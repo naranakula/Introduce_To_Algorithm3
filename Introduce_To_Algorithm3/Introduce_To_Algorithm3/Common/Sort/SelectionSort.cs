@@ -35,7 +35,7 @@ namespace Introduce_To_Algorithm3.Common.Sort
         /// <param name="lo"></param>
         /// <param name="hi"></param>
         /// <returns></returns>
-        private static T[] Sort(T[] arr, int lo, int hi)
+        public static T[] Sort(T[] arr, int lo, int hi)
         {
             for(int i=lo;i<hi;i++)
             {
