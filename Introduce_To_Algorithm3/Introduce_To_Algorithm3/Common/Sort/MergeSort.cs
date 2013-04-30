@@ -5,6 +5,8 @@ using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.Sort
 {
+
+    
     /// <summary>
     /// Merge Sort:Divde into 2 sub array and sort them recursively, then combine the array into one
     /// Merge sort isn't sort in place and not stable but runs at O(nlgn)
@@ -13,6 +15,12 @@ namespace Introduce_To_Algorithm3.Common.Sort
     /// <typeparam name="T"></typeparam>
     public class MergeSort<T> where T:IComparable<T>
     {
+        /// <summary>
+        /// promote sort by using insertion sort if the subarray is small because the insertion sort is quicker when the length of array is not big.
+        /// This is the standard of small length
+        /// </summary>
+        private const int SMALLARRAYLENGTH = 10;
+
         /// <summary>
         /// Insertion sort. It sorts in place and stable. it runs at O(n^2)
         /// </summary>
@@ -27,6 +35,23 @@ namespace Introduce_To_Algorithm3.Common.Sort
             // we need this because the sort isn't in place. We only need only one auxiliary array for all recursions
             T[] tmp = new T[arr.Length];
             Sort(arr, tmp,0, arr.Length - 1);
+            return arr;
+        }
+
+        /// <summary>
+        /// promote sort by using insertion sort if the subarray is small because the insertion sort is quicker when the length of array is not big.
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <returns></returns>
+        public static T[] SortPromote(T[] arr)
+        {
+            if (arr == null || arr.Length <= 1)
+            {
+                return arr;
+            }
+            // we need this because the sort isn't in place. We only need only one auxiliary array for all recursions
+            T[] tmp = new T[arr.Length];
+            SortPromote(arr, tmp, 0, arr.Length - 1);
             return arr;
         }
 
@@ -47,6 +72,30 @@ namespace Introduce_To_Algorithm3.Common.Sort
             int mid = (lo + hi)/2;
             Sort(arr,tmp, lo, mid);
             Sort(arr,tmp, mid + 1, hi);
+
+            Combine(arr, tmp, lo, mid, hi);
+        }
+
+
+        /// <summary>
+        /// hi must >= lo, and sort arr[lo...hi] in place. Doesn't affect the element out of [lo,hi]
+        /// promote sort by using insertion sort if the subarray is small because the insertion sort is quicker when the length of array is not big.
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="tmp"> </param>
+        /// <param name="lo"></param>
+        /// <param name="hi"></param>
+        /// <returns></returns>
+        public static void SortPromote(T[] arr, T[] tmp, int lo, int hi)
+        {
+            if (hi -lo < SMALLARRAYLENGTH)
+            {
+                InsertionSort<T>.Sort(arr, lo, hi);
+                return;
+            }
+            int mid = (lo + hi) / 2;
+            Sort(arr, tmp, lo, mid);
+            Sort(arr, tmp, mid + 1, hi);
 
             Combine(arr, tmp, lo, mid, hi);
         }

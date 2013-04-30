@@ -12,7 +12,7 @@ namespace Introduce_To_Algorithm3
         static void Main(string[] args)
         {
             Random rand = new Random();
-            int len = rand.Next(0, 10);
+            int len = rand.Next(0, 100);
             int[] arr = new int[len];
             for (int i = 0; i < arr.Length; i++)
             {
@@ -20,7 +20,7 @@ namespace Introduce_To_Algorithm3
                 Console.Write(arr[i]+"  ");
             }
             Console.WriteLine();
-            arr = MergeSort<int>.Sort(arr);
+            arr = MergeSort<int>.SortPromote(arr);
             if (!IsSorted(arr))
             {
                 throw new Exception("array is not sorted");
