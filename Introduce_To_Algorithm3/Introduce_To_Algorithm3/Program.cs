@@ -20,7 +20,7 @@ namespace Introduce_To_Algorithm3
                 Console.Write(arr[i]+"  ");
             }
             Console.WriteLine();
-            arr = InsertionSort<int>.Sort(arr);
+            arr = SelectionSort<int>.Sort(arr);
             if (!IsSorted(arr))
             {
                 throw new Exception("array is not sorted");

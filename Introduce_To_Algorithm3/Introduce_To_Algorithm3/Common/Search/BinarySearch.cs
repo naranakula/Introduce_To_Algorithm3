@@ -8,10 +8,11 @@ namespace Introduce_To_Algorithm3.Common.Search
     public static class BinarySearch<T> where T : IComparable<T>
     {
         /// <summary>
-        /// search k in array.
+        /// search the first k in array.
         /// Return nongative if not searched. Return the 0 based position if searched
         /// </summary>
         /// <param name="arr"></param>
+        /// <param name="key"> </param>
         /// <returns></returns>
         public static int Search(T[] arr, T key)
         {
