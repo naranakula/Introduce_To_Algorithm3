@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Introduce_To_Algorithm3.Common.Math;
 using Introduce_To_Algorithm3.Common.Search;
 using Introduce_To_Algorithm3.Common.Sort;
 
@@ -12,21 +13,17 @@ namespace Introduce_To_Algorithm3
         static void Main(string[] args)
         {
             Random rand = new Random();
-            int len = rand.Next(0, 100);
+            int len = rand.Next(0, 10);
             int[] arr = new int[len];
             for (int i = 0; i < arr.Length; i++)
             {
-                arr[i] = rand.Next(10);
+                arr[i] = rand.Next(10)-5;
                 Console.Write(arr[i]+"  ");
             }
             Console.WriteLine();
-            arr = MergeSort<int>.SortPromote(arr);
-            if (!IsSorted(arr))
-            {
-                throw new Exception("array is not sorted");
-            }
-            arr.ToList().ForEach(Console.WriteLine);
-            Console.WriteLine();
+            
+            Console.WriteLine(MaxSubArray.MaxSubArrayByBruteForce(arr));
+            Console.WriteLine(MaxSubArray.MaxSubArrayByDivideAndConquer(arr));
             Console.WriteLine(BinarySearch<int>.Search(arr, 7));
         }
 

@@ -22,7 +22,7 @@ namespace Introduce_To_Algorithm3.Common.Sort
         private const int SMALLARRAYLENGTH = 10;
 
         /// <summary>
-        /// Insertion sort. It sorts in place and stable. it runs at O(n^2)
+        /// Merge sort isn't sort in place and not stable but runs at O(nlgn)
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
@@ -56,7 +56,7 @@ namespace Introduce_To_Algorithm3.Common.Sort
         }
 
         /// <summary>
-        /// hi must >= lo, and sort arr[lo...hi] in place. Doesn't affect the element out of [lo,hi]
+        /// hi must >= lo,  Doesn't affect the element out of [lo,hi]
         /// </summary>
         /// <param name="arr"></param>
         /// <param name="tmp"> </param>
