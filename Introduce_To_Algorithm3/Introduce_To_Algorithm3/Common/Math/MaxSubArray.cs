@@ -81,7 +81,6 @@ namespace Introduce_To_Algorithm3.Common.Math
             {
                 throw new Exception("array shouldn't be null or empty");
             }
-            int beginIndex, endIndex;
             return MaxSubArrayByDivideAndConquer(array, 0, array.Length - 1);
         }
 
