@@ -24,6 +24,7 @@ namespace Introduce_To_Algorithm3
             
             Console.WriteLine(MaxSubArray.MaxSubArrayByBruteForce(arr));
             Console.WriteLine(MaxSubArray.MaxSubArrayByDivideAndConquer(arr));
+            Console.WriteLine(MaxSubArray.MaxSubArrayQuick(arr));
             Console.WriteLine(BinarySearch<int>.Search(arr, 7));
         }
 

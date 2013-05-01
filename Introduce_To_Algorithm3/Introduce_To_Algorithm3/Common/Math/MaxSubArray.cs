@@ -33,7 +33,7 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <param name="endIndex"></param>
         /// <param name="minCount"> true then the differece between endIndex and beginIndex must be smallest  </param>
         /// <returns></returns>
-        public static int MaxSubArrayByBruteForce(int[] array,out int beginIndex,out int endIndex,bool minCount = false)
+        public static int MaxSubArrayByBruteForce(int[] array, out int beginIndex, out int endIndex, bool minCount = false)
         {
             if (array == null || array.Length == 0)
             {
@@ -44,13 +44,13 @@ namespace Introduce_To_Algorithm3.Common.Math
             //init beginIndex and endIndex negative, but they should not be same
             endIndex = -1;
             int result = 0;
-            for(int i=0;i<array.Length;i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 int sum = 0;
-                for(int j=i;j<array.Length;j++)
+                for (int j = i; j < array.Length; j++)
                 {
                     sum += array[j];
-                    if(sum > result)
+                    if (sum > result)
                     {
                         result = sum;
                         beginIndex = i;
@@ -75,14 +75,14 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
-        public static int MaxSubArrayByDivideAndConquer(int [] array)
+        public static int MaxSubArrayByDivideAndConquer(int[] array)
         {
             if (array == null || array.Length == 0)
             {
                 throw new Exception("array shouldn't be null or empty");
             }
             int beginIndex, endIndex;
-            return MaxSubArrayByDivideAndConquer(array,0, array.Length-1);
+            return MaxSubArrayByDivideAndConquer(array, 0, array.Length - 1);
         }
 
         /// <summary>
@@ -94,15 +94,15 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <param name="hi"> </param>
         /// <param name="lo"> </param>
         /// <returns></returns>
-        private static int MaxSubArrayByDivideAndConquer(int[] array, int lo,int hi)
+        private static int MaxSubArrayByDivideAndConquer(int[] array, int lo, int hi)
         {
-            if(lo>hi)
+            if (lo > hi)
             {
                 return 0;
             }
-            if(lo == hi)
+            if (lo == hi)
             {
-                if(array[lo] < 0)
+                if (array[lo] < 0)
                 {
                     return 0;
                 }
@@ -112,7 +112,7 @@ namespace Introduce_To_Algorithm3.Common.Math
                 }
             }
 
-            int mid = (lo + hi)/2;
+            int mid = (lo + hi) / 2;
             int leftMax = MaxSubArrayByDivideAndConquer(array, lo, mid);
             int rightMax = MaxSubArrayByDivideAndConquer(array, mid + 1, hi);
             int crossMax = FindMaxCrossSubArray(array, lo, mid, hi);
@@ -130,14 +130,14 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <param name="mid"></param>
         /// <param name="hi"></param>
         /// <returns></returns>
-        private static int FindMaxCrossSubArray(int[] array, int lo,int mid,int hi)
+        private static int FindMaxCrossSubArray(int[] array, int lo, int mid, int hi)
         {
             int lSum = 0, rSum = 0;
             int sum = 0;
-            for(int i = mid;i>=lo;i--)
+            for (int i = mid; i >= lo; i--)
             {
                 sum += array[i];
-                if(lSum<sum)
+                if (lSum < sum)
                 {
                     lSum = sum;
                     continue;
@@ -145,16 +145,66 @@ namespace Introduce_To_Algorithm3.Common.Math
             }
 
             sum = 0;
-            for(int i=mid+1;i<=hi;i++)
+            for (int i = mid + 1; i <= hi; i++)
             {
                 sum += array[i];
-                if(rSum<sum)
+                if (rSum < sum)
                 {
                     rSum = sum;
                     continue;
                 }
             }
             return lSum + rSum;
+        }
+
+
+        /// <summary>
+        /// find maxsubarray quickly in O(n).
+        /// Determine a maximum subarray of the for j+1 in constant time based on knowing a maximum subarray ending at index j .
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static int MaxSubArrayQuick(int[] array)
+        {
+            int beginIndex, endIndex;
+            return MaxSubArrayQuick(array, out beginIndex, out endIndex);
+        }
+
+        /// <summary>
+        /// find maxsubarray quickly in O(n).
+        /// Determine a maximum subarray of the for j+1 in constant time based on knowing a maximum subarray ending at index j .
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="beginIndex"> </param>
+        /// <param name="endIndex"> </param>
+        /// <returns></returns>
+        public static int MaxSubArrayQuick(int[] array, out int beginIndex, out int endIndex)
+        {
+            beginIndex = endIndex = -1;
+            if (array == null || array.Length == 0)
+            {
+                throw new Exception("array shouldn't be null or empty");
+            }
+
+            int sum = 0, maxSum = 0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                sum += array[i];
+                if(sum>maxSum)
+                {
+                    maxSum = sum;
+                    endIndex = i;
+                }
+                if(sum == 0)
+                {
+                    beginIndex = endIndex = i;
+                }
+                if(sum<0)
+                {
+                    sum = 0;
+                }
+            }
+            return maxSum;
         }
     }
 }
