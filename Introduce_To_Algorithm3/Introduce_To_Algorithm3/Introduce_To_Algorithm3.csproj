@@ -51,10 +51,12 @@
     <Compile Include="Common\Search\BinarySearch.cs" />
     <Compile Include="Common\Search\LinearSearch.cs" />
     <Compile Include="Common\Sort\BubbleSort.cs" />
+    <Compile Include="Common\Sort\HeapSort.cs" />
     <Compile Include="Common\Sort\InsertionSort.cs" />
     <Compile Include="Common\Sort\MergeSort.cs" />
     <Compile Include="Common\Sort\SelectionSort.cs" />
     <Compile Include="Common\Sort\SortCommons.cs" />
+    <Compile Include="Common\Structs\MaxHeap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
