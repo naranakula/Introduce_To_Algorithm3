@@ -7,10 +7,10 @@ using Introduce_To_Algorithm3.Common.Sort;
 namespace Introduce_To_Algorithm3.Common.Structs
 {
     /// <summary>
-    /// the value of parent >= all his children
+    /// the value of parent <= all his children
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class MaxHeap<T> where T : IComparable<T>
+    public class MinHeap<T> where T : IComparable<T>
     {
         /// <summary>
         /// store the heap
@@ -76,7 +76,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         }
 
         /// <summary>
-        /// lets the value at arr[i] “float down” in the max-heap so that the subtree rooted at index i obeys the max-heap property.
+        /// lets the value at arr[i] “float down” in the min-heap so that the subtree rooted at index i obeys the min-heap property.
         /// it runs at O(lgn)
         /// </summary>
         /// <param name="i"></param>
@@ -85,12 +85,12 @@ namespace Introduce_To_Algorithm3.Common.Structs
             int left = Left(i);
             int right = Right(i);
             int max = i;
-            if (left < heapSize && arr[left].CompareTo(arr[max]) > 0)
+            if (left < heapSize && arr[left].CompareTo(arr[max]) < 0)
             {
                 max = left;
             }
 
-            if (right < heapSize && arr[right].CompareTo(arr[max]) > 0)
+            if (right < heapSize && arr[right].CompareTo(arr[max]) < 0)
             {
                 max = right;
             }
@@ -103,12 +103,12 @@ namespace Introduce_To_Algorithm3.Common.Structs
         }
 
         /// <summary>
-        /// lets the value at arr[i] swim up so that themaxheap  obeys the max-heap property.
+        /// lets the value at arr[i] swim up so that themaxheap  obeys the min-heap property.
         /// </summary>
         /// <param name="i"></param>
         private void Swimup(int i)
         {
-            while (i > 0 && arr[Parent(i)].CompareTo(arr[i]) < 0)
+            while (i > 0 && arr[Parent(i)].CompareTo(arr[i]) > 0)
             {
 
                 SortCommons<T>.Exchange(arr, i, Parent(i));
@@ -130,9 +130,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static MaxHeap<T> BuildMaxHeap(T[] source)
+        public static MinHeap<T> BuildMinHeap(T[] source)
         {
-            MaxHeap<T> heap = new MaxHeap<T>();
+            MinHeap<T> heap = new MinHeap<T>();
             if (source == null || source.Length == 0)
             {
                 heap.heapSize = 0;
@@ -181,7 +181,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns>if the heap is empty, throw exceptions</returns>
         public T Peek()
         {
-            if(IsEmpty())
+            if (IsEmpty())
             {
                 throw new Exception("heap is empty");
             }
@@ -202,13 +202,13 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
             T tmp = arr[0];
 
-            SortCommons<T>.Exchange(arr,0,heapSize-1);
+            SortCommons<T>.Exchange(arr, 0, heapSize - 1);
             heapSize--;
             Sink(0);
 
-            if(heapSize!=0 && arr.Length/heapSize>2&&arr.Length/2>=4)
+            if (heapSize != 0 && arr.Length / heapSize > 2 && arr.Length / 2 >= 4)
             {
-                Array.Resize(ref arr,arr.Length/2);
+                Array.Resize(ref arr, arr.Length / 2);
             }
 
             return tmp;

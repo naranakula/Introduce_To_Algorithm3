@@ -56,8 +56,9 @@
     <Compile Include="Common\Sort\MergeSort.cs" />
     <Compile Include="Common\Sort\SelectionSort.cs" />
     <Compile Include="Common\Sort\SortCommons.cs" />
+    <Compile Include="Common\Structs\LinkedNode.cs" />
     <Compile Include="Common\Structs\MaxHeap.cs" />
-    <Compile Include="Common\Structs\MaxLinkedHeap.cs" />
+    <Compile Include="Common\Structs\MinHeap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
