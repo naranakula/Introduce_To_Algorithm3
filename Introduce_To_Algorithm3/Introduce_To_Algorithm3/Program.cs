@@ -14,10 +14,8 @@ namespace Introduce_To_Algorithm3
             int[] arr = { 1, -1, 2, 3, -8,7,3 }; // TODO: 初始化为适当的值
             int[] expected = null; // TODO: 初始化为适当的值
             int[] actual;
-            actual = HeapSort<int>.Sort(arr);
-            MaxHeap<int> heap1 = MaxHeap<int>.BuildMaxHeap(arr);
-            MinHeap<int> heap2 = new MinHeap<int>();
-            actual.ToList().ForEach(heap2.Insert);
+            actual = QuickSort<int>.SortPromote(arr);
+            actual.ToList().ForEach(Console.WriteLine);
         }
     }
 }

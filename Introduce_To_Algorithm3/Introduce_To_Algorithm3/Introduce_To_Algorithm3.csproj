@@ -54,6 +54,7 @@
     <Compile Include="Common\Sort\HeapSort.cs" />
     <Compile Include="Common\Sort\InsertionSort.cs" />
     <Compile Include="Common\Sort\MergeSort.cs" />
+    <Compile Include="Common\Sort\QuickSort.cs" />
     <Compile Include="Common\Sort\SelectionSort.cs" />
     <Compile Include="Common\Sort\SortCommons.cs" />
     <Compile Include="Common\Structs\LinkedNode.cs" />
