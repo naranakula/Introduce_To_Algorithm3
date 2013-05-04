@@ -50,11 +50,15 @@
     <Compile Include="Common\Math\MaxSubArray.cs" />
     <Compile Include="Common\Search\BinarySearch.cs" />
     <Compile Include="Common\Search\LinearSearch.cs" />
+    <Compile Include="Common\Search\OrderStatics.cs" />
     <Compile Include="Common\Sort\BubbleSort.cs" />
+    <Compile Include="Common\Sort\BucketSort.cs" />
+    <Compile Include="Common\Sort\CountingSort.cs" />
     <Compile Include="Common\Sort\HeapSort.cs" />
     <Compile Include="Common\Sort\InsertionSort.cs" />
     <Compile Include="Common\Sort\MergeSort.cs" />
     <Compile Include="Common\Sort\QuickSort.cs" />
+    <Compile Include="Common\Sort\RadixSort.cs" />
     <Compile Include="Common\Sort\SelectionSort.cs" />
     <Compile Include="Common\Sort\SortCommons.cs" />
     <Compile Include="Common\Structs\LinkedNode.cs" />

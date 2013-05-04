@@ -53,8 +53,11 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BucketSortTest.cs" />
+    <Compile Include="CountingSortTest.cs" />
     <Compile Include="HeapSortTest.cs" />
     <Compile Include="MatrixTest.cs" />
+    <Compile Include="OrderStaticsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

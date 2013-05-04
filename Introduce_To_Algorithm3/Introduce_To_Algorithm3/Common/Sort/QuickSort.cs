@@ -11,7 +11,7 @@ namespace Introduce_To_Algorithm3.Common.Sort
     /// 2)sort two subarray A[p,q-1] and A[q+1...r] recursively
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class QuickSort<T> where T : IComparable<T>, IEquatable<T>
+    public class QuickSort<T> where T : IComparable<T>
     {
         /// <summary>
         /// quick sort the arr, it runs at O(nlgn) and not stable(which means the sorted result cannot reserve the equal element position)
