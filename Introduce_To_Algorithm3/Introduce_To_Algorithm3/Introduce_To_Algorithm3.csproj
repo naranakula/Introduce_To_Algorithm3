@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Common\Math\Matrix.cs" />
     <Compile Include="Common\Math\MaxSubArray.cs" />
+    <Compile Include="Common\Math\NumUtils.cs" />
     <Compile Include="Common\Search\BinarySearch.cs" />
     <Compile Include="Common\Search\LinearSearch.cs" />
     <Compile Include="Common\Search\OrderStatics.cs" />
@@ -61,18 +62,25 @@
     <Compile Include="Common\Sort\RadixSort.cs" />
     <Compile Include="Common\Sort\SelectionSort.cs" />
     <Compile Include="Common\Sort\SortCommons.cs" />
-    <Compile Include="Common\Structs\LinkedNode.cs" />
+    <Compile Include="Common\Structs\DoubleLinkedList.cs" />
+    <Compile Include="Common\Structs\HashTable.cs" />
+    <Compile Include="Common\Structs\HashTableOpenAddressing.cs" />
+    <Compile Include="Common\Structs\LinkedListNode.cs" />
+    <Compile Include="Common\Structs\SingleListNode.cs" />
+    <Compile Include="Common\Structs\TreeNode.cs" />
     <Compile Include="Common\Structs\MaxHeap.cs" />
     <Compile Include="Common\Structs\MinHeap.cs" />
+    <Compile Include="Common\Structs\Queue.cs" />
+    <Compile Include="Common\Structs\QueueNode.cs" />
+    <Compile Include="Common\Structs\Stack.cs" />
+    <Compile Include="Common\Utils\HashFunc.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

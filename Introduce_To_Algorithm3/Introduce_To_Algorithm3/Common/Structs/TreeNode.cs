@@ -10,25 +10,25 @@ namespace Introduce_To_Algorithm3.Common.Structs
     /// </summary>
     /// <typeparam name="K">the type of key</typeparam>
     /// <typeparam name="V">the type of value</typeparam>
-    public class LinkedNode<K, V> where K : IComparable<K>, IEquatable<K>
+    public class TreeNode<K, V> where K : IComparable<K>, IEquatable<K>
     {
         public K Key;
         public V Value;
 
-        public LinkedNode()
+        public TreeNode()
         {
 
         }
 
-        public LinkedNode(K key, V val)
+        public TreeNode(K key, V val)
         {
             Key = key;
             Value = val;
         }
 
-        public LinkedNode<K, V> Parent;
-        public LinkedNode<K, V> Left;
-        public LinkedNode<K, V> Right;
+        public TreeNode<K, V> Parent;
+        public TreeNode<K, V> Left;
+        public TreeNode<K, V> Right;
     }
 
 
@@ -36,22 +36,22 @@ namespace Introduce_To_Algorithm3.Common.Structs
     /// linked node
     /// </summary>
     /// <typeparam name="K">the type of key</typeparam>
-    public class LinkedNode<K> where K : IComparable<K>, IEquatable<K>
+    public class TreeNode<K> where K : IComparable<K>, IEquatable<K>
     {
         public K Key;
 
-        public LinkedNode()
+        public TreeNode()
         {
 
         }
 
-        public LinkedNode(K key)
+        public TreeNode(K key)
         {
             Key = key;
         }
 
-        public LinkedNode<K> Parent;
-        public LinkedNode<K> Left;
-        public LinkedNode<K> Right;
+        public TreeNode<K> Parent;
+        public TreeNode<K> Left;
+        public TreeNode<K> Right;
     }
 }
