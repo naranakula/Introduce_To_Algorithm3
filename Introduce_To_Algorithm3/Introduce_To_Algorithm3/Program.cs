@@ -15,11 +15,11 @@ namespace Introduce_To_Algorithm3
         static void Main(string[] args)
         {
             int[] arrs = {1, -2, 3, 4, 5};
-            HashTableOpenAddressing<string,string> hash = new HashTableOpenAddressing<string, string>();
-            arrs.ToList().ForEach(i => hash.Insert(i.ToString(),i.ToString()));
-            Console.WriteLine(hash.Search(5.ToString()));
-            Console.WriteLine(hash.Search("-2".ToString()));
-            hash.Delete("3");
+            BST<int,string> bst = new BST<int, string>();
+
+            arrs.ToList().ForEach(i=>bst.Insert(i,""+i));
+            bst.Delete(bst.Search_(5));
+            bst.Delete(bst.Search_(3));
         }
     }
 }

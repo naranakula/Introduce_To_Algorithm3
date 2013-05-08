@@ -49,7 +49,6 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
 
             int i = 0;
-            bool isUpdated = false;
             while (i < items.Length)
             {
                 int pos = Hash(key, i);
@@ -61,7 +60,6 @@ namespace Introduce_To_Algorithm3.Common.Structs
                 }
                 else if (items[pos].Key.Equals(key))
                 {
-                    isUpdated = true;
                     items[pos].Value = val;
                     break;
                 }
@@ -127,7 +125,6 @@ namespace Introduce_To_Algorithm3.Common.Structs
         public bool Contains(K key)
         {
             int i = 0;
-            bool isContained = false;
             while (i < items.Length)
             {
                 int pos = Hash(key, i);
@@ -223,6 +220,15 @@ hash table to be searched.so h(k,i) can search all the [0,m-1].
 the hash table, the values of c1, c2, and m are constrained.so h(k,i) can search all the [0,m-1].
              */
             throw new NotImplementedException();
+        }
+
+        private void PerfectHash()
+        {
+            /*
+             * 
+             * hash all items hash to same plot again
+             * 
+             */
         }
     }
 

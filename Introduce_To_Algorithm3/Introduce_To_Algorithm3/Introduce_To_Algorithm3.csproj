@@ -62,6 +62,7 @@
     <Compile Include="Common\Sort\RadixSort.cs" />
     <Compile Include="Common\Sort\SelectionSort.cs" />
     <Compile Include="Common\Sort\SortCommons.cs" />
+    <Compile Include="Common\Structs\BST.cs" />
     <Compile Include="Common\Structs\DoubleLinkedList.cs" />
     <Compile Include="Common\Structs\HashTable.cs" />
     <Compile Include="Common\Structs\HashTableOpenAddressing.cs" />
