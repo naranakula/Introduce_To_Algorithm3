@@ -16,7 +16,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
     /// </summary>
     /// <typeparam name="K"></typeparam>
     /// <typeparam name="V"></typeparam>
-    public class RBTreeNode<K, V> : TreeNode<K, V> where K : IComparable<K>, IEquatable<K>
+    public class RBTreeNode<K, V> where K : IComparable<K>, IEquatable<K>
     {
         public Color Color;
         public RBTreeNode()
@@ -24,23 +24,31 @@ namespace Introduce_To_Algorithm3.Common.Structs
         }
 
         public RBTreeNode(K key, V val)
-            : base(key, val)
         {
-
+            this.Key = key;
+            this.Value = val;
         }
 
         public RBTreeNode(K key, V val, Color color)
-            : base(key, val)
         {
             this.Color = color;
+            this.Key = key;
+            this.Value = val;
         }
+
+        public K Key;
+        public V Value;
+
+        public RBTreeNode<K, V> Parent;
+        public RBTreeNode<K, V> Left;
+        public RBTreeNode<K, V> Right;
     }
 
     /// <summary>
     /// red black node
     /// </summary>
     /// <typeparam name="K"></typeparam>
-    public class RBTreeNode<K> : TreeNode<K> where K : IComparable<K>, IEquatable<K>
+    public class RBTreeNode<K> where K : IComparable<K>, IEquatable<K>
     {
         public Color Color;
         public RBTreeNode()
@@ -48,15 +56,21 @@ namespace Introduce_To_Algorithm3.Common.Structs
         }
 
         public RBTreeNode(K key)
-            : base(key)
         {
-
+            this.Key = key;
         }
 
         public RBTreeNode(K key, Color color)
-            : base(key)
         {
             this.Color = color;
+            this.Key = key;
         }
+
+
+        public K Key;
+
+        public RBTreeNode<K> Parent;
+        public RBTreeNode<K> Left;
+        public RBTreeNode<K> Right;
     }
 }

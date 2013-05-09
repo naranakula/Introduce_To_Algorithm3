@@ -78,7 +78,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// post order walk tree runs at O(n)
         /// </summary>
         /// <returns></returns>
-        public List<Tuple<K, V>> ProstorderTreeWalk()
+        public List<Tuple<K, V>> PostorderTreeWalk()
         {
             List<Tuple<K, V>> lists = new List<Tuple<K, V>>();
             PostorderTreeWalk(lists, root);

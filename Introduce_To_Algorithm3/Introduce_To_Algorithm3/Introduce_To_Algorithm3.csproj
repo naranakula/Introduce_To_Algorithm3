@@ -67,6 +67,8 @@
     <Compile Include="Common\Structs\HashTable.cs" />
     <Compile Include="Common\Structs\HashTableOpenAddressing.cs" />
     <Compile Include="Common\Structs\LinkedListNode.cs" />
+    <Compile Include="Common\Structs\RBT.cs" />
+    <Compile Include="Common\Structs\RBTreeNode.cs" />
     <Compile Include="Common\Structs\SingleListNode.cs" />
     <Compile Include="Common\Structs\TreeNode.cs" />
     <Compile Include="Common\Structs\MaxHeap.cs" />
