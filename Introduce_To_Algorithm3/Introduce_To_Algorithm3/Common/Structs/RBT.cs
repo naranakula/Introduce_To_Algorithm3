@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
     /// </summary>
     /// <typeparam name="K"></typeparam>
     /// <typeparam name="V"> </typeparam>
-    public class RBT<K,V> where K : IComparable<K>, IEquatable<K>
+    public class RBT<K, V> where K : IComparable<K>, IEquatable<K>
     {
         protected int count;
         /// <summary>
@@ -371,12 +371,287 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
 
         /// <summary>
+        /// delete the node
+        /// </summary>
+        /// <param name="node"></param>
+        public void Delete(RBTreeNode<K, V> node)
+        {
+            if (node == null) return;
+            count--;
+            RBTreeNode<K, V> y = node, x = null,parent = null;
+            Color yOriginColor = y.Color;
+            if (node.Left == null)
+            {
+                x = node.Right;
+                parent = node.Parent;
+                Transplant(node, node.Right);
+            }
+            else if (node.Right == null)
+            {
+                x = node.Left;
+                parent = node.Parent;
+                Transplant(node, node.Left);
+            }
+            else
+            {
+                y = Minimum_(node.Right);
+                yOriginColor = y.Color;
+                x = y.Right;
+                if (y.Parent == node)
+                {
+                    parent = y;
+                }
+                else
+                {
+                    //the post one is not right the right one
+                    parent = y.Parent;
+                    Transplant(y, y.Right);
+                    //because the post one is not the right child, then node.right is not null
+                    y.Right = node.Right;
+                    y.Right.Parent = y;
+                }
+
+                Transplant(node, y);
+                y.Left = node.Left;
+                //node.left is not null
+                y.Left.Parent = y;
+                y.Color = node.Color;
+            }
+
+            if (yOriginColor == Color.BLACK)
+            {
+                // x can be null, if red, no violation of rbt
+                // node x moves into node y’s original position
+                DeleteFixUp(x,parent);
+            }
+        }
+
+        private void DeleteFixUp(RBTreeNode<K, V> x,RBTreeNode<K,V> parent)
+        {
+            RBTreeNode<K, V> w = null;
+            while (x!=root && IsBlack(x))
+            {
+                //if x is not root then the parent is not null
+                if(x == parent.Left)
+                {
+                    w = parent.Right;
+                    if(IsRed(w))
+                    {
+                        w.Color = Color.BLACK;
+                        parent.Color = Color.RED;
+                        LeftRotate(parent);
+                        w = parent.Right;
+                    }
+                    if(w!=null && IsBlack(w.Left) && IsBlack(w.Right))
+                    {
+                        w.Color = Color.RED;
+                        x = parent;
+                        parent = parent.Parent;
+                    }
+                    else if(w!=null)
+                    {
+                        if (IsBlack(w.Right))
+                        {
+                            if (w.Left != null) w.Left.Color = Color.BLACK;
+                            w.Color = Color.RED;
+                            RightRotate(w);
+                            w = parent.Right;
+                        }
+                        if(w!=null)
+                        {
+                            w.Color = parent.Color;
+                            parent.Color = Color.BLACK;
+                            if(w.Right!=null)
+                            {
+                                w.Right.Color = Color.BLACK;
+                            }
+                            LeftRotate(parent);
+                            x = root;
+                        }
+                    }
+                }
+                else
+                {
+                    w = parent.Left;
+                    if (IsRed(w))
+                    {
+                        w.Color = Color.BLACK;
+                        parent.Color = Color.RED;
+                        RightRotate(parent);
+                        w = parent.Left;
+                    }
+                    if (w != null && IsBlack(w.Left) && IsBlack(w.Right))
+                    {
+                        w.Color = Color.RED;
+                        x = parent;
+                        parent = parent.Parent;
+                    }
+                    else if (w != null)
+                    {
+                        if (IsBlack(w.Left))
+                        {
+                            if (w.Right != null) w.Right.Color = Color.BLACK;
+                            w.Color = Color.RED;
+                            LeftRotate(w);
+                            w = parent.Left;
+                        }
+                        if (w != null)
+                        {
+                            w.Color = parent.Color;
+                            parent.Color = Color.BLACK;
+                            if (w.Left != null)
+                            {
+                                w.Left.Color = Color.BLACK;
+                            }
+                            RightRotate(parent);
+                            x = root;
+                        }
+                    }
+                }
+            }
+
+            if(x!=null)
+            x.Color = Color.BLACK;
+        }
+
+        private bool IsBlack(RBTreeNode<K, V> rBTreeNode)
+        {
+            return rBTreeNode == null || rBTreeNode.Color == Color.BLACK;
+        }
+        private bool IsRed(RBTreeNode<K, V> rBTreeNode)
+        {
+            return !IsBlack(rBTreeNode);
+        }
+
+
+        private void Transplant(RBTreeNode<K, V> u, RBTreeNode<K, V> v)
+        {
+            if (u.Parent == null)
+            {
+                root = v;
+            }
+            else if (u == u.Parent.Left)
+            {
+                u.Parent.Left = v;
+            }
+            else
+            {
+                u.Parent.Right = v;
+            }
+            if (v != null)
+            {
+                v.Parent = u.Parent;
+            }
+        }
+
+
+        /// <summary>
         /// Red Black insert
         /// </summary>
         /// <param name="key"></param>
         /// <param name="val"></param>
-        public void Insert(K key,V val)
+        public void Insert(K key, V val)
         {
+            RBTreeNode<K, V> node = null, inserted = new RBTreeNode<K, V>(key, val);
+            count++;
+            RBTreeNode<K, V> x = root;
+            while (x != null)
+            {
+                node = x;
+                if (key.CompareTo(x.Key) < 0)
+                {
+                    x = x.Left;
+                }
+                else
+                {
+                    x = x.Right;
+                }
+            }
+
+            inserted.Parent = node;
+
+            //first insert a node
+            if (node == null)
+            {
+                root = inserted;
+            }
+            else if (inserted.Key.CompareTo(node.Key) < 0)
+            {
+                node.Left = inserted;
+            }
+            else
+            {
+                node.Right = inserted;
+            }
+
+            inserted.Left = inserted.Right = null;
+            inserted.Color = Color.RED;
+            //fix up the insert node, so red black tree reserve
+            InsertFixup(inserted);
+        }
+
+        /// <summary>
+        /// fix up the insert node, so red black tree reserve
+        /// </summary>
+        /// <param name="inserted"></param>
+        private void InsertFixup(RBTreeNode<K, V> inserted)
+        {
+            //if inserted.Parent == null, then inserted is root
+            //if inserted.Parent.Color == RED,then must have inserted.Parent.Parent !=null. Because root.Color is BLACK
+            while (inserted.Parent != null && inserted.Parent.Color == Color.RED)
+            {
+                //at the beginning of the loop, three invariant are keep
+                //1)node inserted is red
+                //2)if node.parent is the root, then inserted.parent is black
+                //3)if inserted is root, then inserted.parent is null. 
+                if (inserted.Parent == inserted.Parent.Parent.Left)
+                {
+                    RBTreeNode<K, V> y = inserted.Parent.Parent.Right;
+                    if (y != null && y.Color == Color.RED)
+                    {
+                        inserted.Parent.Color = Color.BLACK;
+                        y.Color = Color.BLACK;
+                        inserted.Parent.Parent.Color = Color.RED;
+                        inserted = inserted.Parent.Parent;
+                    }
+                    else
+                    {
+                        if (inserted == inserted.Parent.Right)
+                        {
+                            inserted = inserted.Parent;
+                            LeftRotate(inserted);
+                        }
+                        inserted.Parent.Color = Color.BLACK;
+                        inserted.Parent.Parent.Color = Color.RED;
+                        RightRotate(inserted.Parent.Parent);
+                    }
+
+                }
+                else
+                {
+                    RBTreeNode<K, V> y = inserted.Parent.Parent.Left;
+                    if (y != null && y.Color == Color.RED)
+                    {
+                        inserted.Parent.Color = Color.BLACK;
+                        y.Color = Color.BLACK;
+                        inserted.Parent.Parent.Color = Color.RED;
+                        inserted = inserted.Parent.Parent;
+                    }
+                    else
+                    {
+                        if (inserted == inserted.Parent.Left)
+                        {
+                            inserted = inserted.Parent;
+                            RightRotate(inserted);
+                        }
+                        inserted.Parent.Color = Color.BLACK;
+                        inserted.Parent.Parent.Color = Color.RED;
+                        LeftRotate(inserted.Parent.Parent);
+                    }
+                }
+            }
+
+            root.Color = Color.BLACK;
         }
 
 
@@ -384,23 +659,23 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// left rotate 
         /// </summary>
         /// <param name="x">x must have right child</param>
-        private void LeftRotate(RBTreeNode<K,V> x)
+        private void LeftRotate(RBTreeNode<K, V> x)
         {
             RBTreeNode<K, V> y = x.Right;
             x.Right = y.Left;
 
-            if(y.Left != null)
+            if (y.Left != null)
             {
                 y.Left.Parent = x;
             }
 
             y.Parent = x.Parent;
 
-            if(x.Parent == null)
+            if (x.Parent == null)
             {
                 root = y;
             }
-            else if(x == x.Parent.Left)
+            else if (x == x.Parent.Left)
             {
                 x.Parent.Left = y;
             }

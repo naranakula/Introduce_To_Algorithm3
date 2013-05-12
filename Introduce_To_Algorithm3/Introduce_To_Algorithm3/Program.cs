@@ -14,12 +14,14 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            int[] arrs = {1, -2, 3, 4, 5};
-            BST<int,string> bst = new BST<int, string>();
-
-            arrs.ToList().ForEach(i=>bst.Insert(i,""+i));
-            bst.Delete(bst.Search_(5));
-            bst.Delete(bst.Search_(3));
+            int[] arrs = {9,1, 2, 3, 4, 5, 6,0, 7,  9};
+            RBT<string,int> rbts = new RBT<string, int>();
+            arrs.ToList().ForEach(i=>rbts.Insert(""+i,i));
+            rbts.InorderTreeWalk().ForEach(Console.WriteLine);
+            for (int i = 0; i < arrs.Length; i++)
+            {
+                rbts.Delete(rbts.Search_(arrs[i].ToString()));
+            }
         }
     }
 }
