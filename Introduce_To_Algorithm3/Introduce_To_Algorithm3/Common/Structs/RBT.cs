@@ -378,7 +378,8 @@ namespace Introduce_To_Algorithm3.Common.Structs
         {
             if (node == null) return;
             count--;
-            RBTreeNode<K, V> y = node, x = null,parent = null;
+            
+            RBTreeNode<K, V> y = node, x = null, parent = null;
             Color yOriginColor = y.Color;
             if (node.Left == null)
             {
@@ -400,11 +401,13 @@ namespace Introduce_To_Algorithm3.Common.Structs
                 if (y.Parent == node)
                 {
                     parent = y;
+                    y.Size = node.Size;
                 }
                 else
                 {
                     //the post one is not right the right one
                     parent = y.Parent;
+                    y.Size = node.Size;
                     Transplant(y, y.Right);
                     //because the post one is not the right child, then node.right is not null
                     y.Right = node.Right;
@@ -418,37 +421,55 @@ namespace Introduce_To_Algorithm3.Common.Structs
                 y.Color = node.Color;
             }
 
+            RBTreeNode<K, V> pNode = parent;
+            while (pNode != null)
+            {
+                pNode.Size--;
+                pNode = pNode.Parent;
+            }
+
+
             if (yOriginColor == Color.BLACK)
             {
                 // x can be null, if red, no violation of rbt
                 // node x moves into node y’s original position
-                DeleteFixUp(x,parent);
+                DeleteFixUp(x, parent);
             }
+            //if yOriginColor is red, then x is null and y is leaf node
         }
 
-        private void DeleteFixUp(RBTreeNode<K, V> x,RBTreeNode<K,V> parent)
+        /// <summary>
+        /// x must have at most one child 
+        /// 1)if the root deleted, then a red (must be red or it have none children) child be new root
+        /// 2)all x's path black height less 1
+        /// 3)the father and x node may be both red
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="parent"></param>
+        private void DeleteFixUp(RBTreeNode<K, V> x, RBTreeNode<K, V> parent)
         {
             RBTreeNode<K, V> w = null;
-            while (x!=root && IsBlack(x))
+            while (x != root && IsBlack(x))
             {
                 //if x is not root then the parent is not null
-                if(x == parent.Left)
+                // x is double black
+                if (x == parent.Left)
                 {
                     w = parent.Right;
-                    if(IsRed(w))
+                    if (IsRed(w))
                     {
                         w.Color = Color.BLACK;
                         parent.Color = Color.RED;
                         LeftRotate(parent);
                         w = parent.Right;
                     }
-                    if(w!=null && IsBlack(w.Left) && IsBlack(w.Right))
+                    if (w != null && IsBlack(w.Left) && IsBlack(w.Right))
                     {
                         w.Color = Color.RED;
                         x = parent;
                         parent = parent.Parent;
                     }
-                    else if(w!=null)
+                    else if (w != null)
                     {
                         if (IsBlack(w.Right))
                         {
@@ -457,11 +478,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
                             RightRotate(w);
                             w = parent.Right;
                         }
-                        if(w!=null)
+                        if (w != null)
                         {
                             w.Color = parent.Color;
                             parent.Color = Color.BLACK;
-                            if(w.Right!=null)
+                            if (w.Right != null)
                             {
                                 w.Right.Color = Color.BLACK;
                             }
@@ -504,14 +525,15 @@ namespace Introduce_To_Algorithm3.Common.Structs
                                 w.Left.Color = Color.BLACK;
                             }
                             RightRotate(parent);
+                            //Setting x to be the root causes the while loop to terminate when it tests the loop condition.
                             x = root;
                         }
                     }
                 }
             }
-
-            if(x!=null)
-            x.Color = Color.BLACK;
+            //if x origin color is red,then color black, which add 1 black at the path
+            if (x != null)
+                x.Color = Color.BLACK;
         }
 
         private bool IsBlack(RBTreeNode<K, V> rBTreeNode)
@@ -558,6 +580,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             while (x != null)
             {
                 node = x;
+                node.Size++;
                 if (key.CompareTo(x.Key) < 0)
                 {
                     x = x.Left;
@@ -586,6 +609,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
             inserted.Left = inserted.Right = null;
             inserted.Color = Color.RED;
+            inserted.Size = 1;
             //fix up the insert node, so red black tree reserve
             InsertFixup(inserted);
         }
@@ -686,6 +710,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
             y.Left = x;
             x.Parent = y;
+
+            y.Size = x.Size;
+            x.Size = Size(x.Left) + Size(x.Right) + 1;
         }
 
 
@@ -721,7 +748,74 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
             y.Right = x;
             x.Parent = y;
+
+            y.Size = x.Size;
+            x.Size = Size(x.Left) + Size(x.Right) + 1;
         }
+
+
+
+
+        /// <summary>
+        /// select ith smallest element inorder 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public RBTreeNode<K, V> Select(int i)
+        {
+            return Select(root, i);
+        }
+
+
+
+        private RBTreeNode<K, V> Select(RBTreeNode<K, V> root, int i)
+        {
+            int r = 1 + (root.Left == null ? 0 : root.Left.Size);
+            if (i == r)
+            {
+                return root;
+            }
+            else if (i < r)
+            {
+                return Select(root.Left, i);
+            }
+            else
+            {
+                return Select(root.Right, i - r);
+            }
+        }
+
+
+        /// <summary>
+        /// given a node return the position of x in the linear order by inorder tree walk
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public int Rank(RBTreeNode<K, V> node)
+        {
+            int i = Size(node.Left) + 1;
+            while (node != root)
+            {
+                if (node == node.Parent.Right)
+                {
+                    i += Size(node.Parent.Left) + 1;
+                }
+                node = node.Parent;
+            }
+
+            return i;
+        }
+
+        /// <summary>
+        /// find the number of nodes in the tree
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private int Size(RBTreeNode<K, V> node)
+        {
+            return node == null ? 0 : node.Size;
+        }
+
 
 
     }

@@ -495,5 +495,68 @@ namespace Introduce_To_Algorithm3.Common.Structs
                 v.Parent = u.Parent;
             }
         }
+
+
+
+
+        /// <summary>
+        /// select ith smallest element inorder 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public TreeNode<K,V> Select(int i)
+        {
+            return Select(root, i);
+        }
+
+
+
+        private TreeNode<K, V> Select(TreeNode<K,V> root,int i)
+        {
+            int r = 1+(root.Left == null ? 0 : root.Left.Size);
+            if(i==r)
+            {
+                return root;
+            }
+            else if(i<r)
+            {
+                return Select(root.Left, i);
+            }
+            else
+            {
+                return Select(root.Right, i - r);
+            }
+        }
+
+
+        /// <summary>
+        /// given a node return the position of x in the linear order by inorder tree walk
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public int Rank(TreeNode<K,V> node)
+        {
+            int i = Size(node.Left) + 1;
+            while (node != root)
+            {
+                if(node == node.Parent.Right)
+                {
+                    i += Size(node.Parent.Left) + 1;
+                }
+                node = node.Parent;
+            }
+
+            return i;
+        }
+
+        /// <summary>
+        /// find the number of nodes in the tree
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private int Size(TreeNode<K,V> node)
+        {
+            return node == null ? 0 : node.Size;
+        }
     }
 }

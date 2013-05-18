@@ -29,6 +29,10 @@ namespace Introduce_To_Algorithm3.Common.Structs
         public TreeNode<K, V> Parent;
         public TreeNode<K, V> Left;
         public TreeNode<K, V> Right;
+        /// <summary>
+        /// number of his children and himself
+        /// </summary>
+        public int Size;
     }
 
 
@@ -53,5 +57,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
         public TreeNode<K> Parent;
         public TreeNode<K> Left;
         public TreeNode<K> Right;
+        /// <summary>
+        /// number of his children and himself
+        /// </summary>
+        public int Size;
     }
 }

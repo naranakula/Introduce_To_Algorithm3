@@ -42,6 +42,10 @@ namespace Introduce_To_Algorithm3.Common.Structs
         public RBTreeNode<K, V> Parent;
         public RBTreeNode<K, V> Left;
         public RBTreeNode<K, V> Right;
+        /// <summary>
+        /// number of his children and himself
+        /// </summary>
+        public int Size;
     }
 
     /// <summary>
@@ -72,5 +76,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
         public RBTreeNode<K> Parent;
         public RBTreeNode<K> Left;
         public RBTreeNode<K> Right;
+        /// <summary>
+        /// number of his children and himself
+        /// </summary>
+        public int Size;
     }
 }
