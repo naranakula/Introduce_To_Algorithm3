@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Common\DynamicProgramming\CutRod.cs" />
     <Compile Include="Common\DynamicProgramming\MatrixChain.cs" />
+    <Compile Include="Common\Math\Fibonacci.cs" />
     <Compile Include="Common\Math\Matrix.cs" />
     <Compile Include="Common\Math\MaxSubArray.cs" />
     <Compile Include="Common\Math\NumUtils.cs" />

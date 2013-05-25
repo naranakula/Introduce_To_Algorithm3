@@ -15,12 +15,8 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            int[] arrs = {0,1,5,8, 9, 10, 17, 17, 20,24, 30};
-            List<int> s;
-            for (int i = 1; i <= 11; i++)
-            {
-                Console.WriteLine(CutRod.MemoizedCutRod(arrs,i)+"   "+CutRod.Cut_Rod(arrs,i)+"  "+CutRod.BottomUpCutRod(arrs,i)+"  "+CutRod.ExtendedBottomUpCutRod(arrs,i,out s));
-            }
+            Console.WriteLine(Fibonacci.Fn(20));
+            Console.WriteLine(Fibonacci.FnLinear(20));
         }
     }
 }
