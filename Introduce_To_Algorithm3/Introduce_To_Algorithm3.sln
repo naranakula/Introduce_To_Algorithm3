@@ -6,11 +6,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{1D518535-4971-44B5-9D46-09C6079E296A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{095D2120-A2EA-41AA-88F4-473F6B0997D1}"
-	ProjectSection(SolutionItems) = preProject
-		Introduce_To_Algorithm3.vsmdi = Introduce_To_Algorithm3.vsmdi
-		Local.testsettings = Local.testsettings
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution

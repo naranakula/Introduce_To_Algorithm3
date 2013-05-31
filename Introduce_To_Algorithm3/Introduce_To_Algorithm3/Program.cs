@@ -17,6 +17,7 @@ namespace Introduce_To_Algorithm3
         {
             Console.WriteLine(LCS.Lcs("hellowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwkwww", "yyyyyyyllwyyyyyyyyy"));
             Console.WriteLine(LCS.LcsUnConsecutiveRecursive("hellowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwkwww", "yyyyyyyllwyyyyyyyyy"));
+            Console.ReadKey();
         }
     }
 }
