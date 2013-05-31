@@ -16,7 +16,7 @@ namespace Introduce_To_Algorithm3
         static void Main(string[] args)
         {
             Console.WriteLine(LCS.Lcs("hellowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwkwww", "yyyyyyyllwyyyyyyyyy"));
-            
+            Console.WriteLine(LCS.LcsUnConsecutiveRecursive("hellowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwkwww", "yyyyyyyllwyyyyyyyyy"));
         }
     }
 }
