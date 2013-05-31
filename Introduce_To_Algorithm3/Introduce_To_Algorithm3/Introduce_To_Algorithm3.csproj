@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DynamicProgramming\CutRod.cs" />
+    <Compile Include="Common\DynamicProgramming\LCS.cs" />
     <Compile Include="Common\DynamicProgramming\MatrixChain.cs" />
     <Compile Include="Common\Math\Fibonacci.cs" />
     <Compile Include="Common\Math\Matrix.cs" />

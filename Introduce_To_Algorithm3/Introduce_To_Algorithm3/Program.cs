@@ -15,8 +15,7 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Fibonacci.Fn(20));
-            Console.WriteLine(Fibonacci.FnLinear(20));
+            Console.WriteLine(LCS.LcsConsecutive("hesakfwwdsdaf", "fadfelloowwdksakfdfhllls"));
         }
     }
 }
