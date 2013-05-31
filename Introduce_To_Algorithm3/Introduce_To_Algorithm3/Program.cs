@@ -15,6 +15,13 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
+            int i = 0;
+            while (true)
+            {
+                i++;
+                if (i > 1000000)
+                    i = 0;
+            }
             Console.WriteLine(LCS.Lcs("hellowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwkwww", "yyyyyyyllwyyyyyyyyy"));
             Console.WriteLine(LCS.LcsUnConsecutiveRecursive("hellowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwkwww", "yyyyyyylldwyyyyyyyyy"));
             Console.ReadKey();
