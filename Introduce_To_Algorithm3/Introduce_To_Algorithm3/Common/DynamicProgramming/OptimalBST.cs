@@ -22,6 +22,13 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
     /// we have substruct that: Kr is the root of the Optimal binary search tree. The left and right tree of Kr must be Optimal binary search tree also. we can use cut and paste theory to prove it.
     /// Suppose the Left tree of Kr is Krl, if Krl isn't Optimal binary search tree, then we must have a tree T have better performance than Krl, we cut krl and paste T to replace it. Then we have a tree better then Kr which offends to Kr is OBST.
     /// 
+    /// 
+    /// 
+    /// suppose we have subproblem ki,......,kj.
+    /// define e[i,j] is the expect cost of searching obst contains ki,... ...,kj
+    /// 
+    /// if j=i-1,    e[i,j] = Qi-1
+    /// if i<=j,     e[i,j] = min{e[i,r-1]+e[r+1,j]+w[i,j]}  where i=<r<=j    w[i,j] is the sum of probilities of ki,......kj
     /// </summary>
     public class OptimalBst
     {
