@@ -51,6 +51,7 @@
     <Compile Include="Common\DynamicProgramming\LevenshteinDistance.cs" />
     <Compile Include="Common\DynamicProgramming\MatrixChain.cs" />
     <Compile Include="Common\DynamicProgramming\OptimalBST.cs" />
+    <Compile Include="Common\GreedyAlgorithm\ActivitySelection.cs" />
     <Compile Include="Common\Math\Fibonacci.cs" />
     <Compile Include="Common\Math\Matrix.cs" />
     <Compile Include="Common\Math\MaxSubArray.cs" />

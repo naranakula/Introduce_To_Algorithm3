@@ -102,6 +102,7 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
         {
             if (s1End < 0 || s2End < 0)
             {
+                Console.WriteLine("string.Empty");
                 return string.Empty;
             }
 
