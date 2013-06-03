@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Introduce_To_Algorithm3.Common.Structs;
 
 namespace Introduce_To_Algorithm3.Common.DynamicProgramming
 {
@@ -30,8 +31,7 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
     /// if j=i-1,    e[i,j] = Qi-1
     /// if i<=j,     e[i,j] = min{e[i,r-1]+e[r+1,j]+w[i,j]}  where i=<r<=j    w[i,j] is the sum of probilities of ki,......kj
     /// </summary>
-    public class OptimalBst
+    public class OptimalBst<K, V> where K : IComparable<K>, IEquatable<K>
     {
-
     }
 }
