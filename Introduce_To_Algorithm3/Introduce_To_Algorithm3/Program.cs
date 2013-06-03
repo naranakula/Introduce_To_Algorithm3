@@ -16,17 +16,11 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            List<Activity> testAcs = new List<Activity>();
-            for (int i = 0; i < 10; i++)
-            {
-                testAcs.Add(new Activity() { BeginTime = DateTime.Now.AddHours(i), FinishTime = DateTime.Now.AddHours(i+1) });
-                testAcs.Add(new Activity() { BeginTime = DateTime.Now.AddHours(i), FinishTime = DateTime.Now.AddHours(i + 1) });
-            }
-            testAcs.Add(new Activity(){BeginTime = DateTime.Now,FinishTime = DateTime.Now.AddHours(1)});
-            List<Activity> temp = new List<Activity>();
-            temp = ActivitySelection.DPSelection(testAcs);
-            temp = ActivitySelection.GreedySelection(testAcs);
-            Console.ReadKey();
+            List<KnapsackItem> items = new List<KnapsackItem>();
+            items.Add(new KnapsackItem(){Value = 50,Weight = 40});
+            items.Add(new KnapsackItem(){Value = 35,Weight = 35});
+            items.Add(new KnapsackItem(){Value = 25,Weight = 25});
+            Console.WriteLine(Knapsack.DpKanpsack(items,60));
         }
     }
 }
