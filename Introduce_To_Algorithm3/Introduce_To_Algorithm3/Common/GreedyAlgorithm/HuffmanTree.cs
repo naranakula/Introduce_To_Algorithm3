@@ -23,7 +23,7 @@ namespace Introduce_To_Algorithm3.Common.GreedyAlgorithm
         }
     }
 
-
+    /*
     public class Character:IComparable<double>
     {
         public Char Alphabet { get; set; }
@@ -32,5 +32,5 @@ namespace Introduce_To_Algorithm3.Common.GreedyAlgorithm
         /// the freqency of character, must be > 0
         /// </summary>
         public double Freq { get; set; }
-    }
+    }*/
 }
