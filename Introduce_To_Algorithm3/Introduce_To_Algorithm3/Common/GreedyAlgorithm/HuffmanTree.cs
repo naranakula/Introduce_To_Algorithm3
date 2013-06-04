@@ -17,6 +17,9 @@ namespace Introduce_To_Algorithm3.Common.GreedyAlgorithm
         /// Let c.freq denote the frequency of c in the file and let dt(c) denote the depth of c's leaf in the tree.
         /// The number of bits required to encode a file is 
         /// sum(c.freq*dt(c))
+        /// 
+        /// 
+        /// this runs at O(nlgn)
         /// </summary>
         public static Character<T> Build(List<Tuple<T,double>> characters)
         {
