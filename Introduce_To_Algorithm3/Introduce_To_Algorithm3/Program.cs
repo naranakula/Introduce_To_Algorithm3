@@ -16,11 +16,15 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            List<KnapsackItem> items = new List<KnapsackItem>();
-            items.Add(new KnapsackItem(){Value = 50,Weight = 40});
-            items.Add(new KnapsackItem(){Value = 35,Weight = 35});
-            items.Add(new KnapsackItem(){Value = 25,Weight = 25});
-            Console.WriteLine(Knapsack.DpKanpsack(items,60));
+            List<Tuple<char,double>> lists = new List<Tuple<char, double>>();
+            lists.Add(new Tuple<char, double>('a',0.45));
+            lists.Add(new Tuple<char, double>('b',0.13));
+            lists.Add(new Tuple<char, double>('c',0.12));
+            lists.Add(new Tuple<char, double>('d',0.16));
+            lists.Add(new Tuple<char, double>('e',0.09));
+            lists.Add(new Tuple<char, double>('f',0.05));
+
+            var huffman = HuffmanTree<char>.Build(lists);
         }
     }
 }
