@@ -17,19 +17,7 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            BMinusTreeNode<int,int> node = new BMinusTreeNode<int, int>(){IsLeaf = true};
-            node.KeyValues = new Tuple<int, int>[]
-                {
-                    new Tuple<int, int>(1,1),
-                    new Tuple<int, int>(2,2),
-                    new Tuple<int, int>(3,3),
-                    new Tuple<int, int>(3,3),
-                    new Tuple<int, int>(4,4),
-                    new Tuple<int, int>(6,6), 
-                };
-            BMinusTree<int,int> tree = new BMinusTree<int, int>(4);
-            tree.BinarySearch(node, 2);
-            
+            Console.WriteLine(NumUtils.IsPrime(1200000121122113L));
         }
     }
 }
