@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AdvancedStructs\BMinusTree.cs" />
+    <Compile Include="Common\AdvancedStructs\BMinusTreeNode.cs" />
     <Compile Include="Common\DynamicProgramming\CutRod.cs" />
     <Compile Include="Common\DynamicProgramming\LCS.cs" />
     <Compile Include="Common\DynamicProgramming\LevenshteinDistance.cs" />

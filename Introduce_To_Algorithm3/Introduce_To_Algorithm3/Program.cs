@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Introduce_To_Algorithm3.Common.AdvancedStructs;
 using Introduce_To_Algorithm3.Common.DynamicProgramming;
 using Introduce_To_Algorithm3.Common.GreedyAlgorithm;
 using Introduce_To_Algorithm3.Common.Math;
@@ -16,15 +17,19 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            List<Tuple<char,double>> lists = new List<Tuple<char, double>>();
-            lists.Add(new Tuple<char, double>('a',0.45));
-            lists.Add(new Tuple<char, double>('b',0.13));
-            lists.Add(new Tuple<char, double>('c',0.12));
-            lists.Add(new Tuple<char, double>('d',0.16));
-            lists.Add(new Tuple<char, double>('e',0.09));
-            lists.Add(new Tuple<char, double>('f',0.05));
-
-            var huffman = HuffmanTree<char>.Build(lists);
+            BMinusTreeNode<int,int> node = new BMinusTreeNode<int, int>(){IsLeaf = true};
+            node.KeyValues = new Tuple<int, int>[]
+                {
+                    new Tuple<int, int>(1,1),
+                    new Tuple<int, int>(2,2),
+                    new Tuple<int, int>(3,3),
+                    new Tuple<int, int>(3,3),
+                    new Tuple<int, int>(4,4),
+                    new Tuple<int, int>(6,6), 
+                };
+            BMinusTree<int,int> tree = new BMinusTree<int, int>(4);
+            tree.BinarySearch(node, 2);
+            
         }
     }
 }
