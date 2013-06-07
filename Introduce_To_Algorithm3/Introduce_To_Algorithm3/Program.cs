@@ -17,7 +17,7 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(NumUtils.IsPrime(1200000121122113L));
+            Console.WriteLine(NumUtils.IsPrime(1234567713L));
         }
     }
 }

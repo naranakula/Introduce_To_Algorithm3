@@ -8,12 +8,14 @@ using System.Text;
 namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 {
     /// <summary>
-    /// 1)every non root non leaf node has [M/2,M] child
+    /// 1)every non root non leaf node has [ceil(M/2),M] child
     /// 2)root has [2,M] child
     /// 3)every leaf has same height
-    /// 4)every non root node has [M/2-1,M-1] keys
-    /// we call t=M/2 as the minimum degree of the B- tree.
+    /// 4)every non root node has [ceil(M/2)-1,M-1] keys
+    /// we call t=Ceil(M/2) as the minimum degree of the B- tree.
+    /// m-order B- tree m>=3
     /// it normally used for db
+    /// all keys are different
     /// </summary>
     public class BMinusTree<K, V> where K : IComparable<K>, IEquatable<K>
     {
@@ -31,7 +33,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="minDegree">the minimum degree of B- tree. it &gt;= 2, which means it at least binary search tree</param>
+        /// <param name="minDegree">the minimum degree of B- tree. it &gt;= 2, which means it the min child can a interval node has</param>
         public BMinusTree(int minDegree)
         {
             this.minDegree = minDegree;
@@ -91,7 +93,11 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
 
 
-
+        /// <summary>
+        /// search key
+        /// </summary>
+        /// <param name="key">if found, return the node and the index of key in the node. null, if not found</param>
+        /// <returns></returns>
         public Tuple<BMinusTreeNode<K, V>, int> BinarySearch(K key)
         {
             return BinarySearch(root, key);
