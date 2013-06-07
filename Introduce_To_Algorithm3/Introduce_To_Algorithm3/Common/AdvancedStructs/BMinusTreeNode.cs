@@ -31,8 +31,23 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         public BMinusTreeNode<K,V>[] Children { get; internal set; }
 
         /// <summary>
+        /// parent of this node
+        /// </summary>
+        public BMinusTreeNode<K, V> Parent; 
+
+        /// <summary>
         /// whether is leaf
         /// </summary>
         public bool IsLeaf { get; internal set; }
+
+        /// <summary>
+        /// increase the bottom store
+        /// </summary>
+        /// <param name="minDegree"></param>
+        public void Increase(int minDegree)
+        {
+            
+        }
+
     }
 }

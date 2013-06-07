@@ -36,6 +36,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <param name="minDegree">the minimum degree of B- tree. it &gt;= 2, which means it the min child can a interval node has</param>
         public BMinusTree(int minDegree)
         {
+            Trace.Assert(minDegree>=2);
             this.minDegree = minDegree;
         }
 
@@ -44,6 +45,21 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         {
             return root;
         }
+
+        /// <summary>
+        /// get the mindegree
+        /// </summary>
+        public int MinDegree
+        {
+            get { return minDegree; }
+        }
+        /// <summary>
+        /// get the order of a tree
+        /// </summary>
+        public int Order{
+            get { return 2*minDegree; }
+        }
+
         #endregion
 
 
