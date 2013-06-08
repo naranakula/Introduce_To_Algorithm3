@@ -17,7 +17,18 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(NumUtils.IsPrime(1234567713L));
+            BMinusTree<int,int> tree = new BMinusTree<int, int>(37);
+
+            for (int i = 0; i < 200; i++)
+            {
+                tree.Insert(i, i);
+            }
+            Console.WriteLine(tree.Heigth);
+            for (int i = 0; i < 200000; i++)
+            {
+                tree.Insert(i, i);
+            }
+            Console.WriteLine(tree.Heigth);
         }
     }
 }

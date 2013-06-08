@@ -15,6 +15,7 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <returns></returns>
         public static bool IsPrime(int num)
         {
+            if (num < 2) return false;
             int sqrt = (int)System.Math.Sqrt(num);
             for (int i = 2; i <= sqrt; i++)
             {
@@ -34,6 +35,7 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <returns></returns>
         public static bool IsPrime(long num)
         {
+            if (num < 2) return false;
             long sqrt = (long)System.Math.Sqrt(num);
             for (long i = 2; i <= sqrt; i++)
             {
