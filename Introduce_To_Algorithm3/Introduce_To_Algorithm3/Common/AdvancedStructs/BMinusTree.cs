@@ -161,7 +161,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
         #endregion
 
-        #region
+        #region insert
 
         /// <summary>
         /// we assure that node.Children[i] is full, but node isn't full
@@ -280,6 +280,22 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 InsertNonFull(root.Children[index], key, val);
             }
         }
+
+        #endregion
+
+        #region delete
+
+        /// <summary>
+        /// you need find the item by using search
+        /// </summary>
+        /// <param name="item"></param>
+        public void Delete(Tuple<BMinusTreeNode<K, V>, int> item)
+        {
+            Debug.Assert(item != null && item.Item1 != null && item.Item2>=0);
+
+           
+        }
+
 
         #endregion
     }
