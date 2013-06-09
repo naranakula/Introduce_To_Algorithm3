@@ -61,6 +61,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
 
         public int Heigth { get; set; }
+        public int Count { get; set; }
         #endregion
 
         #region Search
@@ -223,6 +224,8 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 return true;
             }
 
+            Count++;
+
             if (root == null)
             {
                 root = new BMinusTreeNode<K, V>(minDegree);
@@ -291,9 +294,12 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <param name="item"></param>
         public void Delete(Tuple<BMinusTreeNode<K, V>, int> item)
         {
-            Debug.Assert(item != null && item.Item1 != null && item.Item2>=0);
+            if (item == null || Count <= 0 || item.Item1 == null)
+            {
+                return;
+            }
 
-           
+            Count--;
         }
 
 
