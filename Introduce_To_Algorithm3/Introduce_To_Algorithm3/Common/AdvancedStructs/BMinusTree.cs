@@ -36,7 +36,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <param name="minDegree">the minimum degree of B- tree. it &gt;= 2, which means it the min child can a interval node has</param>
         public BMinusTree(int minDegree)
         {
-            Trace.Assert(minDegree>=2);
+            Trace.Assert(minDegree >= 2);
             this.minDegree = minDegree;
         }
 
@@ -56,12 +56,19 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <summary>
         /// get the order of a tree
         /// </summary>
-        public int Order{
-            get { return 2*minDegree; }
+        public int Order
+        {
+            get { return 2 * minDegree; }
         }
 
         public int Heigth { get; set; }
         public int Count { get; set; }
+
+
+        public bool IsEmpty
+        {
+            get { return Count == 0; }
+        }
         #endregion
 
         #region Search
@@ -172,11 +179,11 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         private void SplitChild(BMinusTreeNode<K, V> node, int i)
         {
             BMinusTreeNode<K, V> y = node.Children[i];
-            BMinusTreeNode<K,V> z = new BMinusTreeNode<K, V>(minDegree);
+            BMinusTreeNode<K, V> z = new BMinusTreeNode<K, V>(minDegree);
             z.IsLeaf = y.IsLeaf;
             z.N = minDegree - 1;
             z.Parent = node;
-            for (int j = 0; j < minDegree-1; j++)
+            for (int j = 0; j < minDegree - 1; j++)
             {
                 z.KeyValues[j] = y.KeyValues[j + minDegree];
                 //for accuracy and gc
@@ -192,21 +199,21 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 }
             }
             y.N = minDegree - 1;
-            for (int j = node.N; j >i; j--)
+            for (int j = node.N; j > i; j--)
             {
                 node.Children[j + 1] = node.Children[j];
             }
             node.Children[i + 1] = z;
-            for (int j = node.N-1; j >i; j--)
+            for (int j = node.N - 1; j > i; j--)
             {
-                node.KeyValues[j+1] = node.KeyValues[j];
+                node.KeyValues[j + 1] = node.KeyValues[j];
             }
 
             node.KeyValues[i] = y.KeyValues[minDegree - 1];
             y.KeyValues[minDegree - 1] = null;
             node.N++;
         }
-        
+
         /// <summary>
         /// if it already contains in tree, return true and update the value. if not , return false.
         /// 
@@ -215,12 +222,12 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <param name="key"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public bool Insert(K key,V val)
+        public bool Insert(K key, V val)
         {
             var v = BinarySearch(root, key);
             if (v != null)
             {
-                v.Item1.KeyValues[v.Item2] = new Tuple<K, V>(key,val);
+                v.Item1.KeyValues[v.Item2] = new Tuple<K, V>(key, val);
                 return true;
             }
 
@@ -232,49 +239,49 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 root.IsLeaf = true;
                 root.N = 1;
                 Heigth = 1;
-                root.KeyValues[0] = new Tuple<K, V>(key,val);
+                root.KeyValues[0] = new Tuple<K, V>(key, val);
                 return false;
             }
 
-            if (root.N == 2*minDegree - 1)
+            if (root.N == 2 * minDegree - 1)
             {
-                BMinusTreeNode<K,V> node = new BMinusTreeNode<K, V>(minDegree);
+                BMinusTreeNode<K, V> node = new BMinusTreeNode<K, V>(minDegree);
                 node.Children[0] = root;
                 root.Parent = node;
                 root = node;
                 Heigth++;
-                SplitChild(node,0);
-                InsertNonFull(root, key,val);
+                SplitChild(node, 0);
+                InsertNonFull(root, key, val);
                 return false;
             }
             else
             {
-                InsertNonFull(root, key,val);
+                InsertNonFull(root, key, val);
                 return false;
             }
         }
 
-        private void InsertNonFull(BMinusTreeNode<K, V> root, K key,V val)
+        private void InsertNonFull(BMinusTreeNode<K, V> root, K key, V val)
         {
             //root.N possibly equal 0
-            int i = root.N-1;
+            int i = root.N - 1;
             if (root.IsLeaf)
             {
-                while (i>=0&&key.CompareTo(root.KeyValues[i].Item1)<0)
+                while (i >= 0 && key.CompareTo(root.KeyValues[i].Item1) < 0)
                 {
                     root.KeyValues[i + 1] = root.KeyValues[i];
                     i--;
                 }
-                root.KeyValues[i + 1] = new Tuple<K, V>(key,val);
+                root.KeyValues[i + 1] = new Tuple<K, V>(key, val);
                 root.N++;
             }
             else
             {
                 int index = root.Search(key).Item1;
                 BMinusTreeNode<K, V> node = root.Children[index];
-                if (node.N == 2*minDegree - 1)
+                if (node.N == 2 * minDegree - 1)
                 {
-                    SplitChild(root,index);
+                    SplitChild(root, index);
                     if (key.CompareTo(root.KeyValues[i].Item1) > 0)
                     {
                         index++;
@@ -296,10 +303,72 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         {
             if (item == null || Count <= 0 || item.Item1 == null)
             {
+                Count = 0;
                 return;
             }
 
             Count--;
+            BMinusTreeNode<K, V> node = item.Item1;
+            int index = item.Item2;
+
+            //case 0: node is leaf and root. this is only one node -- the root node just delete
+            if (node.IsLeaf && node == root)
+            {
+                if (node.N <= 1)
+                {
+                    root = null;
+                    Heigth = 0;
+                    Count = 0;
+                }
+                else
+                {
+                    int i = index + 1;
+                    for (; i < node.N; i++)
+                    {
+                        node.KeyValues[i - 1] = node.KeyValues[i];
+                    }
+                    //for gc and accuracy
+                    node.KeyValues[i - 1] = null;
+                    //actually no need to update child because node is leaf and all its children are null
+                    for (i = index + 1; i < node.N + 1; i++)
+                    {
+                        node.Children[i - 1] = node.Children[i];
+                    }
+                    node.Children[i - 1] = null;
+                    node.N--;
+                }
+                return;
+            }
+
+
+            //case 1:node is leaf and its key numbers >= t, delete A[i],K[i];
+            if (node.IsLeaf && node.N >= minDegree)
+            {
+                int i = index + 1;
+                for (; i < node.N; i++)
+                {
+                    node.KeyValues[i - 1] = node.KeyValues[i];
+                }
+                //for gc and accuracy
+                node.KeyValues[i - 1] = null;
+                //actually no need to update child because node is leaf and all its children are null
+                for (i = index + 1; i < node.N + 1; i++)
+                {
+                    node.Children[i - 1] = node.Children[i];
+                }
+                node.Children[i - 1] = null;
+                node.N--;
+                return;
+            }
+
+            //case 2:node is lead and its key numbers = t-1,
+            if (node.IsLeaf && node.N == minDegree - 1)
+            {
+                return;
+            }
+
+
+
         }
 
 

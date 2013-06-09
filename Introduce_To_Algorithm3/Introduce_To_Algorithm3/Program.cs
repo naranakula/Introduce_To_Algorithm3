@@ -17,18 +17,17 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            BMinusTree<int,int> tree = new BMinusTree<int, int>(37);
+            BMinusTree<int,int> tree = new BMinusTree<int, int>(20);
 
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < 20; i++)
             {
                 tree.Insert(i, i);
             }
             Console.WriteLine(tree.Heigth);
-            for (int i = 0; i < 200000; i++)
+            for (int i = 10; i < 20; i++)
             {
-                tree.Insert(i, i);
+                tree.Delete(tree.Search(i));
             }
-            Console.WriteLine(tree.Heigth);
         }
     }
 }
