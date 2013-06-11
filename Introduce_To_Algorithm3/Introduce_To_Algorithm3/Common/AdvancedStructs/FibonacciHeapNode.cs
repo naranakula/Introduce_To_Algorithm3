@@ -34,5 +34,23 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// is made the child of another node.
         /// </summary>
         public bool Mark;
+
+        public List<FibonacciHeapNode<K, V>> GetChildren()
+        {
+            List<FibonacciHeapNode<K,V>> list = new List<FibonacciHeapNode<K, V>>();
+            if (Child == null) return list;
+
+            FibonacciHeapNode<K, V> temp = Child;
+            while (true)
+            {
+                list.Add(temp);
+                temp = temp.RightSibling;
+                if (temp == Child)
+                {
+                    break;
+                }
+            }
+            return list;
+        }
     }
 }
