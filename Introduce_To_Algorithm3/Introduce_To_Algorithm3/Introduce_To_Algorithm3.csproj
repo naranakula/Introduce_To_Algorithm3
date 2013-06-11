@@ -50,6 +50,8 @@
     <Compile Include="Common\AdvancedStructs\BMinusTreeNode.cs" />
     <Compile Include="Common\AdvancedStructs\BPlusTree.cs" />
     <Compile Include="Common\AdvancedStructs\BStarTree.cs" />
+    <Compile Include="Common\AdvancedStructs\FibonacciHeap.cs" />
+    <Compile Include="Common\AdvancedStructs\FibonacciHeapNode.cs" />
     <Compile Include="Common\DynamicProgramming\CutRod.cs" />
     <Compile Include="Common\DynamicProgramming\LCS.cs" />
     <Compile Include="Common\DynamicProgramming\LevenshteinDistance.cs" />

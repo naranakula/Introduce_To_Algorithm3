@@ -364,9 +364,10 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             //case 2:node is lead and its key numbers = t-1,
             if (node.IsLeaf && node.N == minDegree - 1)
             {
+                throw new NotImplementedException();
                 return;
             }
-
+            throw new NotImplementedException();
 
 
         }

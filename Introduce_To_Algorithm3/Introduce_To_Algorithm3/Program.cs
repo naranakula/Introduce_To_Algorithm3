@@ -17,17 +17,18 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            BMinusTree<int,int> tree = new BMinusTree<int, int>(20);
+            FibonacciHeap<int,int> heap = new FibonacciHeap<int, int>();
+            for (int i = 0; i < 1; i++)
+            {
+                heap.Insert(i,i);
+            }
+            FibonacciHeap<int, int> heap1 = new FibonacciHeap<int, int>();
+            for (int i = 2; i < 4; i++)
+            {
+                heap1.Insert(i, i);
+            }
 
-            for (int i = 0; i < 20; i++)
-            {
-                tree.Insert(i, i);
-            }
-            Console.WriteLine(tree.Heigth);
-            for (int i = 10; i < 20; i++)
-            {
-                tree.Delete(tree.Search(i));
-            }
+            heap = FibonacciHeap<int, int>.Union(heap, heap1);
         }
     }
 }
