@@ -52,6 +52,7 @@
     <Compile Include="Common\AdvancedStructs\BStarTree.cs" />
     <Compile Include="Common\AdvancedStructs\FibonacciHeap.cs" />
     <Compile Include="Common\AdvancedStructs\FibonacciHeapNode.cs" />
+    <Compile Include="Common\AdvancedStructs\ProtovEB.cs" />
     <Compile Include="Common\AdvancedStructs\VanEmdeBoasTree.cs" />
     <Compile Include="Common\DynamicProgramming\CutRod.cs" />
     <Compile Include="Common\DynamicProgramming\LCS.cs" />
