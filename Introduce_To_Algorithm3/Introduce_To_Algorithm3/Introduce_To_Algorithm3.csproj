@@ -50,6 +50,7 @@
     <Compile Include="Common\AdvancedStructs\BMinusTreeNode.cs" />
     <Compile Include="Common\AdvancedStructs\BPlusTree.cs" />
     <Compile Include="Common\AdvancedStructs\BStarTree.cs" />
+    <Compile Include="Common\AdvancedStructs\DisjointSet.cs" />
     <Compile Include="Common\AdvancedStructs\FibonacciHeap.cs" />
     <Compile Include="Common\AdvancedStructs\FibonacciHeapNode.cs" />
     <Compile Include="Common\AdvancedStructs\ProtovEB.cs" />
