@@ -11,7 +11,8 @@
     <RootNamespace>Introduce_To_Algorithm3</RootNamespace>
     <AssemblyName>Introduce_To_Algorithm3</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -60,6 +61,13 @@
     <Compile Include="Common\DynamicProgramming\LevenshteinDistance.cs" />
     <Compile Include="Common\DynamicProgramming\MatrixChain.cs" />
     <Compile Include="Common\DynamicProgramming\OptimalBST.cs" />
+    <Compile Include="Common\Graph\AdjMatrixDigraph.cs" />
+    <Compile Include="Common\Graph\AdjMatrixGraph.cs" />
+    <Compile Include="Common\Graph\BreadthFirstPaths.cs" />
+    <Compile Include="Common\Graph\Digraph.cs" />
+    <Compile Include="Common\Graph\Graph.cs" />
+    <Compile Include="Common\Graph\UnDirectedGraph.cs" />
+    <Compile Include="Common\Graph\UnDirectedVertex.cs" />
     <Compile Include="Common\GreedyAlgorithm\ActivitySelection.cs" />
     <Compile Include="Common\GreedyAlgorithm\HuffmanTree.cs" />
     <Compile Include="Common\GreedyAlgorithm\Knapsack.cs" />
@@ -108,6 +116,9 @@
     <Content Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

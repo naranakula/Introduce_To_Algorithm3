@@ -1,39 +1,24 @@
-﻿using Introduce_To_Algorithm3.Common.Search;
+﻿using System;
+using Introduce_To_Algorithm3.Common.Search;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace TestProject
 {
-    
-    
     /// <summary>
-    ///This is a test class for BinarySearchTest and is intended
-    ///to contain all BinarySearchTest Unit Tests
-    ///</summary>
-    [TestClass()]
+    ///     This is a test class for BinarySearchTest and is intended
+    ///     to contain all BinarySearchTest Unit Tests
+    /// </summary>
+    [TestClass]
     public class BinarySearchTest
     {
-
-
-        private TestContext testContextInstance;
-
         /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
+        ///     Gets or sets the test context which provides
+        ///     information about and functionality for the current test run.
+        /// </summary>
+        public TestContext TestContext { get; set; }
 
         #region Additional test attributes
+
         // 
         //You can use the following additional attributes as you write your tests:
         //
@@ -61,12 +46,12 @@ namespace TestProject
         //{
         //}
         //
+
         #endregion
 
-
         /// <summary>
-        ///A test for Search
-        ///</summary>
+        ///     A test for Search
+        /// </summary>
         public void SearchTestHelper<T>()
             where T : IComparable<T>
         {
@@ -79,11 +64,11 @@ namespace TestProject
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void SearchTest()
         {
             Assert.Inconclusive("No appropriate type parameter is found to satisfies the type constraint(s) of T. " +
-                    "Please call SearchTestHelper<T>() with appropriate type parameters.");
+                                "Please call SearchTestHelper<T>() with appropriate type parameters.");
         }
     }
 }
