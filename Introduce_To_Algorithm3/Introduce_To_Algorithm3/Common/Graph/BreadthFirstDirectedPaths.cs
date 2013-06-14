@@ -6,13 +6,12 @@ using System.Text;
 namespace Introduce_To_Algorithm3.Common.Graph
 {
     /// <summary>
-    /// breadth first search 
-    /// it can be used to find shortest path
+    /// breadth first search for directed graph
     /// it runs at O(V+E)
     /// </summary>
-    public class BreadthFirstSearch
+    public class BreadthFirstDirectedPaths
     {
-        public const int INFINITY = int.MaxValue;
+         public const int INFINITY = int.MaxValue;
         /// <summary>
         /// marked[v] = is there an s-v path
         /// </summary>
@@ -33,11 +32,11 @@ namespace Introduce_To_Algorithm3.Common.Graph
         /// </summary>
         /// <param name="g">the graph used to bfs</param>
         /// <param name="s">the begin point --- s</param>
-        public BreadthFirstSearch(Graph g, int s)
+        public BreadthFirstDirectedPaths(Digraph g, int s)
         {
-            marked = new bool[g.V];
-            distTo = new int[g.V];
-            edgeTo = new int[g.V];
+            marked = new bool[g.V()];
+            distTo = new int[g.V()];
+            edgeTo = new int[g.V()];
             bfs(g, s);
         }
 
@@ -46,13 +45,13 @@ namespace Introduce_To_Algorithm3.Common.Graph
         /// </summary>
         /// <param name="g"></param>
         /// <param name="sources"></param>
-        public BreadthFirstSearch(Graph g, IEnumerable<int> sources)
+        public BreadthFirstDirectedPaths(Digraph g, IEnumerable<int> sources)
         {
-            marked = new bool[g.V];
-            distTo = new int[g.V];
-            edgeTo = new int[g.V];
+            marked = new bool[g.V()];
+            distTo = new int[g.V()];
+            edgeTo = new int[g.V()];
 
-            for (int i = 0; i < g.V; i++)
+            for (int i = 0; i < g.V(); i++)
             {
                 distTo[i] = INFINITY;
             }
@@ -65,7 +64,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
         /// </summary>
         /// <param name="g"></param>
         /// <param name="sources"></param>
-        private void bfs(Graph g, IEnumerable<int> sources)
+        private void bfs(Digraph g, IEnumerable<int> sources)
         {
             Queue<int> q = new Queue<int>();
             foreach (int s in sources)
@@ -96,10 +95,10 @@ namespace Introduce_To_Algorithm3.Common.Graph
         /// </summary>
         /// <param name="g"></param>
         /// <param name="s"></param>
-        private void bfs(Graph g, int s)
+        private void bfs(Digraph g, int s)
         {
             Queue<int> q = new Queue<int>();
-            for (int i = 0; i < g.V; i++)
+            for (int i = 0; i < g.V(); i++)
             {
                 distTo[i] = INFINITY;
             }
@@ -165,6 +164,5 @@ namespace Introduce_To_Algorithm3.Common.Graph
 
             return path;
         }
-
     }
 }
