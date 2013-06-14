@@ -63,7 +63,7 @@
     <Compile Include="Common\DynamicProgramming\OptimalBST.cs" />
     <Compile Include="Common\Graph\AdjMatrixDigraph.cs" />
     <Compile Include="Common\Graph\AdjMatrixGraph.cs" />
-    <Compile Include="Common\Graph\BreadthFirstPaths.cs" />
+    <Compile Include="Common\Graph\BreadthFirstSearch.cs" />
     <Compile Include="Common\Graph\Digraph.cs" />
     <Compile Include="Common\Graph\Graph.cs" />
     <Compile Include="Common\Graph\UnDirectedGraph.cs" />
