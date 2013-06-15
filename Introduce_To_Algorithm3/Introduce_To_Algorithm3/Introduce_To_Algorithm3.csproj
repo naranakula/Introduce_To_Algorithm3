@@ -65,9 +65,14 @@
     <Compile Include="Common\Graph\AdjMatrixGraph.cs" />
     <Compile Include="Common\Graph\BreadthFirstDirectedPaths.cs" />
     <Compile Include="Common\Graph\BreadthFirstSearch.cs" />
+    <Compile Include="Common\Graph\Cycle.cs" />
+    <Compile Include="Common\Graph\DepthFirstDirectedPaths.cs" />
     <Compile Include="Common\Graph\DepthFirstSearch.cs" />
     <Compile Include="Common\Graph\Digraph.cs" />
+    <Compile Include="Common\Graph\DirectedCycle.cs" />
+    <Compile Include="Common\Graph\DirectedDFS.cs" />
     <Compile Include="Common\Graph\Graph.cs" />
+    <Compile Include="Common\Graph\TopologicalSort.cs" />
     <Compile Include="Common\Graph\UnDirectedGraph.cs" />
     <Compile Include="Common\Graph\UnDirectedVertex.cs" />
     <Compile Include="Common\GreedyAlgorithm\ActivitySelection.cs" />
