@@ -61,6 +61,10 @@
     <Compile Include="Common\DynamicProgramming\LevenshteinDistance.cs" />
     <Compile Include="Common\DynamicProgramming\MatrixChain.cs" />
     <Compile Include="Common\DynamicProgramming\OptimalBST.cs" />
+    <Compile Include="Common\GraphEx\AdjMatrixDigraph.cs" />
+    <Compile Include="Common\GraphEx\AdjMatrixGraph.cs" />
+    <Compile Include="Common\GraphEx\DiGraph.cs" />
+    <Compile Include="Common\GraphEx\Graph.cs" />
     <Compile Include="Common\Graph\AdjMatrixDigraph.cs" />
     <Compile Include="Common\Graph\AdjMatrixGraph.cs" />
     <Compile Include="Common\Graph\BreadthFirstDirectedPaths.cs" />
