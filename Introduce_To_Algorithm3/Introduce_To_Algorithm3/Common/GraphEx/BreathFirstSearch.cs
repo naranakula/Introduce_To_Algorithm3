@@ -93,28 +93,31 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
             stack.Push(v);
             return stack;
         }
-    }
 
 
-
-    public class VertexNode
-    {
-        /// <summary>
-        /// the id of vertex
-        /// </summary>
-        public int Id { get; private set; }
-
-        public const int UNREACHABLE = -1;
-        public int Distance = UNREACHABLE;
-
-        public VertexNode(int id)
+        private class VertexNode
         {
-            Id = id;
-        }
+            /// <summary>
+            /// the id of vertex
+            /// </summary>
+            public int Id { get; private set; }
 
-        public VertexColor Color;
-        public VertexNode Parent;
+            public const int UNREACHABLE = -1;
+            public int Distance = UNREACHABLE;
+
+            public VertexNode(int id)
+            {
+                Id = id;
+            }
+
+            public VertexColor Color;
+            public VertexNode Parent;
+        }
     }
+
+
+
+    
 
     public enum VertexColor
     {
