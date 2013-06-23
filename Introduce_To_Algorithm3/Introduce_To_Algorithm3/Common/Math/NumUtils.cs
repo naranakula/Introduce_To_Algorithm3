@@ -83,5 +83,33 @@ namespace Introduce_To_Algorithm3.Common.Math
 
             return Gcd(num2, num1%num2);
         }
+
+        /// <summary>
+        /// a factorial of n
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static long A(int n)
+        {
+            Trace.Assert(n>=0);
+            long result = 1;
+            for (int i = 1; i <=n; i++)
+            {
+                result *= n;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// a combination
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public static long C(int n, int r)
+        {
+            return A(n)/A(r)/A(n - r);
+        }
+
     }
 }
