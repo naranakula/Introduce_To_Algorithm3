@@ -67,6 +67,7 @@
     <Compile Include="Common\GraphEx\DepthFirstSearch.cs" />
     <Compile Include="Common\GraphEx\DiGraph.cs" />
     <Compile Include="Common\GraphEx\Graph.cs" />
+    <Compile Include="Common\GraphEx\TopologicalSort.cs" />
     <Compile Include="Common\Graph\AdjMatrixDigraph.cs" />
     <Compile Include="Common\Graph\AdjMatrixGraph.cs" />
     <Compile Include="Common\Graph\BreadthFirstDirectedPaths.cs" />
