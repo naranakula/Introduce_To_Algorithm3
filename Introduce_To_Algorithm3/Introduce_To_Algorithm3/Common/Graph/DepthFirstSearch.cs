@@ -118,7 +118,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
         /// </summary>
         public List<int> ConnnectedV
         {
-            get { return connected; }
+            get { return connected.Distinct(); }
         }
     }
 }
