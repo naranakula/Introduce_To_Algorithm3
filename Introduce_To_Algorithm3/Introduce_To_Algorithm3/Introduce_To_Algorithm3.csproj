@@ -72,6 +72,7 @@
     <Compile Include="Common\Graph\AdjMatrixGraph.cs" />
     <Compile Include="Common\Graph\BreadthFirstDirectedPaths.cs" />
     <Compile Include="Common\Graph\BreadthFirstSearch.cs" />
+    <Compile Include="Common\Graph\CC.cs" />
     <Compile Include="Common\Graph\Cycle.cs" />
     <Compile Include="Common\Graph\DepthFirstDirectedPaths.cs" />
     <Compile Include="Common\Graph\DepthFirstSearch.cs" />

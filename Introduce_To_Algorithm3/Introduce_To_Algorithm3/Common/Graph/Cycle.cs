@@ -38,7 +38,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
 
         private void dfs(Graph g, int u, int v)
         {
-            marked[v] = false;
+            marked[v] = true;
 
             foreach (int w in g.Adj(v))
             {
@@ -51,7 +51,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
                 }
                 else if(w != u)
                 {
-                    //check for cycle (but disregard reverse of edge leading to v)
+                    //check for cycle (but disregard reverse of edge leading to v, such as u-v)
                     cycle = new Stack<int>();
                     for (int x = v; x != w; x = edgeTo[x])
                     {
