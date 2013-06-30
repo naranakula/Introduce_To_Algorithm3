@@ -70,7 +70,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
                 if (adj[i, j])
                     list.Add(j);
             }
-            return list.Distinct().ToList();
+            return list.ToList();
         }
     }
 }
