@@ -38,6 +38,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
         {
             marked = new bool[g.V];
             size = new int[g.V];
+            id = new int[g.V];
             for (int i = 0; i < g.V; i++)
             {
                 if (!marked[i])

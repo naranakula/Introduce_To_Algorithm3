@@ -34,10 +34,10 @@ namespace Introduce_To_Algorithm3.Common.Graph
 
         public DirectedCycle(Digraph g)
         {
-            marked = new bool[g.V()];
-            onStack = new bool[g.V()];
-            edgeTo = new int[g.V()];
-            for (int v = 0; v < g.V(); v++)
+            marked = new bool[g.V];
+            onStack = new bool[g.V];
+            edgeTo = new int[g.V];
+            for (int v = 0; v < g.V; v++)
             {
                 if (!marked[v])
                     dfs(g, v);

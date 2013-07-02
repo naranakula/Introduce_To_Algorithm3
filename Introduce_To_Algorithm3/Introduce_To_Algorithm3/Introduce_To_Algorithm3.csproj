@@ -79,10 +79,15 @@
     <Compile Include="Common\Graph\Cycle.cs" />
     <Compile Include="Common\Graph\DegreesOfSeparation.cs" />
     <Compile Include="Common\Graph\DepthFirstDirectedPaths.cs" />
+    <Compile Include="Common\Graph\DepthFirstOrder.cs" />
     <Compile Include="Common\Graph\DepthFirstSearch.cs" />
     <Compile Include="Common\Graph\Digraph.cs" />
     <Compile Include="Common\Graph\DirectedCycle.cs" />
     <Compile Include="Common\Graph\DirectedDFS.cs" />
+    <Compile Include="Common\Graph\DirectedEdge.cs" />
+    <Compile Include="Common\Graph\Edge.cs" />
+    <Compile Include="Common\Graph\EdgeWeightedDigraph.cs" />
+    <Compile Include="Common\Graph\EdgeWeightedGraph.cs" />
     <Compile Include="Common\Graph\Graph.cs" />
     <Compile Include="Common\Graph\Planarity.cs" />
     <Compile Include="Common\Graph\TopologicalSort.cs" />

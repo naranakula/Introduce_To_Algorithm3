@@ -34,9 +34,9 @@ namespace Introduce_To_Algorithm3.Common.Graph
         /// <param name="s">the begin point --- s</param>
         public BreadthFirstDirectedPaths(Digraph g, int s)
         {
-            marked = new bool[g.V()];
-            distTo = new int[g.V()];
-            edgeTo = new int[g.V()];
+            marked = new bool[g.V];
+            distTo = new int[g.V];
+            edgeTo = new int[g.V];
             bfs(g, s);
         }
 
@@ -47,11 +47,11 @@ namespace Introduce_To_Algorithm3.Common.Graph
         /// <param name="sources"></param>
         public BreadthFirstDirectedPaths(Digraph g, IEnumerable<int> sources)
         {
-            marked = new bool[g.V()];
-            distTo = new int[g.V()];
-            edgeTo = new int[g.V()];
+            marked = new bool[g.V];
+            distTo = new int[g.V];
+            edgeTo = new int[g.V];
 
-            for (int i = 0; i < g.V(); i++)
+            for (int i = 0; i < g.V; i++)
             {
                 distTo[i] = INFINITY;
             }
@@ -98,7 +98,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
         private void bfs(Digraph g, int s)
         {
             Queue<int> q = new Queue<int>();
-            for (int i = 0; i < g.V(); i++)
+            for (int i = 0; i < g.V; i++)
             {
                 distTo[i] = INFINITY;
             }

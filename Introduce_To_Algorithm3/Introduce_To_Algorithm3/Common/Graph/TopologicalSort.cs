@@ -10,6 +10,8 @@ namespace Introduce_To_Algorithm3.Common.Graph
     /// (if the graph contains a cycle, then no linear ordering is possible)
     /// many application use directed acyclic graph to indicate prcedences among event.
     /// in this case, edge (u,v) represents u must start before v
+    /// 
+    /// a directed graph can topological sort if and only if it is dag
     /// </summary>
     public class TopologicalSort
     {

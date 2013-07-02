@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
 
         public DirectedDFS(Digraph g, int s)
         {
-            marked = new bool[g.V()];
+            marked = new bool[g.V];
             dfs(g, s);
         }
 
@@ -27,7 +27,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
         /// <param name="sources"></param>
         public DirectedDFS(Digraph g, IEnumerable<int> sources)
         {
-            marked = new bool[g.V()];
+            marked = new bool[g.V];
             foreach (int v in sources)
             {
                 dfs(g, v);

@@ -41,8 +41,8 @@ namespace Introduce_To_Algorithm3.Common.Graph
         /// <param name="s">the start vertex</param>
         public DepthFirstDirectedPaths(Digraph g, int s)
         {
-            marked = new bool[g.V()];
-            edgeTo = new int[g.V()];
+            marked = new bool[g.V];
+            edgeTo = new int[g.V];
             this.s = s;
             connected = new List<int>();
             dfs(g, s);
