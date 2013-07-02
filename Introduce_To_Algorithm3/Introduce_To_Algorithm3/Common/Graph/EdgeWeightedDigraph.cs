@@ -89,5 +89,31 @@ namespace Introduce_To_Algorithm3.Common.Graph
             adj[e.From()].Add(e);
             (this.e)++;
         }
+
+        /// <summary>
+        /// Return the edges incident from vertex v as an Iterable.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public List<DirectedEdge> Adj(int v)
+        {
+            return adj[v];
+        }
+
+        /// <summary>
+        /// Return all edges in this digraph as an Iterable.
+        /// </summary>
+        /// <returns></returns>
+        public List<DirectedEdge> Edges()
+        {
+            List<DirectedEdge> list = new List<DirectedEdge>();
+
+            for (int v = 0; v < this.v; v++)
+            {
+                list.AddRange(adj[v]);
+            }
+            return list;
+        }
+
     }
 }
