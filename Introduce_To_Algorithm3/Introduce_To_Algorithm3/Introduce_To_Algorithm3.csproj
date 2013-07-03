@@ -90,8 +90,10 @@
     <Compile Include="Common\Graph\EdgeWeightedDirectedCycle.cs" />
     <Compile Include="Common\Graph\EdgeWeightedGraph.cs" />
     <Compile Include="Common\Graph\Graph.cs" />
+    <Compile Include="Common\Graph\KosarajuSharirSCC.cs" />
     <Compile Include="Common\Graph\Planarity.cs" />
     <Compile Include="Common\Graph\Topological.cs" />
+    <Compile Include="Common\Graph\TransitiveClosure.cs" />
     <Compile Include="Common\Graph\TwoColor.cs" />
     <Compile Include="Common\Graph\UnDirectedGraph.cs" />
     <Compile Include="Common\Graph\UnDirectedVertex.cs" />
