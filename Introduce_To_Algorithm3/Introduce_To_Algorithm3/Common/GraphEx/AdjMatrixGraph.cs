@@ -63,6 +63,7 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
         /// <returns></returns>
         public bool Contains(int v, int w)
         {
+            if (v == w) return true;
             return adjs[v, w];
         }
 
