@@ -95,7 +95,7 @@ namespace Introduce_To_Algorithm3.Common.Math
             long result = 1;
             for (int i = 1; i <=n; i++)
             {
-                result *= n;
+                result *= i;
             }
             return result;
         }
@@ -108,15 +108,17 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <returns></returns>
         public static long C(int n, int r)
         {
+            //return  A(n)/(A(r)*A(n-r));
             long res = 1;
             for (int i = 1; i <= r; i++)
             {
-                res *= n - r + 1;
+                res *= n - i + 1;
             }
             for (int i = 1; i <= r; i++)
             {
-                res /=r;
+                res /=i;
             }
+            
             return res;
         }
 
