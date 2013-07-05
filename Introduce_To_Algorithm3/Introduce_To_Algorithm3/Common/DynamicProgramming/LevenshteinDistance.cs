@@ -7,7 +7,6 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
 {
     public class EditDistance
     {
-
         /// <summary>
         /// compute the edit distance from source to string dest<br />
         /// note: the edit distance from source to dest equals the edit distance from dest to source
