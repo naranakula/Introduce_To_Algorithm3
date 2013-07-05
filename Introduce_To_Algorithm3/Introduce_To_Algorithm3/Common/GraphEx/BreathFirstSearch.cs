@@ -5,6 +5,11 @@ using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.GraphEx
 {
+    /// <summary>
+    /// used to find shortest path
+    /// bfs search each vertex only once
+    /// it runs at O(v+e)
+    /// </summary>
     public class BreadthFirstSearch
     {
         private VertexNode[] nodes;
@@ -25,6 +30,43 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
 
             bfs(g, s);
         }
+
+        public BreadthFirstSearch(DiGraph g, int s)
+        {
+            nodes = new VertexNode[g.V];
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                nodes[i] = new VertexNode(i);
+                nodes[i].Color = VertexColor.White;
+            }
+
+            bfs(g,s);
+        }
+
+        private void bfs(DiGraph g, int s)
+        {
+            nodes[s].Parent = null;
+            nodes[s].Distance = 0;
+            nodes[s].Color = VertexColor.Gray;
+            Queue<int> queue = new Queue<int>();
+            queue.Enqueue(s);
+            while (queue.Count != 0)
+            {
+                int u = queue.Dequeue();
+                foreach (var v in g.Adj(u))
+                {
+                    if (nodes[v].Color == VertexColor.White)
+                    {
+                        nodes[v].Color = VertexColor.Gray;
+                        nodes[v].Distance = nodes[u].Distance + 1;
+                        nodes[v].Parent = nodes[u];
+                        queue.Enqueue(v);
+                    }
+                }
+                nodes[u].Color = VertexColor.Black;
+            }
+        }
+
 
         private void bfs(Graph g, int s)
         {
@@ -72,6 +114,20 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
             return nodes[v].Distance;
         }
 
+        /// <summary>
+        /// node linked to s
+        /// </summary>
+        /// <returns></returns>
+        public List<int> LinkedTo()
+        {
+            List<int> list = new List<int>();
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                if(HasPathTo(i))
+                    list.Add(i);
+            }
+            return list;
+        }
 
         /// <summary>
         /// shortest path between s and v, null if no such path
@@ -123,6 +179,9 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
     {
         White,//undiscovered
         Gray,
+        /// <summary>
+        /// all vertices linked to black vertex are already discovered
+        /// </summary>
         Black//discovered
     }
 

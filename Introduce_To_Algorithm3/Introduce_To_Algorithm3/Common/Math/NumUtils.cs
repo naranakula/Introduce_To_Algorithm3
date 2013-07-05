@@ -122,5 +122,16 @@ namespace Introduce_To_Algorithm3.Common.Math
             return res;
         }
 
+
+        /// <summary>
+        /// is a year leap year
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public static bool IsLeapYear(uint year)
+        {
+            return (year%4 == 0 && year%100 != 0) || (year%400 == 0);
+        }
+
     }
 }
