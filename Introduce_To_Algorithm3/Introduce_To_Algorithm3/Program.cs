@@ -18,13 +18,14 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            DiGraph g = new DiGraph(4);
+            DiGraph g = new DiGraph(5);
             g.AddEdge(2,0);
             //g.AddEdge(0,2);
             g.AddEdge(1,2);
             g.AddEdge(3,1);
-            TopologicalSort s = new TopologicalSort(g);
-            var v =s.GetTopoSort();
+            g.AddEdge(1,3);
+            StrongConnected sc = new StrongConnected(g);
+            var v =sc.GetSc();
         }
     }
 }

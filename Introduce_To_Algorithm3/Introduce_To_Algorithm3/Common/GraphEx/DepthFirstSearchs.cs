@@ -13,14 +13,12 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
         private VertexNode[] nodes;
         private Queue<int> preOrder;
         private Queue<int> postOrder;
-        private int count;
-        private List<HashSet<int>> strongConnect;
+
 
         public DepthFirstSearchs(DiGraph g)
         {
             preOrder = new Queue<int>();
             postOrder = new Queue<int>();
-            strongConnect = new List<HashSet<int>>();
             nodes = new VertexNode[g.V];
             for (int i = 0; i < nodes.Length; i++)
             {
@@ -32,8 +30,6 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
             {
                 if (nodes[i].Color == VertexColor.White)
                 {
-                    strongConnect.Add(new HashSet<int>());
-                    count++;
                     dfs(g, i);
                 }
             }
@@ -43,7 +39,6 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
         private void dfs(DiGraph g, int s)
         {
             preOrder.Enqueue(s);
-            strongConnect.Last().Add(s);
             nodes[s].Color = VertexColor.Gray;
             nodes[s].Discovered = ++time;
             foreach (int w in g.Adj(s))
@@ -73,17 +68,6 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
         {
             return postOrder.Reverse();
         }
-
-        public int NumberOfStrongConnected()
-        {
-            return count;
-        }
-
-        public List<HashSet<int>> StrongConnected()
-        {
-            return strongConnect;
-        }
-
 
         private class VertexNode
         {

@@ -68,6 +68,7 @@
     <Compile Include="Common\GraphEx\DepthFirstSearchs.cs" />
     <Compile Include="Common\GraphEx\DiGraph.cs" />
     <Compile Include="Common\GraphEx\Graph.cs" />
+    <Compile Include="Common\GraphEx\StrongConnected.cs" />
     <Compile Include="Common\GraphEx\TopologicalSort.cs" />
     <Compile Include="Common\Graph\AdjMatrixDigraph.cs" />
     <Compile Include="Common\Graph\AdjMatrixGraph.cs" />

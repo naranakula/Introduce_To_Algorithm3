@@ -82,7 +82,7 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
             {
                 for (int j = 0; j < adjs[i].Count; j++)
                 {
-                    graph.AddEdge(j,i);
+                    graph.AddEdge(adjs[i][j],i);
                 }
             }
             return graph;
