@@ -68,7 +68,9 @@
     <Compile Include="Common\GraphEx\DepthFirstSearchs.cs" />
     <Compile Include="Common\GraphEx\DiGraph.cs" />
     <Compile Include="Common\GraphEx\Edge.cs" />
+    <Compile Include="Common\GraphEx\EdgeWeightedGraph.cs" />
     <Compile Include="Common\GraphEx\Graph.cs" />
+    <Compile Include="Common\GraphEx\MSTKruskal.cs" />
     <Compile Include="Common\GraphEx\StrongConnected.cs" />
     <Compile Include="Common\GraphEx\TopologicalSort.cs" />
     <Compile Include="Common\Graph\AdjMatrixDigraph.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Common\Structs\Queue.cs" />
     <Compile Include="Common\Structs\QueueNode.cs" />
     <Compile Include="Common\Structs\Stack.cs" />
+    <Compile Include="Common\Utils\CodeCounter.cs" />
     <Compile Include="Common\Utils\HashFunc.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
