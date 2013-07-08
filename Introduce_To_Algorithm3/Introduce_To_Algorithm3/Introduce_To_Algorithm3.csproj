@@ -71,6 +71,7 @@
     <Compile Include="Common\GraphEx\EdgeWeightedGraph.cs" />
     <Compile Include="Common\GraphEx\Graph.cs" />
     <Compile Include="Common\GraphEx\MSTKruskal.cs" />
+    <Compile Include="Common\GraphEx\MSTPrim.cs" />
     <Compile Include="Common\GraphEx\StrongConnected.cs" />
     <Compile Include="Common\GraphEx\TopologicalSort.cs" />
     <Compile Include="Common\Graph\AdjMatrixDigraph.cs" />
