@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinarySearchTest.cs" />
+    <Compile Include="DijkstraSPTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +62,9 @@
       <Project>{5608DDAE-D5E8-49D4-8D39-8AFAEC2BF6BC}</Project>
       <Name>Introduce_To_Algorithm3</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Shadow Include="Test References\Introduce_To_Algorithm3.accessor" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

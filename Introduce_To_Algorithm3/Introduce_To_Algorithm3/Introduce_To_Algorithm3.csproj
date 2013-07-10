@@ -88,6 +88,7 @@
     <Compile Include="Common\Graph\DepthFirstOrder.cs" />
     <Compile Include="Common\Graph\DepthFirstSearch.cs" />
     <Compile Include="Common\Graph\Digraph.cs" />
+    <Compile Include="Common\Graph\DijkstraSP.cs" />
     <Compile Include="Common\Graph\DirectedCycle.cs" />
     <Compile Include="Common\Graph\DirectedDFS.cs" />
     <Compile Include="Common\Graph\DirectedEdge.cs" />
