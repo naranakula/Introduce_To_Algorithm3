@@ -74,6 +74,8 @@
     <Compile Include="Common\GraphEx\MSTPrim.cs" />
     <Compile Include="Common\GraphEx\StrongConnected.cs" />
     <Compile Include="Common\GraphEx\TopologicalSort.cs" />
+    <Compile Include="Common\Graph\AcyclicLP.cs" />
+    <Compile Include="Common\Graph\AcyclicSP.cs" />
     <Compile Include="Common\Graph\AdjMatrixDigraph.cs" />
     <Compile Include="Common\Graph\AdjMatrixGraph.cs" />
     <Compile Include="Common\Graph\Biconnected.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Common\Graph\DepthFirstOrder.cs" />
     <Compile Include="Common\Graph\DepthFirstSearch.cs" />
     <Compile Include="Common\Graph\Digraph.cs" />
+    <Compile Include="Common\Graph\DijkstraAllPairsSP.cs" />
     <Compile Include="Common\Graph\DijkstraSP.cs" />
     <Compile Include="Common\Graph\DirectedCycle.cs" />
     <Compile Include="Common\Graph\DirectedDFS.cs" />

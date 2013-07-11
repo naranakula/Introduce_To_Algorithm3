@@ -24,8 +24,10 @@ namespace Introduce_To_Algorithm3
             graph.AddEdge(new DirectedEdge(0,1,0.1));
             graph.AddEdge(new DirectedEdge(0,2,0.4));
             graph.AddEdge(new DirectedEdge(1,2,0.2));
-            graph.AddEdge(new DirectedEdge(1,0,0.1));
+            //graph.AddEdge(new DirectedEdge(1,0,0.1));
             DijkstraSP sp = new DijkstraSP(graph,0);
+            AcyclicSP sp2 = new AcyclicSP(graph,0);
+            AcyclicLP lp = new AcyclicLP(g:graph,s:0);
             var r = sp.PathTo(2);
         }
     }

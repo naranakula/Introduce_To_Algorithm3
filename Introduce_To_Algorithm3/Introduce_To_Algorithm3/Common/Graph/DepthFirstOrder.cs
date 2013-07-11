@@ -126,7 +126,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
                     dfs(g,w);
                 }
             }
-            preorder.Enqueue(v);
+            postorder.Enqueue(v);
             post[v] = postCounter++;
         }
 
