@@ -84,6 +84,7 @@
     <Compile Include="Common\Graph\BreadthFirstSearch.cs" />
     <Compile Include="Common\Graph\Bridge.cs" />
     <Compile Include="Common\Graph\CC.cs" />
+    <Compile Include="Common\Graph\CPM.cs" />
     <Compile Include="Common\Graph\Cycle.cs" />
     <Compile Include="Common\Graph\DegreesOfSeparation.cs" />
     <Compile Include="Common\Graph\DepthFirstDirectedPaths.cs" />
