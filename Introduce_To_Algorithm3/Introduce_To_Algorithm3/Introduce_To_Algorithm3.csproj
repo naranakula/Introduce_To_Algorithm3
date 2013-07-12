@@ -67,7 +67,9 @@
     <Compile Include="Common\GraphEx\DepthFirstSearch.cs" />
     <Compile Include="Common\GraphEx\DepthFirstSearchs.cs" />
     <Compile Include="Common\GraphEx\DiGraph.cs" />
+    <Compile Include="Common\GraphEx\DirectedEdge.cs" />
     <Compile Include="Common\GraphEx\Edge.cs" />
+    <Compile Include="Common\GraphEx\EdgeWeightedDigraph.cs" />
     <Compile Include="Common\GraphEx\EdgeWeightedGraph.cs" />
     <Compile Include="Common\GraphEx\Graph.cs" />
     <Compile Include="Common\GraphEx\MSTKruskal.cs" />
@@ -78,6 +80,8 @@
     <Compile Include="Common\Graph\AcyclicSP.cs" />
     <Compile Include="Common\Graph\AdjMatrixDigraph.cs" />
     <Compile Include="Common\Graph\AdjMatrixGraph.cs" />
+    <Compile Include="Common\Graph\Arbitrage.cs" />
+    <Compile Include="Common\Graph\BellmanFordSP.cs" />
     <Compile Include="Common\Graph\Biconnected.cs" />
     <Compile Include="Common\Graph\Bipartite.cs" />
     <Compile Include="Common\Graph\BreadthFirstDirectedPaths.cs" />
