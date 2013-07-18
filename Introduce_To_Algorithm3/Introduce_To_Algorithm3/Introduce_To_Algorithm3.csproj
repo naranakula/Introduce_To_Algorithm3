@@ -158,7 +158,10 @@
     <Compile Include="Common\Structs\QueueNode.cs" />
     <Compile Include="Common\Structs\Stack.cs" />
     <Compile Include="Common\Utils\CodeCounter.cs" />
+    <Compile Include="Common\Utils\DateTimeUtils.cs" />
+    <Compile Include="Common\Utils\FileUtils.cs" />
     <Compile Include="Common\Utils\HashFunc.cs" />
+    <Compile Include="Common\Utils\Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
