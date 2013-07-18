@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
@@ -180,7 +181,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             byte[] sBuf = new byte[bufferSize];
             byte[] tBuf = new byte[bufferSize];
-            using(FileStream sStream = File.OpenRead(source))
+            using (FileStream sStream = File.OpenRead(source))
             using (FileStream tStream = File.OpenRead(target))
             {
                 while (true)
@@ -331,5 +332,28 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
+
+
+        public static void SerializeToXml(object obj, Type type, string xmlFile)
+        {
+            XmlSerializer serializer = new XmlSerializer(type);
+            using (StreamWriter writer = new StreamWriter(xmlFile, false, Encoding.Unicode))
+                serializer.Serialize(writer, obj);
+        }
+
+
+        public static void SerializeToXml(object obj, string xmlFile)
+        {
+            XmlSerializer serializer = new XmlSerializer(obj.GetType());
+            using (StreamWriter writer = new StreamWriter(xmlFile, false, Encoding.Unicode))
+                serializer.Serialize(writer, obj);
+        }
+
+        public static Object DeserializeToObject(string xmlFile, Type type)
+        {
+            XmlSerializer serializer = new XmlSerializer(type);
+            using (StreamReader reader = new StreamReader(xmlFile, Encoding.Unicode))
+                return serializer.Deserialize(reader);
+        }
     }
 }
