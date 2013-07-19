@@ -333,7 +333,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
 
-
+        /// <summary>
+        /// serialize
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="type"></param>
+        /// <param name="xmlFile"></param>
         public static void SerializeToXml(object obj, Type type, string xmlFile)
         {
             XmlSerializer serializer = new XmlSerializer(type);
@@ -341,7 +346,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 serializer.Serialize(writer, obj);
         }
 
-
+        /// <summary>
+        /// serialize
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="xmlFile"></param>
         public static void SerializeToXml(object obj, string xmlFile)
         {
             XmlSerializer serializer = new XmlSerializer(obj.GetType());
@@ -349,6 +358,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 serializer.Serialize(writer, obj);
         }
 
+        /// <summary>
+        /// deserialize
+        /// </summary>
+        /// <param name="xmlFile"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static Object DeserializeToObject(string xmlFile, Type type)
         {
             XmlSerializer serializer = new XmlSerializer(type);

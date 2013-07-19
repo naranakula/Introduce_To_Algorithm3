@@ -13,17 +13,17 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
         /// <summary>
         /// the directed from vertex
         /// </summary>
-        public int From { get; set; }
+        public int From { get; private set; }
 
         /// <summary>
         /// the directed to vertex
         /// </summary>
-        public int To { get; set; }
+        public int To { get;private set; }
 
         /// <summary>
         /// the weight of edge
         /// </summary>
-        public double Weight { get; set; }
+        public double Weight { get;private set; }
 
         /// <summary>
         /// create an edge from from to to with given weight

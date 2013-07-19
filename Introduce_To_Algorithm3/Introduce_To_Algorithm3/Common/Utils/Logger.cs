@@ -33,7 +33,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 if (_instance == null)
                 {
-                    _instance = new Logger(logFile,writeTimestamp,writeToConsole);
+                    _instance = new Logger(logFile, writeTimestamp, writeToConsole);
                 }
             }
             return _instance;
@@ -42,14 +42,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         public void Write(string s, params object[] args)
         {
-            Write(string.Format(s,args));
+            Write(string.Format(s, args));
         }
 
         public void Write(string s)
         {
             if (WriteTimestamp)
             {
-                s = DateTime.Now.ToString(@"yyyy'-'MM'-'dd' 'HH':'mm':'ss'.'fff")+"\t|"+s;
+                s = DateTime.Now.ToString(@"yyyy'-'MM'-'dd' 'HH':'mm':'ss'.'fff") + "\t|" + s;
             }
 
             lock (locker)
@@ -81,6 +81,16 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
+        public void WriteLine()
+        {
+            lock (locker)
+            {
+                if (WriteToConsole)
+                    Console.Error.WriteLine();
+                writer.WriteLine();
+            }
+        }
+
 
         private Logger(string logFile, bool writeTimestamp, bool writeToConsole)
         {
@@ -103,8 +113,20 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         private void Open()
         {
-            writer = new StreamWriter(LogFileName,true,Encoding.Unicode);
+            writer = new StreamWriter(LogFileName, true, Encoding.Unicode);
             writer.AutoFlush = true;
+        }
+
+        public void Refresh()
+        {
+            lock (locker)
+            {
+                if (writer != null)
+                    writer.Close();
+
+                writer = new StreamWriter(LogFileName, true, Encoding.Unicode);
+                writer.AutoFlush = true;
+            }
         }
 
         /// <summary>

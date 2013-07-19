@@ -63,7 +63,9 @@
     <Compile Include="Common\DynamicProgramming\OptimalBST.cs" />
     <Compile Include="Common\GraphEx\AdjMatrixDigraph.cs" />
     <Compile Include="Common\GraphEx\AdjMatrixGraph.cs" />
+    <Compile Include="Common\GraphEx\BellmanFordAlgorithm.cs" />
     <Compile Include="Common\GraphEx\BreathFirstSearch.cs" />
+    <Compile Include="Common\GraphEx\DagShortestPaths.cs" />
     <Compile Include="Common\GraphEx\DepthFirstSearch.cs" />
     <Compile Include="Common\GraphEx\DepthFirstSearchs.cs" />
     <Compile Include="Common\GraphEx\DiGraph.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Common\GraphEx\Graph.cs" />
     <Compile Include="Common\GraphEx\MSTKruskal.cs" />
     <Compile Include="Common\GraphEx\MSTPrim.cs" />
+    <Compile Include="Common\GraphEx\SingleSourceShortPath.cs" />
     <Compile Include="Common\GraphEx\StrongConnected.cs" />
     <Compile Include="Common\GraphEx\TopologicalSort.cs" />
     <Compile Include="Common\Graph\AcyclicLP.cs" />

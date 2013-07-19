@@ -144,6 +144,5 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
 
             return g;
         }
-
     }
 }

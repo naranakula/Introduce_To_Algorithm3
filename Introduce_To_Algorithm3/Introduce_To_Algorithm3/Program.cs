@@ -13,9 +13,29 @@ namespace Introduce_To_Algorithm3
         static void Main(string[] args)
         {
             Logger logger = Logger.GetInstance(@"D:\v-chlu\log.txt", true, true);
-            logger.Write("Hello");
-            logger.WriteLine("Hello");
-            logger.WriteLine("world");
+            EdgeWeightedDigraph digraph = new EdgeWeightedDigraph(5);
+            digraph.AddEdge(new DirectedEdge(0,1,1));
+            digraph.AddEdge(new DirectedEdge(0,3,2));
+            digraph.AddEdge(new DirectedEdge(1,3,3));
+            digraph.AddEdge(new DirectedEdge(1,2,1));
+            digraph.AddEdge(new DirectedEdge(2,4,2));
+            digraph.AddEdge(new DirectedEdge(3,4,4));
+            logger.WriteLine("digraph has {0} vertices,{1} edges",digraph.V,digraph.E);
+            DagShortestPaths bf =new DagShortestPaths(digraph,0);
+
+            for (int i = 0; i < digraph.V; i++)
+            {
+                if (bf.IsHavePathTo(i))
+                {
+                    logger.WriteLine("there is a shortest path from {0} to {1}, weight {2}",0,i,bf.DistTo(i));
+
+                    foreach (var s in bf.PathTo(i))
+                    {
+                        logger.WriteLine(s.ToString());
+                    }
+                }
+            }
+
             logger.Close();
         }
     }
