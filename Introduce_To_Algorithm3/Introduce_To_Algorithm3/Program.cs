@@ -37,6 +37,20 @@ namespace Introduce_To_Algorithm3
             }
 
             logger.Close();
+            logger.Refresh();
+            for (int i = 0; i < digraph.V; i++)
+            {
+                if (bf.IsHavePathTo(i))
+                {
+                    logger.WriteLine("there is a shortest path from {0} to {1}, weight {2}", 0, i, bf.DistTo(i));
+
+                    foreach (var s in bf.PathTo(i))
+                    {
+                        logger.WriteLine(s.ToString());
+                    }
+                }
+            }
+            logger.Close();
         }
     }
 }

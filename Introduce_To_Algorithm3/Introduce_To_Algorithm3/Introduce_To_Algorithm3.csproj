@@ -65,6 +65,7 @@
     <Compile Include="Common\GraphEx\AdjMatrixGraph.cs" />
     <Compile Include="Common\GraphEx\BellmanFordAlgorithm.cs" />
     <Compile Include="Common\GraphEx\BreathFirstSearch.cs" />
+    <Compile Include="Common\GraphEx\CriticalPath.cs" />
     <Compile Include="Common\GraphEx\DagShortestPaths.cs" />
     <Compile Include="Common\GraphEx\DepthFirstSearch.cs" />
     <Compile Include="Common\GraphEx\DepthFirstSearchs.cs" />
