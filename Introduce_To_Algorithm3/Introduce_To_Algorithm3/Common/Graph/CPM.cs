@@ -16,7 +16,7 @@ namespace Introduce_To_Algorithm3.Common.Graph
     public class CPM
     {
 
-        public double Cpm(List<Job> jobs)
+        public static double Cpm(List<Job> jobs)
         {
             //the jobs id start from 0 to n-1
             int n = jobs.Count;
@@ -34,11 +34,11 @@ namespace Introduce_To_Algorithm3.Common.Graph
             {
                 g.AddEdge(new DirectedEdge(source, i, 0));
                 g.AddEdge(new DirectedEdge(i + n, sink, 0));
-                g.AddEdge(new DirectedEdge(i, i + n, 0));
+                g.AddEdge(new DirectedEdge(i, i + n, jobs[i].Duration));
 
                 foreach (var job in jobs[i].Constaints)
                 {
-                    g.AddEdge(new DirectedEdge(i+n,job.JobID,jobs[i].Duration));
+                    g.AddEdge(new DirectedEdge(job.JobID + n, i, 0));
                 }
 
             }

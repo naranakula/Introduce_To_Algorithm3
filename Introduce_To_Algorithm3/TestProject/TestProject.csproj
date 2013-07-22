@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinarySearchTest.cs" />
+    <Compile Include="CriticalPathTest.cs" />
     <Compile Include="DijkstraSPTest.cs" />
     <Compile Include="FileUtilsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

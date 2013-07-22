@@ -111,7 +111,7 @@ namespace TestProject
         {
             string source = @"D:\v-chlu\123.txt"; // TODO: Initialize to an appropriate value
             string target = @"D:\123.txt"; // TODO: Initialize to an appropriate value
-            int bufferSize = 1024; // TODO: Initialize to an appropriate value
+            //int bufferSize = 1024; // TODO: Initialize to an appropriate value
             bool expected = false; // TODO: Initialize to an appropriate value
             bool actual;
             actual = FileUtils.IsFileContentSame(source, target);
