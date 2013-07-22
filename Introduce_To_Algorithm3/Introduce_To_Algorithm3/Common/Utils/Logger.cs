@@ -139,6 +139,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 if (writer != null)
                 {
                     writer.Close();
+                    writer = null;
                 }
             }
         }

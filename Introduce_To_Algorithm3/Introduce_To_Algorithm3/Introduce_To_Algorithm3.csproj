@@ -71,6 +71,7 @@
     <Compile Include="Common\GraphEx\DepthFirstSearch.cs" />
     <Compile Include="Common\GraphEx\DepthFirstSearchs.cs" />
     <Compile Include="Common\GraphEx\DiGraph.cs" />
+    <Compile Include="Common\GraphEx\DijkstraAlgorithm.cs" />
     <Compile Include="Common\GraphEx\DirectedEdge.cs" />
     <Compile Include="Common\GraphEx\Edge.cs" />
     <Compile Include="Common\GraphEx\EdgeWeightedDigraph.cs" />

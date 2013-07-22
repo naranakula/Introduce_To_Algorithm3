@@ -6,7 +6,7 @@ using System.Text;
 namespace Introduce_To_Algorithm3.Common.Structs
 {
     /// <summary>
-    /// the IndexMinPQ clas represents an indexed priority queue of generic keys.
+    /// the IndexMinPQ class represents an indexed priority queue of generic keys.
     /// in order to let clients refer to items on the pq, an integer between 0 and NMAX-1 is associated with each key.
     /// </summary>
     /// <typeparam name="T"></typeparam>

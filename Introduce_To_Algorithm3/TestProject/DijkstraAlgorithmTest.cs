@@ -1,18 +1,17 @@
-﻿using Introduce_To_Algorithm3.Common.Graph;
+﻿using Introduce_To_Algorithm3.Common.GraphEx;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 
 namespace TestProject
 {
-
-
+    
+    
     /// <summary>
-    ///This is a test class for DijkstraSPTest and is intended
-    ///to contain all DijkstraSPTest Unit Tests
+    ///This is a test class for DijkstraAlgorithmTest and is intended
+    ///to contain all DijkstraAlgorithmTest Unit Tests
     ///</summary>
     [TestClass()]
-    public class DijkstraSPTest
+    public class DijkstraAlgorithmTest
     {
 
 
@@ -66,10 +65,10 @@ namespace TestProject
 
 
         /// <summary>
-        ///A test for DijkstraSP Constructor
+        ///A test for DijkstraAlgorithm Constructor
         ///</summary>
         [TestMethod()]
-        public void DijkstraSPConstructorTest()
+        public void DijkstraAlgorithmConstructorTest()
         {
             EdgeWeightedDigraph g = new EdgeWeightedDigraph(5); // TODO: Initialize to an appropriate value
             g.AddEdge(new DirectedEdge(0, 1, 1));
@@ -78,8 +77,8 @@ namespace TestProject
             g.AddEdge(new DirectedEdge(1, 4, 2));
             g.AddEdge(new DirectedEdge(3, 2, 2));
             g.AddEdge(new DirectedEdge(3, 4, 1));
-            int s = 0; // TODO: Initialize to an appropriate value
-            DijkstraSP target = new DijkstraSP(g, s);
+            int source = 0; // TODO: Initialize to an appropriate value
+            DijkstraAlgorithm target = new DijkstraAlgorithm(g, source);
             Assert.Inconclusive("TODO: Implement code to verify target");
         }
     }
