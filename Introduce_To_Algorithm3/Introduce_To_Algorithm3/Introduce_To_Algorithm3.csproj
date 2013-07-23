@@ -82,6 +82,7 @@
     <Compile Include="Common\GraphEx\Graph.cs" />
     <Compile Include="Common\GraphEx\MSTKruskal.cs" />
     <Compile Include="Common\GraphEx\MSTPrim.cs" />
+    <Compile Include="Common\GraphEx\ShortestPathsUsingMatrixMultiply.cs" />
     <Compile Include="Common\GraphEx\SingleSourceShortPath.cs" />
     <Compile Include="Common\GraphEx\StrongConnected.cs" />
     <Compile Include="Common\GraphEx\TopologicalSort.cs" />
