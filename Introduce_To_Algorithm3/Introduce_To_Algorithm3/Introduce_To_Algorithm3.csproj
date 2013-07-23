@@ -63,6 +63,8 @@
     <Compile Include="Common\DynamicProgramming\OptimalBST.cs" />
     <Compile Include="Common\GraphEx\AdjMatrixDigraph.cs" />
     <Compile Include="Common\GraphEx\AdjMatrixGraph.cs" />
+    <Compile Include="Common\GraphEx\AllPairShortestPaths.cs" />
+    <Compile Include="Common\GraphEx\AllPairShortestPathsUsingBellmanFordAlgorithm.cs" />
     <Compile Include="Common\GraphEx\BellmanFordAlgorithm.cs" />
     <Compile Include="Common\GraphEx\BreathFirstSearch.cs" />
     <Compile Include="Common\GraphEx\CriticalPath.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Common\GraphEx\DijkstraAlgorithm.cs" />
     <Compile Include="Common\GraphEx\DirectedEdge.cs" />
     <Compile Include="Common\GraphEx\Edge.cs" />
+    <Compile Include="Common\GraphEx\EdgeWeightedAdjMatrixDigraph.cs" />
     <Compile Include="Common\GraphEx\EdgeWeightedDigraph.cs" />
     <Compile Include="Common\GraphEx\EdgeWeightedGraph.cs" />
     <Compile Include="Common\GraphEx\Graph.cs" />
@@ -107,6 +110,7 @@
     <Compile Include="Common\Graph\DirectedDFS.cs" />
     <Compile Include="Common\Graph\DirectedEdge.cs" />
     <Compile Include="Common\Graph\Edge.cs" />
+    <Compile Include="Common\Graph\EdgeWeightedAdjMatrixDigraph.cs" />
     <Compile Include="Common\Graph\EdgeWeightedDigraph.cs" />
     <Compile Include="Common\Graph\EdgeWeightedDirectedCycle.cs" />
     <Compile Include="Common\Graph\EdgeWeightedGraph.cs" />

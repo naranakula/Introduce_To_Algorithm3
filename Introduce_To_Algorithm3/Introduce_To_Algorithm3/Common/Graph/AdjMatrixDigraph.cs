@@ -47,6 +47,15 @@ namespace Introduce_To_Algorithm3.Common.Graph
         }
 
         /// <summary>
+        /// return the number of vertices
+        /// </summary>
+        /// <returns></returns>
+        public int V()
+        {
+            return v;
+        }
+
+        /// <summary>
         /// add a edge from v to w  v----->w
         /// </summary>
         /// <param name="v"></param>
@@ -70,7 +79,18 @@ namespace Introduce_To_Algorithm3.Common.Graph
                 if (adj[i, j])
                     list.Add(j);
             }
-            return list.ToList();
+            return list;
+        }
+
+        /// <summary>
+        /// has a edge from---> to
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public bool HasEdge(int from, int to)
+        {
+            return adj[from, to];
         }
     }
 }
