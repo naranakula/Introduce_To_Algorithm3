@@ -45,6 +45,25 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="g"></param>
+        public AllPairShortestPaths(EdgeWeightedAdjMatrixDigraph g)
+        {
+            int n = g.V;
+            weights = new double[n,n];
+            hasPathTo = new bool[n,n];
+            pathTo = new List<DirectedEdge>[n,n];
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    weights[i, j] = double.PositiveInfinity;
+                }
+            }
+        }
+
+        /// <summary>
         /// is there a path from ---> to
         /// </summary>
         /// <param name="from"></param>

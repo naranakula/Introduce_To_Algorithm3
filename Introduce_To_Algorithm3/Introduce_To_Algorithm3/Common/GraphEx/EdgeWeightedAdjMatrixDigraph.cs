@@ -54,18 +54,18 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
         /// return the number of edge
         /// </summary>
         /// <returns></returns>
-        public int E()
+        public int E
         {
-            return e;
+            get { return e; }
         }
 
         /// <summary>
         /// return the number of vertices
         /// </summary>
         /// <returns></returns>
-        public int V()
+        public int V
         {
-            return v;
+            get { return v; }
         }
 
         /// <summary>
