@@ -171,8 +171,10 @@
     <Compile Include="Common\Utils\CodeCounter.cs" />
     <Compile Include="Common\Utils\DateTimeUtils.cs" />
     <Compile Include="Common\Utils\FileUtils.cs" />
+    <Compile Include="Common\Utils\GuidUtils.cs" />
     <Compile Include="Common\Utils\HashFunc.cs" />
     <Compile Include="Common\Utils\Logger.cs" />
+    <Compile Include="Common\Utils\Retry.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

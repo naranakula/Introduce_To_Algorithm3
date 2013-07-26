@@ -144,7 +144,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="target"></param>
         public static void UpdateFile(string source, string target)
         {
-            if (IsFileUpdate(source, target))
+            if (IsFileUpdated(source, target))
             {
                 return;
             }
@@ -155,12 +155,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
-        /// is file need to update
+        /// is file already updated
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public static bool IsFileUpdate(string source, string target)
+        public static bool IsFileUpdated(string source, string target)
         {
             return File.Exists(source) && File.Exists(target) && FileSize(source) == FileSize(target) &&
                    File.GetLastWriteTimeUtc(target) >= File.GetLastWriteTimeUtc(source);
