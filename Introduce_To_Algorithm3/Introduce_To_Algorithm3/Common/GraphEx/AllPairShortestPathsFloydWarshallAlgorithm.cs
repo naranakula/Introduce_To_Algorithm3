@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.GraphEx
 {
+    /// <summary>
+    /// it runs at O(v^3)
+    /// </summary>
     public class AllPairShortestPathsFloydWarshallAlgorithm
     {
         private double[,] weights;
