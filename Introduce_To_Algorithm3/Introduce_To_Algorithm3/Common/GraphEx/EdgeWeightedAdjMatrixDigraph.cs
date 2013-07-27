@@ -44,7 +44,7 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
             {
                 for (int j = 0; j < v; j++)
                 {
-                    weights[i, j] = double.PositiveInfinity;
+                    weights[i, j] = i==j?0:double.PositiveInfinity;
                 }
             }
         }
@@ -85,6 +85,12 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
             weights[from, to] = weight;
         }
 
+
+        public void AddEdge(DirectedEdge e)
+        {
+            AddEdge(e.From,e.To,e.Weight);
+        }
+
         /// <summary>
         /// has a edge from---> to
         /// </summary>
@@ -122,6 +128,23 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
                     list.Add(to);
             }
             return list;
+        }
+
+        /// <summary>
+        /// return a copy of weights
+        /// </summary>
+        /// <returns></returns>
+        public double[,] Weights()
+        {
+            double[,] result = new double[weights.GetLength(0),weights.GetLength(1)];
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for (int j = 0; j < result.GetLength(1); j++)
+                {
+                    result[i, j] = weights[i, j];
+                }
+            }
+            return result;
         }
     }
 }

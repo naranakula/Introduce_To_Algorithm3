@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllPairShortestPathsUsingBellmanFordAlgorithmTest.cs" />
+    <Compile Include="AllShortestPathsUsingMatrixMultiplyTest.cs" />
     <Compile Include="BinarySearchTest.cs" />
     <Compile Include="CriticalPathTest.cs" />
     <Compile Include="DijkstraAlgorithmTest.cs" />
