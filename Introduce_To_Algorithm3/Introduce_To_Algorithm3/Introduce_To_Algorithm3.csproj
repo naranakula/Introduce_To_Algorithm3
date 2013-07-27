@@ -64,6 +64,7 @@
     <Compile Include="Common\GraphEx\AdjMatrixDigraph.cs" />
     <Compile Include="Common\GraphEx\AdjMatrixGraph.cs" />
     <Compile Include="Common\GraphEx\AllPairShortestPaths.cs" />
+    <Compile Include="Common\GraphEx\AllPairShortestPathsFloydWarshallAlgorithm.cs" />
     <Compile Include="Common\GraphEx\AllPairShortestPathsUsingBellmanFordAlgorithm.cs" />
     <Compile Include="Common\GraphEx\BellmanFordAlgorithm.cs" />
     <Compile Include="Common\GraphEx\BreathFirstSearch.cs" />
