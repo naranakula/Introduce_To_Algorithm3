@@ -81,6 +81,7 @@
     <Compile Include="Common\GraphEx\EdgeWeightedDigraph.cs" />
     <Compile Include="Common\GraphEx\EdgeWeightedGraph.cs" />
     <Compile Include="Common\GraphEx\Graph.cs" />
+    <Compile Include="Common\GraphEx\MaxFlowFordFulkersonMethod.cs" />
     <Compile Include="Common\GraphEx\MSTKruskal.cs" />
     <Compile Include="Common\GraphEx\MSTPrim.cs" />
     <Compile Include="Common\GraphEx\AllShortestPathsUsingMatrixMultiply.cs" />

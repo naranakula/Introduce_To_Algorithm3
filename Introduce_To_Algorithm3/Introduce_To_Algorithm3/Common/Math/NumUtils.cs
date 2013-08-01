@@ -156,5 +156,53 @@ namespace Introduce_To_Algorithm3.Common.Math
             return System.Math.Abs(f1 - f2) < 1E-10;
         }
 
+        /// <summary>
+        /// find the max
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static T Max<T>(params T[] args) where T:IComparable<T>
+        {
+            if (args == null || args.Length == 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            T max = args[0];
+            for (int i = 1; i < args.Length; i++)
+            {
+                if (args[i].CompareTo(max) > 0)
+                {
+                    max = args[i];
+                }
+            }
+            return max;
+        }
+
+        /// <summary>
+        /// find the min one
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static T Min<T>(params T[] args) where T : IComparable<T>
+        {
+            if (args == null || args.Length == 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            T min = args[0];
+            for (int i = 1; i < args.Length; i++)
+            {
+                if (args[i].CompareTo(min) < 0)
+                {
+                    min = args[i];
+                }
+            }
+
+            return min;
+        }
+        
     }
 }
