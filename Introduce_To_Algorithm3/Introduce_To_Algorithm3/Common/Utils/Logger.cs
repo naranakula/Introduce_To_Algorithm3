@@ -24,7 +24,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="writeTimestamp"></param>
         /// <param name="writeToConsole"></param>
         /// <returns></returns>
-        public static Logger GetInstance(string logFile, bool writeTimestamp = false, bool writeToConsole = false)
+        public static Logger GetInstance(string logFile, bool writeTimestamp = true, bool writeToConsole = false)
         {
             //yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff
             if (_instance != null)
