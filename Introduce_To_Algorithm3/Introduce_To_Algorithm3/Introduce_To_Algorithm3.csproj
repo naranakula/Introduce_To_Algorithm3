@@ -135,6 +135,7 @@
     <Compile Include="Common\Math\Fibonacci.cs" />
     <Compile Include="Common\Math\IMatrix.cs" />
     <Compile Include="Common\Math\IntMatrix.cs" />
+    <Compile Include="Common\Math\IntVector.cs" />
     <Compile Include="Common\Math\Matrix.cs" />
     <Compile Include="Common\Math\MatrixUtils.cs" />
     <Compile Include="Common\Math\MaxSubArray.cs" />

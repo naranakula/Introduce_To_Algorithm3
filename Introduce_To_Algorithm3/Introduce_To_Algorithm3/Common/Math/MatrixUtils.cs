@@ -356,6 +356,28 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <param name="matrix1"></param>
         /// <param name="matrix2"></param>
         /// <returns></returns>
+        public static double[,] Add(this double[,] matrix1, double[,] matrix2)
+        {
+            int w = matrix1.GetLength(0), h = matrix1.GetLength(1);
+            double[,] result = new double[w,h];
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    result[i, j] = matrix1[i, j] + matrix2[i, j];
+                }
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="matrix1"></param>
+        /// <param name="matrix2"></param>
+        /// <returns></returns>
         public static int[,] Substract(this int[,] matrix1, int[,] matrix2)
         {
             int w = matrix1.GetLength(0), h = matrix1.GetLength(1);
@@ -367,6 +389,27 @@ namespace Introduce_To_Algorithm3.Common.Math
                     result[i, j] = matrix1[i, j] - matrix2[i, j];
                 }
             }
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="matrix1"></param>
+        /// <param name="matrix2"></param>
+        /// <returns></returns>
+        public static double[,] Substract(this double[,] matrix1, double[,] matrix2)
+        {
+            int w = matrix1.GetLength(0), h = matrix1.GetLength(1);
+            double[,] result = new double[w, h];
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    result[i, j] = matrix1[i, j] - matrix2[i, j];
+                }
+            }
+
             return result;
         }
 

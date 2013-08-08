@@ -64,6 +64,16 @@ namespace Introduce_To_Algorithm3.Common.Math
             set { _vector[n] = value; }
         }
 
+
+        public int Size()
+        {
+            return _vector.Length;
+        }
+
+        public int Count
+        {
+            get { return _vector.Length; }
+        }
         #endregion
     }
 }
