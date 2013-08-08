@@ -105,7 +105,7 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// this means every row in a become a column in b
         /// </summary>
         /// <returns></returns>
-        public Matrix<T> Transpose()
+        public virtual Matrix<T> Transpose()
         {
             Matrix<T> transpose = new Matrix<T>(_column,_row);
             for (int i = 0; i < _row; i++)
@@ -120,5 +120,20 @@ namespace Introduce_To_Algorithm3.Common.Math
         }
 
         #endregion
+
+        #region square matrices
+
+        /// <summary>
+        /// is a n*n square matrix
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsSquare()
+        {
+            return _row == _column;
+        }
+
+
+        #endregion
+
     }
 }

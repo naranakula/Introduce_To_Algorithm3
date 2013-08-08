@@ -70,9 +70,17 @@ namespace TestProject
         [TestMethod()]
         public void IntMatrixConstructorTest()
         {
-            int row = 0; // TODO: Initialize to an appropriate value
-            int column = 0; // TODO: Initialize to an appropriate value
+            int row = 2; // TODO: Initialize to an appropriate value
+            int column = 4; // TODO: Initialize to an appropriate value
             IntMatrix target = new IntMatrix(row, column);
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    target.Set(i,j,i*j+i);
+                }
+            }
+            Matrix<int> transpose = target.Transpose();
             Assert.Inconclusive("TODO: Implement code to verify target");
         }
     }

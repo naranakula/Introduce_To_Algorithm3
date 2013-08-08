@@ -139,6 +139,7 @@
     <Compile Include="Common\Math\MatrixUtils.cs" />
     <Compile Include="Common\Math\MaxSubArray.cs" />
     <Compile Include="Common\Math\NumUtils.cs" />
+    <Compile Include="Common\Math\Vector.cs" />
     <Compile Include="Common\Search\BinarySearch.cs" />
     <Compile Include="Common\Search\LinearSearch.cs" />
     <Compile Include="Common\Search\OrderStatics.cs" />
