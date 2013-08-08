@@ -37,7 +37,6 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
             {
                 IsNegativeCycle = true;
                 throw new Exception("there is negative cycle");
-                return;
             }
         }
     }

@@ -5,421 +5,120 @@ using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.Math
 {
-    public static class Matrix
+    public class Matrix<T> : IMatrix<T> where T : IComparable<T>, IEquatable<T>
     {
+        #region members
         /// <summary>
-        /// can matrix1 multipy matrix2
+        /// the number of rows in matrix
         /// </summary>
-        /// <param name="matrix1"></param>
-        /// <param name="matrix2"></param>
-        /// <returns></returns>
-        public static bool IsMatrixMul(int[,] matrix1, int[,] matrix2)
+        private int _row;
+
+        /// <summary>
+        /// the number of columns in matrix
+        /// </summary>
+        private int _column;
+
+        /// <summary>
+        /// underly storage for matrix
+        /// </summary>
+        private T[,] _matrix;
+
+        #endregion
+
+        #region constructors
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="row">the number of rows in matrix</param>
+        /// <param name="column">the number of columns in matrix</param>
+        public Matrix(int row, int column)
         {
-            if (matrix1 == null || matrix2 == null)
-            {
-                return false;
-            }
-            int w1 = matrix1.GetLength(0), h1 = matrix1.GetLength(1);
-            int w2 = matrix2.GetLength(0), h2 = matrix2.GetLength(1);
-            if (w1 <= 0 || h1 <= 0 || w2 <= 0 || h2 <= 0 || h1 != w2)
-            {
-                return false;
-            }
-            return true;
+            _row = row;
+            _column = column;
+            _matrix = new T[row, column];
         }
 
+        #endregion
 
+        #region get set
         /// <summary>
-        /// can matrix1 multipy matrix2
+        /// 
         /// </summary>
-        /// <param name="matrix1"></param>
-        /// <param name="matrix2"></param>
-        /// <param name="result">if the return value is true, result can store the result of matrix1 multipy matrix2, but not the result of matrix1 multipy matrix2</param>
+        /// <param name="row">count from 0</param>
+        /// <param name="column">count from 0</param>
         /// <returns></returns>
-        public static bool IsMatrixMul(int[,] matrix1, int[,] matrix2, out int[,] result)
+        public T Get(int row, int column)
         {
-            result = null;
-            if (matrix1 == null || matrix2 == null)
-            {
-                return false;
-            }
-            int w1 = matrix1.GetLength(0), h1 = matrix1.GetLength(1);
-            int w2 = matrix2.GetLength(0), h2 = matrix2.GetLength(1);
-            if (w1 <= 0 || h1 <= 0 || w2 <= 0 || h2 <= 0 || h1 != w2)
-            {
-                return false;
-            }
-
-            result = new int[w1, h2];
-            return true;
-        }
-
-
-        /// <summary>
-        /// multiply two matrix(not necessary n*n ) m*n  x  n*p = m*p
-        /// it runs at (m*n*p)
-        /// </summary>
-        /// <param name="matrix1"></param>
-        /// <param name="matrix2"></param>
-        /// <returns></returns>
-        public static int[,] Multiply(int[,] matrix1, int[,] matrix2)
-        {
-            int[,] result;
-            if (!IsMatrixMul(matrix1, matrix2, out result))
-            {
-                throw new Exception("matrix can not be multiply");
-            }
-
-            for (int i = 0; i < result.GetLength(0); i++)
-            {
-                for (int j = 0; j < result.GetLength(1); j++)
-                {
-                    result[i, j] = 0;
-                    for (int k = 0; k < matrix1.GetLength(1); k++)
-                    {
-                        result[i, j] += matrix1[i, k] * matrix2[k, j];
-                    }
-
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Strassen’s remarkable recursive algorithm for multiplying n*n matrices. It runs in n^lg7 time
-        /// 1)we assume that n is an exact power of 2.we divide n*n matrices into four n/2 * n2 matrices  {{A11,A12},{A21,A22}}  {{B11,B12},{B21,B22}}
-        /// 2)Create 10 matrices S1,S2 ... S10, each of which is n/2 * n/2
-        /// S1 = B12-B22
-        /// S2 = A11+A12
-        /// S3 = A21+A22
-        /// S4 = B21-B11
-        /// S5 = A11+A22
-        /// S6 = B11+B22
-        /// S7 = A12-A22
-        /// S8 = B21+B22
-        /// S9 = A11-A21
-        /// S10 = B11+B12
-        /// 3)compute 7 matrix P1 P2....P7
-        /// P1 = A11*S1
-        /// P2 = S2*B22
-        /// P3 = S3*B11
-        /// P4 = A22*S4
-        /// P5 = S5*S6
-        /// P6 = S7*S8
-        /// P7 = S9*S10
-        /// 4)Compute the desired submatrices C11  C12  C21  C22 of the result matrix C by adding and subtracting various combinations of the Pi matrices.
-        /// C11 = P5+P4-P2+P6
-        /// C12 = P1+P2
-        /// C21 = P3+P4
-        /// C22 = P5+P1-P3-P7
-        /// </summary>
-        /// <param name="matrix1"></param>
-        /// <param name="matrix2"></param>
-        /// <returns></returns>
-        public static int[,] StrassenMultiply(int[,] matrix1, int[,] matrix2)
-        {
-            int[,] result;
-            if (!IsMatrixMul(matrix1, matrix2, out result) || result.GetLength(0) != result.GetLength(1))
-            {
-                throw new Exception("matrix can not be multiply");
-            }
-
-            matrix1 = CreateN2Matrix(matrix1);
-            matrix2 = CreateN2Matrix(matrix2);
-            return Strassen(matrix1, matrix2);
-        }
-
-        /// <summary>
-        /// Strassen’s remarkable recursive algorithm for multiplying n*n matrices. It runs in n^lg7 time
-        /// 1)we assume that n is an exact power of 2.we divide n*n matrices into four n/2 * n2 matrices  {{A11,A12},{A21,A22}}  {{B11,B12},{B21,B22}}
-        /// 2)Create 10 matrices S1,S2 ... S10, each of which is n/2 * n/2
-        /// S1 = B12-B22
-        /// S2 = A11+A12
-        /// S3 = A21+A22
-        /// S4 = B21-B11
-        /// S5 = A11+A22
-        /// S6 = B11+B22
-        /// S7 = A12-A22
-        /// S8 = B21+B22
-        /// S9 = A11-A21
-        /// S10 = B11+B12
-        /// 3)compute 7 matrix P1 P2....P7
-        /// P1 = A11*S1
-        /// P2 = S2*B22
-        /// P3 = S3*B11
-        /// P4 = A22*S4
-        /// P5 = S5*S6
-        /// P6 = S7*S8
-        /// P7 = S9*S10
-        /// 4)Compute the desired submatrices C11  C12  C21  C22 of the result matrix C by adding and subtracting various combinations of the Pi matrices.
-        /// C11 = P5+P4-P2+P6
-        /// C12 = P1+P2
-        /// C21 = P3+P4
-        /// C22 = P5+P1-P3-P7
-        /// </summary>
-        /// <param name="matrix1"></param>
-        /// <param name="matrix2"></param>
-        /// <returns></returns>
-        private static int[,] Strassen(int[,] matrix1, int[,] matrix2)
-        {
-            //when the matrix is small, use direct way to do this
-            if (matrix1.GetLength(0) <= 4)
-            {
-                return Multiply(matrix1, matrix2);
-            }
-
-            int n = matrix1.GetLength(0);
-            int[,] s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
-            int[,] a11 = new int[n / 2, n / 2];
-            int[,] a12 = new int[n / 2, n / 2];
-            int[,] a21 = new int[n / 2, n / 2];
-            int[,] a22 = new int[n / 2, n / 2];
-            int[,] b11 = new int[n / 2, n / 2];
-            int[,] b12 = new int[n / 2, n / 2];
-            int[,] b21 = new int[n / 2, n / 2];
-            int[,] b22 = new int[n / 2, n / 2];
-            int[,] p1, p2, p3, p4, p5, p6, p7;
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    a11[i, j] = matrix1[i, j];
-                }
-            }
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    a12[i, j] = matrix1[i, j + n / 2];
-                }
-            }
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    a21[i, j] = matrix1[i + n / 2, j];
-                }
-            }
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    a22[i, j] = matrix1[i + n / 2, j + n / 2];
-                }
-            }
-
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    b11[i, j] = matrix2[i, j];
-                }
-            }
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    b12[i, j] = matrix2[i, j + n / 2];
-                }
-            }
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    b21[i, j] = matrix2[i + n / 2, j];
-                }
-            }
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    b22[i, j] = matrix2[i + n / 2, j + n / 2];
-                }
-            }
-
-            // 2)Create 10 matrices S1,S2 ... S10, each of which is n/2 * n/2
-            // S1 = B12-B22
-            // S2 = A11+A12
-            // S3 = A21+A22
-            // S4 = B21-B11
-            // S5 = A11+A22
-            // S6 = B11+B22
-            // S7 = A12-A22
-            // S8 = B21+B22
-            // S9 = A11-A21
-            // S10 = B11+B12
-
-            s1 = Substract(b12, b22);
-            s2 = Add(a11, a12);
-            s3 = Add(a21, a22);
-            s4 = Substract(b21, b11);
-            s5 = Add(a11, a22);
-            s6 = Add(b11, b22);
-            s7 = Substract(a12, a22);
-            s8 = Add(b21, b22);
-            s9 = Substract(a11, a21);
-            s10 = Add(b11, b12);
-
-            // 3)compute 7 matrix P1 P2....P7
-            // P1 = A11*S1
-            // P2 = S2*B22
-            // P3 = S3*B11
-            // P4 = A22*S4
-            // P5 = S5*S6
-            // P6 = S7*S8
-            // P7 = S9*S10
-            p1 = Strassen(a11, s1);
-            p2 = Strassen(s2, b22);
-            p3 = Strassen(s3, b11);
-            p4 = Strassen(a22, s4);
-            p5 = Strassen(s5, s6);
-            p6 = Strassen(s7, s8);
-            p7 = Strassen(s9, s10);
-
-            // C11 = P5+P4-P2+P6
-            // C12 = P1+P2
-            // C21 = P3+P4
-            // C22 = P5+P1-P3-P7
-            int[,] c11 = p5.Add(p4).Substract(p2).Add(p6);
-            int[,] c12 = p1.Add(p2);
-            int[,] c21 = p3.Add(p4);
-            int[,] c22 = p5.Add(p1).Substract(p3).Substract(p7);
-
-            int[,] c = new int[n, n];
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    c[i, j] = c11[i, j];
-                }
-            }
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    c[i, j + n / 2] = c12[i, j];
-                }
-            }
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    c[i + n / 2, j] = c21[i, j];
-                }
-            }
-
-            for (int i = 0; i < n / 2; i++)
-            {
-                for (int j = 0; j < n / 2; j++)
-                {
-                    c[i + n / 2, j + n / 2] = c22[i, j];
-                }
-            }
-
-            return c;
+            return _matrix[row, column];
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="matrix1"></param>
-        /// <param name="matrix2"></param>
-        /// <returns></returns>
-        public static int[,] Add(this int[,] matrix1, int[,] matrix2)
+        /// <param name="row">count from 0</param>
+        /// <param name="column">count from 0</param>
+        /// <param name="value"></param>
+        public void Set(int row, int column, T value)
         {
-            int w = matrix1.GetLength(0), h = matrix1.GetLength(1);
-            int[,] result = new int[w, h];
-            for (int i = 0; i < w; i++)
-            {
-                for (int j = 0; j < h; j++)
-                {
-                    result[i, j] = matrix1[i, j] + matrix2[i, j];
-                }
-            }
-            return result;
+            _matrix[row, column] = value;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="matrix1"></param>
-        /// <param name="matrix2"></param>
+        /// <param name="row">count from 0</param>
+        /// <param name="column">count from 0</param>
         /// <returns></returns>
-        public static int[,] Substract(this int[,] matrix1, int[,] matrix2)
+        public T this[int row, int column]
         {
-            int w = matrix1.GetLength(0), h = matrix1.GetLength(1);
-            int[,] result = new int[w, h];
-            for (int i = 0; i < w; i++)
+            get { return _matrix[row, column]; }
+            set
             {
-                for (int j = 0; j < h; j++)
-                {
-                    result[i, j] = matrix1[i, j] - matrix2[i, j];
-                }
+                _matrix[row, column] = value;
             }
-            return result;
         }
 
         /// <summary>
-        /// create a new n*n matrix where n is power of 2
+        /// number of rows
         /// </summary>
-        /// <param name="matrix">this is a square matrix</param>
-        /// <returns></returns>
-        public static int[,] CreateN2Matrix(this int[,] matrix)
+        public int Rows
         {
-            if (matrix.GetLength(0) != matrix.GetLength(1))
-            {
-                throw new Exception("This must be square matrix");
-            }
-            int n = 1;
-            while (n < matrix.GetLength(0))
-            {
-                n *= 2;
-            }
-            if (n == matrix.GetLength(0))
-            {
-                return matrix;
-            }
-            int[,] tmp = new int[n, n];
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    tmp[i, j] = matrix[i, j];
-                }
-            }
-            return tmp;
+            get { return _row; }
         }
-
 
         /// <summary>
-        /// print matrix
+        /// number of columns
         /// </summary>
-        /// <param name="matrix"></param>
-        public static string ToStr(this int[,] matrix)
+        public int Columns
         {
-            if (matrix == null) return "Null";
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    sb.Append(matrix[i, j] + "  ");
-                }
-                sb.AppendLine();
-            }
-            return sb.ToString();
+            get { return _column; }
         }
 
+        #endregion
+
+        #region Transpose
+
+        /// <summary>
+        /// transpose a matrix
+        /// if b is a transpose matrix of a, then b[i,j] = a[j,i]
+        /// this means every row in a become a column in b
+        /// </summary>
+        /// <returns></returns>
+        public Matrix<T> Transpose()
+        {
+            Matrix<T> transpose = new Matrix<T>(_column,_row);
+            for (int i = 0; i < _row; i++)
+            {
+                for (int j = 0; j < _column; j++)
+                {
+                    transpose.Set(j,i,_matrix[i,j]);
+                }
+            }
+
+            return transpose;
+        }
+
+        #endregion
     }
 }

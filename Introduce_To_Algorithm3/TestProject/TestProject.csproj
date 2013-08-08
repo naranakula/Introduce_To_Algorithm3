@@ -61,6 +61,7 @@
     <Compile Include="DijkstraAlgorithmTest.cs" />
     <Compile Include="DijkstraSPTest.cs" />
     <Compile Include="FileUtilsTest.cs" />
+    <Compile Include="IntMatrixTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

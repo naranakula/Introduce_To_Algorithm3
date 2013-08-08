@@ -133,7 +133,10 @@
     <Compile Include="Common\GreedyAlgorithm\HuffmanTree.cs" />
     <Compile Include="Common\GreedyAlgorithm\Knapsack.cs" />
     <Compile Include="Common\Math\Fibonacci.cs" />
+    <Compile Include="Common\Math\IMatrix.cs" />
+    <Compile Include="Common\Math\IntMatrix.cs" />
     <Compile Include="Common\Math\Matrix.cs" />
+    <Compile Include="Common\Math\MatrixUtils.cs" />
     <Compile Include="Common\Math\MaxSubArray.cs" />
     <Compile Include="Common\Math\NumUtils.cs" />
     <Compile Include="Common\Search\BinarySearch.cs" />
