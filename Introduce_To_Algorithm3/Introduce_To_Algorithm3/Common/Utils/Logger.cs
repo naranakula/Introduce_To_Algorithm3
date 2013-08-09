@@ -81,6 +81,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
+        public void WriteLine(Object o)
+        {
+            WriteLine(o.ToString());
+        }
+
         public void WriteLine()
         {
             lock (locker)

@@ -12,9 +12,9 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            bool b = FileUtils.IsUnicode(@"D:\v-chlu\log.txt");
-            Logger logger = Logger.GetInstance(@"D:\v-chlu\log.txt", true, true);
-            logger.WriteLine(CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3") + "");
+            string logFile = @"D:\v-chlu\123.txt";
+            Logger logger = Logger.GetInstance(logFile, true, true);
+            logger.WriteLine(CodeCounter.GetCodeLines(@""));
             logger.Close();
         }
     }
