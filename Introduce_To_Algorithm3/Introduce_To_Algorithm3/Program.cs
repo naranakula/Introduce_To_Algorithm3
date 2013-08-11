@@ -12,10 +12,7 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            string logFile = @"D:\v-chlu\123.txt";
-            Logger logger = Logger.GetInstance(logFile, true, true);
-            logger.WriteLine(CodeCounter.GetCodeLines(@""));
-            logger.Close();
+            
         }
     }
 }
