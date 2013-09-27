@@ -17,7 +17,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="tgtFile"></param>
         public static void UpdateToDir(string srcFile, string tgtDir)
         {
-            UpdateToFile(srcFile,Path.Combine(tgtDir,Path.GetFileName(srcFile));
+            UpdateToFile(srcFile,Path.Combine(tgtDir,Path.GetFileName(srcFile)));
         }
 
         /// <summary>

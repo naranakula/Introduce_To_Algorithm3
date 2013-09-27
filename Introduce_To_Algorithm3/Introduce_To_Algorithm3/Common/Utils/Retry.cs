@@ -304,7 +304,6 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
     }
 
-
     public class RetryTimeOutException : TimeoutException
     {
         public NotifyEventArgs NotifyEventArgs { get; private set; }
