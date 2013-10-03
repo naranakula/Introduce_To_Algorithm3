@@ -184,7 +184,10 @@
     <Compile Include="Common\Utils\Logger.cs" />
     <Compile Include="Common\Utils\ReflectionHelper.cs" />
     <Compile Include="Common\Utils\Retry.cs" />
+    <Compile Include="Common\Utils\RetryDirectory.cs" />
+    <Compile Include="Common\Utils\RetryFile.cs" />
     <Compile Include="Common\Utils\SqlHelper.cs" />
+    <Compile Include="Common\Utils\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

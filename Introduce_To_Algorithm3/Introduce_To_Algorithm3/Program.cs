@@ -14,9 +14,8 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-           DataSet ds = new DataSet();
-           DataTable dt = new DataTable();
-           
+            int count = CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
+            Console.WriteLine(count);
         }
     }
 }
