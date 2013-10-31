@@ -191,6 +191,7 @@
     <Compile Include="Common\Utils\sockets\SocketServer.cs" />
     <Compile Include="Common\Utils\SqlHelper.cs" />
     <Compile Include="Common\Utils\StringExtension.cs" />
+    <Compile Include="Common\Utils\threads\ThreadPoolHelper.cs" />
     <Compile Include="Common\Utils\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

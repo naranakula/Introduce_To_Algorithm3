@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Com.Utility.Commons;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -37,6 +38,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         /// </summary>
         private Exception _lastEx;
 
+        /// <summary>
+        /// action when server get an connection.
+        /// </summary>
+        private WaitCallback action;
+
         #endregion
 
         #region public member
@@ -45,6 +51,24 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         /// check the run status of server
         /// </summary>
         public bool IsAlive { get { return thread != null && thread.IsAlive; } }
+
+        /// <summary>
+        /// get the server ip
+        /// </summary>
+        public string ServerIP
+        {
+            get
+            {
+                if (listener != null)
+                {
+                    return SocketClient.GetLocalPoint_IP(listener);
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+        }
 
         /// <summary>
         /// return the port we listen to
@@ -68,6 +92,17 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         public SocketServer(int port)
         {
             this.port = port;
+        }
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="callback"></param>
+        public SocketServer(int port, WaitCallback callback)
+        {
+            this.port = port;
+            this.action = callback;
         }
 
         #endregion
@@ -97,13 +132,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         /// </summary>
         private void Listen()
         {
-            try
-            {
-                //construct a listener
-                listener = new TcpListener(IPAddress.Any, port);
-                listener.Start();
+            //construct a listener
+            listener = new TcpListener(IPAddress.Any, port);
+            listener.Start();
 
-                while (isRunning)
+            while (isRunning)
+            {
+                try
                 {
                     if (!listener.Pending())
                     {
@@ -114,15 +149,21 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                     //accept the pending connection
                     Socket client = listener.AcceptSocket();
 
+                    if (action != null)
+                    {
+                        ThreadPoolHelper.ExecThreadPool(action, client);
+                    }
+
                     //RequestHandle requestHandle = new RequestHandle(client);
                     //ThreadPoolHelper.ExecThreadPool(ThreadProc, requestHandle);
                     Thread.Sleep(1);
                 }
+                catch (Exception ex)
+                {
+                    _lastEx = ex;
+                }
             }
-            catch (Exception ex)
-            {
-                _lastEx = ex;
-            }
+
         }
 
         ///// <summary>
