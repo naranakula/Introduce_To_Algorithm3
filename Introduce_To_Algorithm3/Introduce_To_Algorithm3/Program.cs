@@ -15,13 +15,7 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            int count = CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
-            Console.WriteLine(count);
 
-            SocketServer server = new SocketServer(12321);
-            server.Start();
-
-            server.Stop();
         }
     }
 }
