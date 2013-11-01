@@ -418,6 +418,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
             return socket.Receive(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
+#region receive
+
         /// <summary>
         /// receive msg
         /// </summary>
@@ -429,14 +431,16 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
             {
                 throw new ArgumentNullException();
             }
-
+            
             //pool for 1 seconds
             if (socket.Poll(1000 * 1000, SelectMode.SelectRead))
             {
                 return null;
             }
+            const int BUFFERSIZE = 256;
 
-            Byte[] recvBytes = new byte[socket.Available];
+            Byte[] recvBytes = new byte[BUFFERSIZE];
+            //recvBytes = new byte[socket.Available];
             int i = socket.Receive(recvBytes, recvBytes.Length, SocketFlags.None);
             if (i <= 0)
             {
@@ -447,6 +451,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                 return encoding.GetString(recvBytes, 0, i);
             }
         }
+#endregion
 
         /// <summary>
         /// close socket

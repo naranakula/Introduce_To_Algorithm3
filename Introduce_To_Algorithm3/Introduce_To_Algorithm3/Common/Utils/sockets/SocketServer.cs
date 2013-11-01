@@ -133,7 +133,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         private void Listen()
         {
             //construct a listener
-            listener = new TcpListener(IPAddress.Any, port);
+            listener = new TcpListener(IPAddress.Parse("172.31.25.34"), port);
             listener.Start();
 
             while (isRunning)

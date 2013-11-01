@@ -17,26 +17,26 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            Socket socket = null;
-            while (true)
+           /* while (true)
             {
-                socket = SocketClient.CreateTcpSocket();
-                if (SocketClient.Connect(socket, "127.0.0.1", 32123))
+                Socket socket = SocketClient.CreateTcpSocket();
+                if (SocketClient.Connect(socket, "172.31.25.34", 32123))
                 {
                     Console.Write(">>>:");
                     SocketClient.Send(socket, Console.ReadLine(), Encoding.UTF8);
-                    
-                    //SocketClient.Close(socket);
+                    SocketClient.Close(socket);
                 }
                 else
                 {
+                    Console.WriteLine("Connect failed");
+                    break;
                 }
-            }
-            /*SocketServer server = new SocketServer(32123,WaitCallBackDelegate);
+            }*/
+            SocketServer server = new SocketServer(32123,WaitCallBackDelegate);
             server.Start();
             Thread.Sleep(1000);
             Console.WriteLine("server listen "+server.ServerIP+":"+server.Port);
-            Console.ReadLine();*/
+            Console.ReadLine();
         }
 
 
