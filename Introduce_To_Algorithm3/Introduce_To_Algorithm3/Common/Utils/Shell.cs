@@ -18,7 +18,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="strArgs"></param>
         /// <param name="strOutput"></param>
         /// <returns></returns>
-        public static int RunConsole(string strCmd, string strArgs, out string strOutput)
+        public static int RunConsole(string strCmd, string strArgs, out string strOutput, string workingDir = null)
         {
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
@@ -26,7 +26,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.FileName = strCmd;
             p.StartInfo.Arguments = strArgs;
-
+            if (!string.IsNullOrWhiteSpace(workingDir))
+            {
+                p.StartInfo.WorkingDirectory = workingDir;
+            }
+            
             StringBuilder sbStdErr = new StringBuilder();
             p.ErrorDataReceived += (object sender, DataReceivedEventArgs args) => { sbStdErr.Append(args.Data); };
             p.Start();
@@ -45,12 +49,16 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="strCmd"></param>
         /// <param name="strArgs"></param>
         /// <returns></returns>
-        public static int Run(string strCmd, string strArgs)
+        public static int Run(string strCmd, string strArgs, string workingDir = null)
         {
             ProcessStartInfo psi = new ProcessStartInfo();
             psi.Arguments = strArgs;
             psi.CreateNoWindow = true;
             psi.FileName = strCmd;
+            if (!string.IsNullOrWhiteSpace(workingDir))
+            {
+                psi.WorkingDirectory = workingDir;
+            }
             psi.UseShellExecute = false;
             psi.WindowStyle = ProcessWindowStyle.Hidden;
             using (Process p = Process.Start(psi))
@@ -66,11 +74,15 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="strCmd"></param>
         /// <param name="strArgs"></param>
         /// <returns></returns>
-        public static int RunConsole(string strCmd, string strArgs)
+        public static int RunConsole(string strCmd, string strArgs,string workingDir = null)
         {
             ProcessStartInfo psi = new ProcessStartInfo();
             psi.Arguments = strArgs;
             psi.FileName = strCmd;
+            if (!string.IsNullOrWhiteSpace(workingDir))
+            {
+                psi.WorkingDirectory = workingDir;
+            }
             psi.UseShellExecute = false;
             using (Process p = Process.Start(psi))
             {

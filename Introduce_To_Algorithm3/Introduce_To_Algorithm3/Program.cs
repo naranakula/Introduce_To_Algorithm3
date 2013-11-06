@@ -17,7 +17,9 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-           /* while (true)
+
+            /*
+            while (true)
             {
                 Socket socket = SocketClient.CreateTcpSocket();
                 if (SocketClient.Connect(socket, "172.31.25.34", 32123))
@@ -32,11 +34,13 @@ namespace Introduce_To_Algorithm3
                     break;
                 }
             }*/
+            /*
             SocketServer server = new SocketServer(32123,WaitCallBackDelegate);
             server.Start();
             Thread.Sleep(1000);
             Console.WriteLine("server listen "+server.ServerIP+":"+server.Port);
             Console.ReadLine();
+            */
         }
 
 
