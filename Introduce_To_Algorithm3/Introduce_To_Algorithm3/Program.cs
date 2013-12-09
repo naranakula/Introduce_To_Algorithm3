@@ -34,13 +34,13 @@ namespace Introduce_To_Algorithm3
                     break;
                 }
             }*/
-            /*
+            
             SocketServer server = new SocketServer(32123,WaitCallBackDelegate);
             server.Start();
             Thread.Sleep(1000);
             Console.WriteLine("server listen "+server.ServerIP+":"+server.Port);
             Console.ReadLine();
-            */
+            
         }
 
 

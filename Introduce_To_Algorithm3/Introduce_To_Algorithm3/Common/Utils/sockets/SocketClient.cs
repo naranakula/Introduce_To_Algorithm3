@@ -433,7 +433,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
             }
             
             //pool for 1 seconds
-            if (socket.Poll(1000 * 1000, SelectMode.SelectRead))
+            if (!socket.Poll(1000 * 1000, SelectMode.SelectRead))
             {
                 return null;
             }
