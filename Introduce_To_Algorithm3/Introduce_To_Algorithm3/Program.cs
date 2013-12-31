@@ -18,6 +18,15 @@ namespace Introduce_To_Algorithm3
         static void Main(string[] args)
         {
 
+            float f1 = 1E-10f, f2 = 1E-07f;
+            List<Tuple<int,int>> list = new List<Tuple<int,int>>();
+            for (int i = 0; i < 11000; i++)
+            {
+                int slot = Hash(i, 101);
+                list.Add(Tuple.Create<int,int>(slot,i));
+            }
+            var query = (from r in list group r by r.Item1 into g select g).OrderBy(g => g.Count()).ToList();
+            Console.WriteLine(query.First().Count() +"            "+query.Last().Count());
             /*
             while (true)
             {
@@ -34,13 +43,20 @@ namespace Introduce_To_Algorithm3
                     break;
                 }
             }*/
-            
+            /*
             SocketServer server = new SocketServer(32123,WaitCallBackDelegate);
             server.Start();
             Thread.Sleep(1000);
             Console.WriteLine("server listen "+server.ServerIP+":"+server.Port);
             Console.ReadLine();
-            
+            */
+        }
+
+        public static int Hash(int key, int slotNum)
+        {
+            double d = (Math.Sqrt(5) - 1) / 2;
+            int slot = (int)(((key * d) - (int)(key * d)) * slotNum);
+            return slot;
         }
 
 

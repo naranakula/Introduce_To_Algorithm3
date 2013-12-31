@@ -378,7 +378,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
         {
             if (node == null) return;
             count--;
-            
+
+            //node x that moves into node y’s original position.
+            //node y as the node either removed from the tree or moved within the tree.
             RBTreeNode<K, V> y = node, x = null, parent = null;
             Color yOriginColor = y.Color;
             if (node.Left == null)
