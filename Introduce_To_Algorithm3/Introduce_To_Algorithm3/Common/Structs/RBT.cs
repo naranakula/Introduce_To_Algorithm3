@@ -457,6 +457,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
                 // x is double black
                 if (x == parent.Left)
                 {
+                    //since node x is double black, node w can not be null, because the number of blacks on simple path from x.p to the leaf w would be smaller than the the number on simple path from x.p to x.
                     w = parent.Right;
                     if (IsRed(w))
                     {
@@ -464,6 +465,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
                         parent.Color = Color.RED;
                         LeftRotate(parent);
                         w = parent.Right;
+                        //w still can not be null here
                     }
                     if (w != null && IsBlack(w.Left) && IsBlack(w.Right))
                     {
