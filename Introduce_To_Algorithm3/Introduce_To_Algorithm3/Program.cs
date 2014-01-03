@@ -29,17 +29,21 @@ namespace Introduce_To_Algorithm3
             {
                 list.Add(rand.Next());
             }
+            DateTime start = DateTime.Now;
             for (int i = 0; i < list.Count; i++)
             {
                 rbt.Insert(list[i], i);
             }
-
+            Console.WriteLine(DateTime.Now - start);
+            start = DateTime.Now;
             for (int i = list.Count-1; i >= 0; i--)
             {
                 var node = rbt.Search_(list[rand.Next(list.Count)]);
                 list.Remove(node.Key);
+                //Console.WriteLine(rbt.Count);
                 rbt.Delete(node);
             }
+            Console.WriteLine(DateTime.Now - start);
             /*
             while (true)
             {

@@ -168,6 +168,7 @@
     <Compile Include="Common\Structs\LinkedListNode.cs" />
     <Compile Include="Common\Structs\RBT.cs" />
     <Compile Include="Common\Structs\RBTreeNode.cs" />
+    <Compile Include="Common\Structs\SBT.cs" />
     <Compile Include="Common\Structs\SingleListNode.cs" />
     <Compile Include="Common\Structs\Treap.cs" />
     <Compile Include="Common\Structs\TreeNode.cs" />
