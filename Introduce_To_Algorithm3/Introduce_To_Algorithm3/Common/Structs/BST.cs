@@ -267,9 +267,6 @@ namespace Introduce_To_Algorithm3.Common.Structs
             return node;
         }
 
-
-
-
         /// <summary>
         /// find successor
         /// </summary>

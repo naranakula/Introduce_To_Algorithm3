@@ -19,8 +19,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
     public class RBTreeNode<K, V> where K : IComparable<K>, IEquatable<K>
     {
         public Color Color;
+
         public RBTreeNode()
         {
+            Key = default(K);
+            Value = default(V);
         }
 
         public RBTreeNode(K key, V val)

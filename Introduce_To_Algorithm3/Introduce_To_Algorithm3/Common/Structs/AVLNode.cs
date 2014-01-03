@@ -18,9 +18,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// the height of this node
         /// </summary>
         public int H;
+
         public AVLNode()
         {
-
+            Key = default(K);
+            Value = default(V);
         }
 
         public AVLNode(K key, V val)

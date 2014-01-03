@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Introduce_To_Algorithm3.Common.GraphEx;
 using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.Common.Structs;
 using Introduce_To_Algorithm3.Common.Utils.sockets;
 using System.Net.Sockets;
 using System.Threading;
@@ -17,16 +18,28 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-
-            float f1 = 1E-10f, f2 = 1E-07f;
-            List<Tuple<int,int>> list = new List<Tuple<int,int>>();
-            for (int i = 0; i < 11000; i++)
+            long l = CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
+            Console.WriteLine(l);
+            AVL<int, int> avl = new AVL<int, int>();
+            RBT<int, int> rbt = new RBT<int, int>();
+            int count = 1000000;
+            List<int> list = new List<int>();
+            Random rand = new Random(100000);
+            for (int i = 0; i < count; i++)
             {
-                int slot = Hash(i, 101);
-                list.Add(Tuple.Create<int,int>(slot,i));
+                list.Add(rand.Next());
             }
-            var query = (from r in list group r by r.Item1 into g select g).OrderBy(g => g.Count()).ToList();
-            Console.WriteLine(query.First().Count() +"            "+query.Last().Count());
+            for (int i = 0; i < list.Count; i++)
+            {
+                rbt.Insert(list[i], i);
+            }
+
+            for (int i = list.Count-1; i >= 0; i--)
+            {
+                var node = rbt.Search_(list[rand.Next(list.Count)]);
+                list.Remove(node.Key);
+                rbt.Delete(node);
+            }
             /*
             while (true)
             {

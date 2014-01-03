@@ -17,7 +17,8 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         public TreeNode()
         {
-
+            Key = default(K);
+            Value = default(V);
         }
 
         public TreeNode(K key, V val)
