@@ -18,55 +18,29 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            long l = CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
-            Console.WriteLine(l);
             AVL<int, int> avl = new AVL<int, int>();
-            RBT<int, int> rbt = new RBT<int, int>();
-            int count = 1000000;
+            Random rand = new Random();
             List<int> list = new List<int>();
-            Random rand = new Random(100000);
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < 1000000; i++)
             {
-                list.Add(rand.Next());
+                list.Add(rand.Next(100000));
             }
-            DateTime start = DateTime.Now;
-            for (int i = 0; i < list.Count; i++)
+
+           // list = list.Distinct().ToList();
+
+            foreach (var item in list)
             {
-                rbt.Insert(list[i], i);
+                avl.Insert(item, item);
             }
-            Console.WriteLine(DateTime.Now - start);
-            start = DateTime.Now;
-            for (int i = list.Count-1; i >= 0; i--)
+
+            foreach (var item in list)
             {
-                var node = rbt.Search_(list[rand.Next(list.Count)]);
-                list.Remove(node.Key);
-                //Console.WriteLine(rbt.Count);
-                rbt.Delete(node);
+                var node = avl.Search_(item);
+                avl.Delete(node);
             }
-            Console.WriteLine(DateTime.Now - start);
-            /*
-            while (true)
-            {
-                Socket socket = SocketClient.CreateTcpSocket();
-                if (SocketClient.Connect(socket, "172.31.25.34", 32123))
-                {
-                    Console.Write(">>>:");
-                    SocketClient.Send(socket, Console.ReadLine(), Encoding.UTF8);
-                    SocketClient.Close(socket);
-                }
-                else
-                {
-                    Console.WriteLine("Connect failed");
-                    break;
-                }
-            }*/
-            /*
-            SocketServer server = new SocketServer(32123,WaitCallBackDelegate);
-            server.Start();
-            Thread.Sleep(1000);
-            Console.WriteLine("server listen "+server.ServerIP+":"+server.Port);
-            Console.ReadLine();
-            */
+
+            var query = from r in list where r > 10 group r by r into g select g;
+
         }
 
         public static int Hash(int key, int slotNum)

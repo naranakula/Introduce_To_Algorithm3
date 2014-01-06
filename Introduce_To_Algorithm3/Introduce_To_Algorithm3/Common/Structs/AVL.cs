@@ -132,7 +132,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         public List<AVLNode<K, V>> PreorderTreeWalk_()
         {
-            List<AVLNode<K,V>> lists = new List<AVLNode<K,V>>();
+            List<AVLNode<K, V>> lists = new List<AVLNode<K, V>>();
             PreorderTreeWalk_(ref lists, root);
             return lists;
         }
@@ -143,7 +143,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// </summary>
         /// <param name="lists"></param>
         /// <param name="node"></param>
-        public void PreorderTreeWalk_(ref List<AVLNode<K,V>> lists, AVLNode<K,V> node)
+        public void PreorderTreeWalk_(ref List<AVLNode<K, V>> lists, AVLNode<K, V> node)
         {
             if (node == null)
             {
@@ -267,12 +267,12 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         private AVLNode<K, V> Search_(K key, AVLNode<K, V> node)
         {
-            if (root == null)
+            if (node == null)
             {
                 return null;
             }
 
-            int i = root.Key.CompareTo(key);
+            int i = node.Key.CompareTo(key);
 
             if (i == 0)
             {
@@ -506,7 +506,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             //the size of avl tree increase 1
             count++;
             //the parent of inserted
-            AVLNode<K, V> parent = root,node = null;
+            AVLNode<K, V> parent = root, node = null;
 
             while (parent != null)
             {
@@ -538,8 +538,32 @@ namespace Introduce_To_Algorithm3.Common.Structs
                 node.Right = inserted;
             }
 
-            //the left or right children of inserted are already null
+            //if a node has node child, we mark it height = 1
+            inserted.H = 1;
 
+            AVLNode<K, V> rParent = node;
+            bool needToFixup = false;
+            while (rParent != null)
+            {
+                int oldH = rParent.H;
+                rParent.H = System.Math.Max(rParent.Left == null ? 0 : rParent.Left.H, rParent.Right == null ? 0 : rParent.Right.H) + 1;
+                if (System.Math.Abs(rParent.H) >= 2)
+                {
+                    needToFixup = true;
+                }
+                if (oldH == rParent.H)
+                {
+                    // no need to do it more
+                    break;
+                }
+                rParent = rParent.Parent;
+            }
+
+            //insert fix up
+            if (needToFixup)
+            {
+                InsertFixup(inserted);
+            }
         }
 
         /// <summary>
@@ -551,6 +575,45 @@ namespace Introduce_To_Algorithm3.Common.Structs
             if (inserted == null)
             {
                 return;
+            }
+
+            AVLNode<K, V> parent = inserted.Parent;
+            AVLNode<K, V> current = inserted;
+
+            while (parent != null)
+            {
+                if (parent.BF == 2)
+                {
+                    //LL
+                    if (current.BF == 1)
+                    {
+                        RightRotate(parent);
+                    }
+                    //LR
+                    if (current.BF == -1)
+                    {
+                        LeftRotate(current);
+                        RightRotate(parent);
+                    }
+                }
+
+                if (parent.BF == -2)
+                {
+                    //RR
+                    if (current.BF == -1)
+                    {
+                        LeftRotate(parent);
+                    }
+                    //RL
+                    if (current.BF == 1)
+                    {
+                        RightRotate(current);
+                        LeftRotate(parent);
+                    }
+                }
+
+                current = parent;
+                parent = parent.Parent;
             }
         }
 
@@ -566,8 +629,80 @@ namespace Introduce_To_Algorithm3.Common.Structs
             {
                 return;
             }
+            count--;
+
+            //delete the node then fixup it
+            AVLNode<K, V> parent = node.Parent;
+            if (node.Left == null && node.Right == null)
+            {
+                Transplant(node, node.Right);
+            }
+            else if (node.Left == null)
+            {
+                parent = node.Right;
+                Transplant(node, node.Right);
+            }
+            else if (node.Right == null)
+            {
+                parent = node.Left;
+                Transplant(node, node.Left);
+            }
+            else
+            {
+                AVLNode<K, V> min = Minimum_(node.Right);
+                if (min.Parent != node)
+                {
+                    parent = min.Right != null ? min.Right : (min.Parent.Right==null?min.Parent:min.Parent.Right);
+                    Transplant(min, min.Right);
+                    min.Right = node.Right;
+                    min.Right.Parent = min;
+                }
+                else
+                {
+                    parent = node.Left;
+                }
+                Transplant(node, min);
+                min.Left = node.Left;
+                min.Left.Parent = min;
+            }
+
+            //parent is the deepest node get affected by delete 
+            AVLNode<K, V> rParent = parent;
+            while (rParent != null)
+            {
+                rParent.H = System.Math.Max(rParent.Left == null ? 0 : rParent.Left.H, rParent.Right == null ? 0 : rParent.Right.H) + 1;
+                rParent = rParent.Parent;
+            }
+
+
+            InsertFixup(parent);
         }
 
+        /// <summary>
+        /// When TRANSPLANT replaces the subtree rooted at node u with
+        /// the subtree rooted at node v , node u’s parent becomes node v’s parent, and u’s parent ends up having v as its appropriate child.
+        /// </summary>
+        /// <param name="u"></param>
+        /// <param name="v"></param>
+        private void Transplant(AVLNode<K, V> u, AVLNode<K, V> v)
+        {
+            if (u.Parent == null)
+            {
+                root = v;
+            }
+            else if (u == u.Parent.Left)
+            {
+                u.Parent.Left = v;
+            }
+            else
+            {
+                u.Parent.Right = v;
+            }
+            if (v != null)
+            {
+                v.Parent = u.Parent;
+            }
+        }
         /// <summary>
         /// left rotate which runs at O(1)
         /// </summary>
@@ -580,7 +715,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             {
                 right.Left.Parent = node;
             }
-
+            node.H = System.Math.Max(node.Left == null ? 0 : node.Left.H, node.Right == null ? 0 : node.Right.H) + 1;
             right.Parent = node.Parent;
 
             if (node.Parent == null)
@@ -598,6 +733,8 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
             right.Left = node;
             node.Parent = right;
+
+            right.H = System.Math.Max(right.Left == null ? 0 : right.Left.H, right.Right == null ? 0 : right.Right.H) + 1;
         }
 
         /// <summary>
@@ -608,12 +745,12 @@ namespace Introduce_To_Algorithm3.Common.Structs
         {
             AVLNode<K, V> left = node.Left;
             node.Left = left.Right;
-
             if (left.Right != null)
             {
                 left.Right.Parent = node;
             }
 
+            node.H = System.Math.Max(node.Left == null ? 0 : node.Left.H, node.Right == null ? 0 : node.Right.H) + 1;
             left.Parent = node.Parent;
 
             if (node.Parent == null)
@@ -631,6 +768,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
             left.Right = node;
             node.Parent = left;
+            left.H = System.Math.Max(left.Left == null ? 0 : left.Left.H, left.Right == null ? 0 : left.Right.H) + 1;
         }
         #endregion
     }

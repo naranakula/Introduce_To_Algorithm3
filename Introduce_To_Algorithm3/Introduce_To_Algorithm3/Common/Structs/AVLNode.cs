@@ -15,9 +15,23 @@ namespace Introduce_To_Algorithm3.Common.Structs
         public K Key;
         public V Value;
         /// <summary>
-        /// the height of this node
+        /// the height of this node,
+        /// if a node has no children, mark its height = 1
         /// </summary>
         public int H;
+
+        /// <summary>
+        ///  the balance factor of this node = the height of left trree - the height of right tree
+        /// </summary>
+        public int BF
+        {
+            get
+            {
+                int leftHeight = Left == null ? 0 : Left.H;
+                int rightHeight = Right == null ? 0 : Right.H;
+                return leftHeight - rightHeight;
+            }
+        }
 
         public AVLNode()
         {
