@@ -13,6 +13,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
     /// <typeparam name="V"></typeparam>
     public class BST<K, V> where K : IComparable<K>, IEquatable<K>
     {
+
         protected int count;
         /// <summary>
         /// return the number in tree
@@ -51,6 +52,30 @@ namespace Introduce_To_Algorithm3.Common.Structs
         }
 
         /// <summary>
+        /// inorder tree walk, O(n)  return a sorted result
+        /// </summary>
+        /// <returns></returns>
+        public List<TreeNode<K, V>> InorderTreeWalk_()
+        {
+            List<TreeNode<K, V>> lists = new List<TreeNode<K, V>>();
+            InorderTreeWalk_(lists, root);
+            return lists;
+        }
+
+        /// <summary>
+        /// inorder tree walk
+        /// </summary>
+        /// <param name="lists"></param>
+        /// <param name="root"></param>
+        private void InorderTreeWalk_(List<TreeNode<K, V>> lists, TreeNode<K, V> root)
+        {
+            if (root == null) return;
+            InorderTreeWalk_(lists, root.Left);
+            lists.Add(root);
+            InorderTreeWalk_(lists, root.Right);
+        }
+
+        /// <summary>
         /// pre order walk tree O(n)
         /// </summary>
         /// <returns></returns>
@@ -75,6 +100,31 @@ namespace Introduce_To_Algorithm3.Common.Structs
         }
 
         /// <summary>
+        /// pre order walk tree O(n)
+        /// </summary>
+        /// <returns></returns>
+        public List<TreeNode<K, V>> PreorderTreeWalk_()
+        {
+            List<TreeNode<K, V>> lists = new List<TreeNode<K, V>>();
+            PreorderTreeWalk_(lists, root);
+            return lists;
+        }
+
+        /// <summary>
+        /// pre order walk tree
+        /// </summary>
+        /// <param name="lists"></param>
+        /// <param name="root"></param>
+        private void PreorderTreeWalk_(List<TreeNode<K, V>> lists, TreeNode<K, V> root)
+        {
+            if (root == null) return;
+            lists.Add(root);
+            PreorderTreeWalk_(lists, root.Left);
+            PreorderTreeWalk_(lists, root.Right);
+        }
+
+
+        /// <summary>
         /// post order walk tree runs at O(n)
         /// </summary>
         /// <returns></returns>
@@ -90,12 +140,36 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// </summary>
         /// <param name="lists"></param>
         /// <param name="treeNode"></param>
-        private void PostorderTreeWalk(List<Tuple<K, V>> lists, TreeNode<K, V> treeNode)
+        private void PostorderTreeWalk(List<Tuple<K, V>> lists, TreeNode<K, V> root)
         {
             if (root == null) return;
             PostorderTreeWalk(lists, root.Left);
             PostorderTreeWalk(lists, root.Right);
             lists.Add(new Tuple<K, V>(root.Key, root.Value));
+        }
+
+        /// <summary>
+        /// post order walk tree runs at O(n)
+        /// </summary>
+        /// <returns></returns>
+        public List<TreeNode<K, V>> PostorderTreeWalk_()
+        {
+            List<TreeNode<K, V>> lists = new List<TreeNode<K, V>>();
+            PostorderTreeWalk_(lists, root);
+            return lists;
+        }
+
+        /// <summary>
+        /// post order walk tree
+        /// </summary>
+        /// <param name="lists"></param>
+        /// <param name="treeNode"></param>
+        private void PostorderTreeWalk_(List<TreeNode<K, V>> lists, TreeNode<K, V> root)
+        {
+            if (root == null) return;
+            PostorderTreeWalk_(lists, root.Left);
+            PostorderTreeWalk_(lists, root.Right);
+            lists.Add(root);
         }
 
         /// <summary>
@@ -387,13 +461,13 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
             TreeNode<K,V> inserted = new TreeNode<K, V>(key,val);
             inserted.Parent = parent;
-            if(key.CompareTo(parent.Key)>0)
+            if (parent.Key.CompareTo(key) > 0)
             {
-                parent.Right = inserted;
+                parent.Left = inserted;
             }
             else
             {
-                parent.Left = inserted;
+                parent.Right = inserted;
             }
         }
 

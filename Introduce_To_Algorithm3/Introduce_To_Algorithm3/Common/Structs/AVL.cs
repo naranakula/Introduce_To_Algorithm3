@@ -69,7 +69,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         /// <summary>
         /// inorder tree walk.
-        /// which runs at O(lgn) & which is the height of tree
+        /// which runs at O(n) 
         /// </summary>
         /// <returns></returns>
         public List<AVLNode<K, V>> InorderTreeWalk_()
@@ -81,7 +81,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         /// <summary>
         /// inorder tree walk
-        /// which runs at O(lgn) & which is the height of tree
+        /// which runs at O(n) 
         /// </summary>
         /// <param name="lists"></param>
         /// <param name="node"></param>
@@ -127,7 +127,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         /// <summary>
         /// preorder tree walk
-        /// which runs at O(lgn) & which is the height of tree
+        /// which runs at O(n)
         /// </summary>
         /// <returns></returns>
         public List<AVLNode<K, V>> PreorderTreeWalk_()
@@ -184,7 +184,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         /// <summary>
         /// post order tree walk 
-        /// which runs at O(lgn) & which is the height of the tree
+        /// which runs at O(n)
         /// </summary>
         /// <returns></returns>
         public List<AVLNode<K, V>> PostorderTreeWalk_()

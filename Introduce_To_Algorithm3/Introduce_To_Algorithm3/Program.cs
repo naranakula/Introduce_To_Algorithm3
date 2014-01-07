@@ -18,29 +18,50 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            AVL<int, int> avl = new AVL<int, int>();
-            Random rand = new Random();
+            int linenum = CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
+            SBT<int, int> sbt = new SBT<int, int>();
+
+            RBT<int, int> avl = new RBT<int, int>();
+            Random rand = new Random(1);
             List<int> list = new List<int>();
-            for (int i = 0; i < 1000000; i++)
+            DateTime dateTime = DateTime.Now;
+            for (int i = 0; i < 5; i++)
             {
-                list.Add(rand.Next(100000));
+                list.Add(rand.Next(1999900000));
             }
 
+            Console.WriteLine(DateTime.Now - dateTime);
+            dateTime = DateTime.Now;
            // list = list.Distinct().ToList();
-
+            
             foreach (var item in list)
             {
                 avl.Insert(item, item);
             }
-
+            Console.WriteLine(DateTime.Now - dateTime);
+            dateTime = DateTime.Now;
             foreach (var item in list)
             {
                 var node = avl.Search_(item);
                 avl.Delete(node);
             }
-
+            Console.WriteLine("Count = "+avl.Count);
+            Console.WriteLine(DateTime.Now - dateTime);
+            int[] copy = list.ToArray();
+            
+            dateTime = DateTime.Now;
+            Console.WriteLine("expect to run in 2 hours");
+            for (int i = 0; i < copy.Length; i++)
+            {
+                list.Remove(copy[i]);
+            }
+            
+            Console.WriteLine(DateTime.Now - dateTime);
             var query = from r in list where r > 10 group r by r into g select g;
-
+            while (true)
+            {
+                Console.ReadLine();
+            }
         }
 
         public static int Hash(int key, int slotNum)
