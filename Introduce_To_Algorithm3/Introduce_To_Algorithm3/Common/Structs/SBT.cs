@@ -646,7 +646,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         #region Delete
 
         /// <summary>
-        /// 
+        /// delete the node
         /// </summary>
         /// <param name="node"></param>
         public void Delete(TreeNode<K, V> node)
@@ -657,6 +657,73 @@ namespace Introduce_To_Algorithm3.Common.Structs
             }
 
             count--;
+            //node x that moves into node y’s original position.
+            //node y as the node either removed from the tree or moved within the tree.
+            TreeNode<K, V> y = node, x = null, parent = null;
+            if (node.Left == null)
+            {
+                x = node.Right;
+                parent = node.Parent;
+                Transplant(node, node.Right);
+            }
+            else if (node.Right == null)
+            {
+                x = node.Left;
+                parent = node.Parent;
+                Transplant(node, node.Left);
+            }
+            else
+            {
+                y = Minimum_(node.Right);
+                x = y.Right;
+                if (y.Parent == node)
+                {
+                    parent = y;
+                    y.Size = node.Size;
+                }
+                else
+                {
+                    //the post one is not right the right one
+                    parent = y.Parent;
+                    y.Size = node.Size;
+                    Transplant(y, y.Right);
+                    //because the post one is not the right child, then node.right is not null
+                    y.Right = node.Right;
+                    y.Right.Parent = y;
+                }
+
+                Transplant(node, y);
+                y.Left = node.Left;
+                //node.left is not null
+                y.Left.Parent = y;
+            }
+
+            TreeNode<K, V> pNode = parent;
+            while (pNode != null)
+            {
+                pNode.Size--;
+                pNode = pNode.Parent;
+            }
+        }
+
+        private void Transplant(TreeNode<K, V> u, TreeNode<K, V> v)
+        {
+            if (u.Parent == null)
+            {
+                root = v;
+            }
+            else if (u == u.Parent.Left)
+            {
+                u.Parent.Left = v;
+            }
+            else
+            {
+                u.Parent.Right = v;
+            }
+            if (v != null)
+            {
+                v.Parent = u.Parent;
+            }
         }
 
         #endregion
@@ -716,5 +783,27 @@ namespace Introduce_To_Algorithm3.Common.Structs
             }
         }
         #endregion
+
+
+
+        public bool IsSizeRight()
+        {
+            if (root == null)
+            {
+                return true;
+            }
+
+            List<TreeNode<K, V>> lists = PreorderTreeWalk_();
+
+            for (int i = 0; i < lists.Count; i++)
+            {
+                var node = lists[i];
+                if (Size(node) != Size(node.Right) + Size(node.Left) + 1)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
