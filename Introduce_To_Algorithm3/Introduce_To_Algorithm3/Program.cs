@@ -16,21 +16,28 @@ namespace Introduce_To_Algorithm3
 {
     class Program
     {
+
         static void Main(string[] args)
         {
-            int linenum = CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
+            for (int i = 0; i < 10000000; i++)
+            {
+                MainProxy(args);
+            }
+        }
+        static void MainProxy(string[] args)
+        {
             SBT<int, int> sbt = new SBT<int, int>();
 
-            RBT<int, int> avl = new RBT<int, int>();
-            Random rand = new Random(1);
+            SBT<int, int> avl = new SBT<int, int>();
+            Random rand = new Random();
             List<int> list = new List<int>();
             DateTime dateTime = DateTime.Now;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 1000000; i++)
             {
-                list.Add(rand.Next(1999900000));
+                list.Add(rand.Next(199999990));
             }
 
-            Console.WriteLine(DateTime.Now - dateTime);
+            //Console.WriteLine(DateTime.Now - dateTime);
             dateTime = DateTime.Now;
            // list = list.Distinct().ToList();
             
@@ -38,30 +45,35 @@ namespace Introduce_To_Algorithm3
             {
                 avl.Insert(item, item);
             }
-            Console.WriteLine(DateTime.Now - dateTime);
-            dateTime = DateTime.Now;
-            foreach (var item in list)
+
+            if (!avl.IsSBT())
             {
-                var node = avl.Search_(item);
-                avl.Delete(node);
+                Console.WriteLine("it is sbt = " + avl.IsSBT());
             }
-            Console.WriteLine("Count = "+avl.Count);
-            Console.WriteLine(DateTime.Now - dateTime);
-            int[] copy = list.ToArray();
+
+            //Console.WriteLine("it is sbt = "+avl.IsSBT());
+            //Console.WriteLine(DateTime.Now - dateTime);
+
+            //dateTime = DateTime.Now;
+
+            //foreach (var item in list)
+            //{
+            //    var node = avl.Search_(item);
+            //    //avl.Delete(node);
+            //}
+            ////Console.WriteLine("Count = "+avl.Count);
+            ////Console.WriteLine(DateTime.Now - dateTime);
+            //int[] copy = list.ToArray();
             
-            dateTime = DateTime.Now;
-            Console.WriteLine("expect to run in 2 hours");
-            for (int i = 0; i < copy.Length; i++)
-            {
-                list.Remove(copy[i]);
-            }
+            //dateTime = DateTime.Now;
+            //Console.WriteLine("expect to run in 2 hours");
+            //for (int i = 0; i < copy.Length; i++)
+            //{
+            //    list.Remove(copy[i]);
+            //}
             
-            Console.WriteLine(DateTime.Now - dateTime);
-            var query = from r in list where r > 10 group r by r into g select g;
-            while (true)
-            {
-                Console.ReadLine();
-            }
+            //Console.WriteLine(DateTime.Now - dateTime);
+
         }
 
         public static int Hash(int key, int slotNum)

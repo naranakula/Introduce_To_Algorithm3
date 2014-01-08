@@ -456,49 +456,104 @@ namespace Introduce_To_Algorithm3.Common.Structs
             count++;
 
             TreeNode<K, V> inserted = new TreeNode<K, V>(key, val) { Size = 1 };
-            TreeNode<K, V> node = root, parent = null;
 
-            while (node != null)
-            {
-                node.Size++;
-                parent = node;
-                if (key.CompareTo(node.Key) < 0)
-                {
-                    node = node.Left;
-                }
-                else
-                {
-                    node = node.Right;
-                }
-            }
-
-            inserted.Parent = parent;
-
-            if (parent == null)
+            if (root == null)
             {
                 root = inserted;
-            }
-            else if (key.CompareTo(parent.Key) < 0)
-            {
-                parent.Left = inserted;
+                return;
             }
             else
             {
-                parent.Right = inserted;
+                Insert(root, root, inserted);
+            }
+        }
+
+
+        private void Insert(TreeNode<K, V> current, TreeNode<K, V> parent, TreeNode<K, V> inserted)
+        {
+            //when first time recursive call, we guarantee current can not be null
+            if (current == null)
+            {
+                if (parent.Key.CompareTo(inserted.Key) > 0)
+                {
+                    parent.Left = inserted;
+                    inserted.Parent = parent;
+                }
+                else
+                {
+                    parent.Right = inserted;
+                    inserted.Parent = parent;
+                }
+
+                return;
             }
 
-            //fix up the insert node, so sbt matains its property
-            InsertFixup(inserted);
+            current.Size++;
+            int i = current.Key.CompareTo(inserted.Key);
+            if (i > 0)
+            {
+                Insert(current.Left, current, inserted);
+            }
+            else
+            {
+                Insert(current.Right, current, inserted);
+            }
+
+            //Maintain(current);
+
+            Maintain(current);
         }
 
-        /// <summary>
-        /// fix up the insert node, so sbt matains its property
-        /// </summary>
-        /// <param name="inserted"></param>
-        private void InsertFixup(TreeNode<K, V> inserted)
+
+        private void Maintain(TreeNode<K, V> node)
         {
-            
+            if (node == null)
+            {
+                return;
+            }
+
+            //the new inserted node was inserted to the left child of node, so node and node.left are both not null.
+            if (node.Left != null && Size(node.Left.Left) > Size(node.Right))
+            {
+                RightRotate(node);
+                var parent = node.Parent;
+                Maintain(node);
+                Maintain(parent);
+                return;
+            }
+            if (node.Left != null && Size(node.Left.Right) > Size(node.Right))
+            {
+                //node.left.right != null
+                LeftRotate(node.Left);
+                RightRotate(node);
+                var parent = node.Parent;
+                Maintain(parent.Left);
+                Maintain(parent.Right);
+                Maintain(parent);
+                return;
+            }
+
+
+            //the new inserted node was inserted to the right child of node, so node and node.right are both not null
+            if (node.Right != null && Size(node.Right.Right) > Size(node.Left))
+            {
+                LeftRotate(node);
+                var parent = node.Parent;
+                Maintain(node);
+                Maintain(parent);
+                return;
+            }
+            if (node.Right != null && Size(node.Right.Left) > Size(node.Left))
+            {
+                RightRotate(node.Right);
+                LeftRotate(node);
+                var parent = node.Parent;
+                Maintain(parent.Left);
+                Maintain(parent.Right);
+                Maintain(parent);
+            }
         }
+
 
         #region rotate
 
@@ -604,6 +659,62 @@ namespace Introduce_To_Algorithm3.Common.Structs
             count--;
         }
 
+        #endregion
+
+        #region Is SBT
+        /// <summary>
+        /// whether the tree is sbt
+        /// </summary>
+        /// <returns></returns>
+        public bool IsSBT()
+        {
+            if (root == null)
+            {
+                return true;
+            }
+
+            List<TreeNode<K, V>> lists = PreorderTreeWalk_();
+
+            for (int i = 0; i < lists.Count; i++)
+            {
+                if (!IsSBTNode(lists[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private bool IsSBTNode(TreeNode<K, V> node)
+        {
+            if (node == null)
+            {
+                return true;
+            }
+
+            if (node.Left == null && node.Right == null)
+            {
+                return true;
+            }
+            else if (node.Right == null)
+            {
+                return node.Left.Left == null && node.Left.Right == null;
+            }
+            else if (node.Left == null)
+            {
+                return node.Right.Left == null && node.Right.Right == null;
+            }
+            else
+            {
+                return (Size(node.Left) >= System.Math.Max(Size(node.Right.Left), Size(node.Right.Right))) &&
+                    (Size(node.Right) >= System.Math.Max(Size(node.Left.Left), Size(node.Left.Right)));
+            }
+        }
         #endregion
     }
 }
