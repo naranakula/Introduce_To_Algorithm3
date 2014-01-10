@@ -16,20 +16,19 @@ namespace Introduce_To_Algorithm3
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             MainProxy(args);
         }
         static void MainProxy(string[] args)
         {
-            SBT<int, int> avl = new SBT<int, int>();
-            Random rand = new Random();
+            SplayTree<int, int> avl = new SplayTree<int, int>();
+            Random rand = new Random(1);
             List<int> list = new List<int>();
             DateTime dateTime = DateTime.Now;
-            for (int i = 0; i < 1000000; i++)
+            for (int i = 0; i < 10000000; i++)
             {
-                list.Add(rand.Next(199990999));
+                list.Add(rand.Next(1999999999));
             }
 
             Console.WriteLine(DateTime.Now - dateTime);
@@ -39,23 +38,27 @@ namespace Introduce_To_Algorithm3
             foreach (var item in list)
             {
                 avl.Insert(item, item);
+ 
             }
-
-            if (!avl.IsSBT())
+            try
             {
-                Console.WriteLine("it is sbt = " + avl.IsSBT());
+                var min = avl.Minimum();
+                if (!avl.IsBST())
+                {
+                    Console.WriteLine();
+                }
             }
-
-            Console.WriteLine("it is sbt = " + avl.IsSBT());
+            catch (Exception ex)
+            {
+            }
             Console.WriteLine(DateTime.Now - dateTime);
 
             dateTime = DateTime.Now;
 
             foreach (var item in list)
             {
-                var node = avl.Search_(item);
-                avl.Delete(node);
-                if (!avl.IsSizeRight())
+                var node = avl.Search(item);
+                if (!avl.IsBST())
                 {
                     Console.WriteLine();
                 }
@@ -63,16 +66,16 @@ namespace Introduce_To_Algorithm3
             Console.WriteLine("Count = " + avl.Count);
             Console.WriteLine(DateTime.Now - dateTime);
             int[] copy = list.ToArray();
-            
-            //dateTime = DateTime.Now;
-            //Console.WriteLine("expect to run in 2 hours");
-            //for (int i = 0; i < copy.Length; i++)
-            //{
-            //    list.Remove(copy[i]);
-            //}
-            
-            //Console.WriteLine(DateTime.Now - dateTime);
 
+            dateTime = DateTime.Now;
+            Console.WriteLine("expect to run in 2 hours");
+            for (int i = 0; i < copy.Length; i++)
+            {
+                list.Remove(copy[i]);
+            }
+
+            Console.WriteLine(DateTime.Now - dateTime);
+            Console.ReadLine();
         }
 
         public static int Hash(int key, int slotNum)

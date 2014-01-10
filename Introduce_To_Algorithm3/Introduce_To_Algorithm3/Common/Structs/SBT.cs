@@ -784,8 +784,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         }
         #endregion
 
-
-
+        #region IsSizeRight
         public bool IsSizeRight()
         {
             if (root == null)
@@ -805,5 +804,6 @@ namespace Introduce_To_Algorithm3.Common.Structs
             }
             return true;
         }
+        #endregion
     }
 }
