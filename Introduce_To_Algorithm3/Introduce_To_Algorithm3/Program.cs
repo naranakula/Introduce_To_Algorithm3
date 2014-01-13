@@ -26,11 +26,12 @@ namespace Introduce_To_Algorithm3
             Random rand = new Random(1);
             List<int> list = new List<int>();
             DateTime dateTime = DateTime.Now;
-            for (int i = 0; i < 10000000; i++)
+            for (int i = 0; i < 1000000; i++)
             {
                 list.Add(rand.Next(1999999999));
             }
-
+            list = list.Distinct().ToList();
+            Console.WriteLine("count = "+list.Count);
             Console.WriteLine(DateTime.Now - dateTime);
             dateTime = DateTime.Now;
            // list = list.Distinct().ToList();
@@ -38,30 +39,19 @@ namespace Introduce_To_Algorithm3
             foreach (var item in list)
             {
                 avl.Insert(item, item);
- 
             }
-            try
-            {
-                var min = avl.Minimum();
-                if (!avl.IsBST())
-                {
-                    Console.WriteLine();
-                }
-            }
-            catch (Exception ex)
-            {
-            }
+
             Console.WriteLine(DateTime.Now - dateTime);
 
             dateTime = DateTime.Now;
 
             foreach (var item in list)
             {
-                var node = avl.Search(item);
-                if (!avl.IsBST())
+                avl.Delete(item);
+                /*if (!avl.IsBST())
                 {
                     Console.WriteLine();
-                }
+                }*/
             }
             Console.WriteLine("Count = " + avl.Count);
             Console.WriteLine(DateTime.Now - dateTime);

@@ -485,6 +485,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <summary>
         /// Search a node whose key is key, if found the node, then splay node.
         /// if can not found node, then return null & splay the most recently visited node
+        /// Search is the heart of splay tree.
+        /// Search should have the following property.
+        /// after search key, the key in r
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -521,6 +524,18 @@ namespace Introduce_To_Algorithm3.Common.Structs
             BottomUpSplay(lastVisited);
             return null;
 
+        }
+        
+        /// <summary>
+        /// determine whether search algorithm right
+        /// 
+        /// this is not always true, so we can determin delete & insert algorithm isn't always right when the tree can have multiple same key .
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool IsSearchRight(K key)
+        {
+            return IsSplitRight(Split(key));
         }
 
         /// <summary>
@@ -592,12 +607,71 @@ namespace Introduce_To_Algorithm3.Common.Structs
         #region Delete
 
         /// <summary>
-        /// 
+        /// delete the key from the tree.
+        /// 1) search key in the tree.
+        /// 2) join the left child and right child of the new root if k is in the tree
         /// </summary>
         /// <param name="key"></param>
         public void Delete(K key)
         {
+            if (root == null)
+            {
+                return;
+            }
+
+            SplayNode<K, V> node = Search_(key);
+            if (node == null)
+            {
+                //tree doesn't contain a key
+                return;
+            }
+
+            count--;
+
+            Join(node.Left, node.Right);
         }
+
+        #region Join
+
+        /// <summary>
+        /// join two tree T1 and T2, for each key in T1 &lt; each key in T2.
+        /// first access the maximum key in T1, After this the root of T1 is the maximum key in T1. let the root of T1 is the new root of the join of T1 and T2
+        /// return the new root of tree
+        /// </summary>
+        /// <param name="T1">T1.parent must be null</param>
+        /// <param name="T2">T2.parent must be null</param>
+        private SplayNode<K,V> Join(SplayNode<K, V> T1, SplayNode<K, V> T2)
+        {
+            if (T1 == null && T2 == null)
+            {
+                root = null;
+                return null;
+            }
+
+            if (T1 == null)
+            {
+                T2.Parent = null;
+                root = T2;
+                return T2;
+            }
+
+            if (T2 == null)
+            {
+                T1.Parent = null;
+                root = T1;
+                return T1;
+            }
+
+            T1.Parent = null;
+            root = T1;
+            K maxKey = Maximum(T1).Item1;
+            Search_(maxKey);
+            root.Right = T2;
+            T2.Parent = root;
+            return root;
+        }
+
+        #endregion
 
         #endregion
 
@@ -610,16 +684,37 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// 2)the key in T2 > key
         /// </summary>
         /// <param name="key"></param>
-        public void Split(K key)
+        public Tuple<SplayNode<K,V>, SplayNode<K,V>> Split(K key)
         {
+            if (root == null)
+            {
+                return new Tuple<SplayNode<K, V>, SplayNode<K, V>>(null, null);
+            }
+            Search_(key);
+            int i = root.Key.CompareTo(key);
+
+            if (i > 0)
+            {
+                //root is bigger than key, cut off left child
+                return new Tuple<SplayNode<K, V>, SplayNode<K, V>>(root.Left, root);
+            }
+            else
+            {
+                return new Tuple<SplayNode<K, V>, SplayNode<K, V>>(root, root.Right);
+            }
+        }
+
+        public bool IsSplitRight(Tuple<SplayNode<K, V>, SplayNode<K, V>> tuple)
+        {
+            if (tuple.Item1 == null || tuple.Item2 == null)
+            {
+                return true;
+            }
+
+            return Maximum(tuple.Item1).Item1.CompareTo(Minimum(tuple.Item2).Item1) < 0;
         }
 
         #endregion
-
-
-        #region Join
-        #endregion
-
 
         #region IsBST
 
