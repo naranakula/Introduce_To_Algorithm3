@@ -679,9 +679,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         /// <summary>
         /// split the splay tree into two part:T1, T2
-        /// 
+        /// if multiple same key in the tree
         /// 1)the key in T1 <= key
-        /// 2)the key in T2 > key
+        /// 2)the key in T2 >= key
         /// </summary>
         /// <param name="key"></param>
         public Tuple<SplayNode<K,V>, SplayNode<K,V>> Split(K key)

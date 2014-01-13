@@ -761,7 +761,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
 
         /// <summary>
-        /// select ith smallest element inorder 
+        /// select ith smallest element in inorder walk sequence, start from 1
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
@@ -770,10 +770,19 @@ namespace Introduce_To_Algorithm3.Common.Structs
             return Select(root, i);
         }
 
-
-
+        /// <summary>
+        /// select the ith smallest tree node in inorder tree walk sequence rooted at root.
+        /// null if can't find one
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="i"></param>
+        /// <returns></returns>
         private RBTreeNode<K, V> Select(RBTreeNode<K, V> root, int i)
         {
+            if (root == null)
+            {
+                return null;
+            }
             int r = 1 + (root.Left == null ? 0 : root.Left.Size);
             if (i == r)
             {
@@ -792,6 +801,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         /// <summary>
         /// given a node return the position of x in the linear order by inorder tree walk
+        /// start from 1.
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
@@ -800,6 +810,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             int i = Size(node.Left) + 1;
             while (node != root)
             {
+                //at the start of each iteration of while loop, i is the rank of x.key in the subtree rooted at node.
                 if (node == node.Parent.Right)
                 {
                     i += Size(node.Parent.Left) + 1;
