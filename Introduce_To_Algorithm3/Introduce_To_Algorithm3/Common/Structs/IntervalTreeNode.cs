@@ -25,7 +25,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         /// <summary>
         /// the maximum value of any interval endpoint stored in the subtree rooted at x
-        /// x.max = max( int.high, x.left.max, x.right.max)
+        /// x.max = max( interval.high, x.left.max, x.right.max)
         /// </summary>
         public int Max { get; set; }
 

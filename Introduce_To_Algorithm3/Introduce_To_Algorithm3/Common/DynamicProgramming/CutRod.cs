@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
         /// <returns>cut a rod of length n and return the max revenue</returns>
         public static int Cut_Rod(int[] p,int n)
         {
-            if (n == 0) return 0;
+            if (n <= 0) return 0;
             int max = int.MinValue;
 
             for(int i=1;i<=n;i++)
@@ -105,8 +105,6 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
             return r[n];
         }
 
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -140,8 +138,5 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
             }
             return r[n];
         }
-
-
-
     }
 }

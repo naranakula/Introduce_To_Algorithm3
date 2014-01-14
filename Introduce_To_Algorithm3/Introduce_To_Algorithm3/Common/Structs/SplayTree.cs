@@ -60,7 +60,6 @@ namespace Introduce_To_Algorithm3.Common.Structs
             return lists;
         }
 
-        static int i = 0;
         /// <summary>
         /// inorder tree walk
         /// </summary>
@@ -765,6 +764,19 @@ namespace Introduce_To_Algorithm3.Common.Structs
             }
 
             return true;
+        }
+
+        #endregion
+
+        #region GetRoot
+
+        /// <summary>
+        /// get the root node of this tree
+        /// </summary>
+        /// <returns></returns>
+        public SplayNode<K, V> GetRoot()
+        {
+            return root;
         }
 
         #endregion
