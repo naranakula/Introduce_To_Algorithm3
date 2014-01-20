@@ -23,15 +23,20 @@ namespace Introduce_To_Algorithm3
         {
             //fwghso
             Random rand = new Random();
-            BTree<int,int> bTree = new BTree<int, int>(10);
+            BTree<int,int> bTree = new BTree<int, int>(50);
             for (int i = 0; i < 100000; i++)
             {
-                bTree.Insert(i, i);
+                int k = rand.Next();
+                bTree.Insert(k, k);
             }
 
             if (bTree.IsBTree())
             {
-                
+                Console.WriteLine("it is btree");
+            }
+            else
+            {
+                Console.WriteLine("not BTREE");
             }
         }
 

@@ -429,6 +429,20 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                     return false;
                 }
             }
+
+            List<K> list = InorderTreeWalk();
+            if (list.Count != Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < list.Count-1; i++)
+            {
+                if (list[i].CompareTo(list[i + 1]) > 0)
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -450,6 +464,28 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             {
                 TreeWalk(node.Children[i],ref lists);
             }
+        }
+
+        public List<K> InorderTreeWalk()
+        {
+            List<K> lists = new List<K>();
+            InorderTreeWalk(root,ref lists);
+            return lists;
+        }
+
+        private void InorderTreeWalk(BTreeNode<K, V> node, ref List<K> lists)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < node.N; i++)
+            {
+                InorderTreeWalk(node.Children[i],ref lists);
+                lists.Add(node.KeyValues[i].Item1);
+            }
+            InorderTreeWalk(node.Children[node.N],ref  lists);
         }
 
         /// <summary>
@@ -479,6 +515,21 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 }
             }
 
+            for (int i = node.N+1; i < 2*minDegree; i++)
+            {
+                if (node.Children[i] != null)
+                {
+                    throw  new Exception();
+                }
+            }
+
+            for (int i = node.N; i < 2*minDegree-1; i++)
+            {
+                if (node.KeyValues[i] != null)
+                {
+                    throw new Exception();
+                }
+            }
             return true;
         }
 
