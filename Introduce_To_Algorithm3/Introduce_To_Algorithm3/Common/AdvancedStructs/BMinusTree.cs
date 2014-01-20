@@ -17,7 +17,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
     /// it normally used for db
     /// all keys are different
     /// </summary>
-    public class BMinusTree<K, V> where K : IComparable<K>, IEquatable<K>
+    public class BTree<K, V> where K : IComparable<K>, IEquatable<K>
     {
         #region members
         /// <summary>
@@ -28,20 +28,20 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <summary>
         /// the number of keys is between [1,2t-1]
         /// </summary>
-        private BMinusTreeNode<K, V> root;
+        private BTreeNode<K, V> root;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="minDegree">the minimum degree of B- tree. it &gt;= 2, which means it the min child can a interval node has</param>
-        public BMinusTree(int minDegree)
+        public BTree(int minDegree)
         {
             Trace.Assert(minDegree >= 2);
             this.minDegree = minDegree;
         }
 
 
-        public BMinusTreeNode<K, V> GetRoot()
+        public BTreeNode<K, V> GetRoot()
         {
             return root;
         }
@@ -78,7 +78,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// </summary>
         /// <param name="key"></param>
         /// <returns>if found, return the node and the index of key in the node. null, if not found</returns>
-        public Tuple<BMinusTreeNode<K, V>, int> Search(K key)
+        public Tuple<BTreeNode<K, V>, int> Search(K key)
         {
             return Search(root, key);
         }
@@ -89,7 +89,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <param name="root"></param>
         /// <param name="key"></param>
         /// <returns>if found, return the node and the index of key in the node. null, if not found</returns>
-        public Tuple<BMinusTreeNode<K, V>, int> Search(BMinusTreeNode<K, V> root, K key)
+        public Tuple<BTreeNode<K, V>, int> Search(BTreeNode<K, V> root, K key)
         {
             if (root == null || root.N <= 0)
             {
@@ -104,7 +104,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
             if (i < root.N && key.CompareTo(root.KeyValues[i].Item1) == 0)
             {
-                return new Tuple<BMinusTreeNode<K, V>, int>(root, i);
+                return new Tuple<BTreeNode<K, V>, int>(root, i);
             }
             else if (root.IsLeaf)
             {
@@ -122,13 +122,13 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// </summary>
         /// <param name="key">if found, return the node and the index of key in the node. null, if not found</param>
         /// <returns></returns>
-        public Tuple<BMinusTreeNode<K, V>, int> BinarySearch(K key)
+        public Tuple<BTreeNode<K, V>, int> BinarySearch(K key)
         {
             return BinarySearch(root, key);
         }
 
 
-        public Tuple<BMinusTreeNode<K, V>, int> BinarySearch(BMinusTreeNode<K, V> root, K key)
+        public Tuple<BTreeNode<K, V>, int> BinarySearch(BTreeNode<K, V> root, K key)
         {
             if (root == null || root.N <= 0)
             {
@@ -138,7 +138,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             int i = BinarySearch(root, key, 0, root.N - 1);
             if (i < root.N && key.CompareTo(root.KeyValues[i].Item1) == 0)
             {
-                return new Tuple<BMinusTreeNode<K, V>, int>(root, i);
+                return new Tuple<BTreeNode<K, V>, int>(root, i);
             }
             else if (root.IsLeaf)
             {
@@ -151,7 +151,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
 
 
-        public int BinarySearch(BMinusTreeNode<K, V> node, K key, int begin, int end)
+        public int BinarySearch(BTreeNode<K, V> node, K key, int begin, int end)
         {
             if (end == begin)
             {
@@ -176,10 +176,10 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// </summary>
         /// <param name="node"></param>
         /// <param name="i"></param>
-        private void SplitChild(BMinusTreeNode<K, V> node, int i)
+        private void SplitChild(BTreeNode<K, V> node, int i)
         {
-            BMinusTreeNode<K, V> y = node.Children[i];
-            BMinusTreeNode<K, V> z = new BMinusTreeNode<K, V>(minDegree);
+            BTreeNode<K, V> y = node.Children[i];
+            BTreeNode<K, V> z = new BTreeNode<K, V>(minDegree);
             z.IsLeaf = y.IsLeaf;
             z.N = minDegree - 1;
             z.Parent = node;
@@ -235,7 +235,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
             if (root == null)
             {
-                root = new BMinusTreeNode<K, V>(minDegree);
+                root = new BTreeNode<K, V>(minDegree);
                 root.IsLeaf = true;
                 root.N = 1;
                 Heigth = 1;
@@ -245,7 +245,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
             if (root.N == 2 * minDegree - 1)
             {
-                BMinusTreeNode<K, V> node = new BMinusTreeNode<K, V>(minDegree);
+                BTreeNode<K, V> node = new BTreeNode<K, V>(minDegree);
                 node.Children[0] = root;
                 root.Parent = node;
                 root = node;
@@ -261,7 +261,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
         }
 
-        private void InsertNonFull(BMinusTreeNode<K, V> root, K key, V val)
+        private void InsertNonFull(BTreeNode<K, V> root, K key, V val)
         {
             //root.N possibly equal 0
             int i = root.N - 1;
@@ -278,7 +278,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             else
             {
                 int index = root.Search(key).Item1;
-                BMinusTreeNode<K, V> node = root.Children[index];
+                BTreeNode<K, V> node = root.Children[index];
                 if (node.N == 2 * minDegree - 1)
                 {
                     SplitChild(root, index);
@@ -299,7 +299,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// you need find the item by using search
         /// </summary>
         /// <param name="item"></param>
-        public void Delete(Tuple<BMinusTreeNode<K, V>, int> item)
+        public void Delete(Tuple<BTreeNode<K, V>, int> item)
         {
             if (item == null || Count <= 0 || item.Item1 == null)
             {
@@ -308,7 +308,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
 
             Count--;
-            BMinusTreeNode<K, V> node = item.Item1;
+            BTreeNode<K, V> node = item.Item1;
             int index = item.Item2;
 
             //case 0: node is leaf and root. this is only one node -- the root node just delete

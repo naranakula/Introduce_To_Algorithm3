@@ -10,7 +10,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
     /// we call t=M/2 as the minimum degree of the B- tree.
     /// each non root non leaf node has [t-1,2t-1] keys
     /// </summary>
-    public class BMinusTreeNode<K, V> where K : IComparable<K>, IEquatable<K>
+    public class BTreeNode<K, V> where K : IComparable<K>, IEquatable<K>
     {
         /// <summary>
         /// the number of keys in current node it must between [t-1,2t-1]
@@ -33,12 +33,12 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <summary>
         /// t number children.     keys[i-1] =&gt; children[i] &lt;= keys[i]
         /// </summary>
-        public BMinusTreeNode<K, V>[] Children;
+        public BTreeNode<K, V>[] Children;
 
         /// <summary>
         /// parent of this node
         /// </summary>
-        public BMinusTreeNode<K, V> Parent;
+        public BTreeNode<K, V> Parent;
 
         /// <summary>
         /// whether is leaf
@@ -51,10 +51,10 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// constructor
         /// </summary>
         /// <param name="minDegree">the min degree</param>
-        public BMinusTreeNode(int minDegree)
+        public BTreeNode(int minDegree)
         {
             Debug.Assert(minDegree >= 2);
-            Array.Resize<BMinusTreeNode<K, V>>(ref Children, 2*minDegree);
+            Array.Resize<BTreeNode<K, V>>(ref Children, 2*minDegree);
             Array.Resize(ref KeyValues, 2*minDegree - 1);
             N = 0;
             Parent = null;

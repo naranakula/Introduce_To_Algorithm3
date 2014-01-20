@@ -4,8 +4,6 @@ using System;
 
 namespace TestProject
 {
-    
-    
     /// <summary>
     ///This is a test class for DijkstraAlgorithmTest and is intended
     ///to contain all DijkstraAlgorithmTest Unit Tests
