@@ -407,5 +407,81 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
 
         #endregion
+
+        #region isBTree
+
+        /// <summary>
+        /// is this tree a b tree
+        /// </summary>
+        /// <returns></returns>
+        public bool IsBTree()
+        {
+            if (root == null)
+            {
+                return true;
+            }
+
+            List<BTreeNode<K, V>> lists = TreeWalk();
+            foreach (var bTreeNode in lists)
+            {
+                if (!IsBTreeNode(bTreeNode))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public List<BTreeNode<K,V>> TreeWalk()
+        {
+            List<BTreeNode<K,V>> lists = new List<BTreeNode<K, V>>();
+            TreeWalk(root, ref lists);
+            return lists;
+        }
+
+        private void TreeWalk(BTreeNode<K, V> node, ref List<BTreeNode<K, V>> lists)
+        {
+            if (node == null)
+            {
+                return;
+            }
+            lists.Add(node);
+            for (int i = 0; i <= node.N; i++)
+            {
+                TreeWalk(node.Children[i],ref lists);
+            }
+        }
+
+        /// <summary>
+        /// if a node btree node
+        /// </summary>
+        /// <param name="node"></param>
+        private bool IsBTreeNode(BTreeNode<K, V> node)
+        {
+            if (node == null)
+            {
+                return true; 
+            }
+
+            if (root != node)
+            {
+                if (!(node.N >= minDegree - 1 && node.N <= 2*minDegree - 1))
+                {
+                    return false;
+                }
+            }
+
+            for (int i = 0; i < node.N-1; i++)
+            {
+                if (node.KeyValues[i].Item1.CompareTo(node.KeyValues[i + 1].Item1) > 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }

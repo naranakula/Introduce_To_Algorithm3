@@ -65,12 +65,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Introduce_To_Algorithm3\Introduce_To_Algorithm3.csproj">
-      <Project>{5608DDAE-D5E8-49D4-8D39-8AFAEC2BF6BC}</Project>
-      <Name>Introduce_To_Algorithm3</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Shadow Include="Test References\Introduce_To_Algorithm3.accessor" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Introduce_To_Algorithm3.Common.AdvancedStructs;
 using Introduce_To_Algorithm3.Common.GraphEx;
 using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Structs;
@@ -21,10 +22,17 @@ namespace Introduce_To_Algorithm3
         static void Main(string[] args)
         {
             //fwghso
-            List<string> list = new List<string>();
-            List<string> list2 = new List<string>();
-            var query1 = (from r in list where r.Length > 5 group r by r.Length into g select g).Where(g => g.Count() >= 2);
-            var query2 = from r1 in list join r2 in list2 on r1.Length equals r2.Length select new { Item1 = r1,Item2 = r2}; 
+            Random rand = new Random();
+            BTree<int,int> bTree = new BTree<int, int>(10);
+            for (int i = 0; i < 100000; i++)
+            {
+                bTree.Insert(i, i);
+            }
+
+            if (bTree.IsBTree())
+            {
+                
+            }
         }
 
 
