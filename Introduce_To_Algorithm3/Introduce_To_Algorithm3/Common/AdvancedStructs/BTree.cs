@@ -26,7 +26,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         private int minDegree;
 
         /// <summary>
-        /// the number of keys is between [1,2t-1]
+        /// the number of keys is between [0,2t-1] && the root of B tree is always in main memory.
         /// </summary>
         private BTreeNode<K, V> root;
 
@@ -40,38 +40,53 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             this.minDegree = minDegree;
         }
 
-
+        /// <summary>
+        /// get the root of B tree
+        /// </summary>
+        /// <returns></returns>
         public BTreeNode<K, V> GetRoot()
         {
             return root;
         }
 
         /// <summary>
-        /// get the mindegree
+        /// get the mindegree = the minimum number of children a non root node must have
         /// </summary>
         public int MinDegree
         {
             get { return minDegree; }
         }
+
         /// <summary>
-        /// get the order of a tree
+        /// get the order of a tree = the maximum number of children a non root node must have
         /// </summary>
         public int Order
         {
             get { return 2 * minDegree; }
         }
 
+        /// <summary>
+        /// the height of B tree
+        /// we define Heigth = 0 when a tree has no nodes
+        /// Heighth = 1 when a tree just has root node.
+        /// </summary>
         public int Heigth { get; set; }
+
+        /// <summary>
+        /// the number of key value in B tree
+        /// </summary>
         public int Count { get; set; }
 
-
+        /// <summary>
+        /// is btree empty
+        /// </summary>
         public bool IsEmpty
         {
             get { return Count == 0; }
         }
         #endregion
 
-        #region Search
+        #region search
 
         /// <summary>
         /// search key
@@ -84,7 +99,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
 
         /// <summary>
-        /// search key
+        /// search key in sequence
         /// </summary>
         /// <param name="root"></param>
         /// <param name="key"></param>
@@ -118,7 +133,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
 
         /// <summary>
-        /// search key
+        /// search key return the first node searched just as sequence search
         /// </summary>
         /// <param name="key">if found, return the node and the index of key in the node. null, if not found</param>
         /// <returns></returns>
@@ -127,8 +142,13 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             return BinarySearch(root, key);
         }
 
-
-        public Tuple<BTreeNode<K, V>, int> BinarySearch(BTreeNode<K, V> root, K key)
+        /// <summary>
+        /// search key return the first node searched just as sequence search
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        private Tuple<BTreeNode<K, V>, int> BinarySearch(BTreeNode<K, V> root, K key)
         {
             if (root == null || root.N <= 0)
             {
@@ -150,8 +170,15 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
         }
 
-
-        public int BinarySearch(BTreeNode<K, V> node, K key, int begin, int end)
+        /// <summary>
+        /// search key return the first node searched just as sequence search
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="key"></param>
+        /// <param name="begin"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        private int BinarySearch(BTreeNode<K, V> node, K key, int begin, int end)
         {
             if (end == begin)
             {
@@ -178,6 +205,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <param name="i"></param>
         private void SplitChild(BTreeNode<K, V> node, int i)
         {
+            //y is full
             BTreeNode<K, V> y = node.Children[i];
             BTreeNode<K, V> z = new BTreeNode<K, V>(minDegree);
             z.IsLeaf = y.IsLeaf;
@@ -185,26 +213,30 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             z.Parent = node;
             for (int j = 0; j < minDegree - 1; j++)
             {
+                //move the last t-1 key to new created node
                 z.KeyValues[j] = y.KeyValues[j + minDegree];
                 //for accuracy and gc
                 y.KeyValues[j + minDegree] = null;
             }
             if (!y.IsLeaf)
             {
-                //copy child point
+                //copy t child point
                 for (int j = 0; j < minDegree; j++)
                 {
                     z.Children[j] = y.Children[j + minDegree];
                     y.Children[j + minDegree] = null;
                 }
             }
+            
             y.N = minDegree - 1;
+
             for (int j = node.N; j > i; j--)
             {
+                //move the node
                 node.Children[j + 1] = node.Children[j];
             }
             node.Children[i + 1] = z;
-            for (int j = node.N - 1; j > i; j--)
+            for (int j = node.N - 1; j >= i; j--)
             {
                 node.KeyValues[j + 1] = node.KeyValues[j];
             }
@@ -215,8 +247,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
 
         /// <summary>
-        /// if it already contains in tree, return true and update the value. if not , return false.
-        /// 
+        /// if it already contains in tree, return true and update the value. if not, insert a new node, return false.
         /// it runs at tLgt(N)
         /// </summary>
         /// <param name="key"></param>
@@ -232,7 +263,8 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
 
             Count++;
-
+            
+            // insert first node
             if (root == null)
             {
                 root = new BTreeNode<K, V>(minDegree);
@@ -242,6 +274,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 root.KeyValues[0] = new Tuple<K, V>(key, val);
                 return false;
             }
+
 
             if (root.N == 2 * minDegree - 1)
             {
@@ -263,7 +296,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
         private void InsertNonFull(BTreeNode<K, V> root, K key, V val)
         {
-            //root.N possibly equal 0
+            //root.N can be 0
             int i = root.N - 1;
             if (root.IsLeaf)
             {
