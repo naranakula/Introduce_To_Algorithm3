@@ -21,14 +21,15 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
+            //fwghso
+            int limit = args.Length<=1?1000000: int.Parse(args[0]);
             int m = 2;
             while (true)
             {
-                //fwghso
                 Random rand = new Random();
                 BTree<int, int> bTree = new BTree<int, int>(m++);
                 DateTime dt = DateTime.Now;
-                for (int i = 0; i < 600000; i++)
+                for (int i = 0; i < limit; i++)
                 {
                     int k = rand.Next();
                     bTree.Insert(k, k);
@@ -41,6 +42,7 @@ namespace Introduce_To_Algorithm3
                 else
                 {
                     Console.WriteLine("not BTREE");
+                    Console.ReadLine();
                 }
 
                 Console.WriteLine("==========================");
@@ -49,7 +51,6 @@ namespace Introduce_To_Algorithm3
                 Thread.Sleep(2000);
             }
         }
-
 
         static void MainProxy1(string[] args)
         {

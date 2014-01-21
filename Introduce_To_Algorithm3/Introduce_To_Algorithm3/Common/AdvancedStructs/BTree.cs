@@ -228,7 +228,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                     y.Children[j + minDegree] = null;
                 }
             }
-            
+
             y.N = minDegree - 1;
 
             for (int j = node.N; j > i; j--)
@@ -264,7 +264,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
 
             Count++;
-            
+
             // insert first node
             if (root == null)
             {
@@ -294,7 +294,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 return false;
             }
         }
-        
+
 
         private void InsertNonFull(BTreeNode<K, V> root, K key, V val)
         {
@@ -336,6 +336,8 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
         /// <summary>
         /// you need find the item by using search
+        /// when we delete a key from node x, we design this node x must have at least minDegree keys which is one more then the least a nonroot node can have
+        /// 1)if the key  k in node x and x is a leaf,delete the k from x.
         /// </summary>
         /// <param name="item"></param>
         public void Delete(Tuple<BTreeNode<K, V>, int> item)
@@ -411,6 +413,42 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="key"></param>
+        private void Delete(BTreeNode<K, V> node, K key)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            #region case 1: node is leaf
+            if (node.IsLeaf)
+            {
+                for (int i = 0; i < node.N; i++)
+                {
+                    if (node.KeyValues[i].Item1.CompareTo(key) == 0)
+                    {
+                        for (int j = i; j < node.N - 1; j++)
+                        {
+                            node.KeyValues[i] = node.KeyValues[i + 1];
+                        }
+                        //for gc
+                        node.KeyValues[node.N - 1] = null;
+                        node.N--;
+                        break;
+                    }
+                }
+                return;
+            }
+            #endregion
+
+            #region node is a internal node
+            #endregion
+        }
 
         #endregion
 
@@ -442,7 +480,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 return false;
             }
 
-            for (int i = 0; i < list.Count-1; i++)
+            for (int i = 0; i < list.Count - 1; i++)
             {
                 if (list[i].CompareTo(list[i + 1]) > 0)
                 {
@@ -456,9 +494,9 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// tree walk all the node
         /// </summary>
         /// <returns></returns>
-        public List<BTreeNode<K,V>> TreeWalk()
+        public List<BTreeNode<K, V>> TreeWalk()
         {
-            List<BTreeNode<K,V>> lists = new List<BTreeNode<K, V>>();
+            List<BTreeNode<K, V>> lists = new List<BTreeNode<K, V>>();
             TreeWalk(root, ref lists);
             return lists;
         }
@@ -477,7 +515,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             lists.Add(node);
             for (int i = 0; i <= node.N; i++)
             {
-                TreeWalk(node.Children[i],ref lists);
+                TreeWalk(node.Children[i], ref lists);
             }
         }
 
@@ -488,7 +526,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         public List<K> InorderTreeWalk()
         {
             List<K> lists = new List<K>();
-            InorderTreeWalk(root,ref lists);
+            InorderTreeWalk(root, ref lists);
             return lists;
         }
 
@@ -501,10 +539,10 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
             for (int i = 0; i < node.N; i++)
             {
-                InorderTreeWalk(node.Children[i],ref lists);
+                InorderTreeWalk(node.Children[i], ref lists);
                 lists.Add(node.KeyValues[i].Item1);
             }
-            InorderTreeWalk(node.Children[node.N],ref  lists);
+            InorderTreeWalk(node.Children[node.N], ref  lists);
         }
 
         /// <summary>
@@ -515,18 +553,18 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         {
             if (node == null)
             {
-                return true; 
+                return true;
             }
 
             if (root != node)
             {
-                if (!(node.N >= minDegree - 1 && node.N <= 2*minDegree - 1))
+                if (!(node.N >= minDegree - 1 && node.N <= 2 * minDegree - 1))
                 {
                     return false;
                 }
             }
 
-            for (int i = 0; i < node.N-1; i++)
+            for (int i = 0; i < node.N - 1; i++)
             {
                 if (node.KeyValues[i].Item1.CompareTo(node.KeyValues[i + 1].Item1) > 0)
                 {
@@ -534,15 +572,15 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 }
             }
 
-            for (int i = node.N+1; i < 2*minDegree; i++)
+            for (int i = node.N + 1; i < 2 * minDegree; i++)
             {
                 if (node.Children[i] != null)
                 {
-                    throw  new Exception();
+                    throw new Exception();
                 }
             }
 
-            for (int i = node.N; i < 2*minDegree-1; i++)
+            for (int i = node.N; i < 2 * minDegree - 1; i++)
             {
                 if (node.KeyValues[i] != null)
                 {
