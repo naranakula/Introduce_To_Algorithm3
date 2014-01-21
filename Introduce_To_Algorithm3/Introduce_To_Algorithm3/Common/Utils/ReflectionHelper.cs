@@ -23,7 +23,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 return Assembly.Load(assemblyName);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return null;
             }
@@ -39,7 +39,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 return Assembly.LoadFrom(assemblyFile);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -60,7 +60,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 return Type.GetType(typeName);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return null;
             }
@@ -88,7 +88,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 return assembly.GetType(typeName);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return null;
             }
@@ -109,7 +109,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 return Activator.CreateInstance(type, parameters);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return null;
             }

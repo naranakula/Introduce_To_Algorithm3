@@ -220,6 +220,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
             if (!y.IsLeaf)
             {
+                //if y is leaf, the y's children are null
                 //copy t child point
                 for (int j = 0; j < minDegree; j++)
                 {
@@ -293,6 +294,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 return false;
             }
         }
+        
 
         private void InsertNonFull(BTreeNode<K, V> root, K key, V val)
         {
@@ -310,17 +312,21 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
             else
             {
-                int index = root.Search(key).Item1;
-                BTreeNode<K, V> node = root.Children[index];
+                while (i >= 0 && key.CompareTo(root.KeyValues[i].Item1) < 0)
+                {
+                    i--;
+                }
+                i++;
+                BTreeNode<K, V> node = root.Children[i];
                 if (node.N == 2 * minDegree - 1)
                 {
-                    SplitChild(root, index);
-                    if (key.CompareTo(root.KeyValues[i].Item1) > 0)
+                    SplitChild(root, i);
+                    if (key.CompareTo(root.KeyValues[i].Item1) >= 0)
                     {
-                        index++;
+                        i++;
                     }
                 }
-                InsertNonFull(root.Children[index], key, val);
+                InsertNonFull(root.Children[i], key, val);
             }
         }
 
@@ -446,6 +452,10 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             return true;
         }
 
+        /// <summary>
+        /// tree walk all the node
+        /// </summary>
+        /// <returns></returns>
         public List<BTreeNode<K,V>> TreeWalk()
         {
             List<BTreeNode<K,V>> lists = new List<BTreeNode<K, V>>();
@@ -453,6 +463,11 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             return lists;
         }
 
+        /// <summary>
+        /// tree walk all the node from root down to child
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="lists"></param>
         private void TreeWalk(BTreeNode<K, V> node, ref List<BTreeNode<K, V>> lists)
         {
             if (node == null)
@@ -466,6 +481,10 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
         }
 
+        /// <summary>
+        /// inorder tree walk all the key which will return a sorted list
+        /// </summary>
+        /// <returns></returns>
         public List<K> InorderTreeWalk()
         {
             List<K> lists = new List<K>();

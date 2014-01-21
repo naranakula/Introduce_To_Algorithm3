@@ -471,6 +471,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
             }
             finally
             {

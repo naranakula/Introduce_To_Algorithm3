@@ -86,7 +86,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 conn = new SqlConnection(_connectionString);
                 conn.Open();
             }
-            catch(Exception ex)
+            catch(Exception )
             {
                 result = false;
             }
@@ -401,7 +401,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 trans.Commit();
                 return true;
             }
-            catch(Exception ex)
+            catch(Exception )
             {
                 if(trans!=null)
                 {
@@ -444,7 +444,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 trans.Commit();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (trans != null)
                 {

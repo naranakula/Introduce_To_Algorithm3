@@ -200,7 +200,7 @@ namespace Com.Utility.Commons
                 //未传递参数。
                 return ThreadPool.QueueUserWorkItem(callback);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -219,7 +219,7 @@ namespace Com.Utility.Commons
                 //未传递参数。
                 return ThreadPool.QueueUserWorkItem(callback, state);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

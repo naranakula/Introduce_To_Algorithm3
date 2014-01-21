@@ -21,22 +21,32 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            //fwghso
-            Random rand = new Random();
-            BTree<int,int> bTree = new BTree<int, int>(50);
-            for (int i = 0; i < 100000; i++)
+            int m = 2;
+            while (true)
             {
-                int k = rand.Next();
-                bTree.Insert(k, k);
-            }
+                //fwghso
+                Random rand = new Random();
+                BTree<int, int> bTree = new BTree<int, int>(m++);
+                DateTime dt = DateTime.Now;
+                for (int i = 0; i < 600000; i++)
+                {
+                    int k = rand.Next();
+                    bTree.Insert(k, k);
+                }
+                Console.WriteLine(DateTime.Now - dt);
+                if (bTree.IsBTree())
+                {
+                    Console.WriteLine("it is btree mindegree = "+(m-1)+"  hight="+bTree.Heigth+"  count="+bTree.Count);
+                }
+                else
+                {
+                    Console.WriteLine("not BTREE");
+                }
 
-            if (bTree.IsBTree())
-            {
-                Console.WriteLine("it is btree");
-            }
-            else
-            {
-                Console.WriteLine("not BTREE");
+                Console.WriteLine("==========================");
+                Console.WriteLine();
+                Console.WriteLine();
+                Thread.Sleep(2000);
             }
         }
 

@@ -301,14 +301,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="target"></param>
         public static void Compress(string source, string target)
         {
-            using (FileStream sourceStream = File.OpenRead(source))
+            using (var sourceStream = File.OpenRead(source))
             {
-                using (FileStream targetStream = new FileStream(target, FileMode.Create, FileAccess.Write))
+                FileStream targetStream = new FileStream(target, FileMode.Create, FileAccess.Write);
+                using (GZipStream gzStream = new GZipStream(targetStream, CompressionMode.Compress))
                 {
-                    using (GZipStream gzStream = new GZipStream(targetStream, CompressionMode.Compress))
-                    {
-                        sourceStream.CopyTo(gzStream);
-                    }
+                    sourceStream.CopyTo(gzStream);
                 }
             }
         }
