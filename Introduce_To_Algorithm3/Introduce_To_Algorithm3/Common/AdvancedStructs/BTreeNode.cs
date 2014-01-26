@@ -37,11 +37,6 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         public BTreeNode<K, V>[] Children;
 
         /// <summary>
-        /// parent of this node
-        /// </summary>
-        public BTreeNode<K, V> Parent;
-
-        /// <summary>
         /// whether is leaf
         /// </summary>
         public bool IsLeaf { get; internal set; }
@@ -58,7 +53,6 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             Array.Resize<BTreeNode<K, V>>(ref Children, 2 * minDegree);
             Array.Resize(ref KeyValues, 2 * minDegree - 1);
             N = 0;
-            Parent = null;
             IsLeaf = false;
         }
 
@@ -149,6 +143,66 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             {
                 return BinarySearch(key, mid + 1, end);
             }
+        }
+
+        #endregion
+
+        #region Minimum
+
+        /// <summary>
+        /// Get the minimum one which is the first key in btreeNode
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public BTreeNode<K, V> Minimum(BTreeNode<K,V> node)
+        {
+            if (!node.IsLeaf)
+            {
+                return Minimum(node.Children[0]);
+            }
+            else
+            {
+                return node;
+            }
+        }
+
+
+        public Tuple<K, V> Minimum()
+        {
+            var min = Minimum(this);
+            return min.KeyValues[0];
+        }
+
+        #endregion
+
+
+        #region Maximum
+
+        /// <summary>
+        /// return the maximum one
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public static BTreeNode<K, V> Maximum(BTreeNode<K, V> node)
+        {
+            if (!node.IsLeaf)
+            {
+                return Maximum(node.Children[node.N]);
+            }
+            else
+            {
+                return node;
+            }
+        }
+
+        /// <summary>
+        /// return the maximum one
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<K, V> Maximum()
+        {
+            var max = Maximum(this);
+            return max.KeyValues[max.N - 1];
         }
 
         #endregion

@@ -75,7 +75,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <summary>
         /// the number of key value in B tree
         /// </summary>
-        public int Count { get; set; }
+        public int Count { get; private set; }
 
         /// <summary>
         /// is btree empty
@@ -210,7 +210,6 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             BTreeNode<K, V> z = new BTreeNode<K, V>(minDegree);
             z.IsLeaf = y.IsLeaf;
             z.N = minDegree - 1;
-            z.Parent = node;
             for (int j = 0; j < minDegree - 1; j++)
             {
                 //move the last t-1 key to new created node
@@ -281,7 +280,6 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             {
                 BTreeNode<K, V> node = new BTreeNode<K, V>(minDegree);
                 node.Children[0] = root;
-                root.Parent = node;
                 root = node;
                 Heigth++;
                 SplitChild(node, 0);
@@ -340,81 +338,31 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// 1)if the key  k in node x and x is a leaf,delete the k from x.
         /// </summary>
         /// <param name="item"></param>
-        public void Delete(Tuple<BTreeNode<K, V>, int> item)
+        /// <returns>true if contains key , otherwise false.</returns>
+        public bool Delete(K key)
         {
-            if (item == null || Count <= 0 || item.Item1 == null)
+            Tuple<BTreeNode<K,V>, int> searchResult = Search(key);
+            if (searchResult == null)
             {
-                Count = 0;
-                return;
+                return false;
             }
-
             Count--;
-            BTreeNode<K, V> node = item.Item1;
-            int index = item.Item2;
-
-            //case 0: node is leaf and root. this is only one node -- the root node just delete
-            if (node.IsLeaf && node == root)
+            Delete(root, key);
+            if (root.N == 0 && root.IsLeaf)
             {
-                if (node.N <= 1)
-                {
-                    root = null;
-                    Heigth = 0;
-                    Count = 0;
-                }
-                else
-                {
-                    int i = index + 1;
-                    for (; i < node.N; i++)
-                    {
-                        node.KeyValues[i - 1] = node.KeyValues[i];
-                    }
-                    //for gc and accuracy
-                    node.KeyValues[i - 1] = null;
-                    //actually no need to update child because node is leaf and all its children are null
-                    for (i = index + 1; i < node.N + 1; i++)
-                    {
-                        node.Children[i - 1] = node.Children[i];
-                    }
-                    node.Children[i - 1] = null;
-                    node.N--;
-                }
-                return;
+                root = null;
+                Heigth--;
             }
-
-
-            //case 1:node is leaf and its key numbers >= t, delete A[i],K[i];
-            if (node.IsLeaf && node.N >= minDegree)
+            else if (root.N == 0)
             {
-                int i = index + 1;
-                for (; i < node.N; i++)
-                {
-                    node.KeyValues[i - 1] = node.KeyValues[i];
-                }
-                //for gc and accuracy
-                node.KeyValues[i - 1] = null;
-                //actually no need to update child because node is leaf and all its children are null
-                for (i = index + 1; i < node.N + 1; i++)
-                {
-                    node.Children[i - 1] = node.Children[i];
-                }
-                node.Children[i - 1] = null;
-                node.N--;
-                return;
+                root = root.Children[0];
+                Heigth--;
             }
-
-            //case 2:node is lead and its key numbers = t-1,
-            if (node.IsLeaf && node.N == minDegree - 1)
-            {
-                throw new NotImplementedException();
-                return;
-            }
-            throw new NotImplementedException();
-
-
+            return true;
         }
 
         /// <summary>
-        /// 
+        /// we guarantee that whenever call delete, the first parameter node must have at least t keys where t is the minimum degree. This condition allow us to delete a key from the tree in one way downward pass without having to back up.
         /// </summary>
         /// <param name="node"></param>
         /// <param name="key"></param>
@@ -428,6 +376,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             #region case 1: node is leaf
             if (node.IsLeaf)
             {
+                //this works even key is not in the node
                 for (int i = 0; i < node.N; i++)
                 {
                     if (node.KeyValues[i].Item1.CompareTo(key) == 0)
@@ -446,8 +395,192 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
             #endregion
 
-            #region node is a internal node
-            #endregion
+            Tuple<int, bool> tuple = node.Search(key);
+
+            if (tuple.Item2)
+            {
+                #region case 2: node is a internal node && key is in node
+
+                BTreeNode<K, V> precedeChild = node.Children[tuple.Item1];
+                if (precedeChild.N >= minDegree)
+                {
+                    #region case 2a: the child y thar precede k in node has at least t keys,then find biggest key in y, delete y and replace it in x.
+                    Tuple<K,V> max = precedeChild.Maximum();
+                    Delete(precedeChild, max.Item1);
+                    node.KeyValues[tuple.Item1] = new Tuple<K, V>(max.Item1, max.Item2);
+                    return;
+                    #endregion
+                }
+                else
+                {
+                    #region case 2b:examine the child z follows k in nodex, if z has at least minDegree keys. find the smallest in z, delete it from z, replace k with it.
+                    BTreeNode<K, V> successorChild = node.Children[tuple.Item1 + 1];
+                    if (successorChild.N >= minDegree)
+                    {
+                        Tuple<K, V> min = successorChild.Minimum();
+                        Delete(successorChild, min.Item1);
+                        node.KeyValues[tuple.Item1] = new Tuple<K, V>(min.Item1, min.Item2);
+                        return;
+                    }
+                    #endregion
+
+                    #region case 2c: the preceder and successor child of node have only minDegree-1 keys, merge key and preceder and successor into preceder,now preceder has 2minDegree-1 key. delete key from it.
+                    for (int i = tuple.Item1 + 1; i < node.N; i++)
+                    {
+                        node.Children[i] = node.Children[i + 1];
+                    }
+                    //for gc and accurate
+                    node.Children[node.N] = null;
+
+                    Tuple<K, V> found = node.KeyValues[tuple.Item1];
+                    for (int i = tuple.Item1; i < node.N - 1; i++)
+                    {
+                        node.KeyValues[i] = node.KeyValues[i + 1];
+                    }
+                    node.KeyValues[node.N - 1] = null;
+                    node.N--;
+
+                    //merge precede and successor
+                    precedeChild.KeyValues[precedeChild.N] = found;
+                    precedeChild.N++;
+                    int flag = precedeChild.N;
+                    for (int i = 0; i < successorChild.N; i++)
+                    {
+                        precedeChild.KeyValues[precedeChild.N] = successorChild.KeyValues[i];
+                        precedeChild.N++;
+                    }
+
+                    for (int i = 0; i <= successorChild.N; i++)
+                    {
+                        precedeChild.Children[flag] = successorChild.Children[i];
+                        flag++;
+                    }
+
+                    Delete(precedeChild, key);
+                    return;
+                    #endregion
+                }
+                #endregion
+            }
+            else
+            {
+                #region case 3: key is not present in internal node x
+                BTreeNode<K, V> subTree = node.Children[tuple.Item1];
+                if (subTree.N >= minDegree)
+                {
+                    Delete(subTree, key);
+                }
+                else
+                {
+                    BTreeNode<K, V> before = tuple.Item1 == 0 ? null : node.Children[tuple.Item1 - 1];
+                    BTreeNode<K, V> after = tuple.Item1 == node.N? null : node.Children[tuple.Item1 + 1];
+                    #region case 3a:If subTree has only t - 1 keys but has an immediate sibling with at least t keys, give subTree an extra key by moving a key from x down into subTrr, moving a key from subTree’s immediate left or right sibling up into x, and moving the appropriate child pointer from the sibling into subTree .
+                    if (before != null && before.N >= minDegree)
+                    {
+                        Tuple<K, V> farther = node.KeyValues[tuple.Item1 - 1];
+                        Tuple<K, V> leftKeyValue = before.KeyValues[before.N - 1];
+                        BTreeNode<K, V> leftChild = before.Children[before.N];
+                        before.KeyValues[before.N - 1] = null;
+                        before.Children[before.N] = null;
+                        before.N--;
+                        node.KeyValues[tuple.Item1 - 1] = leftKeyValue;
+                        for (int i = subTree.N; i >0; i--)
+                        {
+                            subTree.KeyValues[i] = subTree.KeyValues[i - 1]; 
+                        }
+                        subTree.KeyValues[0] = farther;
+                        for (int i = subTree.N+1; i > 0; i--)
+                        {
+                            subTree.Children[i] = subTree.Children[i-1];
+                        }
+                        subTree.Children[0] = leftChild;
+                        subTree.N++;
+                        Delete(subTree, key);
+                        return;
+                    }
+
+                    if (after != null && after.N >= minDegree)
+                    {
+                        Tuple<K, V> farther = node.KeyValues[tuple.Item1];
+                        Tuple<K, V> rightKeyValue = after.KeyValues[0];
+                        BTreeNode<K, V> rightChild = after.Children[0];
+                        for (int i = 0; i < after.N-1; i++)
+                        {
+                            after.KeyValues[i] = after.KeyValues[i + 1];
+                        }
+                        after.KeyValues[after.N - 1] = null;
+
+                        for (int i = 0; i < after.N; i++)
+                        {
+                            after.Children[i] = after.Children[i + 1];
+                        }
+                        after.Children[after.N] = null;
+                        after.N--;
+
+                        node.KeyValues[tuple.Item1] = rightKeyValue;
+                        subTree.KeyValues[subTree.N] = farther;
+                        subTree.Children[subTree.N + 1] = rightChild;
+                        subTree.N++;
+                        Delete(subTree, key);
+                        return;
+                    }
+                    #endregion
+                    if (before != null)
+                    {
+                        Tuple<K, V> farther = node.KeyValues[tuple.Item1 - 1];
+                        for (int i = tuple.Item1-1; i < node.N-1; i++)
+                        {
+                            node.KeyValues[i] = node.KeyValues[i + 1];
+                        }
+                        node.KeyValues[node.N - 1] = null;
+
+                        before.KeyValues[before.N] = farther;
+                        for (int i = 0; i < subTree.N; i++)
+                        {
+                            before.KeyValues[before.N + 1 + i] = subTree.KeyValues[i];
+                        }
+                        for (int i = 0; i <= subTree.N; i++)
+                        {
+                            before.Children[before.N + 1 + i] = subTree.Children[i];
+                        }
+                        before.N += 1 + subTree.N;
+                        for (int i = tuple.Item1; i < node.N; i++)
+                        {
+                            node.Children[i] = node.Children[i + 1];
+                        }
+                        node.Children[node.N] = null;
+                        node.N--;
+                        Delete(before, key);
+                    }
+                    else if (after != null)
+                    {
+                        Tuple<K, V> farther = node.KeyValues[tuple.Item1];
+                        for (int i = tuple.Item1; i < node.N - 1; i++)
+                        {
+                            node.KeyValues[i] = node.KeyValues[i + 1];
+                        }
+                        node.KeyValues[node.N - 1] = null;
+                        subTree.KeyValues[subTree.N] = farther;
+                        for (int i = 0; i < after.N; i++)
+                        {
+                            subTree.KeyValues[subTree.N + 1 + i] = after.KeyValues[i];
+                        }
+                        for (int i = 0; i <= after.N; i++)
+                        {
+                            subTree.Children[subTree.N + 1 + i] = after.Children[i];
+                        }
+                        subTree.N += 1 + after.N;
+                        for (int i = tuple.Item1+1; i <  node.N; i++)
+                        {
+                            node.Children[i] = node.Children[i + 1];
+                        }
+                        node.Children[node.N] = null;
+                        node.N--;
+                        Delete(subTree, key);
+                    }
+                }
+                #endregion
+            }
         }
 
         #endregion

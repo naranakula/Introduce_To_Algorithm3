@@ -14,6 +14,7 @@ using System.Net.Sockets;
 using System.Threading;
 using Introduce_To_Algorithm3.Common.DynamicProgramming;
 using System.Net;
+using Introduce_To_Algorithm3.Common.Sort;
 
 namespace Introduce_To_Algorithm3
 {
@@ -21,23 +22,28 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
-            //fwghso
             int limit = args.Length<=1?1000000: int.Parse(args[0]);
-            int m = 2;
+            int m = 20;
             while (true)
             {
                 Random rand = new Random();
                 BTree<int, int> bTree = new BTree<int, int>(m++);
                 DateTime dt = DateTime.Now;
+                List<int> list = new List<int>();
                 for (int i = 0; i < limit; i++)
                 {
                     int k = rand.Next();
+                    list.Add(k);
                     bTree.Insert(k, k);
                 }
+                list = list.Distinct().ToList();
+                var array = list.ToArray();
+                QuickSort<int>.RandomRearrange(array);
+                list = array.ToList();
                 Console.WriteLine(DateTime.Now - dt);
                 if (bTree.IsBTree())
                 {
-                    Console.WriteLine("it is btree mindegree = "+(m-1)+"  hight="+bTree.Heigth+"  count="+bTree.Count);
+                    Console.WriteLine("it is btree mindegree = "+(m-1)+"  hight="+bTree.Heigth+"  count="+bTree.Count+"  DateTime="+DateTime.Now);
                 }
                 else
                 {
@@ -45,10 +51,25 @@ namespace Introduce_To_Algorithm3
                     Console.ReadLine();
                 }
 
+                foreach (var item in list)
+                {
+                    bTree.Delete(item);
+                    if (bTree.IsBTree())
+                    {
+                        Console.WriteLine("it is btree mindegree = " + (m - 1) + "  hight=" + bTree.Heigth + "  count=" + bTree.Count + "  DateTime=" + DateTime.Now);
+                    }
+                    else
+                    {
+                        Console.WriteLine("not BTREE");
+                        Console.ReadLine();
+                    }
+                }
+                
+
                 Console.WriteLine("==========================");
                 Console.WriteLine();
                 Console.WriteLine();
-                Thread.Sleep(2000);
+                Thread.Sleep(10000);
             }
         }
 
