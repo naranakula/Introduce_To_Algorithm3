@@ -23,7 +23,7 @@ namespace Introduce_To_Algorithm3
         static void Main(string[] args)
         {
             int limit = args.Length<=1?1000000: int.Parse(args[0]);
-            int m = 20;
+            int m = 3;
             while (true)
             {
                 Random rand = new Random();
