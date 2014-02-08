@@ -10,6 +10,9 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         public K Key;
         public V Value;
         public FibonacciHeapNode<K, V> Child;
+        /// <summary>
+        /// left sibling and right sibling construct a child list. siblings may appear in a child list in any order.
+        /// </summary>
         public FibonacciHeapNode<K, V> LeftSibling;
         public FibonacciHeapNode<K, V> RightSibling;
         public FibonacciHeapNode<K, V> Parent;

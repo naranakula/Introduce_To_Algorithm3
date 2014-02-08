@@ -19,8 +19,14 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
     public class FibonacciHeap<K, V> where K : IComparable<K>, IEquatable<K>
     {
         #region member
+        /// <summary>
+        /// the root of fibonacci heap & it is a min heap
+        /// </summary>
         private FibonacciHeapNode<K, V> minRoot;
-        public int Count { get; set; }
+        /// <summary>
+        /// the number of nodes in heap
+        /// </summary>
+        public int Count { get; protected set; }
 
 
         public FibonacciHeap()
