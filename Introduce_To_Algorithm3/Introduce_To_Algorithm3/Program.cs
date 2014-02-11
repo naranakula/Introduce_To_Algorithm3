@@ -22,6 +22,7 @@ namespace Introduce_To_Algorithm3
     {
         static void Main(string[] args)
         {
+            int codeCounter = CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
             int limit = args.Length<=1?1000000: int.Parse(args[0]);
             int m = 3;
             while (true)
