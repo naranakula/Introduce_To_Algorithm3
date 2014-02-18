@@ -215,6 +215,8 @@
     <Compile Include="Common\Utils\Shell.cs" />
     <Compile Include="Common\Utils\sockets\SocketClient.cs" />
     <Compile Include="Common\Utils\sockets\SocketServer.cs" />
+    <Compile Include="Common\Utils\sockets\TcpClientEx.cs" />
+    <Compile Include="Common\Utils\sockets\TcpListenerEx.cs" />
     <Compile Include="Common\Utils\SqlHelper.cs" />
     <Compile Include="Common\Utils\StringExtension.cs" />
     <Compile Include="Common\Utils\threads\ThreadPoolHelper.cs" />

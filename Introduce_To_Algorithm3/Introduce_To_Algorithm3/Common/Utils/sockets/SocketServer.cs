@@ -165,7 +165,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                     _lastEx = ex;
                 }
             }
-
         }
 
         ///// <summary>
