@@ -33,8 +33,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// </summary>
         public int Degree;
         /// <summary>
-        /// indicate whether node has lost a child since the last time it was made the child of another node.Newly created nodes are unmarked, and a node x becomes unmarked whenever it
-        /// is made the child of another node.
+        /// indicate whether node has lost a child since the last time it was made the child of another node.Newly created nodes are unmarked, and a node x becomes unmarked whenever it is made the child of another node.
         /// </summary>
         public bool Mark;
 
