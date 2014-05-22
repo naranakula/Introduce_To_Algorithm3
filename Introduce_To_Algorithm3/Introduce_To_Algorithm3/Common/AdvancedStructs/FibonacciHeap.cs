@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 {
     /// <summary>
-    /// A fibonacci heap is a collection of rooted tree that are min-heap ordered
-    /// we define the potential of Fibonacci heap φ(H) = t(H)+2m(H)
-    /// t(H) the number of tree in the root list
-    /// m(H) the number of marked nodes in H
-    /// 
-    /// D(n) represents the maximum degree of any node in n-node fibonacci heap
-    /// 
-    /// 
-    /// it's Extractmin and delete runs at O(lgn) insert  minimum union decrease runs at O(1)
+    ///     A fibonacci heap is a collection of rooted tree that are min-heap ordered
+    ///     we define the potential of Fibonacci heap φ(H) = t(H)+2m(H)
+    ///     t(H) the number of tree in the root list
+    ///     m(H) the number of marked nodes in H
+    ///     D(n) represents the maximum degree of any node in n-node fibonacci heap
+    ///     it's Extractmin and delete runs at O(lgn) insert  minimum union decrease runs at O(1)
     /// </summary>
     public class FibonacciHeap<K, V> where K : IComparable<K>, IEquatable<K>
     {
         #region member
+
         /// <summary>
-        /// the root of fibonacci heap & it is a min heap
+        ///     the root of fibonacci heap & it is a min heap
         /// </summary>
         private FibonacciHeapNode<K, V> minRoot;
+
         /// <summary>
-        /// the number of nodes in heap
+        ///     the number of nodes in heap
         /// </summary>
         public int Count { get; protected set; }
 
@@ -34,18 +31,20 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             Count = 0;
             minRoot = null;
         }
+
         #endregion
 
         #region insert
+
         /// <summary>
-        /// insert
-        /// it runs at O(1)
+        ///     insert
+        ///     it runs at O(1)
         /// </summary>
         /// <param name="key"></param>
         /// <param name="val"></param>
         public void Insert(K key, V val)
         {
-            FibonacciHeapNode<K, V> node = new FibonacciHeapNode<K, V>(key, val);
+            var node = new FibonacciHeapNode<K, V>(key, val);
             if (minRoot == null)
             {
                 minRoot = node;
@@ -66,17 +65,19 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
             Count++;
         }
+
         #endregion
 
         #region peek
+
         /// <summary>
-        /// peek the min one
-        /// it runs at O(1)
+        ///     peek the min one
+        ///     it runs at O(1)
         /// </summary>
         /// <returns></returns>
         public Tuple<K, V> Peek()
         {
-            if (Count <= 0)
+            if (Count <= 0 || minRoot == null)
             {
                 throw new Exception("New Element in Fibonacci Heap");
             }
@@ -89,8 +90,8 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         #region union
 
         /// <summary>
-        /// union
-        /// It runs at O(1)
+        ///     union
+        ///     It runs at O(1)
         /// </summary>
         /// <param name="h1"></param>
         /// <param name="h2"></param>
@@ -100,7 +101,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             if (h1 == null || h1.minRoot == null) return h2;
             if (h2 == null || h2.minRoot == null) return h1;
 
-            FibonacciHeap<K, V> heap = new FibonacciHeap<K, V>();
+            var heap = new FibonacciHeap<K, V>();
             heap.minRoot = h1.minRoot;
             if (h1.minRoot.Key.CompareTo(h2.minRoot.Key) > 0)
             {
@@ -124,7 +125,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         #region Extract min
 
         /// <summary>
-        /// extractMin it runs at 
+        ///     extractMin it runs at
         /// </summary>
         /// <returns></returns>
         public FibonacciHeapNode<K, V> ExtractMin()
@@ -152,30 +153,26 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 Count = 0;
                 return temp;
             }
-            else
-            {
-                //remove minroot
-                FibonacciHeapNode<K, V> tempL = minRoot.LeftSibling;
-                tempL.RightSibling = tempR;
-                tempR.LeftSibling = tempL;
-                minRoot = tempR;
-                Consolidate();
-                Count--;
-            }
+            //remove minroot
+            FibonacciHeapNode<K, V> tempL = minRoot.LeftSibling;
+            tempL.RightSibling = tempR;
+            tempR.LeftSibling = tempL;
+            minRoot = tempR;
+            Consolidate();
+            Count--;
             return temp;
-
         }
+
         /// <summary>
-        /// 
         /// </summary>
         private void Consolidate()
         {
             if (minRoot == null) return;
 
             //if arr[i] = y, then y is currently a root with y.degree = i
-            FibonacciHeapNode<K, V>[] arr = new FibonacciHeapNode<K, V>[MaxDegree() + 1];
+            var arr = new FibonacciHeapNode<K, V>[MaxDegree() + 1];
             FibonacciHeapNode<K, V> temp = minRoot;
-            List<FibonacciHeapNode<K, V>> rootList = new List<FibonacciHeapNode<K, V>>();
+            var rootList = new List<FibonacciHeapNode<K, V>>();
             rootList.Add(temp);
             while (true)
             {
@@ -226,7 +223,6 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                         {
                             minRoot = arr[i];
                         }
-
                     }
                 }
             }
@@ -265,7 +261,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
 
         /// <summary>
-        /// get the maximum degree of all nodes in fibonacci Heap
+        ///     get the maximum degree of all nodes in fibonacci Heap
         /// </summary>
         /// <returns></returns>
         public int MaxDegree()
@@ -276,7 +272,6 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         #endregion
 
         #region decrease
-
 
         public void DecreaseKey(FibonacciHeapNode<K, V> x, K key)
         {
@@ -292,7 +287,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
 
             x.Key = key;
-            var y = x.Parent;
+            FibonacciHeapNode<K, V> y = x.Parent;
             if (y != null && x.Key.CompareTo(y.Key) < 0)
             {
                 Cut(x, y);
@@ -307,7 +302,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
         private void CascadingCut(FibonacciHeapNode<K, V> node)
         {
-            var z = node.Parent;
+            FibonacciHeapNode<K, V> z = node.Parent;
             if (z != null)
             {
                 if (node.Mark == false)
@@ -316,7 +311,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 }
                 else
                 {
-                    Cut(node,z);
+                    Cut(node, z);
                     CascadingCut(z);
                 }
             }
@@ -324,7 +319,6 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
         private void Cut(FibonacciHeapNode<K, V> x, FibonacciHeapNode<K, V> y)
         {
-
             y.Degree--;
 
             if (x.LeftSibling == x)
@@ -338,7 +332,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
 
             // add x to the root list
-            var t = minRoot.RightSibling;
+            FibonacciHeapNode<K, V> t = minRoot.RightSibling;
             minRoot.RightSibling = x;
             x.LeftSibling = minRoot;
             x.RightSibling = t;
@@ -348,6 +342,5 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
 
         #endregion
-
     }
 }
