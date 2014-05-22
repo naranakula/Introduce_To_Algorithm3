@@ -197,6 +197,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
 
         /// <summary>
+        /// consolidate the heap util every node in the root list have different degree value
         /// </summary>
         private void Consolidate()
         {
@@ -261,6 +262,11 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             }
         }
 
+        /// <summary>
+        /// x.key<=y.key  make y a child of x
+        /// </summary>
+        /// <param name="y"></param>
+        /// <param name="x"></param>
         private void HeapLink(FibonacciHeapNode<K, V> y, FibonacciHeapNode<K, V> x)
         {
             FibonacciHeapNode<K, V> temp = y;

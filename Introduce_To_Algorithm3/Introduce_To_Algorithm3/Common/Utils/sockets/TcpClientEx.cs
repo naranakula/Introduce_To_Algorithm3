@@ -129,5 +129,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         }
 
         #endregion
+
+        #region isconnected
+
+        public bool IsConnected()
+        {
+            return isConnected;
+        }
+
+        #endregion
     }
 }
