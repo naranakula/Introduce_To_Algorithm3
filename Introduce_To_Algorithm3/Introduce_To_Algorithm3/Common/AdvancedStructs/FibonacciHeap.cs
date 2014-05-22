@@ -87,6 +87,19 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
         #endregion
 
+        #region getroot
+
+        /// <summary>
+        ///     get root
+        /// </summary>
+        /// <returns></returns>
+        public FibonacciHeapNode<K, V> GetRoot()
+        {
+            return minRoot;
+        }
+
+        #endregion
+
         #region union
 
         /// <summary>
@@ -111,13 +124,24 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             //concatenate the root list of H1 and H2
             FibonacciHeapNode<K, V> h1Node = h1.minRoot.RightSibling;
             FibonacciHeapNode<K, V> h2Node = h2.minRoot.RightSibling;
-            h1.minRoot.RightSibling = h2.minRoot;
-            h2.minRoot.LeftSibling = h1.minRoot;
-            h2Node.RightSibling = h1Node;
-            h1Node.LeftSibling = h2Node;
+            h1.minRoot.RightSibling = h2Node;
+            h2Node.LeftSibling = h1.minRoot;
+            h2.minRoot.RightSibling = h1Node;
+            h1Node.LeftSibling = h2.minRoot;
 
             heap.Count = h1.Count + h2.Count;
             return heap;
+        }
+
+        /// <summary>
+        ///     union
+        /// </summary>
+        /// <param name="heap"></param>
+        public void Union(FibonacciHeap<K, V> heap)
+        {
+            FibonacciHeap<K, V> h = Union(this, heap);
+            Count = h.Count;
+            minRoot = h.minRoot;
         }
 
         #endregion
@@ -125,7 +149,8 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         #region Extract min
 
         /// <summary>
-        ///     extractMin it runs at
+        ///     extractMin it runs at O(lgn)
+        ///     it's where the delayed work of consolidating trees finally occurs.
         /// </summary>
         /// <returns></returns>
         public FibonacciHeapNode<K, V> ExtractMin()
@@ -137,18 +162,25 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
             //for each child in minRoot add it in the root list
             List<FibonacciHeapNode<K, V>> list = minRoot.GetChildren();
-            Count -= list.Count;
-            foreach (var fibonacciHeapNode in list)
-            {
-                Insert(fibonacciHeapNode.Key, fibonacciHeapNode.Value);
-            }
+
             minRoot.Child = null;
+            minRoot.Degree = 0;
+            foreach (var node in list)
+            {
+                node.Parent = null;
+                //insert node to root list
+                FibonacciHeapNode<K, V> right = minRoot.RightSibling;
+                node.RightSibling = right;
+                right.LeftSibling = node;
+                minRoot.RightSibling = node;
+                node.LeftSibling = minRoot;
+            }
 
             FibonacciHeapNode<K, V> temp = minRoot;
-            temp.Degree = 0;
             FibonacciHeapNode<K, V> tempR = minRoot.RightSibling;
             if (temp == tempR)
             {
+                //no element in heap
                 minRoot = null;
                 Count = 0;
                 return temp;
@@ -157,6 +189,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             FibonacciHeapNode<K, V> tempL = minRoot.LeftSibling;
             tempL.RightSibling = tempR;
             tempR.LeftSibling = tempL;
+            //minRoot may not the min one here
             minRoot = tempR;
             Consolidate();
             Count--;

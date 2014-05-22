@@ -75,5 +75,20 @@ namespace IntroduceToAlgorithm3UnitTest
             }
             Console.WriteLine(heap);
         }
+
+
+        [TestMethod()]
+        public void UnionTest()
+        {
+            FibonacciHeap<int, int> heap1 = new FibonacciHeap<int, int>();
+            FibonacciHeap<int, int> heap2 = new FibonacciHeap<int, int>();
+            heap1.Insert(1,1);
+            heap1.Insert(3,3);
+            heap2.Insert(2,2);
+            heap2.Insert(0,0);
+            heap2.Insert(4,4);
+            var f = FibonacciHeap<int, int>.Union(heap1, heap2);
+            Console.WriteLine(f);
+        }
     }
 }
