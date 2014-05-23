@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 
 namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 {
@@ -149,8 +150,9 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         #region Extract min
 
         /// <summary>
-        ///     extractMin it runs at O(lgn)
+        ///     extractMin it runs at O(D(n)) amortized time. D(n) is maximum degree which O(lgn)
         ///     it's where the delayed work of consolidating trees finally occurs.
+        /// the min one are remove from heap
         /// </summary>
         /// <returns></returns>
         public FibonacciHeapNode<K, V> ExtractMin()
@@ -198,6 +200,8 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
         /// <summary>
         /// consolidate the heap util every node in the root list have different degree value
+        /// 1)find two roots x and y in the root list with the same degree. without loss of generality, let x.key &lt;= y.key
+        /// 2)remove y from the root list, and make y a child of x by calling the HeapLink procedure. the procedure increments the attribute x.degree and clear the mark on y
         /// </summary>
         private void Consolidate()
         {
@@ -207,9 +211,10 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             var arr = new FibonacciHeapNode<K, V>[MaxDegree() + 1];
             FibonacciHeapNode<K, V> temp = minRoot;
             var rootList = new List<FibonacciHeapNode<K, V>>();
-            rootList.Add(temp);
+            
             while (true)
             {
+                rootList.Add(temp);
                 temp = temp.RightSibling;
                 if (temp == minRoot)
                 {
@@ -223,6 +228,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                 int d = fnode.Degree;
                 while (arr[d] != null)
                 {
+                    //y must appear before x in the rootList  & x and y have same degree
                     FibonacciHeapNode<K, V> y = arr[d];
                     if (x.Key.CompareTo(y.Key) > 0)
                     {
@@ -248,7 +254,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                     }
                     else
                     {
-                        FibonacciHeapNode<K, V> minR = minRoot;
+                        FibonacciHeapNode<K, V> minR = minRoot.RightSibling;
                         minRoot.RightSibling = arr[i];
                         arr[i].LeftSibling = minRoot;
                         arr[i].RightSibling = minR;
@@ -263,7 +269,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
 
         /// <summary>
-        /// x.key<=y.key  make y a child of x
+        /// x.key&lt;=y.key  make y a child of x
         /// </summary>
         /// <param name="y"></param>
         /// <param name="x"></param>
@@ -300,35 +306,42 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
 
         /// <summary>
-        ///     get the maximum degree of all nodes in fibonacci Heap
+        /// get the maximum degree of all nodes in fibonacci Heap
+        /// this isn't currently the maximum degree. it's the maximum degree will in the root list.
         /// </summary>
         /// <returns></returns>
         public int MaxDegree()
         {
-            throw new NotImplementedException();
+            return (int)(System.Math.Log(Count, (System.Math.Sqrt(5.0)+1)/2.0))+2;
         }
 
         #endregion
 
         #region decrease
 
-        public void DecreaseKey(FibonacciHeapNode<K, V> x, K key)
+        /// <summary>
+        /// it runs at O(1) amortized
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="newKey"></param>
+        public void DecreaseKey(FibonacciHeapNode<K, V> x, K newKey)
         {
-            if (key.CompareTo(x.Key) > 0)
+            if (newKey.CompareTo(x.Key) > 0)
             {
                 throw new Exception("new key is greater than current key");
             }
 
-            if (key.CompareTo(x.Key) == 0)
+            if (newKey.CompareTo(x.Key) == 0)
             {
                 return;
             }
 
 
-            x.Key = key;
+            x.Key = newKey;
             FibonacciHeapNode<K, V> y = x.Parent;
             if (y != null && x.Key.CompareTo(y.Key) < 0)
             {
+                //move x from y to root list
                 Cut(x, y);
                 CascadingCut(y);
             }
@@ -341,21 +354,28 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
         private void CascadingCut(FibonacciHeapNode<K, V> node)
         {
-            FibonacciHeapNode<K, V> z = node.Parent;
-            if (z != null)
+            FibonacciHeapNode<K, V> parent = node.Parent;
+            if (parent != null)
             {
                 if (node.Mark == false)
                 {
+                    //cut the first child
                     node.Mark = true;
                 }
                 else
                 {
-                    Cut(node, z);
-                    CascadingCut(z);
+                    //cut two children from parent
+                    Cut(node, parent);
+                    CascadingCut(parent);
                 }
             }
         }
 
+        /// <summary>
+        /// move x from y to root list 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         private void Cut(FibonacciHeapNode<K, V> x, FibonacciHeapNode<K, V> y)
         {
             y.Degree--;
@@ -378,6 +398,30 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
             t.LeftSibling = x;
             x.Parent = null;
             x.Mark = false;
+        }
+
+        #endregion
+
+        #region delete
+
+        /// <summary>
+        /// it runs at O(D(n)) amortized time. D(n) is maximum degree, which O(lgn)
+        /// </summary>
+        /// <param name="node">the node to delete</param>
+        /// <param name="min">the min value so that we can decrease the node to the root</param>
+        public void Delete(FibonacciHeapNode<K, V> node, K min)
+        {
+            DecreaseKey(node, min);
+            ExtractMin();
+        }
+
+        #endregion
+
+        #region IsEmpty
+
+        public bool IsEmpty
+        {
+            get { return minRoot == null || Count <= 0; }
         }
 
         #endregion

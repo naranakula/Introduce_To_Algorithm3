@@ -23,6 +23,17 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
+            FibonacciHeap<int,int> heap = new FibonacciHeap<int, int>();
+            for (int i = 0; i < 1000000; i++)
+            {
+                heap.Insert(i,i);
+            }
+            for (int i = 0; i < 1000000; i++)
+            {
+                var r = heap.ExtractMin();
+                if (r.Key != i) 
+                    Console.WriteLine(r.Key);
+            }
         }
     }
 }
