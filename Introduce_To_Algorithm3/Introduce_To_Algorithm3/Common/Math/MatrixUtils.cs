@@ -444,6 +444,53 @@ namespace Introduce_To_Algorithm3.Common.Math
             return tmp;
         }
 
+        /// <summary>
+        /// scalar multiply
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="scalar"></param>
+        /// <returns></returns>
+        public static int[,] ScalarMultiply(this int[,] matrix, int scalar)
+        {
+            int row = matrix.GetLength(0);
+            int column = matrix.GetLength(1);
+
+            int[,] result = new int[row,column];
+
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    result[i, j] = scalar*matrix[i, j];
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// scalar multiply
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="scalar"></param>
+        /// <returns></returns>
+        public static double[,] ScalarMultiply(this double[,] matrix, double scalar)
+        {
+            int row = matrix.GetLength(0);
+            int column = matrix.GetLength(1);
+
+            double[,] result = new double[row, column];
+
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    result[i, j] = scalar * matrix[i, j];
+                }
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// print matrix
