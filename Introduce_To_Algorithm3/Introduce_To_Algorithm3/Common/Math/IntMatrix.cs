@@ -37,7 +37,7 @@ namespace Introduce_To_Algorithm3.Common.Math
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (i != j && Get(i, j) != 0)
+                    if (i != j && this[i, j] != 0)
                     {
                         return false;
                     }
@@ -60,7 +60,7 @@ namespace Introduce_To_Algorithm3.Common.Math
 
             for (int i = 0; i < Rows; i++)
             {
-                if (Get(i, i) != 1)
+                if (this[i, i] != 1)
                 {
                     return false;
                 }
@@ -84,7 +84,7 @@ namespace Introduce_To_Algorithm3.Common.Math
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (System.Math.Abs(i-j)>1 && Get(i, j) != 0)
+                    if (System.Math.Abs(i-j)>1 && this[i, j] != 0)
                     {
                         return false;
                     }
@@ -95,7 +95,7 @@ namespace Introduce_To_Algorithm3.Common.Math
         }
 
         /// <summary>
-        /// an upper-triangular matrix is one for which aij =0 for i>j
+        /// an upper-triangular matrix is one for which aij =0 for i&gt;j
         /// </summary>
         /// <returns></returns>
         public virtual bool IsUpperTriangular()
@@ -109,7 +109,7 @@ namespace Introduce_To_Algorithm3.Common.Math
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (i>j && Get(i, j) != 0)
+                    if (i>j && this[i, j] != 0)
                     {
                         return false;
                     }

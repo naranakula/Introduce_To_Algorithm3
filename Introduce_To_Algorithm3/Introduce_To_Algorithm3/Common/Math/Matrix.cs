@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.Math
 {
-    public class Matrix<T> : IMatrix<T> where T : IComparable<T>, IEquatable<T>
+    public class Matrix<T> where T:IEquatable<T>,IComparable<T>
     {
         #region members
         /// <summary>
@@ -37,6 +37,24 @@ namespace Introduce_To_Algorithm3.Common.Math
             _row = row;
             _column = column;
             _matrix = new T[row, column];
+        }
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="from"></param>
+        public Matrix(T[,] from)
+        {
+            _row = from.GetLength(0);
+            _column = from.GetLength(1);
+            _matrix = new T[_row, _column];
+            for (int i = 0; i < _row; i++)
+            {
+                for (int j = 0; j < _column; j++)
+                {
+                    _matrix[i, j] = from[i, j];
+                }   
+            }
         }
 
         #endregion
@@ -121,7 +139,9 @@ namespace Introduce_To_Algorithm3.Common.Math
 
         #endregion
 
-        #region square matrices
+        #region Square
+
+        #region is square matrices
 
         /// <summary>
         /// is a n*n square matrix
@@ -135,5 +155,50 @@ namespace Introduce_To_Algorithm3.Common.Math
 
         #endregion
 
+        #endregion
+
+        #region convert
+
+        /// <summary>
+        /// convert to matrix
+        /// </summary>
+        /// <param name="from"></param>
+        /// <returns></returns>
+        public static Matrix<T> ConvertFrom(T[,] from)
+        {
+            int rows = from.GetLength(0);
+            int columns = from.GetLength(1);
+
+            Matrix<T> matrix = new Matrix<T>(rows, columns);
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    matrix[i, j] = from[i, j];
+                }
+            }
+
+            return matrix;
+        }
+
+        /// <summary>
+        /// Convert to
+        /// </summary>
+        /// <returns></returns>
+        public T[,] ConvertTo()
+        {
+            T[,] matrix = new T[_row, _column];
+
+            for (int i = 0; i < _row; i++)
+            {
+                for (int j = 0; j < _column; j++)
+                {
+                    matrix[i, j] = this[i, j];
+                }
+            }
+            return matrix;
+        }
+        #endregion
     }
 }
