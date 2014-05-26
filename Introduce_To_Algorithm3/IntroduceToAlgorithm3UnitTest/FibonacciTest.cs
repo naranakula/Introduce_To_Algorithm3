@@ -70,7 +70,7 @@ namespace IntroduceToAlgorithm3UnitTest
         [TestMethod()]
         public void FnLinearTest()
         {
-            int n = 40; // TODO: Initialize to an appropriate value
+            int n = 50; // TODO: Initialize to an appropriate value
             long expected = 0; // TODO: Initialize to an appropriate value
             long actual;
             actual = Fibonacci.FnLinear(n);
