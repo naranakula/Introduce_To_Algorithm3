@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -20,8 +21,10 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public static int Fn(int n)
+        public static long Fn(int n)
         {
+            Debug.Assert(n>=0);
+            if (n == 0) return 0;
             if (n == 1 || n == 2) return 1;
             return Fn(n - 2) + Fn(n - 1);
         }
@@ -31,16 +34,17 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public static int FnLinear(int n)
+        public static long FnLinear(int n)
         {
-            int fn_1 = 1, fn_2 = 1;
+            Debug.Assert(n >= 0);
+            if (n == 0) return 0;
             if (n == 1 || n == 2) return 1;
-            int result = 1;
+            long result = 1,fn1 = 1, fn2 = 1;;
             for (int i = 3; i <= n; i++)
             {
-                result = fn_1 + fn_2;
-                fn_2 = fn_1;
-                fn_1 = result;
+                result = fn1 + fn2;
+                fn1 = fn2;
+                fn2 = result;
             }
             return result;
         }

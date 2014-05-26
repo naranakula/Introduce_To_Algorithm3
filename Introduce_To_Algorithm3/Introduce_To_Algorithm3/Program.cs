@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Introduce_To_Algorithm3.Common.AdvancedStructs;
 using Introduce_To_Algorithm3.Common.GraphEx;
 using Introduce_To_Algorithm3.Common.Utils;
@@ -24,8 +25,6 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            int i = CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
-            Console.WriteLine(i);
         }
     }
 }

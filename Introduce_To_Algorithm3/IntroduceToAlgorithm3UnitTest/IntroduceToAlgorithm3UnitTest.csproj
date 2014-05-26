@@ -58,6 +58,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FibonacciHeapTest.cs" />
+    <Compile Include="FibonacciTest.cs" />
     <Compile Include="NumUtilsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

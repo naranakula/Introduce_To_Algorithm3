@@ -527,6 +527,7 @@ namespace Introduce_To_Algorithm3.Common.Math
         ///  L is a unit lower triangular matrix
         ///  U is upper triangulat matrix
         ///  P is permutation matrix
+        ///  we call matrices L,U, and P satisfying PA = LU an LUP decomposition of matrix A.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
