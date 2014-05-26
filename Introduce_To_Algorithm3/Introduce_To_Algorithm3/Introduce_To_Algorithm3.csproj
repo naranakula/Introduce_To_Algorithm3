@@ -155,6 +155,7 @@
     <Compile Include="Common\GreedyAlgorithm\ActivitySelection.cs" />
     <Compile Include="Common\GreedyAlgorithm\HuffmanTree.cs" />
     <Compile Include="Common\GreedyAlgorithm\Knapsack.cs" />
+    <Compile Include="Common\Math\DoubleMatrix.cs" />
     <Compile Include="Common\Math\Fibonacci.cs" />
     <Compile Include="Common\Math\IMatrix.cs" />
     <Compile Include="Common\Math\IntMatrix.cs" />

@@ -359,7 +359,7 @@ namespace Introduce_To_Algorithm3.Common.Math
         public static double[,] Add(this double[,] matrix1, double[,] matrix2)
         {
             int w = matrix1.GetLength(0), h = matrix1.GetLength(1);
-            double[,] result = new double[w,h];
+            double[,] result = new double[w, h];
             for (int i = 0; i < w; i++)
             {
                 for (int j = 0; j < h; j++)
@@ -455,13 +455,13 @@ namespace Introduce_To_Algorithm3.Common.Math
             int row = matrix.GetLength(0);
             int column = matrix.GetLength(1);
 
-            int[,] result = new int[row,column];
+            int[,] result = new int[row, column];
 
             for (int i = 0; i < row; i++)
             {
                 for (int j = 0; j < column; j++)
                 {
-                    result[i, j] = scalar*matrix[i, j];
+                    result[i, j] = scalar * matrix[i, j];
                 }
             }
 
@@ -511,6 +511,52 @@ namespace Introduce_To_Algorithm3.Common.Math
             return sb.ToString();
         }
 
+
+        #region linear equation
+
+        /// <summary>
+        /// a11x1+a12x2+... +a1nxn = b1;
+        /// a21x1+a22x2+... +a2nxn = b2;
+        /// ...
+        /// an1x1+an2x2+... +annxn = bn
+        /// 
+        /// we can model this problem as Ax = b;
+        /// then x = a^-1b and x is unique solution
+        /// we can LUP deomposition is to find three n*n matrices L,U and P such that PA = LU
+        /// where
+        ///  L is a unit lower triangular matrix
+        ///  U is upper triangulat matrix
+        ///  P is permutation matrix
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        public static void LinearEquation(int[,] a, int[] b)
+        {
+
+        }
+
+        /// <summary>
+        /// a11x1+a12x2+... +a1nxn = b1;
+        /// a21x1+a22x2+... +a2nxn = b2;
+        /// ...
+        /// an1x1+an2x2+... +annxn = bn
+        /// 
+        /// we can model this problem as Ax = b;
+        /// then x = a^-1b and x is unique solution
+        /// we can LUP deomposition is to find three n*n matrices L,U and P such that PA = LU
+        /// where
+        ///  L is a unit lower triangular matrix
+        ///  U is upper triangulat matrix
+        ///  P is permutation matrix
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        public static void LinearEquation(double[,] a, double[] b)
+        {
+
+        }
+
+        #endregion
 
     }
 }

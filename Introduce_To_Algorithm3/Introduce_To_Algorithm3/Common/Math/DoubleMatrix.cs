@@ -2,27 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Introduce_To_Algorithm3.Common.Math
 {
-    /// <summary>
-    /// a matrix int[,]
-    /// </summary>
-    public class IntMatrix : Matrix<int>
+    public class DoubleMatrix : Matrix<double>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="row">the number of rows</param>
-        /// <param name="column">the number of columns</param>
-        public IntMatrix(int row, int column)
+        #region constructor
+        public DoubleMatrix(int row, int column)
             : base(row, column)
         {
         }
 
-        public IntMatrix(int[,] @from) : base(@from)
+        public DoubleMatrix(double[,] @from)
+            : base(@from)
         {
         }
+        #endregion
+
 
         #region methods
 
@@ -41,7 +38,7 @@ namespace Introduce_To_Algorithm3.Common.Math
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (i != j && this[i, j] != 0)
+                    if (i != j && System.Math.Abs(this[i, j]) > TOLERANCE)
                     {
                         return false;
                     }
@@ -64,7 +61,7 @@ namespace Introduce_To_Algorithm3.Common.Math
 
             for (int i = 0; i < Rows; i++)
             {
-                if (this[i, i] != 1)
+                if (System.Math.Abs((int)(this[i, i] - 1)) > TOLERANCE)
                 {
                     return false;
                 }
@@ -88,7 +85,7 @@ namespace Introduce_To_Algorithm3.Common.Math
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (System.Math.Abs(i-j)>1 && this[i, j] != 0)
+                    if (System.Math.Abs(i - j) > 1 && System.Math.Abs(this[i, j]) > TOLERANCE)
                     {
                         return false;
                     }
@@ -113,7 +110,7 @@ namespace Introduce_To_Algorithm3.Common.Math
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (i>j && this[i, j] != 0)
+                    if (i > j && System.Math.Abs(this[i, j]) > TOLERANCE)
                     {
                         return false;
                     }
@@ -136,7 +133,7 @@ namespace Introduce_To_Algorithm3.Common.Math
 
             for (int i = 0; i < Rows; i++)
             {
-                if (Get(i, i) != 1)
+                if (System.Math.Abs(Get(i, i) - 1) > TOLERANCE)
                 {
                     return false;
                 }
@@ -159,7 +156,7 @@ namespace Introduce_To_Algorithm3.Common.Math
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (i < j && Get(i, j) != 0)
+                    if (i < j && System.Math.Abs(Get(i, j)) > TOLERANCE)
                     {
                         return false;
                     }
@@ -182,7 +179,7 @@ namespace Introduce_To_Algorithm3.Common.Math
 
             for (int i = 0; i < Rows; i++)
             {
-                if (Get(i, i) != 1)
+                if (System.Math.Abs(Get(i, i) - 1) > TOLERANCE)
                 {
                     return false;
                 }
@@ -206,12 +203,12 @@ namespace Introduce_To_Algorithm3.Common.Math
                 int count = 0;
                 for (int j = 0; j < Columns; j++)
                 {
-                    int val = Get(i, j);
-                    if (val != 1 && val != 0)
+                    double val = Get(i, j);
+                    if (System.Math.Abs(val - 1) > TOLERANCE && System.Math.Abs(val) > TOLERANCE)
                     {
                         return false;
                     }
-                    if (val == 1)
+                    if (System.Math.Abs(val - 1) < TOLERANCE)
                     {
                         count++;
                     }
@@ -227,12 +224,12 @@ namespace Introduce_To_Algorithm3.Common.Math
                 int count = 0;
                 for (int i = 0; i < Rows; i++)
                 {
-                    int val = Get(i, j);
-                    if (val != 1 && val != 0)
+                    double val = Get(i, j);
+                    if (System.Math.Abs(val - 1) > TOLERANCE && System.Math.Abs(val) > TOLERANCE)
                     {
                         return false;
                     }
-                    if (val == 1)
+                    if (System.Math.Abs(val - 1) < TOLERANCE)
                     {
                         count++;
                     }
@@ -257,12 +254,12 @@ namespace Introduce_To_Algorithm3.Common.Math
                 throw new Exception(@"it's not a square matrix");
             }
 
-            Matrix<int> trans = Transpose();
+            Matrix<double> trans = Transpose();
             for (int i = 0; i < Rows; i++)
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    if (Get(i, j) != trans.Get(i, j))
+                    if (System.Math.Abs(Get(i, j) - trans.Get(i, j)) > TOLERANCE)
                     {
                         return false;
                     }
@@ -274,5 +271,6 @@ namespace Introduce_To_Algorithm3.Common.Math
 
         #endregion
 
+        public const double TOLERANCE = 10 ^ -6;
     }
 }

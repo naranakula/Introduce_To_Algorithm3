@@ -24,7 +24,8 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-
+            int i = CodeCounter.GetCodeLines(@"C:\Users\v-chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
+            Console.WriteLine(i);
         }
     }
 }
