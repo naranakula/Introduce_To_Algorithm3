@@ -528,6 +528,8 @@ namespace Introduce_To_Algorithm3.Common.Math
         ///  U is upper triangulat matrix
         ///  P is permutation matrix
         ///  we call matrices L,U, and P satisfying PA = LU an LUP decomposition of matrix A.
+        /// 
+        /// PAx = Pb = LUx we define y = Ux, Ly = Pb  we can vector y "forward substitution"  y = Ux called "back substitution", AX = P^-1LUx = P^-1Ly = P^-1Pb = b
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -549,6 +551,8 @@ namespace Introduce_To_Algorithm3.Common.Math
         ///  L is a unit lower triangular matrix
         ///  U is upper triangulat matrix
         ///  P is permutation matrix
+        /// 
+        ///     PAx = Pb = LUx we define y = Ux, Ly = Pb  we can vector y "forward substitution"  y = Ux called "back substitution", AX = P^-1LUx = P^-1Ly = P^-1Pb = b
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>

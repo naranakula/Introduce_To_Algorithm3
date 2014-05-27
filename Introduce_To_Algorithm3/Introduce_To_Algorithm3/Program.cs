@@ -27,16 +27,12 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            int n = 50; // TODO: Initialize to an appropriate value
-            long expected = 0; // TODO: Initialize to an appropriate value
+            int n = 50;
             long actual;
             Stopwatch watch = new Stopwatch();
             watch.Start();
             actual = Fibonacci.FnLinear(n);
             Console.WriteLine(actual + "\t\t" + watch.Elapsed);
-            watch.Restart();
-            expected = Fibonacci.Fn(n);
-            Console.WriteLine(expected + "\t\t" + watch.Elapsed);
         }
     }
 }
