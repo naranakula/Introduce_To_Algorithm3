@@ -228,7 +228,11 @@
   <ItemGroup>
     <Content Include="Readme.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\ApproximationAlgorithm\" />
+    <Folder Include="Common\LinearProgramming\" />
+    <Folder Include="Common\NumberTheory\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>

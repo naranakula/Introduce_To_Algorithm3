@@ -530,6 +530,9 @@ namespace Introduce_To_Algorithm3.Common.Math
         ///  we call matrices L,U, and P satisfying PA = LU an LUP decomposition of matrix A.
         /// 
         /// PAx = Pb = LUx we define y = Ux, Ly = Pb  we can vector y "forward substitution"  y = Ux called "back substitution", AX = P^-1LUx = P^-1Ly = P^-1Pb = b
+        /// 
+        /// forward substitution can solve L P b in O(n^2) time.
+        /// we can represent permutation P compactly by π[1,......,n]. only P（i,π[i]) = 1
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
