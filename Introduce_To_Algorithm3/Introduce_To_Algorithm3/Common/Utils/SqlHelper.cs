@@ -10,10 +10,9 @@ using System.Transactions;
  * creatime:   2011年1月28日14:56:18
  * modifytime: 2011年7月29日11:34:28
  */
+
 namespace Introduce_To_Algorithm3.Common.Utils
 {
-	
-	
     /// <summary>
     /// 自定义数据库访问通用类
     /// </summary>
@@ -25,6 +24,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         private static SqlHelper _instance;
 
         #region 其实多线程下获取实例时应该加锁，但不加不会引发错误(前提是连接字符串不变)
+
         /// <summary>
         /// 用于获取使用默认连接字符串的SqlHelper的唯一实例。
         /// </summary>
@@ -47,7 +47,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 _instance = new SqlHelper();
             }
 
-            if (!string.IsNullOrEmpty(connectionString))
+            if (!string.IsNullOrWhiteSpace(connectionString))
             {
                 _instance._connectionString = connectionString;
             }
@@ -56,13 +56,15 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         #endregion
+
         /// <summary>
         /// 私有的连接字符串，它默认使用配置文件中的连接字符串。
         /// </summary>
         private string _connectionString;
+
         //User ID=sa;Initial Catalog=WirelessCity_POI;Data Source=192.168.85.136;Password=smssdev
         //private string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MyStock.Properties.Settings.SmartStockConnectionString"].ConnectionString;
-        
+
         /// <summary>
         /// 默认的构造函数。
         /// </summary>
@@ -80,13 +82,13 @@ namespace Introduce_To_Algorithm3.Common.Utils
         public bool IsConnectionActive()
         {
             bool result = true;
-            SqlConnection conn = null; 
+            SqlConnection conn = null;
             try
             {
                 conn = new SqlConnection(_connectionString);
                 conn.Open();
             }
-            catch(Exception )
+            catch (Exception)
             {
                 result = false;
             }
@@ -193,8 +195,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
                             command.Parameters.Add(parameter);
                         }
                     }
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    adapter.Fill(ds);
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(ds);
+                    }
                 }
             }
             return ds;
@@ -245,8 +249,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
                             command.Parameters.Add(parameter);
                         }
                     }
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    adapter.Fill(data);
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(data);
+                    }
                 }
             }
             return data;
@@ -401,9 +407,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 trans.Commit();
                 return true;
             }
-            catch(Exception )
+            catch (Exception)
             {
-                if(trans!=null)
+                if (trans != null)
                 {
                     trans.Rollback();
                 }
@@ -411,7 +417,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             finally
             {
-                if(conn !=null)
+                if (conn != null)
                 {
                     conn.Close();
                 }
@@ -436,7 +442,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 trans = conn.BeginTransaction();
                 foreach (string sql in sqlList)
                 {
-                    using(SqlCommand command = new SqlCommand(sql,conn,trans))
+                    using (SqlCommand command = new SqlCommand(sql, conn, trans))
                     {
                         command.ExecuteNonQuery();
                     }
@@ -468,13 +474,13 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         public void ExecTransactionUsingScope(IEnumerable<string> sqlList)
         {
-            using(TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
             {
-                using(SqlConnection conn = new SqlConnection(_connectionString))
+                using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     foreach (string sql in sqlList)
                     {
-                        using(SqlCommand command = new SqlCommand(sql,conn))
+                        using (SqlCommand command = new SqlCommand(sql, conn))
                         {
                             command.ExecuteNonQuery();
                         }

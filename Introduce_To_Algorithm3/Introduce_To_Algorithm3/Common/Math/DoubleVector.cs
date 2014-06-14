@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Introduce_To_Algorithm3.Common.Math
 {
-    public class IntVector:Vector<int>
+    /// <summary>
+    /// a vector of double
+    /// </summary>
+    public class DoubleVector:Vector<double>
     {
-        public IntVector(int size) : base(size)
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="size"></param>
+        public DoubleVector(int size) : base(size)
         {
         }
 
-
-        public IntVector(int[] array) : base(array.Length)
+        public DoubleVector(double[] array) : base(array.Length)
         {
             for (int i = 0; i < array.Length; i++)
             {
@@ -20,10 +27,11 @@ namespace Introduce_To_Algorithm3.Common.Math
             }
         }
 
-        public int[] ToArray()
+        public double[] ToArray()
         {
             return this._vector;
         }
+
 
         /// <summary>
         /// calculate the inner product
@@ -32,36 +40,37 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public virtual int InnerProduct(IntVector vector)
+        public virtual double InnerProduct(DoubleVector vector)
         {
             if (Count != vector.Count)
             {
                 throw new Exception("vector must have the same dimens");
             }
 
-            int result = 0;
+            double result = 0;
+
             for (int i = 0; i < Count; i++)
             {
-                result += Get(i)*vector.Get(i);
+                result += Get(i) * vector.Get(i);
             }
 
             return result;
         }
 
 
-        public virtual int[,] OuterProduct(IntVector vector)
+        public virtual double[,] OuterProduct(DoubleVector vector)
         {
             if (Count != vector.Count)
             {
                 throw new Exception("vector must have the same dimens");
             }
 
-            int[,] result = new int[Count,Count];
+            Double[,] result = new double[Count, Count];
             for (int i = 0; i < Count; i++)
             {
                 for (int j = 0; j < Count; j++)
                 {
-                    result[i, j] = Get(i)*vector.Get(j);
+                    result[i, j] = Get(i) * vector.Get(j);
                 }
             }
 
@@ -71,9 +80,10 @@ namespace Introduce_To_Algorithm3.Common.Math
         public virtual double EuclideanNorm()
         {
             double result = 0;
+
             for (int i = 0; i < Count; i++)
             {
-                result += Get(i)*Get(i);
+                result += Get(i) * Get(i);
             }
 
             return System.Math.Sqrt(result);
@@ -84,13 +94,13 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// </summary>
         /// <param name="intVector"></param>
         /// <returns></returns>
-        public virtual double DistanceTo(IntVector inVector)
+        public virtual double DistanceTo(DoubleVector inVector)
         {
             double square = 0;
 
             for (int i = 0; i < Count; i++)
             {
-                square += System.Math.Pow((this[i]-inVector[i]),2);
+                square += System.Math.Pow((this[i] - inVector[i]), 2);
             }
 
             return System.Math.Sqrt(square);

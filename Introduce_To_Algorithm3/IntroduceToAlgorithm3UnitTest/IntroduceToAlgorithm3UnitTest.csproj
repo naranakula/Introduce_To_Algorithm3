@@ -57,6 +57,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Common\MachineLearning\KNearestNeighborTests.cs" />
     <Compile Include="FibonacciHeapTest.cs" />
     <Compile Include="FibonacciTest.cs" />
     <Compile Include="NumUtilsTest.cs" />

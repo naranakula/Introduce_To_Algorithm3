@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <summary>
         /// underlying storage
         /// </summary>
-        private T[] _vector;
+        protected T[] _vector;
 
         #endregion
 
