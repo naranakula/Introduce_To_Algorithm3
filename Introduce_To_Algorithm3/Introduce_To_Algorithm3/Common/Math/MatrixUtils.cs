@@ -56,15 +56,72 @@ namespace Introduce_To_Algorithm3.Common.Math
 
 
         /// <summary>
+        /// can matrix1 multipy matrix2
+        /// </summary>
+        /// <param name="matrix1"></param>
+        /// <param name="matrix2"></param>
+        /// <param name="result">if the return value is true, result can store the result of matrix1 multipy matrix2, but not the result of matrix1 multipy matrix2</param>
+        /// <returns></returns>
+        public static bool IsMatrixMul(double[,] matrix1, double[,] matrix2, out double[,] result)
+        {
+            result = null;
+            if (matrix1 == null || matrix2 == null)
+            {
+                return false;
+            }
+            int w1 = matrix1.GetLength(0), h1 = matrix1.GetLength(1);
+            int w2 = matrix2.GetLength(0), h2 = matrix2.GetLength(1);
+            if (w1 <= 0 || h1 <= 0 || w2 <= 0 || h2 <= 0 || h1 != w2)
+            {
+                return false;
+            }
+
+            result = new double[w1, h2];
+            return true;
+        }
+
+
+        /// <summary>
         /// multiply two matrix(not necessary n*n ) m*n  x  n*p = m*p
         /// it runs at (m*n*p)
         /// </summary>
         /// <param name="matrix1"></param>
         /// <param name="matrix2"></param>
         /// <returns></returns>
-        public static int[,] Multiply(int[,] matrix1, int[,] matrix2)
+        public static int[,] Multiply(this int[,] matrix1, int[,] matrix2)
         {
             int[,] result;
+            if (!IsMatrixMul(matrix1, matrix2, out result))
+            {
+                throw new Exception("matrix can not be multiply");
+            }
+
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for (int j = 0; j < result.GetLength(1); j++)
+                {
+                    result[i, j] = 0;
+                    for (int k = 0; k < matrix1.GetLength(1); k++)
+                    {
+                        result[i, j] += matrix1[i, k] * matrix2[k, j];
+                    }
+
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// multiply two matrix(not necessary n*n ) m*n  x  n*p = m*p
+        /// it runs at (m*n*p)
+        /// </summary>
+        /// <param name="matrix1"></param>
+        /// <param name="matrix2"></param>
+        /// <returns></returns>
+        public static double[,] Multiply(this double[,] matrix1, double[,] matrix2)
+        {
+            double[,] result;
             if (!IsMatrixMul(matrix1, matrix2, out result))
             {
                 throw new Exception("matrix can not be multiply");
@@ -566,5 +623,42 @@ namespace Introduce_To_Algorithm3.Common.Math
 
         #endregion
 
+
+        #region transpose
+
+        public static double[,] Transpose(this double[,] inMatrix)
+        {
+            int m = inMatrix.GetLength(0);
+            int n = inMatrix.GetLength(1);
+            double[,] result = new double[n,m];
+            for (int i = 0; i < inMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < inMatrix.GetLength(1); j++)
+                {
+                    result[j, i] = inMatrix[i, j];
+                }
+            }
+
+            return result;
+        }
+
+
+        public static int[,] Transpose(this int[,] inMatrix)
+        {
+            int m = inMatrix.GetLength(0);
+            int n = inMatrix.GetLength(1);
+            int[,] result = new int[n, m];
+            for (int i = 0; i < inMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < inMatrix.GetLength(1); j++)
+                {
+                    result[j, i] = inMatrix[i, j];
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 }

@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Introduce_To_Algorithm3.Common.AdvancedStructs;
+using System.Text;
+using System.Threading.Tasks;
 using Introduce_To_Algorithm3.Common.MachineLearning;
-using Introduce_To_Algorithm3.Common.Utils;
-
-namespace Introduce_To_Algorithm3
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace Introduce_To_Algorithm3.Common.MachineLearning.Tests
 {
-    class Program
+    [TestClass()]
+    public class LogisticRegressionTests
     {
-        private static void Main(string[] args)
+        [TestMethod()]
+        public void GradAscentTest()
         {
             string file = @"C:\db\testset.txt";
             var lines = File.ReadAllLines(file);
-            double[,] dataMat = new double[lines.Length, 3];
-            double[,] labelMat = new double[lines.Length, 1];
+            double[,] dataMat = new double[lines.Length,3];
+            double[,] labelMat = new double[lines.Length,1];
             for (int i = 0; i < lines.Length; i++)
             {
                 var temp = lines[i].Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -30,6 +29,5 @@ namespace Introduce_To_Algorithm3
             var result = LogisticRegression.GradAscent(dataMat, labelMat);
             Console.WriteLine(result);
         }
-
     }
 }

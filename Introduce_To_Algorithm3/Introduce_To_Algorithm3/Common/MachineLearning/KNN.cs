@@ -40,6 +40,47 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         }
 
         /// <summary>
+        /// norm input using (oldValue - minValue)/(maxValue-minValue)
+        /// </summary>
+        /// <param name="testVector"></param>
+        /// <param name="dataSet"></param>
+        /// <param name="normedTestVector"></param>
+        /// <param name="normedDataSet"></param>
+        public static void Norm(double[] testVector, List<double[]> dataSet,out double[] normedTestVector,out List<double[]> normedDataSet)
+        {
+            int len = testVector.Length;
+            normedTestVector = new double[len];
+            normedDataSet = new List<double[]>();
+
+            double[] minVals = new double[len];
+            double[] maxVals = new double[len];
+            double[] ranges = new double[len];
+            for (int i = 0; i < len; i++)
+            {
+                minVals[i] = (from r in dataSet select r[i]).Min();
+                maxVals[i] = (from r in dataSet select r[i]).Max();
+                ranges[i] = maxVals[i] - minVals[i];
+            }
+
+            for (int i = 0; i < len; i++)
+            {
+                normedTestVector[i] = (testVector[i]-minVals[i])/ranges[i];
+            }
+
+            foreach (double[] data in dataSet)
+            {
+                double[] newData = new double[len];
+                for (int i = 0; i < len; i++)
+                {
+                    newData[i] = (data[i] - minVals[i])/ranges[i];
+                }
+
+                normedDataSet.Add(newData);
+            }
+
+        }
+
+        /// <summary>
         /// the theory of knn:
         /// 1)calculte the distance between testVector and ech vector in dataSet
         /// 2)sort the distances in increasing order
