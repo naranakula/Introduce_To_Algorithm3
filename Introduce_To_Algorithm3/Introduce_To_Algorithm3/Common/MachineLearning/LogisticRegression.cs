@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Odbc;
 using System.Linq;
 using System.Text;
@@ -69,6 +70,72 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
                     Console.WriteLine(weights[0,0]+"\t"+weights[1,0]+"\t"+weights[2,0]);
                 }
             }
+            double[] result = new double[n];
+            for (int i = 0; i < n; i++)
+            {
+                result[i] = weights[i, 0];
+            }
+            return result;
+        }
+
+
+        public static double[] StochasticGradientAscent(double[,] Features, double[,] classLabels)
+        {
+            int m = Features.GetLength(0);
+            int n = Features.GetLength(1);
+            double[,] weights = new double[n, 1];
+            for (int i = 0; i < n; i++)
+            {
+                weights[i, 0] = 1;
+            }
+
+            for (int i = 0; i < m; i++)
+            {
+                double h = 0.0;
+                double[,] temp = new double[n, 1];
+                for (int j = 0; j < n; j++)
+                {
+                    h += Features[i, j]*weights[j, 0];
+                    temp[j, 0] = Features[i, j];
+                }
+                double error = classLabels[i,0] - Sigmoid(h);
+                weights = weights.Add(temp.ScalarMultiply(error*WALKSTEP));
+            }
+            double[] result = new double[n];
+            for (int i = 0; i < n; i++)
+            {
+                result[i] = weights[i, 0];
+            }
+            return result;
+        }
+
+        public static double[] StochasticGradientAscent(double[,] Features, double[,] classLabels, int numIter = 1000)
+        {
+            int m = Features.GetLength(0);
+            int n = Features.GetLength(1);
+            double[,] weights = new double[n, 1];
+            for (int i = 0; i < n; i++)
+            {
+                weights[i, 0] = 1;
+            }
+
+            for (int i = 0; i < numIter; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    double alpha = 4/(1.0 + i + j) + WALKSTEP;
+                    double h = 0.0;
+                    double[,] temp = new double[n, 1];
+                    for (int k = 0; k < n; k++)
+                    {
+                        h += Features[j, k] * weights[k, 0];
+                        temp[k, 0] = Features[j, k];
+                    }
+                    double error = classLabels[j, 0] - Sigmoid(h);
+                    weights = weights.Add(temp.ScalarMultiply(error * alpha));
+                }
+            }
+
             double[] result = new double[n];
             for (int i = 0; i < n; i++)
             {
