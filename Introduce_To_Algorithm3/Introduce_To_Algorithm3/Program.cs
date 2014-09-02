@@ -12,26 +12,24 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Introduce_To_Algorithm3
 {
-    class Program
+    internal class Program
     {
         private static void Main(string[] args)
         {
-            //string file = @"C:\db\testset.txt";
-            //var lines = File.ReadAllLines(file);
-            //double[,] dataMat = new double[lines.Length, 3];
-            //double[,] labelMat = new double[lines.Length, 1];
-            //for (int i = 0; i < lines.Length; i++)
-            //{
-            //    var temp = lines[i].Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            //    dataMat[i, 0] = 1.0;
-            //    dataMat[i, 1] = double.Parse(temp[0]);
-            //    dataMat[i, 2] = double.Parse(temp[1]);
-            //    labelMat[i, 0] = double.Parse(temp[2]);
-            //}
-            //var result = LogisticRegression.StochasticGradientAscent(dataMat, labelMat, 1500);
-            //Console.WriteLine(result);
-            
+            Console.WriteLine(
+                CodeCounter.GetCodeLines(
+                    @"C:\Users\chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3"));
+            //////////////////////
+            int i = 0;
+            while (true)
+            {
+                Console.WriteLine("Hello world"+i++);
+                System.Threading.Thread.Sleep(100);
+                if (i > int.MaxValue - 100)
+                {
+                    i = 0;
+                }
+            }
         }
-
     }
 }

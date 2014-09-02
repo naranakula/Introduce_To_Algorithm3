@@ -64,6 +64,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics">
@@ -234,12 +238,15 @@
     <Compile Include="Common\Utils\StringExtension.cs" />
     <Compile Include="Common\Utils\threads\ThreadPoolHelper.cs" />
     <Compile Include="Common\Utils\Utils.cs" />
+    <Compile Include="OpenSourceLib\Utils\JsonHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="Readme.txt" />
     <Content Include="Reference\MathNet.Numerics.dll" />
+    <Content Include="Reference\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\ApproximationAlgorithm\" />
