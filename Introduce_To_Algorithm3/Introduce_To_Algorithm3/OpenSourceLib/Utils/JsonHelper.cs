@@ -13,17 +13,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// </summary>
     public static class JsonHelper
     {
-        private static JsonSerializerSettings jsonSettings;
-        private static string dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+        private static readonly JsonSerializerSettings JsonSettings;
+        private const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
         static JsonHelper()
         {
-            var dataTimeConverter = new IsoDateTimeConverter() {DateTimeFormat = dateTimeFormat};
-            jsonSettings = new JsonSerializerSettings();
-            jsonSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
-            jsonSettings.NullValueHandling = NullValueHandling.Ignore;
-            jsonSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            jsonSettings.Converters.Add(dataTimeConverter);
+            var dataTimeConverter = new IsoDateTimeConverter {DateTimeFormat = DateTimeFormat};
+            JsonSettings = new JsonSerializerSettings
+            {
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                NullValueHandling = NullValueHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+            JsonSettings.Converters.Add(dataTimeConverter);
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             if (obj == null) return null;
             try
             {
-                return JsonConvert.SerializeObject(obj, Formatting.None, jsonSettings);
+                return JsonConvert.SerializeObject(obj, Formatting.None, JsonSettings);
             }
             catch (Exception e)
             {
@@ -54,7 +56,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         {
             try
             {
-                return JsonConvert.DeserializeObject<T>(jsonString, jsonSettings);
+                return JsonConvert.DeserializeObject<T>(jsonString, JsonSettings);
             }
             catch (Exception e)
             {
