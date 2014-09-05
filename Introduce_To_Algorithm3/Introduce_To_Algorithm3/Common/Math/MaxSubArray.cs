@@ -70,8 +70,6 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <summary>
         /// divide the arr in to two part. [lo,mid) mid (mid+1,hi].
         /// the max subarray at [lo,mid) (mid+1,hi] or contains mid
-        /// if beginIndex or endIndex is negative, the array are all negative
-        /// it runs at O(nlgn)
         /// </summary>
         /// <param name="array"></param>
         /// <returns></returns>
@@ -139,7 +137,6 @@ namespace Introduce_To_Algorithm3.Common.Math
                 if (lSum < sum)
                 {
                     lSum = sum;
-                    continue;
                 }
             }
 
@@ -150,7 +147,6 @@ namespace Introduce_To_Algorithm3.Common.Math
                 if (rSum < sum)
                 {
                     rSum = sum;
-                    continue;
                 }
             }
             return lSum + rSum;
@@ -179,11 +175,14 @@ namespace Introduce_To_Algorithm3.Common.Math
         /// <returns></returns>
         public static int MaxSubArrayQuick(int[] array, out int beginIndex, out int endIndex)
         {
-            beginIndex = endIndex = -1;
+            endIndex = -1;
+            beginIndex = 0;
             if (array == null || array.Length == 0)
             {
                 throw new Exception("array shouldn't be null or empty");
             }
+
+            int tempBeginIndex = -1;
 
             int sum = 0, maxSum = 0;
             for (int i = 0; i < array.Length; i++)
@@ -193,14 +192,15 @@ namespace Introduce_To_Algorithm3.Common.Math
                 {
                     maxSum = sum;
                     endIndex = i;
+                    if (endIndex >= tempBeginIndex)
+                    {
+                        beginIndex = tempBeginIndex;
+                    }
                 }
-                if(sum == 0)
-                {
-                    beginIndex = endIndex = i;
-                }
-                if(sum<0)
+                if(sum<=0)
                 {
                     sum = 0;
+                    tempBeginIndex = i + 1;
                 }
             }
             return maxSum;
