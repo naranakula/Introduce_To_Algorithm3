@@ -19,5 +19,13 @@ namespace Introduce_To_Algorithm3.Common.Structs
             System.Diagnostics.Debug.Assert(interval != null);
             return Low <= interval.High && interval.Low <= High;
         }
+
+        /// <summary>
+        /// low as key for tree
+        /// </summary>
+        public int Key
+        {
+            get { return Low; }
+        }
     }
 }

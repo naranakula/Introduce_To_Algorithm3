@@ -15,6 +15,10 @@ namespace Introduce_To_Algorithm3.Common.Sort
         /// <param name="ex2"></param>
         public static void Exchange(T[] arr, int ex1, int ex2)
         {
+            if (ex1 == ex2)
+            {
+                return;
+            }
             T tmp = arr[ex1];
             arr[ex1] = arr[ex2];
             arr[ex2] = tmp;

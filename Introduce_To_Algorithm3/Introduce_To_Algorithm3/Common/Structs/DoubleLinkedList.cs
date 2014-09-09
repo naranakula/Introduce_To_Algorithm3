@@ -13,6 +13,24 @@ namespace Introduce_To_Algorithm3.Common.Structs
         private LinkedListNode<T> head;
 
         /// <summary>
+        /// tail of linkedList
+        /// </summary>
+        private LinkedListNode<T> tail;
+
+        /// <summary>
+        /// is empty
+        /// </summary>
+        public bool IsEmpty
+        {
+            get { return head == null || tail == null; }
+        }
+
+        /// <summary>
+        /// the number of element in list
+        /// </summary>
+        public int Count { get; protected set; }
+
+        /// <summary>
         /// find the first item . if not found,return null
         /// </summary>
         /// <param name="item"></param>
@@ -33,9 +51,10 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <param name="item"></param>
         public void Insert(T item)
         {
+            Count++;
             if(head == null)
             {
-                head = new LinkedListNode<T>(item);
+                head = tail = new LinkedListNode<T>(item);
                 return;
             }
 
@@ -51,6 +70,13 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <param name="node"></param>
         public void Delete(LinkedListNode<T> node)
         {
+            if (node == null)
+            {
+                return;
+            }
+
+            Count--;
+
             if(node.Prev != null)
             {
                 node.Prev.Next = node.Next;
@@ -60,14 +86,16 @@ namespace Introduce_To_Algorithm3.Common.Structs
                 head = node.Next;
             }
 
+            if (node.Next == null)
+            {
+                tail = node.Prev;
+            }
+
             if(node.Next != null)
             {
                 node.Next.Prev = node.Prev;
             }
         }
-
-
-
 
     }
 }

@@ -51,6 +51,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Common\MachineLearning\LogisticRegressionTests.cs" />
+    <Compile Include="Common\Sort\HeapSortTests.cs" />
+    <Compile Include="Common\Sort\QuickSortTests.cs" />
+    <Compile Include="Common\Structs\BSTTests.cs" />
+    <Compile Include="Common\Structs\MaxHeapTests.cs" />
+    <Compile Include="Common\Structs\RBTTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

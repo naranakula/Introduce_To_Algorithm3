@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace Com.Utility.Commons
+namespace Introduce_To_Algorithm3.Common.Utils
 {
     /// <summary>
     /// 线程帮助类

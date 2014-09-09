@@ -69,10 +69,16 @@
       <HintPath>Reference\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.81.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -196,7 +202,9 @@
     <Compile Include="Common\Sort\SortCommons.cs" />
     <Compile Include="Common\Structs\AVL.cs" />
     <Compile Include="Common\Structs\AVLNode.cs" />
+    <Compile Include="Common\Structs\BinaryHeap.cs" />
     <Compile Include="Common\Structs\BST.cs" />
+    <Compile Include="Common\Structs\Deque.cs" />
     <Compile Include="Common\Structs\DoubleLinkedList.cs" />
     <Compile Include="Common\Structs\HashTable.cs" />
     <Compile Include="Common\Structs\HashTableOpenAddressing.cs" />
@@ -208,6 +216,7 @@
     <Compile Include="Common\Structs\RBT.cs" />
     <Compile Include="Common\Structs\RBTreeNode.cs" />
     <Compile Include="Common\Structs\SBT.cs" />
+    <Compile Include="Common\Structs\SingleLinkedList.cs" />
     <Compile Include="Common\Structs\SingleListNode.cs" />
     <Compile Include="Common\Structs\SplayNode.cs" />
     <Compile Include="Common\Structs\SplayTree.cs" />
@@ -219,23 +228,38 @@
     <Compile Include="Common\Structs\QueueNode.cs" />
     <Compile Include="Common\Structs\Stack.cs" />
     <Compile Include="Common\Structs\TreapNode.cs" />
+    <Compile Include="Common\Structs\UnBoundedTreeNode.cs" />
+    <Compile Include="Common\Utils\CmdHelper.cs" />
     <Compile Include="Common\Utils\CodeCounter.cs" />
+    <Compile Include="Common\Utils\ConfigUtils.cs" />
     <Compile Include="Common\Utils\DateTimeUtils.cs" />
+    <Compile Include="Common\Utils\DESHelper.cs" />
+    <Compile Include="Common\Utils\EnumHelper.cs" />
     <Compile Include="Common\Utils\FileUtils.cs" />
     <Compile Include="Common\Utils\GuidUtils.cs" />
     <Compile Include="Common\Utils\HashFunc.cs" />
     <Compile Include="Common\Utils\Logger.cs" />
+    <Compile Include="Common\Utils\OneRunner.cs" />
     <Compile Include="Common\Utils\ReflectionHelper.cs" />
     <Compile Include="Common\Utils\Retry.cs" />
     <Compile Include="Common\Utils\RetryDirectory.cs" />
     <Compile Include="Common\Utils\RetryFile.cs" />
+    <Compile Include="Common\Utils\SerializeHelper.cs" />
     <Compile Include="Common\Utils\Shell.cs" />
+    <Compile Include="Common\Utils\sockets\ClientHelper.cs" />
+    <Compile Include="Common\Utils\sockets\FTPclient.cs" />
+    <Compile Include="Common\Utils\sockets\MailHelper.cs" />
     <Compile Include="Common\Utils\sockets\SocketClient.cs" />
     <Compile Include="Common\Utils\sockets\SocketServer.cs" />
     <Compile Include="Common\Utils\sockets\TcpClientEx.cs" />
     <Compile Include="Common\Utils\sockets\TcpListenerEx.cs" />
-    <Compile Include="Common\Utils\SqlHelper.cs" />
+    <Compile Include="Common\Utils\sql\SqlHelper.cs" />
+    <Compile Include="Common\Utils\sql\SqliteHelper.cs" />
+    <Compile Include="Common\Utils\XMLHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
     <Compile Include="Common\Utils\StringExtension.cs" />
+    <Compile Include="Common\Utils\threads\SynchronizationHelper.cs" />
+    <Compile Include="Common\Utils\threads\TaskHelper.cs" />
     <Compile Include="Common\Utils\threads\ThreadPoolHelper.cs" />
     <Compile Include="Common\Utils\Utils.cs" />
     <Compile Include="OpenSourceLib\Utils\JsonHelper.cs" />
@@ -247,6 +271,7 @@
     <Content Include="Readme.txt" />
     <Content Include="Reference\MathNet.Numerics.dll" />
     <Content Include="Reference\Newtonsoft.Json.dll" />
+    <Content Include="Reference\System.Data.SQLite.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\ApproximationAlgorithm\" />

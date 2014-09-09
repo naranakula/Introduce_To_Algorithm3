@@ -91,7 +91,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             T tmp = arr[count - 1];
             arr[count - 1] = default(T);
             count--;
-            if(count/2>0 &&(arr.Length)/count>2)
+            if(count/2>2 &&(arr.Length)/count>2)
             {
                 Array.Resize(ref arr, arr.Length/2);
             }

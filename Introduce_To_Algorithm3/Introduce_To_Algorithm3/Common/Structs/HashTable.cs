@@ -77,6 +77,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             {
                 throw new Exception("can not find key");
             }
+
             int position = GetPosition(key);
             SingleListNode<K, V> results = arrs[position];
 
@@ -97,7 +98,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
                 before.Next = results.Next;
             }
             count--;
-            if (count >= 4 && arrs.Length / count > 4)
+            if (count >= 4 && arrs.Length / count > 8)
             {
                 SingleListNode<K, V>[] tmp = arrs;
                 arrs = new SingleListNode<K, V>[count];

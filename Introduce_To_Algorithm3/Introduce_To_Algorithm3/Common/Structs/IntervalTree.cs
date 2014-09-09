@@ -6,8 +6,12 @@ using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.Structs
 {
+    /// <summary>
+    /// we choose a red black tree in which each node x contains an interval x.interval and the key of x is low endpoint x.interval.Low.
+    /// </summary>
     public class IntervalTree
     {
+        #region Member
         /// <summary>
         /// the root of the tree
         /// </summary>
@@ -23,8 +27,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
             get { return count; }
         }
 
+        #endregion
+
+        #region Insert & Delete is the the as rbt
         /// <summary>
-        /// Red Black insert
+        /// Red Black insert. adds the element x, who has interval attribute.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="val"></param>
@@ -129,8 +136,6 @@ namespace Introduce_To_Algorithm3.Common.Structs
             root.Color = Color.BLACK;
         }
 
-
-
         /// <summary>
         /// left rotate 
         /// </summary>
@@ -199,9 +204,13 @@ namespace Introduce_To_Algorithm3.Common.Structs
             x.Parent = y;
         }
 
+        #endregion 
+
+        #region Search
 
         /// <summary>
         /// return a node which overlaps item
+        /// returns a pointer to an element x in the interval tree T such that x:int overlaps interval i , or a pointer to the sentinel T:nil if no such element
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -223,6 +232,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             return x;
         }
 
+        #endregion
 
     }
 }

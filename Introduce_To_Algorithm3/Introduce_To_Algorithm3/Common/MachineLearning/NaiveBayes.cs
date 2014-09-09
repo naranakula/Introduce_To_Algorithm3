@@ -49,7 +49,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         /// <param name="dataSet">每个项对应一个文档</param>
         /// <param name="classList">每个相对应文档的分类</param>
         /// <returns>tuple第一项为值是在某个类发生的情况下，单词出现的概率 ； tuple的第二项计算每个类出现的概率</returns>
-        public new Tuple<Dictionary<Tuple<string, int>, double>, Dictionary<string, double>> TrainBayes(
+        public  Tuple<Dictionary<Tuple<string, int>, double>, Dictionary<string, double>> TrainBayes(
             List<bool[]> dataSet, string[] classList)
         {
             //每个类出现的概率
@@ -111,7 +111,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         /// <param name="dataSet">每个项对应一个文档</param>
         /// <param name="classList">每个相对应文档的分类</param>
         /// <returns>tuple第一项为值是在某个类发生的情况下，单词出现的概率 ； tuple的第二项计算每个类出现的概率</returns>
-        public new Tuple<Dictionary<Tuple<string, int>, double>, Dictionary<string, double>> TrainBayesTuned(
+        public  Tuple<Dictionary<Tuple<string, int>, double>, Dictionary<string, double>> TrainBayesTuned(
             List<bool[]> dataSet, string[] classList)
         {
             //每个类出现的概率
@@ -275,7 +275,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
             return vector;
         }
 
-        public new Tuple<Dictionary<Tuple<string, int>, double>, Dictionary<string, double>> TrainBayes(
+        public Tuple<Dictionary<Tuple<string, int>, double>, Dictionary<string, double>> TrainBayes(
     List<int[]> dataSet, string[] classList)
         {
             //每个类出现的概率
@@ -332,7 +332,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         /// <param name="dataSet">每个项对应一个文档</param>
         /// <param name="classList">每个相对应文档的分类</param>
         /// <returns>tuple第一项为值是在某个类发生的情况下，单词出现的概率 ； tuple的第二项计算每个类出现的概率</returns>
-        public new Tuple<Dictionary<Tuple<string, int>, double>, Dictionary<string, double>> TrainBayesTuned(
+        public  Tuple<Dictionary<Tuple<string, int>, double>, Dictionary<string, double>> TrainBayesTuned(
             List<int[]> dataSet, string[] classList)
         {
             //每个类出现的概率

@@ -14,6 +14,8 @@ namespace Introduce_To_Algorithm3.Common.Structs
     public class BST<K, V> where K : IComparable<K>, IEquatable<K>
     {
 
+        #region Member
+
         protected int count;
         /// <summary>
         /// return the number in tree
@@ -26,6 +28,10 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// root of the tree
         /// </summary>
         protected TreeNode<K, V> root;
+
+        #endregion
+
+        #region TreeWalk
 
         /// <summary>
         /// inorder tree walk, O(n)  return a sorted result
@@ -172,6 +178,10 @@ namespace Introduce_To_Algorithm3.Common.Structs
             lists.Add(root);
         }
 
+        #endregion
+
+        #region Search & Min & Max & Precedessor & Successor
+
         /// <summary>
         /// runs at O(h) h is the high of tree
         /// </summary>
@@ -184,7 +194,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         private Tuple<K,V> Search(K key,TreeNode<K,V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             int i = root.Key.CompareTo(key);
 
             if(i == 0)
@@ -214,7 +228,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         private TreeNode<K, V> Search_(K key, TreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             int i = root.Key.CompareTo(key);
 
             if (i == 0)
@@ -248,7 +266,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         private Tuple<K,V> Minimum(TreeNode<K,V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             TreeNode<K, V> node = root;
 
             while (node.Left != null)
@@ -275,7 +297,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         private Tuple<K, V> Maximum(TreeNode<K,V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             TreeNode<K, V> node = root;
 
             while (node.Right != null)
@@ -435,7 +461,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
             return node==null?null:new Tuple<K, V>(node.Key, node.Value);
         }
 
+        #endregion
 
+        #region Insert & Delete
 
         /// <summary>
         /// insert 
@@ -506,6 +534,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
             }
         }
 
+        #endregion
+
+        #region Utils
 
         /// <summary>
         /// if a node is root node
@@ -567,8 +598,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
             }
         }
 
+        #endregion
 
-
+        #region Order
 
         /// <summary>
         /// select ith smallest element inorder 
@@ -579,8 +611,6 @@ namespace Introduce_To_Algorithm3.Common.Structs
         {
             return Select(root, i);
         }
-
-
 
         private TreeNode<K, V> Select(TreeNode<K,V> root,int i)
         {
@@ -629,5 +659,79 @@ namespace Introduce_To_Algorithm3.Common.Structs
         {
             return node == null ? 0 : node.Size;
         }
+
+        #endregion
+
+        #region Height
+
+        /// <summary>
+        /// get the height of rbt tree.  
+        /// it runs at O(n)
+        /// T(n) = 2T(n/2) + O(1)
+        /// define height as follow:
+        /// 1)if a node is null, its height is 0
+        /// 2) it a node has left or right child, its height is 1.(we treat its left & right children are null)
+        /// 3）height(node) = 1+ Max(    height(node.left), height(node.right)  )
+        /// </summary>
+        /// <returns></returns>
+        public int MaxHeight()
+        {
+            return MaxHeight(root);
+        }
+
+        /// <summary>
+        /// get the height of rbt tree
+        /// define height as follow:
+        /// 1)if a node is null, its height is 0
+        /// 2) it a node has left or right child, its height is 1.(we treat its left & right children are null)
+        /// 3）height(node) = 1+ Max(    height(node.left), height(node.right)  )
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private int MaxHeight(TreeNode<K, V> node)
+        {
+            if (node == null)
+            {
+                return 0;
+            }
+
+            return System.Math.Max(MaxHeight(node.Left), MaxHeight(node.Right)) + 1;
+        }
+
+        /// <summary>
+        /// get the height of rbt tree.  
+        /// it runs at O(n)
+        /// T(n) = 2T(n/2) + O(1)
+        /// define height as follow:
+        /// 1)if a node is null, its height is 0
+        /// 2) it a node has left or right child, its height is 1.(we treat its left & right children are null)
+        /// 3）height(node) = 1+ Min(    height(node.left), height(node.right)  )
+        /// </summary>
+        /// <returns></returns>
+        public int MinHeight()
+        {
+            return MinHeight(root);
+        }
+
+        /// <summary>
+        /// get the height of rbt tree
+        /// define height as follow:
+        /// 1)if a node is null, its height is 0
+        /// 2) it a node has left or right child, its height is 1.(we treat its left & right children are null)
+        /// 3）height(node) = 1+ Min(    height(node.left), height(node.right)  )
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private int MinHeight(TreeNode<K, V> node)
+        {
+            if (node == null)
+            {
+                return 0;
+            }
+
+            return System.Math.Min(MinHeight(node.Left), MinHeight(node.Right)) + 1;
+        }
+
+        #endregion
     }
 }

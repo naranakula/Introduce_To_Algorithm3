@@ -99,7 +99,7 @@ namespace Introduce_To_Algorithm3.Common.Sort
         /// heapsort: it runs in place and runs at n(lgn)
         /// </summary>
         /// <param name="arr"></param>
-        public static T[] Sort(T[] arr)
+        public static T[] Sort(params T[] arr)
         {
             if (arr == null || arr.Length <= 1)
             {
@@ -116,5 +116,6 @@ namespace Introduce_To_Algorithm3.Common.Sort
             }
             return arr;
         }
+
     }
 }

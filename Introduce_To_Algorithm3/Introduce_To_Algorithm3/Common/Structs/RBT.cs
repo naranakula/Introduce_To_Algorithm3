@@ -12,12 +12,17 @@ namespace Introduce_To_Algorithm3.Common.Structs
     /// 3)each leaf is black
     /// 4)if a node is  red, then both its children are black
     /// 5)For each node, all simple paths from the node to descendant leaves contain the same number of black nodes.
+    /// 
+    /// we alreay maintain the size attribute
     /// </summary>
     /// <typeparam name="K"></typeparam>
     /// <typeparam name="V"> </typeparam>
     public class RBT<K, V> where K : IComparable<K>, IEquatable<K>
     {
+        #region Member
+
         protected int count;
+
         /// <summary>
         /// return the number in tree
         /// </summary>
@@ -30,6 +35,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// </summary>
         protected RBTreeNode<K, V> root;
 
+        #endregion
+
+        #region TreeWalk
 
         /// <summary>
         /// inorder tree walk, O(n)  return a sorted result
@@ -38,7 +46,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         public List<Tuple<K, V>> InorderTreeWalk()
         {
             List<Tuple<K, V>> lists = new List<Tuple<K, V>>();
-            InorderTreeWalk(lists, root);
+            InorderTreeWalk(ref lists, root);
             return lists;
         }
 
@@ -47,12 +55,45 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// </summary>
         /// <param name="lists"></param>
         /// <param name="root"></param>
-        private void InorderTreeWalk(List<Tuple<K, V>> lists, RBTreeNode<K, V> root)
+        private void InorderTreeWalk(ref List<Tuple<K, V>> lists, RBTreeNode<K, V> root)
         {
-            if (root == null) return;
-            InorderTreeWalk(lists, root.Left);
+            if (root == null)
+            {
+                return;
+            }
+
+            InorderTreeWalk(ref lists, root.Left);
             lists.Add(new Tuple<K, V>(root.Key, root.Value));
-            InorderTreeWalk(lists, root.Right);
+            InorderTreeWalk(ref lists, root.Right);
+        }
+
+
+        /// <summary>
+        /// inorder tree walk, O(n)  return a sorted result
+        /// </summary>
+        /// <returns></returns>
+        public List<RBTreeNode<K,V>> InorderTreeWalk_()
+        {
+            List<RBTreeNode<K, V>> lists = new List<RBTreeNode<K, V>>();
+            InorderTreeWalk_(ref lists, root);
+            return lists;
+        }
+
+        /// <summary>
+        /// inorder tree walk
+        /// </summary>
+        /// <param name="lists"></param>
+        /// <param name="root"></param>
+        private void InorderTreeWalk_(ref List<RBTreeNode<K, V>> lists, RBTreeNode<K, V> root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            InorderTreeWalk_(ref lists, root.Left);
+            lists.Add(root);
+            InorderTreeWalk_(ref lists, root.Right);
         }
 
         /// <summary>
@@ -62,7 +103,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         public List<Tuple<K, V>> PreorderTreeWalk()
         {
             List<Tuple<K, V>> lists = new List<Tuple<K, V>>();
-            PreorderTreeWalk(lists, root);
+            PreorderTreeWalk(ref lists, root);
             return lists;
         }
 
@@ -71,12 +112,44 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// </summary>
         /// <param name="lists"></param>
         /// <param name="root"></param>
-        private void PreorderTreeWalk(List<Tuple<K, V>> lists, RBTreeNode<K, V> root)
+        private void PreorderTreeWalk(ref List<Tuple<K, V>> lists, RBTreeNode<K, V> root)
         {
-            if (root == null) return;
+            if (root == null)
+            {
+                return;
+            }
+
             lists.Add(new Tuple<K, V>(root.Key, root.Value));
-            PreorderTreeWalk(lists, root.Left);
-            PreorderTreeWalk(lists, root.Right);
+            PreorderTreeWalk(ref lists, root.Left);
+            PreorderTreeWalk(ref lists, root.Right);
+        }
+
+        /// <summary>
+        /// pre order walk tree O(n)
+        /// </summary>
+        /// <returns></returns>
+        public List<RBTreeNode<K,V>> PreorderTreeWalk_()
+        {
+            List<RBTreeNode<K, V>> lists = new List<RBTreeNode<K, V>>();
+            PreorderTreeWalk_(ref lists, root);
+            return lists;
+        }
+
+        /// <summary>
+        /// pre order walk tree
+        /// </summary>
+        /// <param name="lists"></param>
+        /// <param name="root"></param>
+        private void PreorderTreeWalk_(ref List<RBTreeNode<K, V>> lists, RBTreeNode<K, V> root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            lists.Add(root);
+            PreorderTreeWalk_(ref lists, root.Left);
+            PreorderTreeWalk_(ref lists, root.Right);
         }
 
         /// <summary>
@@ -86,7 +159,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         public List<Tuple<K, V>> PostorderTreeWalk()
         {
             List<Tuple<K, V>> lists = new List<Tuple<K, V>>();
-            PostorderTreeWalk(lists, root);
+            PostorderTreeWalk(ref lists, root);
             return lists;
         }
 
@@ -95,13 +168,49 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// </summary>
         /// <param name="lists"></param>
         /// <param name="treeNode"></param>
-        private void PostorderTreeWalk(List<Tuple<K, V>> lists, RBTreeNode<K, V> treeNode)
+        private void PostorderTreeWalk(ref List<Tuple<K, V>> lists, RBTreeNode<K, V> treeNode)
         {
-            if (root == null) return;
-            PostorderTreeWalk(lists, root.Left);
-            PostorderTreeWalk(lists, root.Right);
+            if (root == null)
+            {
+                return;
+            }
+
+            PostorderTreeWalk(ref lists, root.Left);
+            PostorderTreeWalk(ref lists, root.Right);
             lists.Add(new Tuple<K, V>(root.Key, root.Value));
         }
+
+        /// <summary>
+        /// post order walk tree runs at O(n)
+        /// </summary>
+        /// <returns></returns>
+        public List<RBTreeNode<K,V>> PostorderTreeWalk_()
+        {
+            List<RBTreeNode<K, V>> lists = new List<RBTreeNode<K, V>>();
+            PostorderTreeWalk_(ref lists, root);
+            return lists;
+        }
+
+        /// <summary>
+        /// post order walk tree
+        /// </summary>
+        /// <param name="lists"></param>
+        /// <param name="treeNode"></param>
+        private void PostorderTreeWalk_(ref List<RBTreeNode<K, V>> lists, RBTreeNode<K, V> treeNode)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            PostorderTreeWalk_(ref lists, root.Left);
+            PostorderTreeWalk_(ref lists, root.Right);
+            lists.Add(root);
+        }
+
+        #endregion
+
+        #region Search & Min & Max & Successor & Precedessor
 
         /// <summary>
         /// runs at O(h) h is the high of tree
@@ -115,7 +224,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         private Tuple<K, V> Search(K key, RBTreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             int i = root.Key.CompareTo(key);
 
             if (i == 0)
@@ -145,7 +258,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
         private RBTreeNode<K, V> Search_(K key, RBTreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             int i = root.Key.CompareTo(key);
 
             if (i == 0)
@@ -179,7 +296,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         private Tuple<K, V> Minimum(RBTreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             RBTreeNode<K, V> node = root;
 
             while (node.Left != null)
@@ -206,7 +327,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         private Tuple<K, V> Maximum(RBTreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             RBTreeNode<K, V> node = root;
 
             while (node.Right != null)
@@ -234,7 +359,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         private RBTreeNode<K, V> Minimum_(RBTreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             RBTreeNode<K, V> node = root;
 
             while (node.Left != null)
@@ -261,7 +390,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         private RBTreeNode<K, V> Maximum_(RBTreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
+
             RBTreeNode<K, V> node = root;
 
             while (node.Right != null)
@@ -282,7 +415,10 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         public RBTreeNode<K, V> Successor_(RBTreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
 
             if (root.Right != null)
             {
@@ -305,7 +441,10 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         public RBTreeNode<K, V> Predecessor_(RBTreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
 
             if (root.Left != null)
             {
@@ -329,7 +468,10 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <returns></returns>
         public Tuple<K, V> Successor(RBTreeNode<K, V> root)
         {
-            if (root == null) return null;
+            if (root == null)
+            {
+                return null;
+            }
 
             if (root.Right != null)
             {
@@ -369,6 +511,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
             return node == null ? null : new Tuple<K, V>(node.Key, node.Value);
         }
 
+        #endregion
+
+        #region Insert & Delete
 
         /// <summary>
         /// delete the node
@@ -376,11 +521,16 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <param name="node"></param>
         public void Delete(RBTreeNode<K, V> node)
         {
-            if (node == null) return;
+            if (node == null)
+            {
+                return;
+            }
+
             count--;
 
             //node x that moves into node y’s original position.
             //node y as the node either removed from the tree or moved within the tree.
+            //parent is the path where size need to minus 1
             RBTreeNode<K, V> y = node, x = null, parent = null;
             Color yOriginColor = y.Color;
             if (node.Left == null)
@@ -433,8 +583,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
             if (yOriginColor == Color.BLACK)
             {
-                // x can be null, if red, no violation of rbt
+                // x can be null. if y originColor red, no violation of rbt
                 // node x moves into node y’s original position
+                //we can sure here parent is the parent of x ,but because x can be null, we need to use parent as a parameter
                 DeleteFixUp(x, parent);
             }
             //if yOriginColor is red, then x is null and y is leaf node
@@ -454,7 +605,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             while (x != root && IsBlack(x))
             {
                 //if x is not root then the parent is not null
-                // x is double black
+                // x is double black & x can be null
                 if (x == parent.Left)
                 {
                     //since node x is double black, node w can not be null, because the number of blacks on simple path from x.p to the leaf w would be smaller than the the number on simple path from x.p to x.
@@ -467,6 +618,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
                         w = parent.Right;
                         //w still can not be null here
                     }
+
                     if (w != null && IsBlack(w.Left) && IsBlack(w.Right))
                     {
                         w.Color = Color.RED;
@@ -476,7 +628,8 @@ namespace Introduce_To_Algorithm3.Common.Structs
                     else if (w != null)
                     {
                         if (IsBlack(w.Right))
-                        {
+                        { 
+                            //w.left is red 
                             if (w.Left != null) w.Left.Color = Color.BLACK;
                             w.Color = Color.RED;
                             RightRotate(w);
@@ -549,7 +702,12 @@ namespace Introduce_To_Algorithm3.Common.Structs
             return !IsBlack(rBTreeNode);
         }
 
-
+        /// <summary>
+        /// When TRANSPLANT replaces the subtree rooted at node u with
+        /// the subtree rooted at node v , node u’s parent becomes node v’s parent, and u’s parent ends up having v as its appropriate child.
+        /// </summary>
+        /// <param name="u"></param>
+        /// <param name="v"></param>
         private void Transplant(RBTreeNode<K, V> u, RBTreeNode<K, V> v)
         {
             if (u.Parent == null)
@@ -564,6 +722,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             {
                 u.Parent.Right = v;
             }
+
             if (v != null)
             {
                 v.Parent = u.Parent;
@@ -689,6 +848,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <param name="x">x must have right child</param>
         private void LeftRotate(RBTreeNode<K, V> x)
         {
+            if (x.Right == null)
+            {
+                return;
+            }
+
             RBTreeNode<K, V> y = x.Right;
             x.Right = y.Left;
 
@@ -727,6 +891,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <param name="x">x must have left child</param>
         private void RightRotate(RBTreeNode<K, V> x)
         {
+            if (x.Left == null)
+            {
+                return;
+            }
+
             RBTreeNode<K, V> y = x.Left;
             x.Left = y.Right;
 
@@ -757,8 +926,9 @@ namespace Introduce_To_Algorithm3.Common.Structs
             x.Size = Size(x.Left) + Size(x.Right) + 1;
         }
 
+        #endregion
 
-
+        #region Order
 
         /// <summary>
         /// select ith smallest element in inorder walk sequence, start from 1
@@ -773,6 +943,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// <summary>
         /// select the ith smallest tree node in inorder tree walk sequence rooted at root.
         /// null if can't find one
+        /// it runs at O(lgn)
         /// </summary>
         /// <param name="root"></param>
         /// <param name="i"></param>
@@ -831,7 +1002,227 @@ namespace Introduce_To_Algorithm3.Common.Structs
             return node == null ? 0 : node.Size;
         }
 
+        #region Height
 
+        /// <summary>
+        /// get the height of rbt tree.  
+        /// it runs at O(n)
+        /// T(n) = 2T(n/2) + O(1)
+        /// define height as follow:
+        /// 1)if a node is null, its height is 0
+        /// 2) it a node has left or right child, its height is 1.(we treat its left & right children are null)
+        /// 3）height(node) = 1+ Max(    height(node.left), height(node.right)  )
+        /// </summary>
+        /// <returns></returns>
+        public int MaxHeight()
+        {
+            return MaxHeight(root);
+        }
 
+        /// <summary>
+        /// get the height of rbt tree
+        /// define height as follow:
+        /// 1)if a node is null, its height is 0
+        /// 2) it a node has left or right child, its height is 1.(we treat its left & right children are null)
+        /// 3）height(node) = 1+ Max(    height(node.left), height(node.right)  )
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private int MaxHeight(RBTreeNode<K, V> node)
+        {
+            if (node == null)
+            {
+                return 0;
+            }
+
+            return System.Math.Max(MaxHeight(node.Left), MaxHeight(node.Right)) + 1;
+        }
+
+        /// <summary>
+        /// get the height of rbt tree.  
+        /// it runs at O(n)
+        /// T(n) = 2T(n/2) + O(1)
+        /// define height as follow:
+        /// 1)if a node is null, its height is 0
+        /// 2) it a node has left or right child, its height is 1.(we treat its left & right children are null)
+        /// 3）height(node) = 1+ Min(    height(node.left), height(node.right)  )
+        /// </summary>
+        /// <returns></returns>
+        public int MinHeight()
+        {
+            return MinHeight(root);
+        }
+
+        /// <summary>
+        /// get the height of rbt tree
+        /// define height as follow:
+        /// 1)if a node is null, its height is 0
+        /// 2) it a node has left or right child, its height is 1.(we treat its left & right children are null)
+        /// 3）height(node) = 1+ Min(    height(node.left), height(node.right)  )
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private int MinHeight(RBTreeNode<K, V> node)
+        {
+            if (node == null)
+            {
+                return 0;
+            }
+
+            return System.Math.Min(MinHeight(node.Left), MinHeight(node.Right)) + 1;
+        }
+
+        /// <summary>
+        /// get the black height
+        /// the black height defined as follow:
+        /// 1)if node == null, blackHeight(node) = 0
+        /// 2)all the black node number from node(included) to its leaf
+        /// </summary>
+        /// <returns></returns>
+        public int BlackHeight()
+        {
+            return BlackHeight(root);
+        }
+
+        /// <summary>
+        /// get the black height.
+        /// the black height defined as follow:
+        /// 1)if node == null, blackHeight(node) = 0
+        /// 2)all the black node number from node(included) to its leaf
+        /// </summary>
+        /// <param name="rbTreeNode"></param>
+        /// <returns></returns>
+        private int BlackHeight(RBTreeNode<K, V> rbTreeNode)
+        {
+            int height = 0;
+
+            while (rbTreeNode != null)
+            {
+                if (rbTreeNode.Color == Color.BLACK)
+                {
+                    height++;
+                }
+
+                rbTreeNode = rbTreeNode.Left;
+            }
+
+            return height;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region TestUtil
+
+        /// <summary>
+        /// is the tree a real red black tree
+        /// </summary>
+        /// <returns></returns>
+        public bool IsRealRbt()
+        {
+            if (root == null)
+            {
+                return true;
+            }
+
+            List<RBTreeNode<K,V>> list = InorderTreeWalk_();
+
+            //root is black
+            if (!IsBlack(root))
+            {
+                return false;
+            }
+
+            //if a node is red, his children can't be black
+            foreach (RBTreeNode<K, V> rbTreeNode in list)
+            {
+                if (IsRed(rbTreeNode))
+                {
+                    if (IsRed(rbTreeNode.Left) || IsRed(rbTreeNode.Right))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// is size right
+        /// </summary>
+        /// <returns></returns>
+        public bool IsSizeAttributeRight()
+        {
+            List<RBTreeNode<K, V>> list = InorderTreeWalk_();
+
+            foreach (RBTreeNode<K, V> rbTreeNode in list)
+            {
+                if (Size(rbTreeNode) != Size(rbTreeNode.Left) + Size(rbTreeNode.Right) + 1)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Is count right
+        /// </summary>
+        /// <returns></returns>
+        public bool IsCountAttributeRight()
+        {
+            List<RBTreeNode<K, V>> list = InorderTreeWalk_();
+
+            return count == list.Count;
+        }
+
+        /// <summary>
+        ///   is        node.left.key  &lt;=  node.key  &lt;= node.right.key 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public bool IsTreeNode(RBTreeNode<K,V> node)
+        {
+            if (node == null)
+            {
+                return true;
+            }
+
+            if (node.Left != null && node.Left.Key.CompareTo(node.Key) > 0)
+            {
+                return false;
+            }
+
+            if (node.Right != null && node.Right.Key.CompareTo(node.Key) < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// is it a tree
+        /// </summary>
+        /// <returns></returns>
+        public bool IsTree()
+        {
+            List<RBTreeNode<K, V>> list = InorderTreeWalk_();
+
+            foreach (RBTreeNode<K, V> node in list)
+            {
+                if (!IsTreeNode(node))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }

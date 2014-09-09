@@ -45,8 +45,11 @@ namespace Introduce_To_Algorithm3.Common.Structs
                 head = tail = new QueueNode<T>(item);
                 return;
             }
-            tail.Next = new QueueNode<T>(item);
-            tail = tail.Next;
+            else
+            {
+                tail.Next = new QueueNode<T>(item);
+                tail = tail.Next;
+            }
         }
 
         /// <summary>
@@ -72,6 +75,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
             {
                 throw new Exception("queue underflow");
             }
+
             count--;
             T result = head.Key;
             if(IsEmpty)

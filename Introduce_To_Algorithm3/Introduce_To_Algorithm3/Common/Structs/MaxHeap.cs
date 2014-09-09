@@ -20,6 +20,8 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// the heap length
         /// </summary>
         private int heapSize;
+
+        #region Method
         /// <summary>
         /// The parent index of i
         /// </summary>
@@ -54,7 +56,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// get the index of first Leaf
         /// </summary>
         /// <returns></returns>
-        private int FirstLeaf()
+        public int FirstLeaf()
         {
             return heapSize / 2;
         }
@@ -75,12 +77,19 @@ namespace Introduce_To_Algorithm3.Common.Structs
             get { return heapSize; }
         }
 
+
+        public T[] GetData()
+        {
+            return arr;
+        }
+        #endregion
+
         /// <summary>
         /// lets the value at arr[i] “float down” in the max-heap so that the subtree rooted at index i obeys the max-heap property.
         /// it runs at O(lgn)
         /// </summary>
         /// <param name="i"></param>
-        private void Sink(int i)
+        public void Sink(int i)
         {
             int left = Left(i);
             int right = Right(i);
@@ -106,7 +115,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
         /// lets the value at arr[i] swim up so that themaxheap  obeys the max-heap property.
         /// </summary>
         /// <param name="i"></param>
-        private void Swimup(int i)
+        public void Swimup(int i)
         {
             while (i > 0 && arr[Parent(i)].CompareTo(arr[i]) < 0)
             {
@@ -213,5 +222,51 @@ namespace Introduce_To_Algorithm3.Common.Structs
 
             return tmp;
         }
+
+        /// <summary>
+        /// is heap is max heap
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="heapSize">the size of heap.  heapSize&lt;=arr.Length</param>
+        /// <returns></returns>
+        public static bool IsMaxHeap(T[] arr, int heapSize)
+        {
+            if (heapSize <= 1)
+            {
+                return true;
+            }
+
+            for (int i = 0; i < heapSize; i++)
+            {
+                int left = 2*i + 1;
+                int right = 2*i + 2;
+                if (left >= heapSize)
+                {
+                    break;
+                }
+
+                if (arr[i].CompareTo(arr[left]) < 0)
+                {
+                    return false;
+                }
+
+                if (right >= heapSize)
+                {
+                    break;
+                }
+
+                if (arr[i].CompareTo(arr[right]) < 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public BinaryHeap<T> ConvertTo()
+        {
+            return new BinaryHeap<T>(this);
+        } 
     }
 }

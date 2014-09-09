@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.Sort
@@ -18,7 +19,7 @@ namespace Introduce_To_Algorithm3.Common.Sort
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
-        public static  T[] Sort(T[] arr)
+        public static T[] Sort(T[] arr)
         {
             if (arr == null || arr.Length <= 1)
             {
@@ -34,7 +35,7 @@ namespace Introduce_To_Algorithm3.Common.Sort
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
-        public static  T[] SortPromote(T[] arr)
+        public static T[] SortPromote(T[] arr)
         {
             if (arr == null || arr.Length <= 1)
             {
@@ -53,7 +54,7 @@ namespace Introduce_To_Algorithm3.Common.Sort
         /// <param name="hi"></param>
         public static void Sort(T[] arr, int lo, int hi)
         {
-            if (arr == null || arr.Length <= 1 || hi<=lo)
+            if (arr == null || arr.Length <= 1 || hi <= lo)
             {
                 return;
             }
@@ -103,17 +104,19 @@ namespace Introduce_To_Algorithm3.Common.Sort
         {
             if (lo < hi)
             {
-                if(hi-lo<9)
+                if (hi - lo < 9)
                 {
                     InsertionSort<T>.Sort(arr, lo, hi);
                     return;
                 }
                 int q, k;
-                Partition3(arr, lo, hi,out q,out k);
+                Partition3(arr, lo, hi, out q, out k);
                 sortPromote(arr, lo, q - 1);
                 sortPromote(arr, k + 1, hi);
             }
         }
+
+        #region paetiton
 
         /// <summary>
         /// Divide A[p...r] into two part A[p...q-1] and [q+1...r] such that each element of A[p...q-1] is less than A[q] , which is ,in turn, less than or equal to each element of A[q+1....r]
@@ -122,20 +125,20 @@ namespace Introduce_To_Algorithm3.Common.Sort
         /// <param name="lo">you should guarantee the availabity of the index</param>
         /// <param name="hi"></param>
         /// <returns></returns>
-        public static  int Partition(T[] arr, int lo, int hi)
+        public static int Partition(T[] arr, int lo, int hi)
         {
             T tmp = arr[hi];
             //let hi as pivot. from low postion, find the one lower than the pivot and move it to low position
             int q = lo - 1;
             for (int i = lo; i < hi; i++)
             {
-                if(arr[i].CompareTo(tmp)<0)
+                if (arr[i].CompareTo(tmp) < 0)
                 {
                     q++;
-                    SortCommons<T>.Exchange(arr,q,i);
+                    SortCommons<T>.Exchange(arr, q, i);
                 }
             }
-            SortCommons<T>.Exchange(arr,q+1,hi);
+            SortCommons<T>.Exchange(arr, q + 1, hi);
             return q + 1;
         }
 
@@ -173,47 +176,83 @@ namespace Introduce_To_Algorithm3.Common.Sort
         /// <param name="q"> </param>
         /// <param name="k"> </param>
         /// <returns></returns>
-        public static void Partition3(T[] arr, int lo, int hi,out int q,out int k)
+        public static void Partition3(T[] arr, int lo, int hi, out int q, out int k)
         {
-            T tmp = arr[hi];
-            //let hi as pivot. from low postion, find the one lower than the pivot and move it to low position
-            q = lo - 1;
-            k = lo-1;
-            for (int i = lo; i < hi; i++)
+            q = lo;
+            k = hi;
+            T temp = arr[lo];
+            int i = lo;
+            while (i <= k)
             {
-                if (arr[i].CompareTo(tmp) < 0)
+                int cmp = arr[i].CompareTo(temp);
+                if (cmp < 0)
                 {
-                    q++;
-                    k++;
-                    SortCommons<T>.Exchange(arr, q, i);
+                    SortCommons<T>.Exchange(arr, q++, i++);
                 }
-                if(arr[i].CompareTo(tmp) == 0)
+                else if (cmp > 0)
                 {
-                    k++;
+                    SortCommons<T>.Exchange(arr, k--, i);
+                }
+                else
+                {
+                    i++;
                 }
             }
-            SortCommons<T>.Exchange(arr, q + 1, hi);
-            q++;
-            k++;
         }
 
+        /// <summary>
+        /// partition the subarray a[lo .. hi] by returning an index j. so that a[lo .. j-1] <= a[j] <= a[j+1 .. hi]
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="lo"></param>
+        /// <param name="hi"></param>
+        /// <returns></returns>
+        public static int Partition4(T[] a, int lo, int hi)
+        {
+            int i = lo;
+            int j = hi + 1;
+            T v = a[lo];
+            while (true)
+            {
 
+                // find item on lo to swap
+                //找到第一个比lo大的元素位置
+                while (a[++i].CompareTo(v) <= 0)
+                    if (i == hi) break;
+
+                // find item on hi to swap
+                while (v.CompareTo(a[--j]) <= 0)
+                    if (j == lo) break;      // redundant since a[lo] acts as sentinel
+
+                // check if pointers cross
+                if (i >= j) break;
+
+                SortCommons<T>.Exchange(a, i, j);
+            }
+
+            // put v = a[j] into position
+            SortCommons<T>.Exchange(a, lo, j);
+
+            // with a[lo .. j-1] <= a[j] <= a[j+1 .. hi]
+            return j;
+        }
+        #endregion
 
         /// <summary>
         /// Rearrange the array,so the result is random
         /// </summary>
         /// <param name="arr"></param>
-        public static  void RandomRearrange(T[] arr)
+        public static void RandomRearrange(T[] arr)
         {
-            if(arr == null || arr.Length <= 1)
+            if (arr == null || arr.Length <= 1)
             {
                 return;
             }
             Random rand = new Random();
-            for(int i=0;i<arr.Length-1;i++)
+            for (int i = 0; i < arr.Length - 1; i++)
             {
                 int index = rand.Next(i, arr.Length);
-                SortCommons<T>.Exchange(arr,i,index);
+                SortCommons<T>.Exchange(arr, i, index);
             }
         }
     }

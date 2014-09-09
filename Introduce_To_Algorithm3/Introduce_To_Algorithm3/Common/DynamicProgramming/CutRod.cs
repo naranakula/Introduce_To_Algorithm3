@@ -9,13 +9,18 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
     {
         /// <summary>
         /// it runs at O(2^n)
+        /// because there are (2^n) ways to cut a rod
         /// </summary>
         /// <param name="p">p[i] is the price for rod of length i.if no price at position i, p[i] = 0</param>
         /// <param name="n">a rod of length n</param>
         /// <returns>cut a rod of length n and return the max revenue</returns>
         public static int Cut_Rod(int[] p,int n)
         {
-            if (n <= 0) return 0;
+            if (n <= 0)
+            {
+                return 0;
+            }
+
             int max = int.MinValue;
 
             for(int i=1;i<=n;i++)
