@@ -61,8 +61,6 @@ namespace Introduce_To_Algorithm3.Common.GreedyAlgorithm
         }
         #endregion
 
-
-
         #region greedy
 
         /// <summary>
@@ -126,6 +124,10 @@ namespace Introduce_To_Algorithm3.Common.GreedyAlgorithm
             return (activity1.FinishTime > activity2.BeginTime && activity1.BeginTime < activity2.FinishTime);
         }
 
+        public static bool Compatiable(Activity activity1, Activity activity2)
+        {
+            return !Overlap(activity1, activity2);
+        }
 
         public int CompareTo(Activity other)
         {

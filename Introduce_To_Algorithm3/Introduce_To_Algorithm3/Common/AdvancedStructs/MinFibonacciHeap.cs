@@ -12,7 +12,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
     ///     D(n) represents the maximum degree of any node in n-node fibonacci heap
     ///     it's Extractmin and delete runs at O(lgn) insert  minimum union decrease runs at O(1)
     /// </summary>
-    public class FibonacciHeap<K, V> where K : IComparable<K>, IEquatable<K>
+    public class MinFibonacciHeap<K, V> where K : IComparable<K>, IEquatable<K>
     {
         #region member
 
@@ -27,7 +27,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         public int Count { get; protected set; }
 
 
-        public FibonacciHeap()
+        public MinFibonacciHeap()
         {
             Count = 0;
             minRoot = null;
@@ -110,12 +110,12 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         /// <param name="h1"></param>
         /// <param name="h2"></param>
         /// <returns></returns>
-        public static FibonacciHeap<K, V> Union(FibonacciHeap<K, V> h1, FibonacciHeap<K, V> h2)
+        public static MinFibonacciHeap<K, V> Union(MinFibonacciHeap<K, V> h1, MinFibonacciHeap<K, V> h2)
         {
             if (h1 == null || h1.minRoot == null) return h2;
             if (h2 == null || h2.minRoot == null) return h1;
 
-            var heap = new FibonacciHeap<K, V>();
+            var heap = new MinFibonacciHeap<K, V>();
             heap.minRoot = h1.minRoot;
             if (h1.minRoot.Key.CompareTo(h2.minRoot.Key) > 0)
             {
@@ -138,9 +138,9 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         ///     union
         /// </summary>
         /// <param name="heap"></param>
-        public void Union(FibonacciHeap<K, V> heap)
+        public void Union(MinFibonacciHeap<K, V> heap)
         {
-            FibonacciHeap<K, V> h = Union(this, heap);
+            MinFibonacciHeap<K, V> h = Union(this, heap);
             Count = h.Count;
             minRoot = h.minRoot;
         }

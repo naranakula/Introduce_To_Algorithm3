@@ -92,7 +92,8 @@
     <Compile Include="Common\AdvancedStructs\BPlusTree.cs" />
     <Compile Include="Common\AdvancedStructs\BStarTree.cs" />
     <Compile Include="Common\AdvancedStructs\DisjointSet.cs" />
-    <Compile Include="Common\AdvancedStructs\FibonacciHeap.cs" />
+    <Compile Include="Common\AdvancedStructs\MaxFibonacciHeap.cs" />
+    <Compile Include="Common\AdvancedStructs\MinFibonacciHeap.cs" />
     <Compile Include="Common\AdvancedStructs\FibonacciHeapNode.cs" />
     <Compile Include="Common\AdvancedStructs\ProtovEB.cs" />
     <Compile Include="Common\AdvancedStructs\VanEmdeBoasTree.cs" />

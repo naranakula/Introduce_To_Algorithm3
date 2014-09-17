@@ -12,7 +12,8 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
         /// p represents A0A1.....An  matrix multiply
         /// m[i,j] = the cost of  AiAi+1....Aj
         /// 
-        /// m[i,j] = 0, if i=j,  m[i,j] = min{ m[i,k]+m[k+1,j]+Pi-1PkPj }, if i<j
+        /// m[i,j] = 0, if i=j,  m[i,j] = min{ m[i,k]+m[k+1,j]+Pi-1PkPj }, if i&lt;j
+
         /// </summary>
         /// <param name="p"></param>
         /// <param name="s"></param>
