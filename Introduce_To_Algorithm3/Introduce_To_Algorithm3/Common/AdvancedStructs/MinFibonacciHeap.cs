@@ -5,7 +5,7 @@ using System.Dynamic;
 namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 {
     /// <summary>
-    ///     A fibonacci heap is a collection of rooted tree that are min-heap ordered
+    ///     A min fibonacci heap is a collection of rooted tree that are min-heap ordered
     ///     we define the potential of Fibonacci heap φ(H) = t(H)+2m(H)
     ///     t(H) the number of tree in the root list
     ///     m(H) the number of marked nodes in H
@@ -15,6 +15,7 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
     public class MinFibonacciHeap<K, V> where K : IComparable<K>, IEquatable<K>
     {
         #region member
+
 
         /// <summary>
         ///     the root of fibonacci heap & it is a min heap
