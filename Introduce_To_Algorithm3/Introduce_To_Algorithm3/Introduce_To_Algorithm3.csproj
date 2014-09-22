@@ -56,6 +56,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Introduce_To_Algorithm3.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -255,7 +258,6 @@
     <Compile Include="Common\Utils\sockets\TcpClientEx.cs" />
     <Compile Include="Common\Utils\sockets\TcpListenerEx.cs" />
     <Compile Include="Common\Utils\sql\SqlHelper.cs" />
-    <Compile Include="Common\Utils\sql\SqliteHelper.cs" />
     <Compile Include="Common\Utils\XMLHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
     <Compile Include="Common\Utils\StringExtension.cs" />

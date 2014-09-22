@@ -334,6 +334,108 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
 
         #endregion
 
+        #region Increase
+
+
+        /// <summary>
+        /// it runs at O(1) amortized
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="newKey"></param>
+        public void IncreaseKey(FibonacciHeapNode<K, V> x, K newKey)
+        {
+            if (newKey.CompareTo(x.Key) < 0)
+            {
+                throw new Exception("new key is smaller than current key");
+            }
+
+            if (newKey.CompareTo(x.Key) == 0)
+            {
+                return;
+            }
+
+
+            x.Key = newKey;
+            FibonacciHeapNode<K, V> y = x.Parent;
+            if (y != null && x.Key.CompareTo(y.Key) > 0)
+            {
+                //move x from y to root list
+                Cut(x, y);
+                CascadingCut(y);
+            }
+
+            if (x.Key.CompareTo(maxRoot.Key) > 0)
+            {
+                maxRoot = x;
+            }
+        }
+
+        private void CascadingCut(FibonacciHeapNode<K, V> node)
+        {
+            FibonacciHeapNode<K, V> parent = node.Parent;
+            if (parent != null)
+            {
+                if (node.Mark == false)
+                {
+                    //cut the first child
+                    node.Mark = true;
+                }
+                else
+                {
+                    //cut two children from parent
+                    Cut(node, parent);
+                    CascadingCut(parent);
+                }
+            }
+        }
+
+        /// <summary>
+        /// move x from y to root list 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        private void Cut(FibonacciHeapNode<K, V> x, FibonacciHeapNode<K, V> y)
+        {
+            y.Degree--;
+
+            if (x.LeftSibling == x)
+            {
+                y.Child = null;
+            }
+            else
+            {
+                x.LeftSibling.RightSibling = x.RightSibling;
+                x.RightSibling.LeftSibling = x.LeftSibling;
+            }
+
+            // add x to the root list
+            FibonacciHeapNode<K, V> t = maxRoot.RightSibling;
+            maxRoot.RightSibling = x;
+            x.LeftSibling = maxRoot;
+            x.RightSibling = t;
+            t.LeftSibling = x;
+            x.Parent = null;
+            x.Mark = false;
+        }
+
+        #endregion
+
+        #region Delete
+
+        /// <summary>
+        /// it runs at O(D(n)) amortized time. D(n) is maximum degree, which O(lgn)
+        /// </summary>
+        /// <param name="node">the node to delete</param>
+        /// <param name="max">the max value so that we can increase the node to the root</param>
+        public void Delete(FibonacciHeapNode<K, V> node, K max)
+        {
+            IncreaseKey(node, max);
+            ExtractMax();
+        }
+
+
+        #endregion
+
         #region IsEmpty
 
         public bool IsEmpty
