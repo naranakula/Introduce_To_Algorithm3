@@ -209,6 +209,7 @@
     <Compile Include="Common\Structs\BinaryHeap.cs" />
     <Compile Include="Common\Structs\BST.cs" />
     <Compile Include="Common\Structs\Deque.cs" />
+    <Compile Include="Common\Structs\DirectAddressingTable.cs" />
     <Compile Include="Common\Structs\DoubleLinkedList.cs" />
     <Compile Include="Common\Structs\HashTable.cs" />
     <Compile Include="Common\Structs\HashTableOpenAddressing.cs" />
