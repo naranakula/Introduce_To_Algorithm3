@@ -223,6 +223,10 @@
     <Compile Include="Common\Structs\SBT.cs" />
     <Compile Include="Common\Structs\SingleLinkedList.cs" />
     <Compile Include="Common\Structs\SingleListNode.cs" />
+    <Compile Include="Common\Structs\SkipList.cs" />
+    <Compile Include="Common\Structs\SkipListNode.cs" />
+    <Compile Include="Common\Structs\SortedDoubleLinkedList.cs" />
+    <Compile Include="Common\Structs\SortedSkipLinkedList.cs" />
     <Compile Include="Common\Structs\SplayNode.cs" />
     <Compile Include="Common\Structs\SplayTree.cs" />
     <Compile Include="Common\Structs\Treap.cs" />

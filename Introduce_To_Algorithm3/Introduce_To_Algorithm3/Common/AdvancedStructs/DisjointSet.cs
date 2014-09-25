@@ -123,11 +123,11 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
         }
         #endregion
 
-
         #region disjoint set forest
 
 
 
         #endregion
+
     }
 }

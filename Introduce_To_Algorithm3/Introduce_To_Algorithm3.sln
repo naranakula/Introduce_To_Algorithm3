@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Introduce_To_Algorithm3", "Introduce_To_Algorithm3\Introduce_To_Algorithm3.csproj", "{5608DDAE-D5E8-49D4-8D39-8AFAEC2BF6BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Introduce_To_Algorithm3Tests", "Introduce_To_Algorithm3Tests\Introduce_To_Algorithm3Tests.csproj", "{22C7563B-25E3-4A56-99D2-6EB844A1759A}"

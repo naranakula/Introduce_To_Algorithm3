@@ -24,6 +24,8 @@ namespace Introduce_To_Algorithm3
                 CodeCounter.GetCodeLines(
                     @"C:\Users\chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3"));
 
+
+
             #region
             /*
             string connstring = @"User ID=sa;Initial Catalog=SFIDS;Data Source=chlu-pc\CHLU;Password=558276344";
@@ -191,7 +193,7 @@ namespace Introduce_To_Algorithm3
             #endregion
 
             #region app
-
+/*
             string appName = @"小说阅读器";
             string description = @"小说阅读器";
 
@@ -216,7 +218,7 @@ namespace Introduce_To_Algorithm3
 
 
             helper.ExecuteNonQuery(sql,CommandType.Text,parameters);
-
+            */
             #endregion
         }
     }

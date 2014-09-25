@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.Structs
 {
-    public class LinkedListNode<T>where T:IComparable<T>
+    public class LinkedListNode<T>where T:IComparable<T>,IEquatable<T>
     {
         public T Key;
 
@@ -29,7 +29,7 @@ namespace Introduce_To_Algorithm3.Common.Structs
     /// </summary>
     /// <typeparam name="K">the type of key</typeparam>
     /// <typeparam name="V">the type of value</typeparam>
-    public class LinkedListNode<K, V> where K : IComparable<K>
+    public class LinkedListNode<K, V> where K : IComparable<K>,IEquatable<K>
     {
         public K Key;
         public V Value;

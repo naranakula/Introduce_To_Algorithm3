@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Introduce_To_Algorithm3.Common.Structs
 {
-    public class DoubleLinkedList<T> where T:IComparable<T>
+    public class DoubleLinkedList<T> where T:IComparable<T>,IEquatable<T>
     {
         /// <summary>
         /// head of linkedlist
@@ -95,6 +95,17 @@ namespace Introduce_To_Algorithm3.Common.Structs
             {
                 node.Next.Prev = node.Prev;
             }
+        }
+
+        /// <summary>
+        /// delete from list
+        /// </summary>
+        /// <param name="key"></param>
+        public void Delete(T key)
+        {
+            var node = Search(key);
+            
+            Delete(node);
         }
 
     }

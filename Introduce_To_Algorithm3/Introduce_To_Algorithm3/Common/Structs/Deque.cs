@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Introduce_To_Algorithm3.Common.Structs
 {
-    public class Deque<T> where T:IComparable<T>
+    public class Deque<T> where T:IComparable<T>,IEquatable<T>
     {
         private LinkedListNode<T> head;
         private LinkedListNode<T> tail;
