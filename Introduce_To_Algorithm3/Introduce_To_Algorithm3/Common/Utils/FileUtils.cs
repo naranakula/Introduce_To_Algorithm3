@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -367,6 +368,44 @@ namespace Introduce_To_Algorithm3.Common.Utils
             XmlSerializer serializer = new XmlSerializer(type);
             using (StreamReader reader = new StreamReader(xmlFile, Encoding.Unicode))
                 return serializer.Deserialize(reader);
+        }
+
+        /// <summary>
+        /// delete empty directory recursively
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        private static void DeleteEmptyDirectoryRecursively(string dir,ref List<string> list)
+        {
+            if (!Directory.Exists(dir))
+            {
+                return;
+            }
+
+            DirectorySecurity ds = Directory.GetAccessControl(dir);
+
+            foreach (string s in Directory.GetDirectories(dir,"*",SearchOption.TopDirectoryOnly))
+            {
+                DeleteEmptyDirectoryRecursively(s, ref list);
+            }
+
+            if (Directory.GetFileSystemEntries(dir).Length == 0)
+            {
+                list.Add(dir);
+                Directory.Delete(dir);
+            }
+        }
+
+        /// <summary>
+        /// delete empty directory recursively
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        public static List<string> DeleteEmptyDirectoryRecursively(string dir)
+        {
+            List<string> list = new List<string>();
+            DeleteEmptyDirectoryRecursively(dir, ref list);
+            return list;
         }
     }
 }

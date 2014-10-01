@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using Com.Utility.Commons;
 using Introduce_To_Algorithm3.Common.AdvancedStructs;
@@ -24,7 +25,7 @@ namespace Introduce_To_Algorithm3
                 CodeCounter.GetCodeLines(
                     @"C:\Users\chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3"));
 
-
+            Console.WriteLine((5-3.3)/3.3);
 
             #region
             /*
@@ -220,6 +221,53 @@ namespace Introduce_To_Algorithm3
             helper.ExecuteNonQuery(sql,CommandType.Text,parameters);
             */
             #endregion
+
+            #region Delete Empty Directory
+
+
+            //string dir = @"E:\BaiduYunDownload";
+
+            //List<string> list = FileUtils.DeleteEmptyDirectoryRecursively(dir);
+            //list.ForEach(Console.WriteLine);
+            #endregion
+
+            #region utf-8
+
+            //string dir = @"E:\svn\docs\webdocs\webdocs\docs";
+
+            //foreach (var file in Directory.GetFiles(dir,"*.html",SearchOption.AllDirectories))
+            //{
+            //    File.WriteAllText(file,File.ReadAllText(file),Encoding.UTF8);
+            //}
+
+            #endregion
+
+            #region books
+
+//            string connstring = @"User ID=sa;Initial Catalog=Books;Data Source=chlu-pc\CHLU;Password=558276344";
+//            SqlHelper helper = SqlHelper.GetInstance(connstring);
+//            string sql = @"INSERT INTO [Books].[dbo].[book]
+//           ([Id]
+//           ,[Name]
+//           ,[PageNum]
+//           ,[CreateTime])
+//     VALUES
+//           (@Id
+//           ,@Name
+//           ,@PageNum
+//           ,@CreateTime)";
+
+//            SqlParameter[] parameters = new SqlParameter[4];
+//            parameters[0] = new SqlParameter("@Id", SqlDbType.UniqueIdentifier) { Value = Guid.NewGuid() };
+//            parameters[1] = new SqlParameter("@Name", SqlDbType.NVarChar) { Value = "beginning java 8 fundamental" };
+//            parameters[2] = new SqlParameter("@PageNum", SqlDbType.NVarChar) { Value = 11 };
+//            parameters[3] = new SqlParameter("@CreateTime", SqlDbType.DateTime) { Value = DateTime.Now };
+
+
+//            helper.ExecuteNonQuery(sql, CommandType.Text, parameters);
+
+            #endregion
         }
+
     }
 }

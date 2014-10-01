@@ -66,6 +66,12 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                     if (set1 != null && set2 != null)
                         break;
                 }
+
+                if (set1 == set2)
+                {
+                    continue;
+                }
+
                 lists.Remove(set1);
                 lists.Remove(set2);
                 set1.UnionWith(set2);
@@ -113,6 +119,12 @@ namespace Introduce_To_Algorithm3.Common.AdvancedStructs
                     if (set1 != null && set2 != null)
                         break;
                 }
+
+                if (set1 == set2)
+                {
+                    continue;
+                }
+
                 lists.Remove(set1);
                 lists.Remove(set2);
                 set1.UnionWith(set2);
