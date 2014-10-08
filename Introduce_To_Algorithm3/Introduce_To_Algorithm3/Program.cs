@@ -25,7 +25,7 @@ namespace Introduce_To_Algorithm3
                 CodeCounter.GetCodeLines(
                     @"C:\Users\chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3"));
 
-            Console.WriteLine((5-3.3)/3.3);
+            Console.WriteLine((5-3.4)/3.4);
 
             #region
             /*
@@ -259,8 +259,8 @@ namespace Introduce_To_Algorithm3
 
 //            SqlParameter[] parameters = new SqlParameter[4];
 //            parameters[0] = new SqlParameter("@Id", SqlDbType.UniqueIdentifier) { Value = Guid.NewGuid() };
-//            parameters[1] = new SqlParameter("@Name", SqlDbType.NVarChar) { Value = "beginning java 8 fundamental" };
-//            parameters[2] = new SqlParameter("@PageNum", SqlDbType.NVarChar) { Value = 11 };
+//            parameters[1] = new SqlParameter("@Name", SqlDbType.NVarChar) { Value = "pro entity framework 4.0" };
+//            parameters[2] = new SqlParameter("@PageNum", SqlDbType.NVarChar) { Value = 1 };
 //            parameters[3] = new SqlParameter("@CreateTime", SqlDbType.DateTime) { Value = DateTime.Now };
 
 
@@ -268,6 +268,5 @@ namespace Introduce_To_Algorithm3
 
             #endregion
         }
-
     }
 }

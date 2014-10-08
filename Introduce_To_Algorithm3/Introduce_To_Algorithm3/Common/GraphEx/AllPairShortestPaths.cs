@@ -39,7 +39,8 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
             {
                 for (int j = 0; j < n; j++)
                 {
-                    weights[i, j] = i==j?0:double.PositiveInfinity;
+                    //for simplicity，no deal with PositiveInfinity+something
+                    weights[i, j] = i==j?0:double.PositiveInfinity/2;
                 }
             }
         }

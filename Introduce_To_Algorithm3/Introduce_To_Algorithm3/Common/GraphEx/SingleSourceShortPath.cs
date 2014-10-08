@@ -38,7 +38,8 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
             distTo = new double[g.V];
             for (int i = 0; i < g.V; i++)
             {
-                distTo[i] = double.PositiveInfinity;
+                //for simplicity， we don't init to positiveInfinity, because of overflow.
+                distTo[i] = double.PositiveInfinity/2;
             }
 
             distTo[source] = 0;

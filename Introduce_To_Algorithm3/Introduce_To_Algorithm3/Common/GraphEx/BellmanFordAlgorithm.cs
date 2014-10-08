@@ -32,7 +32,7 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
                 }
             }
 
-            //assume this is negative cycle (v0,v1,...vk) vk=v0. then there must be at least one distTo[e.To] < distTo[e.From] + e.Weight
+            //assume this is negative cycle (v0,v1,...vk) vk=v0. then there must be at least one distTo[e.To] > distTo[e.From] + e.Weight
             if (edges.Any(e => distTo[e.To] > distTo[e.From] + e.Weight))
             {
                 IsNegativeCycle = true;

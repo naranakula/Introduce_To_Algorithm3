@@ -44,6 +44,7 @@ namespace Introduce_To_Algorithm3.Common.GraphEx
                 }
                 else
                 {
+                    //this will never used
                     pq.Insert(w,distTo[w]);
                 }
             }
