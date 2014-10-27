@@ -25,7 +25,7 @@ namespace Introduce_To_Algorithm3
                 CodeCounter.GetCodeLines(
                     @"C:\Users\chlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3"));
 
-            Console.WriteLine((5-3.4)/3.4);
+            Console.WriteLine((1-0.64)/0.64);
 
             #region
             /*
