@@ -263,6 +263,7 @@
     <Compile Include="Common\Utils\sockets\SocketServer.cs" />
     <Compile Include="Common\Utils\sockets\TcpClientEx.cs" />
     <Compile Include="Common\Utils\sockets\TcpListenerEx.cs" />
+    <Compile Include="Common\Utils\sql\EFHelper.cs" />
     <Compile Include="Common\Utils\sql\SqlHelper.cs" />
     <Compile Include="Common\Utils\XMLHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
