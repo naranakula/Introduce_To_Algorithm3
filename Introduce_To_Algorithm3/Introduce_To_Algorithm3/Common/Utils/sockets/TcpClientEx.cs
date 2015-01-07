@@ -138,5 +138,148 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         }
 
         #endregion
+
+        #region send
+
+        /// <summary>
+        /// 发送消息，如果发送失败抛出异常抛出异常
+        /// </summary>
+        /// <param name="msg"></param>
+        public void Send(string msg,Encoding encoding)
+        {
+            if (msg == null)
+            {
+                msg = string.Empty;
+            }
+
+            byte[] bytes = encoding.GetBytes(msg);
+            tcpClient.GetStream().Write(bytes, 0, bytes.Length);
+        }
+
+        /// <summary>
+        /// 发送消息，如果发送失败也不抛出异常
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public bool SendSafe(string msg,Encoding encoding)
+        {
+            try
+            {
+                Send(msg,encoding);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region receive
+
+        /// <summary>
+        /// 终止符
+        /// </summary>
+        private byte[] terminator;
+
+
+        #region buffer
+
+        /// <summary>
+        /// the buffer to receive
+        /// </summary>
+        private byte[] buffer;
+
+        /// <summary>
+        /// 接收到数据的offset
+        /// </summary>
+        private int offset;
+
+        #endregion
+        /// <summary>
+        /// 接收数据
+        /// </summary>
+        /// <returns>true, 如果解析了包；false,如果解析失败</returns>
+        public Tuple<bool, string> receive(Encoding encoding)
+        {
+            try
+            {
+                offset = 0;
+                NetworkStream stream = tcpClient.GetStream();
+                Tuple<bool, int> tuple = null;
+                while (true)
+                {
+                    int count = stream.Read(buffer, offset, buffer.Length - offset);
+
+                    offset += count;
+                    tuple = search();
+                    if (tuple.Item1)
+                    {
+                        //找到了完整包
+                        break;
+                    }
+                    else if (offset >= buffer.Length)
+                    {
+                        //buffer满了，为了防止内存占用过多和攻击，放弃解析本包
+                        break;
+                    }
+                }
+
+                if (tuple.Item1)
+                {
+                    return new Tuple<bool, string>(true, encoding.GetString(buffer, 0, tuple.Item2));
+                }
+                else
+                {
+                    return new Tuple<bool, string>(false, string.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                //this.lastException = ex;
+                return new Tuple<bool, string>(false, string.Empty);
+            }
+        }
+
+        /// <summary>
+        /// 在接收到的buffer中查找终止符
+        /// </summary>
+        /// <returns>true,如果找到，其结束位置为第二个参数；false如果未找到，第二个参数没有意义</returns>
+        private Tuple<bool, int> search()
+        {
+            for (int i = 0; i < offset; i++)
+            {
+                if (buffer[i] == terminator[0])
+                {
+                    bool isSame = true;
+
+                    for (int j = 0; j < terminator.Length; j++)
+                    {
+                        if ((i + j) >= offset)
+                        {
+                            //超出边界，不可能相同，返回false
+                            return new Tuple<bool, int>(false, 0);
+                        }
+                        //对应位置不相等,i不是要查找的位置，退出循环
+                        if (buffer[i + j] != terminator[j])
+                        {
+                            isSame = false;
+                            break;
+                        }
+                    }
+                    //找到索引位置
+                    if (isSame)
+                    {
+                        return new Tuple<bool, int>(true, i);
+                    }
+                }
+            }
+
+            return new Tuple<bool, int>(false, 0);
+        }
+
+
+        #endregion
     }
 }
