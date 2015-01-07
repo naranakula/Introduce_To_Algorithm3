@@ -249,6 +249,7 @@
     <Compile Include="Common\Utils\GuidUtils.cs" />
     <Compile Include="Common\Utils\HashFunc.cs" />
     <Compile Include="Common\Utils\Logger.cs" />
+    <Compile Include="Common\Utils\ObjectXmlSerializer.cs" />
     <Compile Include="Common\Utils\OneRunner.cs" />
     <Compile Include="Common\Utils\ReflectionHelper.cs" />
     <Compile Include="Common\Utils\Retry.cs" />
