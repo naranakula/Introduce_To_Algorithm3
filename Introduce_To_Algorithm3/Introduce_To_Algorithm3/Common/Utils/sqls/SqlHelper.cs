@@ -141,7 +141,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
                     {
                         foreach (SqlParameter parameter in parameters)
                         {
-                            command.Parameters.Add(parameter);
+                            if (parameter != null)
+                            {
+                                command.Parameters.Add(parameter);
+                            }
                         }
                     }
                     connection.Open();
@@ -191,7 +194,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
                     {
                         foreach (SqlParameter parameter in parameters)
                         {
-                            command.Parameters.Add(parameter);
+                            if (parameter != null)
+                            {
+                                command.Parameters.Add(parameter);
+                            }
                         }
                     }
                     SqlDataAdapter adapter = new SqlDataAdapter(command);
@@ -239,11 +245,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
                     command.CommandType = commandType;
                     if (parameters != null)
                     {
-                        //clear是为了调试使用
-                        command.Parameters.Clear();
                         foreach (SqlParameter parameter in parameters)
                         {
-                            command.Parameters.Add(parameter);
+                            if (parameter != null)
+                            {
+                                command.Parameters.Add(parameter);
+                            }
                         }
                     }
                     SqlDataAdapter adapter = new SqlDataAdapter(command);
@@ -351,7 +358,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
                     {
                         foreach (SqlParameter parameter in parameters)
                         {
-                            command.Parameters.Add(parameter);
+                            if (parameter != null)
+                            {
+                                command.Parameters.Add(parameter);
+                            }
                         }
                     }
                     connection.Open();
