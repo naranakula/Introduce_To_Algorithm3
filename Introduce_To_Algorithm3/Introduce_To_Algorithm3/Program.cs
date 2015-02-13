@@ -13,6 +13,7 @@ using Introduce_To_Algorithm3.Common.MachineLearning;
 using Introduce_To_Algorithm3.Common.Math;
 using Introduce_To_Algorithm3.Common.Structs;
 using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.Common.Utils.threads;
 using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Introduce_To_Algorithm3
@@ -21,9 +22,14 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            String dir = @"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3";
-            int count = CodeCounter.GetCodeLines(dir, "*.cs");
-            Console.WriteLine(count);
+            DateTime before = DateTime.Now;
+            Timer timer = TimerUtils.StartTimer(obj =>
+            {
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId + "        " + (DateTime.Now - before));
+                before = DateTime.Now;
+                Thread.Sleep(6000);
+            }, 1000, 1000);
+            Console.Read();
         }
     }
 }

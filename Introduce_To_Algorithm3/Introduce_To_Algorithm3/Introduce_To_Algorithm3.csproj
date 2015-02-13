@@ -266,6 +266,7 @@
     <Compile Include="Common\Utils\sockets\TcpListenerEx.cs" />
     <Compile Include="Common\Utils\sqls\EFHelper.cs" />
     <Compile Include="Common\Utils\sqls\SqlHelper.cs" />
+    <Compile Include="Common\Utils\threads\TimerUtils.cs" />
     <Compile Include="Common\Utils\XMLHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
     <Compile Include="Common\Utils\StringExtension.cs" />
