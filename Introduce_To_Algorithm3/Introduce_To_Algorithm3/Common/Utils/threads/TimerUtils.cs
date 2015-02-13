@@ -11,6 +11,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
     {
         /// <summary>
         /// 立刻启动定时服务
+        /// 注：Timer没有start方法，创建了一个实例就立刻执行
         /// 注：定时任务是按照时间间隔严格执行的。即使之前的定时任务没有完成，到达时间也启动新的定时任务。
         /// 这意味着定时任务不一定在同一个线程执行
         /// </summary>
