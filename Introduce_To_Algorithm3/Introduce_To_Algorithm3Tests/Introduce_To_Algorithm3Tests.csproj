@@ -58,6 +58,7 @@
     <Compile Include="Common\Structs\RBTTests.cs" />
     <Compile Include="Common\Structs\SkipListTests.cs" />
     <Compile Include="Common\Structs\SortedSkipLinkedListTests.cs" />
+    <Compile Include="Common\Utils\BitConverterUtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,9 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using Com.Utility.Commons;
@@ -22,14 +25,6 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            DateTime before = DateTime.Now;
-            Timer timer = TimerUtils.StartTimer(obj =>
-            {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId + "        " + (DateTime.Now - before));
-                before = DateTime.Now;
-                Thread.Sleep(6000);
-            }, 1000, 1000);
-            Console.Read();
         }
     }
 }

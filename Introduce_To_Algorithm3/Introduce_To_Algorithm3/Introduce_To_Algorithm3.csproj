@@ -239,6 +239,7 @@
     <Compile Include="Common\Structs\Stack.cs" />
     <Compile Include="Common\Structs\TreapNode.cs" />
     <Compile Include="Common\Structs\UnBoundedTreeNode.cs" />
+    <Compile Include="Common\Utils\BitConverterUtils.cs" />
     <Compile Include="Common\Utils\CmdHelper.cs" />
     <Compile Include="Common\Utils\CodeCounter.cs" />
     <Compile Include="Common\Utils\ConfigUtils.cs" />
