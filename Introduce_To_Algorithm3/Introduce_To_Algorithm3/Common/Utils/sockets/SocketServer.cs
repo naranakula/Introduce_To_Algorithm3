@@ -133,7 +133,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         {
             //construct a listener
             listener = new TcpListener(IPAddress.Any, port);
-            listener.Start();
+            listener.Start(1024);
 
             while (isRunning)
             {
@@ -147,6 +147,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
 
                     //accept the pending connection
                     Socket client = listener.AcceptSocket();
+                   // TcpClient client = listener.AcceptTcpClient();
 
                     if (action != null)
                     {
