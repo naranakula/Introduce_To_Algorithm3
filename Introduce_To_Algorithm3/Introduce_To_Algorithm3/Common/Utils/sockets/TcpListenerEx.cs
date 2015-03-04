@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Introduce_To_Algorithm3.Common.Utils.sockets
 {
     /// <summary>
-    /// a tcp client for client
+    /// a tcp Listener for server
     /// </summary>
     public class TcpListenerEx
     {

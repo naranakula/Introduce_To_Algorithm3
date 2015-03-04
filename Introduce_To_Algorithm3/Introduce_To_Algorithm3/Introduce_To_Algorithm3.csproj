@@ -243,6 +243,7 @@
     <Compile Include="Common\Utils\CmdHelper.cs" />
     <Compile Include="Common\Utils\CodeCounter.cs" />
     <Compile Include="Common\Utils\ConfigUtils.cs" />
+    <Compile Include="Common\Utils\Console\ConsoleEventUtils.cs" />
     <Compile Include="Common\Utils\DateTimeUtils.cs" />
     <Compile Include="Common\Utils\DESHelper.cs" />
     <Compile Include="Common\Utils\EnumHelper.cs" />
