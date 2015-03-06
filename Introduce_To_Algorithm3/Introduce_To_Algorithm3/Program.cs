@@ -26,6 +26,19 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            for (int i = 0; i < 1024; i++)
+            {
+                for (int j = 0; j < 1024; j++)
+                {
+                    if (i == j)
+                    {
+                        int k = i + j*i;
+                        int m = k + i;
+                    }
+                }
+            }
+            Console.WriteLine(stopwatch.Elapsed);
         }
     }
 }
