@@ -90,9 +90,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                     Socket socket = tcpListener.AcceptSocket();
                     ThreadPool.QueueUserWorkItem((obj) => waitCallback((Socket)obj), socket);
 
-                    if (sleepFlag % 100 == 0)
+                    if (sleepFlag % 10 == 0)
                     {
-                        Thread.Sleep(10);
+                        Thread.Sleep(100);
                     }
 
                     if (sleepFlag > 100000000)
