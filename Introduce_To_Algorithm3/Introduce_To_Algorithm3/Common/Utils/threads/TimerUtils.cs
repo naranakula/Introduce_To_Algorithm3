@@ -17,7 +17,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="delayTime">以毫秒为单位，第一次启动的延迟时间</param>
-        /// <param name="period">调用的周期</param>
+        /// <param name="period">调用的周期，毫秒为单位</param>
         /// <param name="state">传递的参数</param>
         /// <returns></returns>
         public static Timer StartTimer(TimerCallback callback, int delayTime, int period, object state = null)
