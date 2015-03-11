@@ -63,6 +63,9 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>Reference\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\log4net.dll</HintPath>
@@ -280,7 +283,8 @@
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\XMLHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
-    <Compile Include="OpenSourceLib\Utils\QuartzHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
+    <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
     <Compile Include="Common\Utils\strings\StringExtension.cs" />
     <Compile Include="Common\Utils\threads\SynchronizationHelper.cs" />
@@ -294,6 +298,7 @@
   <ItemGroup>
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="Readme.txt" />
+    <Content Include="Reference\Common.Logging.dll" />
     <Content Include="Reference\log4net.dll" />
     <Content Include="Reference\MathNet.Numerics.dll" />
     <Content Include="Reference\Newtonsoft.Json.dll" />
@@ -307,7 +312,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="log4net.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
