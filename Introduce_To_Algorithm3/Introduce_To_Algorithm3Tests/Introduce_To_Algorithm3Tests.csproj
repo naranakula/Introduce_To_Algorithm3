@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Quartz">
+      <HintPath>..\Introduce_To_Algorithm3\Reference\Quartz.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -59,6 +62,7 @@
     <Compile Include="Common\Structs\SkipListTests.cs" />
     <Compile Include="Common\Structs\SortedSkipLinkedListTests.cs" />
     <Compile Include="Common\Utils\BitConverterUtilsTests.cs" />
+    <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
