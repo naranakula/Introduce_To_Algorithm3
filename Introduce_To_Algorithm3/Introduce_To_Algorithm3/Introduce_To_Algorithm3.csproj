@@ -63,6 +63,10 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MathNet.Numerics, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\MathNet.Numerics.dll</HintPath>
@@ -70,6 +74,10 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz, Version=2.3.0.18, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -271,6 +279,8 @@
     <Compile Include="Common\Utils\threads\TimerUtils.cs" />
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\XMLHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\QuartzHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
     <Compile Include="Common\Utils\strings\StringExtension.cs" />
     <Compile Include="Common\Utils\threads\SynchronizationHelper.cs" />
@@ -284,8 +294,10 @@
   <ItemGroup>
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="Readme.txt" />
+    <Content Include="Reference\log4net.dll" />
     <Content Include="Reference\MathNet.Numerics.dll" />
     <Content Include="Reference\Newtonsoft.Json.dll" />
+    <Content Include="Reference\Quartz.dll" />
     <Content Include="Reference\System.Data.SQLite.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +307,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="log4net.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

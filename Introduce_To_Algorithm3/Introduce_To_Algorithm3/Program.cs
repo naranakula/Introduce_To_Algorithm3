@@ -26,26 +26,7 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            List<Socket> list = new List<Socket>();
-            for (int i = 0; i < 1020; i++)
-            {
-                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.163.163"), 52321);
-                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                socket.Connect(endPoint);
-                String terminator = "##<eof>##";
-                String msg = "Helo world";
 
-                byte[] arr = Encoding.UTF8.GetBytes(msg + terminator);
-                socket.Send(arr);
-                arr = Encoding.UTF8.GetBytes(msg + terminator + msg + terminator + terminator);
-                socket.Send(arr);
-                list.Add(socket);
-                //Thread.Sleep(100);
-                Console.WriteLine(i);
-                Thread.Sleep(100);
-            }
-            Console.WriteLine("Hello world");
-            Console.ReadLine();
         }
     }
 }
