@@ -255,6 +255,8 @@
     <Compile Include="Common\Utils\CodeCounter.cs" />
     <Compile Include="Common\Utils\ConfigUtils.cs" />
     <Compile Include="Common\Utils\Console\ConsoleEventUtils.cs" />
+    <Compile Include="Common\Utils\files\DirectoryHold.cs" />
+    <Compile Include="Common\Utils\StartupUtils.cs" />
     <Compile Include="Common\Utils\Time\DateTimeUtils.cs" />
     <Compile Include="Common\Utils\DESHelper.cs" />
     <Compile Include="Common\Utils\EnumHelper.cs" />
@@ -266,8 +268,8 @@
     <Compile Include="Common\Utils\OneRunner.cs" />
     <Compile Include="Common\Utils\ReflectionHelper.cs" />
     <Compile Include="Common\Utils\Retry.cs" />
-    <Compile Include="Common\Utils\RetryDirectory.cs" />
-    <Compile Include="Common\Utils\RetryFile.cs" />
+    <Compile Include="Common\Utils\files\RetryDirectory.cs" />
+    <Compile Include="Common\Utils\files\RetryFile.cs" />
     <Compile Include="Common\Utils\files\SerializeHelper.cs" />
     <Compile Include="Common\Utils\Shell.cs" />
     <Compile Include="Common\Utils\sockets\ClientHelper.cs" />
@@ -281,7 +283,7 @@
     <Compile Include="Common\Utils\sqls\SqlHelper.cs" />
     <Compile Include="Common\Utils\threads\TimerUtils.cs" />
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
-    <Compile Include="Common\Utils\XMLHelper.cs" />
+    <Compile Include="Common\Utils\files\XMLHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />

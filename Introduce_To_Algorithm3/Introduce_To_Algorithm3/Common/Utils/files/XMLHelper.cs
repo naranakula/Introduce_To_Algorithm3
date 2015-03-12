@@ -17,7 +17,7 @@ using System.Xml.XPath;
  * modifytime0:
  **************************************************/
 
-namespace iFlyTek.SMSS10.ProcEngine.SMSHall.BaseRoute
+namespace common.cmlu.io
 {
     /// <summary>
     /// 处理xml操作的通用类

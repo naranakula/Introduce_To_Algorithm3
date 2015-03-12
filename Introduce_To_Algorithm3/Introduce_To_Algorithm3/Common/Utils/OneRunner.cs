@@ -7,6 +7,9 @@ using System.Threading;
 
 namespace Common
 {
+    /// <summary>
+    /// 更加安全合理的方式是使用 Mutex
+    /// </summary>
     public class OneRunner
     {
         /// <summary>

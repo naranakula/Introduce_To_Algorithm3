@@ -30,11 +30,13 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            QuartzHelper quartzHelper = QuartzHelper.GetInstance();
-            quartzHelper.Start();
-            quartzHelper.ScheduleJob(quartzHelper.CreateJob("firstjob",typeof(JobImpl)), quartzHelper.CreateCronTrigger("firstTrigger",5,"0/5 * * * * ?"));
+            StartupUtils.SetStartup();
+            Console.WriteLine("AppFullName="+FileUtils.GetAppFullName());
+            Console.WriteLine("AppName="+FileUtils.GetAppName());
+            Console.WriteLine("CurrentDir="+FileUtils.GetCurrentDir());
+            Console.WriteLine("AppDir="+FileUtils.GetAppDir());
             Console.ReadLine();
-            quartzHelper.Shutdown();
+            Console.ReadLine();
         }
     }
 }

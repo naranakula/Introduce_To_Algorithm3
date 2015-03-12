@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -14,6 +15,50 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// </summary>
     public class FileUtils
     {
+        /// <summary>
+        /// 获取当前工作目录路径
+        /// </summary>
+        /// <returns></returns>
+        public static string GetCurrentDir()
+        {
+            return Environment.CurrentDirectory;
+        }
+
+        /// <summary>
+        /// 获取当前app的全限定路径
+        /// </summary>
+        /// <returns></returns>
+        public static string GetAppFullName()
+        {
+            return Process.GetCurrentProcess().MainModule.FileName;
+        }
+
+        /// <summary>
+        /// 获取当前app的名字，不包括目录
+        /// </summary>
+        /// <param name="withExtension">是否带拓展名</param>
+        /// <returns></returns>
+        public static string GetAppName(bool withExtension = true)
+        {
+            if (withExtension)
+            {
+                return Path.GetFileName(GetAppFullName());
+            }
+            else
+            {
+                return Path.GetFileNameWithoutExtension(GetAppFullName());
+            }
+        }
+
+        /// <summary>
+        /// 获取app所在的目录
+        /// </summary>
+        /// <returns></returns>
+        public static string GetAppDir()
+        {
+            return Path.GetDirectoryName(GetAppFullName());
+        }
+
         /// <summary>
         /// is Encoding.Unicode
         /// Little endian UTF-16 FF FE
