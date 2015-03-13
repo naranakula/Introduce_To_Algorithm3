@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -30,6 +31,13 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
+
+
+
+
+
+
+
             StartupUtils.SetStartup();
             Console.WriteLine("AppFullName="+FileUtils.GetAppFullName());
             Console.WriteLine("AppName="+FileUtils.GetAppName());

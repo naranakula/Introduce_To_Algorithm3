@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// </summary>
     public static class StartupUtils
     {
+
+        #region  开机启动
         /// <summary>
         /// 设置应用程序自动开机运行
         /// </summary>
@@ -92,5 +95,37 @@ namespace Introduce_To_Algorithm3.Common.Utils
             string appToRun = FileUtils.GetAppFullName();
             SetStartup(keyName, appToRun, isAutoStartup);
         }
+        #endregion
+
+        #region 程序退出重启
+
+        /// <summary>
+        /// 是否设置了退出重启事件
+        /// </summary>
+        private static volatile bool isSetted;
+
+        /// <summary>
+        /// 设置退出重启
+        /// </summary>
+        public static void ExitedRestart()
+        {
+            if (isSetted)
+            {
+                return;
+            }
+
+            //获取或设置在进程终止时是否应激发 System.Diagnostics.Process.Exited 事件。
+            Process.GetCurrentProcess().EnableRaisingEvents = true;
+            Process.GetCurrentProcess().Exited += delegate(object sender, EventArgs args)
+            {
+                //处理退出重启事件
+                //新开一个Process，启动程序
+            };
+
+            isSetted = true;
+        }
+
+        #endregion
+
     }
 }
