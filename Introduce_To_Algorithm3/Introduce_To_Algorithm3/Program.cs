@@ -31,18 +31,21 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-
-
-
-
-
-
-
-            StartupUtils.SetStartup();
+            /*StartupUtils.SetStartup();
             Console.WriteLine("AppFullName="+FileUtils.GetAppFullName());
             Console.WriteLine("AppName="+FileUtils.GetAppName());
             Console.WriteLine("CurrentDir="+FileUtils.GetCurrentDir());
+            Console.WriteLine("File="+new FileInfo("file.xml").FullName);
             Console.WriteLine("AppDir="+FileUtils.GetAppDir());
+
+            Directory.SetCurrentDirectory(FileUtils.GetAppDir());
+            Console.WriteLine("CurrentDir=" + FileUtils.GetCurrentDir());
+            Console.WriteLine("File=" + new FileInfo("file.xml").FullName);*/
+            Console.WriteLine(CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3"));
+            Directory.SetCurrentDirectory(FileUtils.GetAppDir());
+            QuartzHelper quartzHelper = QuartzHelper.GetInstance();
+            quartzHelper.Start();
+            quartzHelper.ScheduleJob(quartzHelper.CreateJob("firstjob", typeof(JobImpl)), quartzHelper.CreateSimpleTrigger("triggerName",0, 4));
             Console.ReadLine();
             Console.ReadLine();
         }

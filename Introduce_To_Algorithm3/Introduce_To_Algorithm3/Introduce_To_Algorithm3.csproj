@@ -66,6 +66,10 @@
     <Reference Include="Common.Logging">
       <HintPath>Reference\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\Common.Logging.Core.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\log4net.dll</HintPath>
@@ -285,6 +289,7 @@
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\files\XMLHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\BeITMemcachedHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
@@ -296,10 +301,19 @@
     <Compile Include="OpenSourceLib\Utils\JsonHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reference\memcached\HashAlgorithms.cs" />
+    <Compile Include="Reference\memcached\LogAdapter.cs" />
+    <Compile Include="Reference\memcached\MemcachedClient.cs" />
+    <Compile Include="Reference\memcached\MemcachedClientException.cs" />
+    <Compile Include="Reference\memcached\PooledSocket.cs" />
+    <Compile Include="Reference\memcached\Serializer.cs" />
+    <Compile Include="Reference\memcached\ServerPool.cs" />
+    <Compile Include="Reference\memcached\SocketPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="Readme.txt" />
+    <Content Include="Reference\Common.Logging.Core.dll" />
     <Content Include="Reference\Common.Logging.dll" />
     <Content Include="Reference\log4net.dll" />
     <Content Include="Reference\MathNet.Numerics.dll" />

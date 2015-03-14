@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sockets
 {
@@ -170,6 +171,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
             }
             catch (Exception ex)
             {
+                Log4netHelper.Error(ex.ToString());
                 return false;
             }
         }
@@ -181,7 +183,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         /// <summary>
         /// 终止符
         /// </summary>
-        private byte[] terminator;
+        private byte[] terminator = Encoding.UTF8.GetBytes("##<eof>##");
 
 
         #region buffer
@@ -189,7 +191,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         /// <summary>
         /// the buffer to receive
         /// </summary>
-        private byte[] buffer;
+        private byte[] buffer = new byte[64*1024];
 
         /// <summary>
         /// 接收到数据的offset
@@ -238,6 +240,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
             catch (Exception ex)
             {
                 //this.lastException = ex;
+                Log4netHelper.Error(ex.ToString());
                 return new Tuple<bool, string>(false, string.Empty);
             }
         }

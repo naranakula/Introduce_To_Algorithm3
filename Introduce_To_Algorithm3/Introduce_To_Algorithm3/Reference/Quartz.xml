@@ -5280,6 +5280,11 @@
             Get or set the instance Id of the Scheduler (must be unique within this server instance).
             </summary>
         </member>
+        <member name="P:Quartz.Impl.AdoJobStore.JobStoreSupport.RetryableActionErrorLogThreshold">
+            <summary>
+            Gets or sets the number of retries before an error is logged for recovery operations.
+            </summary>
+        </member>
         <member name="P:Quartz.Impl.AdoJobStore.JobStoreSupport.Clustered">
             <summary> 
             Get or set whether this instance is part of a cluster.
@@ -5511,7 +5516,7 @@
             enclosing transaction.
             </summary>
             <seealso cref="M:Quartz.Impl.AdoJobStore.JobStoreSupport.ExecuteInNonManagedTXLock(System.String,System.Action{Quartz.Impl.AdoJobStore.ConnectionAndTransactionHolder})"/>
-            <seealso cref="M:Quartz.Impl.AdoJobStore.JobStoreTX.ExecuteInLock``1(System.String,System.Func{Quartz.Impl.AdoJobStore.ConnectionAndTransactionHolder,``0})"/>
+            <seealso cref="M:Quartz.Impl.AdoJobStore.JobStoreSupport.ExecuteInLock(System.String,System.Action{Quartz.Impl.AdoJobStore.ConnectionAndTransactionHolder})"/>
             <seealso cref="M:Quartz.Impl.AdoJobStore.JobStoreSupport.GetNonManagedTXConnection"/>
             <seealso cref="M:Quartz.Impl.AdoJobStore.JobStoreSupport.GetConnection"/>
             <param name="lockName">

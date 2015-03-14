@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 using System.Transactions;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 /***************************************
  * author:     lcm
@@ -89,6 +90,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
             }
             catch(Exception ex)
             {
+                Log4netHelper.Error(ex.ToString());
                 result = false;
             }
             finally
@@ -414,6 +416,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
             }
             catch(Exception ex)
             {
+                Log4netHelper.Error(ex.ToString());
                 if(trans!=null)
                 {
                     trans.Rollback();
@@ -457,6 +460,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
             }
             catch (Exception ex)
             {
+                Log4netHelper.Error(ex.ToString());
                 if (trans != null)
                 {
                     trans.Rollback();
