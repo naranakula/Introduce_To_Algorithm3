@@ -21,6 +21,7 @@ using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Utils.threads;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs;
+using log4net.Util;
 using MathNet.Numerics.LinearAlgebra.Double;
 using Quartz;
 using Quartz.Impl;
@@ -41,11 +42,18 @@ namespace Introduce_To_Algorithm3
             Directory.SetCurrentDirectory(FileUtils.GetAppDir());
             Console.WriteLine("CurrentDir=" + FileUtils.GetCurrentDir());
             Console.WriteLine("File=" + new FileInfo("file.xml").FullName);*/
-            Console.WriteLine(CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3"));
+            BeITMemcachedHelper.GetInstance().Setup("192.168.163.204", new string[] {"192.168.163.204"});
+            Object obj = BeITMemcachedHelper.GetInstance().Get<String>("192.168.163.204");
+            Console.WriteLine(obj);
             Directory.SetCurrentDirectory(FileUtils.GetAppDir());
+
+
+            Console.WriteLine(CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3"));
+
             QuartzHelper quartzHelper = QuartzHelper.GetInstance();
             quartzHelper.Start();
             quartzHelper.ScheduleJob(quartzHelper.CreateJob("firstjob", typeof(JobImpl)), quartzHelper.CreateSimpleTrigger("triggerName",0, 4));
+            Thread.Sleep(10000);
             Console.ReadLine();
             Console.ReadLine();
         }
