@@ -15,5 +15,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.Console
         /// </summary>
         [DllImport("user32")]
         public static extern void LockWorkStation();
+
+
     }
 }
