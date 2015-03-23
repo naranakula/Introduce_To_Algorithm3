@@ -43,18 +43,6 @@ namespace Introduce_To_Algorithm3
             Console.WriteLine("CurrentDir=" + FileUtils.GetCurrentDir());
             Console.WriteLine("File=" + new FileInfo("file.xml").FullName);*/
 
-            string dir = @"C:\Users\cmlu\Desktop\logs20150319\logs";
-            foreach(string file in Directory.GetFiles(dir,"*.txt",SearchOption.AllDirectories))
-            {
-                String s = File.ReadAllText(file);
-                if (s.Contains("更新行李转盘"))
-                {
-                    Console.WriteLine(file);
-                }
-            }
-
-            Console.ReadLine();
-
             BeITMemcachedHelper.GetInstance().Setup("192.168.163.204", new string[] {"192.168.163.204"});
             Object obj = BeITMemcachedHelper.GetInstance().Get<String>("192.168.163.204");
             Console.WriteLine(obj);

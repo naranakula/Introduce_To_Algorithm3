@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Introduce_To_Algorithm3.Common.Utils.Console
+namespace Introduce_To_Algorithm3.Common.Utils
 {
     public class PcFunctions
     {
