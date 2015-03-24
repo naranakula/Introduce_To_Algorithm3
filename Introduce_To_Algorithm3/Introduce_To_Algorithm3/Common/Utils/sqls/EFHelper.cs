@@ -87,7 +87,7 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
     /// </summary>
     public static class EfHelper<T> where T:class
     {
-        #region 转换到低阶DbContext
+        #region DbContext相关
         /// <summary>
         /// 将高层的DbContext转换为较低阶的ObjectContext
         /// </summary>
@@ -98,6 +98,31 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
             IObjectContextAdapter ioca = dbContext as IObjectContextAdapter;
             return ioca == null ? null : ioca.ObjectContext;
         }
+
+
+        public static void Excute()
+        {/*
+            using (var context = new SchoolDBEntities())
+            {
+                context.Configuration.AutoDetectChangesEnabled = true;// false then context cannot detect changes made to existing entities so do not execute update query.默认是true
+                var studentList = context.Students.ToList<Student>();
+
+                //Perform create operation
+                context.Students.Add(new Student() { StudentName = "New Student" });
+
+                //Perform Update operation
+                Student studentToUpdate = studentList.Where(s => s.StudentName == "student1").FirstOrDefault<Student>();
+                studentToUpdate.StudentName = "Edited student1";
+
+                //Perform delete operation
+                context.Students.Remove(studentList.ElementAt<Student>(0));
+
+                //Execute Inser, Update & Delete queries in the database
+                context.SaveChanges();
+
+            }*/
+        }
+
         #endregion
 
         #region DBSet相关
