@@ -230,6 +230,31 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
         {
             return dbSet.SqlQuery(sql, parameters);
         }
+
+
+        /// <summary>
+        /// A SQL query returning instances of any type, including primitive types,
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static DbRawSqlQuery<T> SqlQuery(DbContext dbContext, string sql, params object[] parameters)
+        {
+            return dbContext.Database.SqlQuery<T>(sql, parameters);
+        }
+
+        /// <summary>
+        /// ExecuteSqlCommnad method is useful in sending non-query commands to the database, such as the Insert, Update or Delete command. 
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static int ExecuteSqlCommand(DbContext dbContext, string sql, params object[] parameters)
+        {
+            return dbContext.Database.ExecuteSqlCommand(sql, parameters);
+        }
         #endregion
 
         #region DBEntityEntry相关
