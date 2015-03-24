@@ -100,6 +100,11 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
         }
 
 
+        public static void SaveChanges(DbContext dbContext)
+        {
+            dbContext.SaveChanges();
+        }
+
         public static void Excute()
         {/*
             using (var context = new SchoolDBEntities())
@@ -178,6 +183,29 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
         public static T Find(DbSet<T> dbSet,Guid id)
         {
             return dbSet.Find(id);
+        }
+
+        /// <summary>
+        /// 可以将离线的entity转为dbcontext在线
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="entity"></param>
+        /// <param name="state"></param>
+        public static void Change(DbContext dbContext, T entity, EntityState state)
+        {
+            dbContext.Entry(entity).State = state;
+        }
+
+
+        /// <summary>
+        /// Update可以将离线的entity转为dbcontext在线
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="entity"></param>
+        /// <param name="state"></param>
+        public static void Update(DbContext dbContext, T entity)
+        {
+            dbContext.Entry(entity).State = EntityState.Modified;
         }
 
         /// <summary>
