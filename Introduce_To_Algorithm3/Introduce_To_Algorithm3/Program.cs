@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -34,6 +35,8 @@ namespace Introduce_To_Algorithm3
         {
         }
     }
+
+
 
     /*
      * 

@@ -135,6 +135,24 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         }
 
         /// <summary>
+        /// 暂停一个job
+        /// </summary>
+        /// <param name="jobName"></param>
+        public void Pause(String jobName)
+        {
+            GetScheduler().PauseJob(new JobKey(jobName));
+        }
+
+        /// <summary>
+        /// 删除一个job
+        /// </summary>
+        /// <param name="jobName"></param>
+        public void Delete(string jobName)
+        {
+            GetScheduler().DeleteJob(new JobKey(jobName));
+        }
+
+        /// <summary>
         /// 创建一个无限执行的触发器，放入默认的组
         /// trigger将定期按时执行，
         /// 意味着如果下一个周期到来，而上一次周期执行未完成，job仍然在一个新线程中执行

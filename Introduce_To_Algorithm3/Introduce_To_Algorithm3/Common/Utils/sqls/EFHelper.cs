@@ -310,5 +310,6 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
         }
 
         #endregion
+
     }
 }
