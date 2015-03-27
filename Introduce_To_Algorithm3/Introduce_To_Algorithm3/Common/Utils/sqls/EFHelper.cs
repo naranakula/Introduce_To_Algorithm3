@@ -143,6 +143,17 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
             return dbSet.Add(entity);
         }
 
+
+        /// <summary>
+        /// add a number of object
+        /// </summary>
+        /// <param name="dbSet"></param>
+        /// <param name="entityList"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> AddRange(DbSet<T> dbSet, List<T> entityList)
+        {
+            return dbSet.AddRange(entityList);
+        }
         /// <summary>
         /// Entities returned as AsNoTracking, will not be tracked by DBContext. This will be significant performance boost for read only entities. 
         /// </summary>
@@ -217,6 +228,17 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
         public static T Remove(DbSet<T> dbSet,T entity)
         {
             return dbSet.Remove(entity);
+        }
+
+        /// <summary>
+        /// remove a number of object
+        /// </summary>
+        /// <param name="dbSet"></param>
+        /// <param name="entityList"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> RemoveRange(DbSet<T> dbSet, List<T> entityList)
+        {
+            return dbSet.RemoveRange(entityList);
         }
 
         /// <summary>
