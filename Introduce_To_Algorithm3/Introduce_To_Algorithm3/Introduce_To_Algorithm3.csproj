@@ -105,6 +105,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -335,6 +336,7 @@
     <Folder Include="Common\ApproximationAlgorithm\" />
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
+    <Folder Include="Common\Utils\wcfs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -33,6 +33,32 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
+            Console.WriteLine("定时任务测试");
+            String jobName = "FirstJob";
+            ITrigger trigger = QuartzHelper.GetInstance().CreateSimpleTrigger("FirstTrigger", 1, 5);
+            IJobDetail job = QuartzHelper.GetInstance().CreateJob(jobName, typeof (JobImpl));
+            Console.WriteLine("调度任务");
+            QuartzHelper.GetInstance().ScheduleJob(job,trigger);
+            QuartzHelper.GetInstance().Start();
+            while (true)
+            {
+                Console.WriteLine("P：暂停任务；R:恢复任务");
+                String line = Console.ReadLine();
+                if (line == "P" || line == "p")
+                {
+                    QuartzHelper.GetInstance().Pause(jobName);
+                }
+
+                if (line == "R" || line == "r")
+                {
+                    QuartzHelper.GetInstance().Resume(jobName);
+                }
+            }
+
+            Console.WriteLine("输入任意内容删除Job");
+            Console.ReadLine();
+            QuartzHelper.GetInstance().Delete(jobName);
+            Console.ReadLine();
         }
     }
 

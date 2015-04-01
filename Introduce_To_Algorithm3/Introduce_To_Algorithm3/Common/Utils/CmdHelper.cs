@@ -72,6 +72,23 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             this.RunProgram(programName, "");
         }
+
+        /// <summary>
+        /// 运行指定的程序
+        /// </summary>
+        /// <param name="programName">程序名的全限定路径名</param>
+        /// <param name="args">程序的参数</param>
+        public Process RunProgramNormal(String programName, String args=null)
+        {
+            if (string.IsNullOrWhiteSpace(args))
+            {
+                return Process.Start(programName);
+            }
+            else
+            {
+                return Process.Start(programName, args);
+            }
+        }
     }
 
 

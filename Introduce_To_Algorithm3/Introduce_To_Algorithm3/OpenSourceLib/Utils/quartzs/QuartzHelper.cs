@@ -144,6 +144,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         }
 
         /// <summary>
+        /// Resume一个Job
+        /// </summary>
+        /// <param name="jobName"></param>
+        public void Resume(string jobName)
+        {
+            GetScheduler().ResumeJob(new JobKey(jobName));
+        }
+
+        /// <summary>
         /// 删除一个job
         /// </summary>
         /// <param name="jobName"></param>

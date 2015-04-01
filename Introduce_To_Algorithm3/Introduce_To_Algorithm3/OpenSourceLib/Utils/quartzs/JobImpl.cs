@@ -21,7 +21,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="context"></param>
         public void Execute(IJobExecutionContext context)
         {
-            Log4netHelper.Info(Thread.CurrentThread.ManagedThreadId+"   "+DateTime.Now.ToString());
+            Console.WriteLine(Thread.CurrentThread.ManagedThreadId+"   "+DateTime.Now.ToString());
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// </summary>
         public JobImpl()
         {
-            Log4netHelper.Debug("创建一个job实例");
+            Console.WriteLine("创建一个job实例");
         }
         #endregion
     }
