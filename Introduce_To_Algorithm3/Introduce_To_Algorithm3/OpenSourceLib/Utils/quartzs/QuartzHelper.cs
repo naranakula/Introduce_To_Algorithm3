@@ -131,6 +131,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         public IJobDetail CreateJob(String jobName, Type jobtype)
         {
             IJobDetail jobDetail = new JobDetailImpl(jobName, null, jobtype, true, false);
+            //jobDetail.JobDataMap.Add();
+            //添加job的关联数据
             return jobDetail;
         }
 

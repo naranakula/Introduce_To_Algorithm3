@@ -33,6 +33,9 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
+            Console.WriteLine((int)DayOfWeek.Sunday+1);
+            Console.WriteLine((int)(DayOfWeek.Saturday + 1));
+            /*
             Console.WriteLine("定时任务测试");
             String jobName = "FirstJob";
             ITrigger trigger = QuartzHelper.GetInstance().CreateSimpleTrigger("FirstTrigger", 1, 5);
@@ -57,7 +60,7 @@ namespace Introduce_To_Algorithm3
 
             Console.WriteLine("输入任意内容删除Job");
             Console.ReadLine();
-            QuartzHelper.GetInstance().Delete(jobName);
+            QuartzHelper.GetInstance().Delete(jobName);*/
             Console.ReadLine();
         }
     }

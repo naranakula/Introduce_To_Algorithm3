@@ -21,6 +21,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="context"></param>
         public void Execute(IJobExecutionContext context)
         {
+            JobDataMap dataMap = context.JobDetail.JobDataMap;//获取job的数据
+            
             Console.WriteLine(Thread.CurrentThread.ManagedThreadId+"   "+DateTime.Now.ToString());
         }
 
