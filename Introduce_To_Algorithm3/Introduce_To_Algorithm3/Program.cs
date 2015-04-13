@@ -19,6 +19,7 @@ using Introduce_To_Algorithm3.Common.MachineLearning;
 using Introduce_To_Algorithm3.Common.Math;
 using Introduce_To_Algorithm3.Common.Structs;
 using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.Common.Utils.sqls;
 using Introduce_To_Algorithm3.Common.Utils.threads;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs;
@@ -33,8 +34,24 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine((int)DayOfWeek.Sunday+1);
-            Console.WriteLine((int)(DayOfWeek.Saturday + 1));
+            string sql = @"SELECT [VALUE]
+      ,[REMARK]
+      ,[TYPE]
+      ,[Relation]
+  FROM [Fids].[dbo].[fids_cfg_dict]";
+            var dt =SqlHelper.GetInstance(@"User ID=sa;Initial Catalog=Fids;Data Source=CMLU-PC\CMLU;Password=558276344")
+                .ExecuteDataTable(sql);
+            StringBuilder sb = new StringBuilder();
+            foreach (DataRow row in dt.Rows)
+            {
+                string line = string.Format("dicts.Add(new CfgDict {3}" + " Id = Guid.NewGuid(), CreatedTime = DateTime.Now, Description = \"\",Value = \"{0}\", Remark = \"{1}\", Type = \"{2}\" " + "{4});", row["VALUE"], row["REMARK"], row["TYPE"],"{","}");
+                sb.AppendLine(line);
+            }
+
+            File.WriteAllText("D:\\io.txt",sb.ToString(),Encoding.UTF8);
+
+
+
             /*
             Console.WriteLine("定时任务测试");
             String jobName = "FirstJob";
