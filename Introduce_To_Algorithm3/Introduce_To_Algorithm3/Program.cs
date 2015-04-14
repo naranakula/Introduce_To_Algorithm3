@@ -42,13 +42,19 @@ namespace Introduce_To_Algorithm3
             var dt =SqlHelper.GetInstance(@"User ID=sa;Initial Catalog=Fids;Data Source=CMLU-PC\CMLU;Password=558276344")
                 .ExecuteDataTable(sql);
             StringBuilder sb = new StringBuilder();
+            List<string> list = new List<string>();
             foreach (DataRow row in dt.Rows)
             {
-                string line = string.Format("dicts.Add(new CfgDict {3}" + " Id = Guid.NewGuid(), CreatedTime = DateTime.Now, Description = \"\",Value = \"{0}\", Remark = \"{1}\", Type = \"{2}\" " + "{4});", row["VALUE"], row["REMARK"], row["TYPE"],"{","}");
-                sb.AppendLine(line);
+                //string line = string.Format("dicts.Add(new CfgDict {3}" + " Id = Guid.NewGuid(), CreatedTime = DateTime.Now, Description = \"\",Value = \"{0}\", Remark = \"{1}\", Type = \"{2}\" " + "{4});", row["VALUE"], row["REMARK"], row["TYPE"],"{","}");
+                string line = row["TYPE"].ToString()+" |";
+                list.Add(line);
+                sb.Append(line);
             }
+            
+            File.WriteAllLines(@"D:\io.txt",list.Distinct().ToArray(),Encoding.UTF8);
 
-            File.WriteAllText("D:\\io.txt",sb.ToString(),Encoding.UTF8);
+
+            //File.WriteAllText(@"D:\io.txt",sb.ToString(),Encoding.UTF8);
 
 
 
@@ -83,40 +89,6 @@ namespace Introduce_To_Algorithm3
     }
 
 
-
-    /*
-     * 
-    //正确使用wcf的示例
-    CalculatorClient wcfClient = new CalculatorClient();
-    try
-    {
-        Console.WriteLine(wcfClient.Add(4, 6));
-        wcfClient.Close();
-    }
-    catch (TimeoutException timeProblem)
-    {
-          Console.WriteLine("The service operation timed out. " + timeProblem.Message);
-          Console.ReadLine();
-          wcfClient.Abort();
-    }
-    catch (FaultException<GreetingFault> greetingFault)
-        {
-          Console.WriteLine(greetingFault.Detail.Message);
-          Console.ReadLine();
-          wcfClient.Abort();
-        }
-        catch (FaultException unknownFault)
-        {
-          Console.WriteLine("An unknown exception was received. " + unknownFault.Message);
-          Console.ReadLine();
-          wcfClient.Abort();
-        }
-        catch (CommunicationException commProblem)
-        {
-          Console.WriteLine("There was a communication problem. " + commProblem.Message + commProblem.StackTrace);
-          Console.ReadLine();
-          wcfClient.Abort();
-        }*/
 
 
 

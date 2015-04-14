@@ -299,6 +299,7 @@
     <Compile Include="Common\Utils\threads\TimerUtils.cs" />
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\files\XMLHelper.cs" />
+    <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\BeITMemcachedHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
@@ -336,7 +337,6 @@
     <Folder Include="Common\ApproximationAlgorithm\" />
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
-    <Folder Include="Common\Utils\wcfs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
