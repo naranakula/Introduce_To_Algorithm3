@@ -34,7 +34,16 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            string sql = @"SELECT [VALUE]
+            BeITMemcachedHelper.GetInstance().Setup("Test", new[] {"127.0.0.1"});
+            BeITMemcachedHelper.GetInstance().Set("key1", "value1", new TimeSpan(0, 0, 5));
+            while (true)
+            {
+                string s = BeITMemcachedHelper.GetInstance().Get<string>("key1");
+                Console.WriteLine(string.IsNullOrEmpty(s)?"过期":s);
+                Thread.Sleep(1000);
+            }
+
+            /* string sql = @"SELECT [VALUE]
       ,[REMARK]
       ,[TYPE]
       ,[Relation]
@@ -52,7 +61,7 @@ namespace Introduce_To_Algorithm3
             }
             
             File.WriteAllLines(@"D:\io.txt",list.Distinct().ToArray(),Encoding.UTF8);
-
+            */
 
             //File.WriteAllText(@"D:\io.txt",sb.ToString(),Encoding.UTF8);
 
