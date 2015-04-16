@@ -34,13 +34,23 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            BeITMemcachedHelper.GetInstance().Setup("Test", new[] {"127.0.0.1"});
-            BeITMemcachedHelper.GetInstance().Set("key1", "value1", new TimeSpan(0, 0, 5));
-            while (true)
+            DateTime now = DateTime.Now;
+            string dir = now.ToString("yyyy-MM");
+            string file = now.ToString("yyyy-MM-dd")+".txt";
+            file = Path.Combine(dir, file);
+            if (Directory.Exists(dir) && File.Exists(file))
             {
-                string s = BeITMemcachedHelper.GetInstance().Get<string>("key1");
-                Console.WriteLine(string.IsNullOrEmpty(s)?"过期":s);
-                Thread.Sleep(1000);
+                return;
+            }
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            if (!File.Exists(file))
+            {
+                File.CreateText(file).Close();
             }
 
             /* string sql = @"SELECT [VALUE]
