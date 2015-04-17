@@ -202,6 +202,7 @@
     <Compile Include="Common\GreedyAlgorithm\HuffmanTree.cs" />
     <Compile Include="Common\GreedyAlgorithm\Knapsack.cs" />
     <Compile Include="Common\MachineLearning\DecisionTree.cs" />
+    <Compile Include="Common\MachineLearning\KMeans.cs" />
     <Compile Include="Common\MachineLearning\KNN.cs" />
     <Compile Include="Common\MachineLearning\LogisticRegression.cs" />
     <Compile Include="Common\MachineLearning\NaiveBayes.cs" />
