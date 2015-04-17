@@ -34,24 +34,10 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            DateTime now = DateTime.Now;
-            string dir = now.ToString("yyyy-MM");
-            string file = now.ToString("yyyy-MM-dd")+".txt";
-            file = Path.Combine(dir, file);
-            if (Directory.Exists(dir) && File.Exists(file))
-            {
-                return;
-            }
+            int result = CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
 
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
+            Console.WriteLine(result);
 
-            if (!File.Exists(file))
-            {
-                File.CreateText(file).Close();
-            }
 
             /* string sql = @"SELECT [VALUE]
       ,[REMARK]
