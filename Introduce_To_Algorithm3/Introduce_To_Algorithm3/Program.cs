@@ -36,8 +36,11 @@ namespace Introduce_To_Algorithm3
         {
             int result = CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
 
-            Console.WriteLine(result);
-
+            while (true)
+            {
+                Console.WriteLine(CpuMemoryUtils.GetNextCpuUsedPercent());
+                Thread.Sleep(600);
+            }
 
             /* string sql = @"SELECT [VALUE]
       ,[REMARK]
