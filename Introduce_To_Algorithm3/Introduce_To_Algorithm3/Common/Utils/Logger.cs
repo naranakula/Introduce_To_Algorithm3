@@ -55,7 +55,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             lock (locker)
             {
                 if (WriteToConsole)
-                    Console.Error.Write(s);
+                    System.Console.Error.Write(s);
                 writer.Write(s);
             }
         }
@@ -76,7 +76,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             lock (locker)
             {
                 if (WriteToConsole)
-                    Console.Error.WriteLine(s);
+                    System.Console.Error.WriteLine(s);
                 writer.WriteLine(s);
             }
         }
@@ -91,7 +91,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             lock (locker)
             {
                 if (WriteToConsole)
-                    Console.Error.WriteLine();
+                    System.Console.Error.WriteLine();
                 writer.WriteLine();
             }
         }
@@ -110,7 +110,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             lock (locker)
             {
                 if (WriteToConsole)
-                    Console.Error.Flush();
+                    System.Console.Error.Flush();
                 if (writer != null)
                     writer.Flush();
             }

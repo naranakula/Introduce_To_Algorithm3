@@ -268,8 +268,9 @@
     <Compile Include="Common\Utils\CmdHelper.cs" />
     <Compile Include="Common\Utils\CodeCounter.cs" />
     <Compile Include="Common\Utils\ConfigUtils.cs" />
-    <Compile Include="Common\Utils\Console\ConsoleEventUtils.cs" />
-    <Compile Include="Common\Utils\Console\PcFunctions.cs" />
+    <Compile Include="Common\Utils\ConsoleUtils\ConsoleEventUtils.cs" />
+    <Compile Include="Common\Utils\ConsoleUtils\CpuUtils.cs" />
+    <Compile Include="Common\Utils\ConsoleUtils\PcFunctions.cs" />
     <Compile Include="Common\Utils\files\DirectoryHold.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
     <Compile Include="Common\Utils\StartupUtils.cs" />

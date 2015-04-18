@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Console = System.Console; 
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls
 {
@@ -297,18 +298,18 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
 
         public static void ShowDbEntityEntry(DbEntityEntry entry)
         {
-            Console.WriteLine(entry.State);
+            System.Console.WriteLine(entry.State);
             foreach (var propertyName in entry.CurrentValues.PropertyNames)
             {
-                Console.WriteLine("Property Name: {0}", propertyName);
+                System.Console.WriteLine("Property Name: {0}", propertyName);
                 
                 //get original value
                 var orgVal = entry.OriginalValues[propertyName];
-                Console.WriteLine("     Original Value: {0}", orgVal);
+                System.Console.WriteLine("     Original Value: {0}", orgVal);
 
                 //get current values
                 var curVal = entry.CurrentValues[propertyName];
-                Console.WriteLine("     Current Value: {0}", curVal);
+                System.Console.WriteLine("     Current Value: {0}", curVal);
             }
         }
 

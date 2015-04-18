@@ -33,7 +33,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 proc.Start();
                 proc.StandardInput.WriteLine(cmd);
                 proc.StandardInput.WriteLine("exit");
-                Console.WriteLine("执行停止webservice的输出"+proc.StandardOutput.ReadToEnd());
+                System.Console.WriteLine("执行停止webservice的输出"+proc.StandardOutput.ReadToEnd());
             }
             finally
             {
