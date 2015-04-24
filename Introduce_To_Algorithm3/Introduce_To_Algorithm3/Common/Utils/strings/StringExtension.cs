@@ -55,5 +55,16 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 return s1;
             }
         }
+
+        /// <summary>
+        /// format
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static string FormatWith(this string s, params object[] args)
+        {
+            return string.Format(s, args);
+        }
     }
 }
