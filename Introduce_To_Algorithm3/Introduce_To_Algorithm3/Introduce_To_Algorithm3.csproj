@@ -92,6 +92,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Quartz.dll</HintPath>
     </Reference>
+    <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\StackExchange.Redis.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -302,8 +306,9 @@
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\files\XMLHelper.cs" />
     <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
+    <Compile Include="OpenSourceLib\Cache\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
-    <Compile Include="OpenSourceLib\Utils\BeITMemcachedHelper.cs" />
+    <Compile Include="OpenSourceLib\Cache\BeITMemcachedHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
@@ -333,6 +338,7 @@
     <Content Include="Reference\MathNet.Numerics.dll" />
     <Content Include="Reference\Newtonsoft.Json.dll" />
     <Content Include="Reference\Quartz.dll" />
+    <Content Include="Reference\StackExchange.Redis.dll" />
     <Content Include="Reference\System.Data.SQLite.dll" />
   </ItemGroup>
   <ItemGroup>

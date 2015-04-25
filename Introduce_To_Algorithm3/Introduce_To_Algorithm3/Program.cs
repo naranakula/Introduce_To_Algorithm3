@@ -21,6 +21,7 @@ using Introduce_To_Algorithm3.Common.Structs;
 using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Utils.sqls;
 using Introduce_To_Algorithm3.Common.Utils.threads;
+using Introduce_To_Algorithm3.OpenSourceLib.Cache;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs;
 using log4net.Util;
@@ -34,6 +35,9 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
+            RedisClientHelper.Steup("localhost");
+            RedisClientHelper.Instance.SetString("Hello", "world", new TimeSpan(0, 0, 10));
+
             int result = CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
 
             Console.WriteLine(result);

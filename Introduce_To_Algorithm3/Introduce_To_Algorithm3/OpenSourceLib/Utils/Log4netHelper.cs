@@ -43,6 +43,24 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         {
             log4net.LogManager.GetLogger(LOGGERNAME).Error(msg);
         }
+        /// <summary>
+        /// 写error日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        public static void Error(object msg)
+        {
+            log4net.LogManager.GetLogger(LOGGERNAME).Error(msg);
+        }
+
+        /// <summary>
+        /// 写error日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        /// <param name="args">格式化参数</param>
+        public static void Error(string msg,string args)
+        {
+            log4net.LogManager.GetLogger(LOGGERNAME).Error(string.Format(msg,args));
+        }
 
         /// <summary>
         /// 写error日志
@@ -87,6 +105,27 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             log4net.LogManager.GetLogger(LOGGERNAME).Warn(msg, exception);
         }
 
+
+        /// <summary>
+        /// 写error日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        public static void Warn(object msg)
+        {
+            log4net.LogManager.GetLogger(LOGGERNAME).Warn(msg);
+        }
+
+        /// <summary>
+        /// 写error日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        /// <param name="args">格式化参数</param>
+        public static void Warn(string msg, string args)
+        {
+            log4net.LogManager.GetLogger(LOGGERNAME).Warn(string.Format(msg, args));
+        }
+
+
         /// <summary>
         /// 写warn日志
         /// </summary>
@@ -118,6 +157,26 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         {
             log4net.LogManager.GetLogger(LOGGERNAME).Info(msg, exception);
         }
+
+        /// <summary>
+        /// 写error日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        public static void Info(object msg)
+        {
+            log4net.LogManager.GetLogger(LOGGERNAME).Info(msg);
+        }
+
+        /// <summary>
+        /// 写error日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        /// <param name="args">格式化参数</param>
+        public static void Info(string msg, string args)
+        {
+            log4net.LogManager.GetLogger(LOGGERNAME).Info(string.Format(msg, args));
+        }
+
 
         /// <summary>
         /// 写info日志
@@ -161,6 +220,27 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         {
             log4net.LogManager.GetLogger(LOGGERNAME).DebugFormat(format, args);
         }
+
+
+        /// <summary>
+        /// 写error日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        public static void Debug(object msg)
+        {
+            log4net.LogManager.GetLogger(LOGGERNAME).Debug(msg);
+        }
+
+        /// <summary>
+        /// 写error日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        /// <param name="args">格式化参数</param>
+        public static void Debug(string msg, string args)
+        {
+            log4net.LogManager.GetLogger(LOGGERNAME).Debug(string.Format(msg, args));
+        }
+
 
         #endregion
     }
