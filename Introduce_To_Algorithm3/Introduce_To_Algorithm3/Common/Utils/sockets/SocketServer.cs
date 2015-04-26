@@ -133,7 +133,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         {
             //construct a listener
             listener = new TcpListener(IPAddress.Any, port);
-            listener.Start(1024);
+            //backlog是最大允许的同时排队的连接数，用于处理并发的连接，与实际的连接数无关，因此该数不必太大
+            listener.Start(512);
 
             while (isRunning)
             {

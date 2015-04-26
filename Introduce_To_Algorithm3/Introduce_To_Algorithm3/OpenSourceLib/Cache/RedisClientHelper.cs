@@ -37,14 +37,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Cache
         /// 创建实例
         /// </summary>
         /// <returns></returns>
-        public static RedisClientHelper Steup(string url)
+        public static void Steup(string url)
         {
             if (_instance != null)
             {
-                return _instance;
+                return;
             }
 
-            return _instance ?? (_instance = new RedisClientHelper(url));
+            _instance = new RedisClientHelper(url);
         }
 
         /// <summary>
@@ -273,6 +273,22 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Cache
         #endregion
 
         #region 事务
+
+        public void Transtion()
+        {
+            ITransaction transaction = _multiplexer.GetDatabase().CreateTransaction();
+            //设置事务的检查条件
+            //Constraints are basically pre-canned tests involving  WATCH , some kind of test, and a check on the result. If all the constraints pass, the  MULTI / EXEC  is issued; otherwise  UNWATCH  is issued.
+            //transaction.AddCondition(Condition.HashNotExists());
+            //排队事务操作
+            //Note that the object returned from  CreateTransaction  only has access to the async methods - because the result of each operation will not be known until after  Execute  (or  ExecuteAsync ) has completed
+            //transaction.HashSetAsync()
+
+            bool committed = transaction.Execute();
+            //if true: it was applied; if false: it was rolled back
+
+        }
+
         #endregion
 
         #endregion

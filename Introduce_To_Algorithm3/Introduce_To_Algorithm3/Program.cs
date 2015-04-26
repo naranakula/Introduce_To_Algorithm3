@@ -19,6 +19,7 @@ using Introduce_To_Algorithm3.Common.MachineLearning;
 using Introduce_To_Algorithm3.Common.Math;
 using Introduce_To_Algorithm3.Common.Structs;
 using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.Common.Utils.sockets;
 using Introduce_To_Algorithm3.Common.Utils.sqls;
 using Introduce_To_Algorithm3.Common.Utils.threads;
 using Introduce_To_Algorithm3.OpenSourceLib.Cache;
@@ -35,12 +36,47 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            RedisClientHelper.Steup("localhost");
-            RedisClientHelper.Instance.SetString("Hello", "world", new TimeSpan(0, 0, 10));
 
-            int result = CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
+            RedisClientHelper.Steup("127.0.0.1");
 
-            Console.WriteLine(result);
+            RedisClientHelper.Instance.SetString("hello", "world", new TimeSpan(0, 0, 30));
+            while (true)
+            {
+                Console.WriteLine(RedisClientHelper.Instance.GetString("hello"));
+                Thread.Sleep(1000);
+            }
+            
+            //List<Socket> sockets = new List<Socket>();
+
+            //for (int i = 0; i < 2048; i++)
+            //{
+            //    Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            //    socket.Connect("127.0.0.1", 1089);
+            //    lock (sockets)
+            //    {
+            //        sockets.Add(socket);
+            //    }
+            //    Thread.Sleep(10);
+            //}
+
+            //Console.WriteLine("helloworld");
+            /*
+            Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            socket.Bind(new IPEndPoint(IPAddress.Any, 1089));
+            socket.Listen(1);
+            List<Socket> list = new List<Socket>();
+
+            while (true)
+            {
+                Socket client =socket.Accept();
+                if (client != null)
+                {
+                    list.Add(client);
+                    Console.WriteLine(list.Count);
+                }
+                Thread.Sleep(10);
+            }
+            */
 
             /* string sql = @"SELECT [VALUE]
       ,[REMARK]
