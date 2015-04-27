@@ -104,6 +104,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\StackExchange.Redis.dll</HintPath>
     </Reference>
+    <Reference Include="SuperSocket.Common, Version=1.6.4.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\SuperSocket\SuperSocket.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketBase, Version=1.6.4.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\SuperSocket\SuperSocket.SocketBase.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketEngine, Version=1.6.4.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\SuperSocket\SuperSocket.SocketEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -316,6 +328,10 @@
     <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\ActiveMqClientHelper.cs" />
     <Compile Include="OpenSourceLib\Cache\RedisClientHelper.cs" />
+    <Compile Include="OpenSourceLib\SuperSocket\Server\BootStrapUtils.cs" />
+    <Compile Include="OpenSourceLib\SuperSocket\Server\CustomServer.cs" />
+    <Compile Include="OpenSourceLib\SuperSocket\Server\CustomSession.cs" />
+    <Compile Include="OpenSourceLib\SuperSocket\Server\SuperSocketServer.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\Cache\BeITMemcachedHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
@@ -353,12 +369,22 @@
     <Content Include="Reference\Newtonsoft.Json.dll" />
     <Content Include="Reference\Quartz.dll" />
     <Content Include="Reference\StackExchange.Redis.dll" />
+    <Content Include="Reference\SuperSocket\SuperSocket.Common.dll" />
+    <Content Include="Reference\SuperSocket\SuperSocket.Common.pdb" />
+    <Content Include="Reference\SuperSocket\SuperSocket.Common.XML" />
+    <Content Include="Reference\SuperSocket\SuperSocket.SocketBase.dll" />
+    <Content Include="Reference\SuperSocket\SuperSocket.SocketBase.pdb" />
+    <Content Include="Reference\SuperSocket\SuperSocket.SocketBase.XML" />
+    <Content Include="Reference\SuperSocket\SuperSocket.SocketEngine.dll" />
+    <Content Include="Reference\SuperSocket\SuperSocket.SocketEngine.pdb" />
+    <Content Include="Reference\SuperSocket\SuperSocket.SocketEngine.XML" />
     <Content Include="Reference\System.Data.SQLite.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\ApproximationAlgorithm\" />
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
+    <Folder Include="OpenSourceLib\SuperSocket\Client\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -22,6 +22,7 @@ using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Utils.sockets;
 using Introduce_To_Algorithm3.Common.Utils.sqls;
 using Introduce_To_Algorithm3.Common.Utils.threads;
+using Introduce_To_Algorithm3.OpenSourceLib;
 using Introduce_To_Algorithm3.OpenSourceLib.Cache;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs;
@@ -36,13 +37,11 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            RedisClientHelper.Steup("127.0.0.1,192.168.163.218");
-     
-            for (int i = 0; i < 10; i++)
-            {
-                Console.WriteLine(RedisClientHelper.Instance.GetString("hello" + i));
-            }
 
+            SuperSocketServer server = new SuperSocketServer(1098);
+
+            int count = CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
+            Console.WriteLine(count);
 
             //List<Socket> sockets = new List<Socket>();
 

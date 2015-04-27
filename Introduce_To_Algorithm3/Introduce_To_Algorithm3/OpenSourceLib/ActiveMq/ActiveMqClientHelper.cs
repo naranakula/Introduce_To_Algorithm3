@@ -11,7 +11,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
     /// </summary>
     public class ActiveMqClientHelper
     {
-        #region Consumer
+        #region Consumer相关
+        #endregion
+
+        #region Provider相关
         #endregion
     }
 }
