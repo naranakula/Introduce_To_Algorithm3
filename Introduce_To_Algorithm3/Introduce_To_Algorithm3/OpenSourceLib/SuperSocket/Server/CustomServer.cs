@@ -16,7 +16,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib
 
         #region 构造函数
 
-        //public CustomServer():base(new CommandLineReceiveFilterFactory())
+        //public CustomServer()
+        //    : base(new CommandLineReceiveFilterFactory())
         //{
         //    //
         //    //默认的命令行协议要求每个请求必须以”\r\n”结束，空格分隔命令、各个参数。在SuperSocket中命令行协议会翻译成StringRequestInfo实例。
@@ -41,15 +42,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib
         //    //一个协议使用三个字符 "###" 作为结束符
         //}
 
-        ///// <summary>
-        ///// 固定数量分隔符协议
-        ///// </summary>
-        //public CustomServer(int i)
-        //    : base()
-        //{
-        //    //结束符协议
-        //    //一个协议使用三个字符 "###" 作为结束符
-        //}
+        /// <summary>
+        /// 固定数量分隔符协议
+        /// </summary>
+        public CustomServer(int i)
+            : base()
+        {
+            //结束符协议
+            //一个协议使用三个字符 "###" 作为结束符
+        }
 
         #endregion
 
