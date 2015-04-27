@@ -36,16 +36,14 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-
-            RedisClientHelper.Steup("127.0.0.1");
-
-            RedisClientHelper.Instance.SetString("hello", "world", new TimeSpan(0, 0, 30));
-            while (true)
+            RedisClientHelper.Steup("127.0.0.1,192.168.163.218");
+     
+            for (int i = 0; i < 10; i++)
             {
-                Console.WriteLine(RedisClientHelper.Instance.GetString("hello"));
-                Thread.Sleep(1000);
+                Console.WriteLine(RedisClientHelper.Instance.GetString("hello" + i));
             }
-            
+
+
             //List<Socket> sockets = new List<Socket>();
 
             //for (int i = 0; i < 2048; i++)

@@ -35,6 +35,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Cache
 
         /// <summary>
         /// 创建实例
+        /// 支持逗号分隔的节点，默认端口号6379 如localhost,127.0.0.1:77
         /// </summary>
         /// <returns></returns>
         public static void Steup(string url)

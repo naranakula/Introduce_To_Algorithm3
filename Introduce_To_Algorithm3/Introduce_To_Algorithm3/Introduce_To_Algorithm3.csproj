@@ -63,6 +63,14 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Apache.NMS, Version=1.6.0.3083, Culture=neutral, PublicKeyToken=82756feee3957618, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\activeMq\Apache.NMS.dll</HintPath>
+    </Reference>
+    <Reference Include="Apache.NMS.ActiveMQ, Version=1.6.3.3483, Culture=neutral, PublicKeyToken=82756feee3957618, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\activeMq\Apache.NMS.ActiveMQ.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging">
       <HintPath>Reference\Common.Logging.dll</HintPath>
     </Reference>
@@ -306,6 +314,7 @@
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\files\XMLHelper.cs" />
     <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\ActiveMqClientHelper.cs" />
     <Compile Include="OpenSourceLib\Cache\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\Cache\BeITMemcachedHelper.cs" />
@@ -332,6 +341,11 @@
   <ItemGroup>
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="Readme.txt" />
+    <Content Include="Reference\activeMq\Apache.NMS.ActiveMQ.dll" />
+    <Content Include="Reference\activeMq\Apache.NMS.ActiveMQ.pdb" />
+    <Content Include="Reference\activeMq\Apache.NMS.ActiveMQ.xml" />
+    <Content Include="Reference\activeMq\Apache.NMS.dll" />
+    <Content Include="Reference\activeMq\Apache.NMS.pdb" />
     <Content Include="Reference\Common.Logging.Core.dll" />
     <Content Include="Reference\Common.Logging.dll" />
     <Content Include="Reference\log4net.dll" />
@@ -351,7 +365,9 @@
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
