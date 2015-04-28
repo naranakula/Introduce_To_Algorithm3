@@ -108,6 +108,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\SuperSocket\SuperSocket.Common.dll</HintPath>
     </Reference>
+    <Reference Include="SuperSocket.Facility, Version=1.6.4.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\SuperSocket\SuperSocket.Facility.dll</HintPath>
+    </Reference>
     <Reference Include="SuperSocket.SocketBase, Version=1.6.4.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\SuperSocket\SuperSocket.SocketBase.dll</HintPath>
@@ -372,6 +376,8 @@
     <Content Include="Reference\SuperSocket\SuperSocket.Common.dll" />
     <Content Include="Reference\SuperSocket\SuperSocket.Common.pdb" />
     <Content Include="Reference\SuperSocket\SuperSocket.Common.XML" />
+    <Content Include="Reference\SuperSocket\SuperSocket.Facility.dll" />
+    <Content Include="Reference\SuperSocket\SuperSocket.Facility.XML" />
     <Content Include="Reference\SuperSocket\SuperSocket.SocketBase.dll" />
     <Content Include="Reference\SuperSocket\SuperSocket.SocketBase.pdb" />
     <Content Include="Reference\SuperSocket\SuperSocket.SocketBase.XML" />
