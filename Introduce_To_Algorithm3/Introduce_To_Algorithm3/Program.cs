@@ -37,7 +37,6 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine(1024*1024*1024);
             new DirectoryInfo(@"E:\工作相关\sources_airport\Monitor\MonitorServerConsole\bin\Debug\Logs").GetFiles("*.log",SearchOption.AllDirectories).ToList().ForEach(r=>Console.WriteLine(r));
             int count = CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
             Console.WriteLine(count);
