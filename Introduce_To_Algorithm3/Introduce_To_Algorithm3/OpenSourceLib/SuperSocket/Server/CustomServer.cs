@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.OpenSourceLib.SuperSocket.Server;
 using SuperSocket.Facility.Protocol;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
@@ -54,6 +55,25 @@ namespace Introduce_To_Algorithm3.OpenSourceLib
             //协议定义了像这样格式的请求 "#part1#part2#part3#part4#part5#part6#part7#". 每个请求有7个由 '#' 分隔的部分. 
         }
 
+        /// <summary>
+        /// 固定长度请求的协议
+        /// </summary>
+        /// <param name="filter"></param>
+        public CustomServer(FixedSizeReceiveFilter<StringRequestInfo> filter) : base(new DefaultReceiveFilterFactory<CmluFixedSizeReceiveFilter,StringRequestInfo>())
+        {
+            //在这种协议之中, 所有请求的大小都是相同的。
+        }
+
+        /// <summary>
+        /// 带起止符的协议
+        /// 即协议的开始部分和结束部分是一致的
+        /// </summary>
+        /// <param name="receiveFilter"></param>
+        public CustomServer(BeginEndMarkReceiveFilter<StringRequestInfo> receiveFilter)
+            : base(new DefaultReceiveFilterFactory<CmluBeginEndMarkReceiveFilter, StringRequestInfo>())
+        {
+            
+        }
 
         #endregion
 
