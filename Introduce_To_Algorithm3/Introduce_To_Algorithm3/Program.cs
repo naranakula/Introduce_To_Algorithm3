@@ -37,12 +37,19 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            new DirectoryInfo(@"E:\工作相关\sources_airport\Monitor\MonitorServerConsole\bin\Debug\Logs").GetFiles("*.log",SearchOption.AllDirectories).ToList().ForEach(r=>Console.WriteLine(r));
-            int count = CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
-            Console.WriteLine(count);
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    PcFunctions.MonitorOff();
+                    Thread.Sleep(1000);
+                    PcFunctions.MonitorOn();
+                    Thread.Sleep(10000);
+
+                }
+            }).Start();
 
             Console.ReadLine();
-
             //List<Socket> sockets = new List<Socket>();
 
             //for (int i = 0; i < 2048; i++)

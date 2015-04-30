@@ -4,6 +4,7 @@ using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
@@ -103,6 +104,30 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
+
+        /// <summary>
+        /// 该函数综合鼠标击键和鼠标动作。
+        /// </summary>
+        /// <param name="dwFlags"></param>
+        /// <param name="dx"></param>
+        /// <param name="dy"></param>
+        /// <param name="dwData"></param>
+        /// <param name="dwExtraInfo"></param>
+        [DllImport("user32.dll")]
+        static extern void mouse_event(Int32 dwFlags, Int32 dx, Int32 dy, Int32 dwData, UIntPtr dwExtraInfo);
+
+        private const int MOUSEEVENTF_MOVE = 0x0001;
+
+        /// <summary>
+        /// 在win8中开屏需要移动鼠标
+        /// </summary>
+        private static void Wake()
+        {
+            mouse_event(MOUSEEVENTF_MOVE, 0, 1, 0, UIntPtr.Zero);
+            Thread.Sleep(10);
+            mouse_event(MOUSEEVENTF_MOVE, 0, -1, 0, UIntPtr.Zero);
+        }
+
         #endregion
 
         #region 主功能区
@@ -147,6 +172,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         public static void MonitorOn()
         {
+            //win8中需要
+            Wake();
             // Turn on monitor
             PostMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, -1);
         }
