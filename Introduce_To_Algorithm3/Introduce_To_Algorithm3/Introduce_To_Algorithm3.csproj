@@ -96,6 +96,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="Quartz, Version=2.3.0.18, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Quartz.dll</HintPath>
@@ -344,6 +348,7 @@
     <Compile Include="OpenSourceLib\SuperSocket\Server\SuperSocketServer.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\Cache\BeITMemcachedHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\ProtobufUtils.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
@@ -377,6 +382,9 @@
     <Content Include="Reference\log4net.dll" />
     <Content Include="Reference\MathNet.Numerics.dll" />
     <Content Include="Reference\Newtonsoft.Json.dll" />
+    <Content Include="Reference\protobuf-net.dll" />
+    <Content Include="Reference\protobuf-net.pdb" />
+    <Content Include="Reference\protobuf-net.xml" />
     <Content Include="Reference\Quartz.dll" />
     <Content Include="Reference\StackExchange.Redis.dll" />
     <Content Include="Reference\SuperSocket\SuperSocket.Common.dll" />
@@ -400,7 +408,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="EasySocket\自主研发.docx" />
+    <None Include="EasySocket\ReadMe.docx" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
