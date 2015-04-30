@@ -37,18 +37,7 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            new Thread(() =>
-            {
-                while (true)
-                {
-                    PcFunctions.MonitorOff();
-                    Thread.Sleep(1000);
-                    PcFunctions.MonitorOn();
-                    Thread.Sleep(10000);
-
-                }
-            }).Start();
-
+          
             Console.ReadLine();
             //List<Socket> sockets = new List<Socket>();
 
