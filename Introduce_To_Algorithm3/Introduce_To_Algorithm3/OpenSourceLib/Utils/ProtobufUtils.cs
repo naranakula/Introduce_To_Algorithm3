@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +11,80 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// <summary>
     /// Protobuf 是google的一种数据交换格式。支持数据的序列化和反序列化。支持不同平台的通信。
     /// 效率和兼容性优异，二进制格式,平台独立，可拓展
+    /// Protobuf is equally comfortable serializing fields and properties, and it can serialize both public and private fields and properties 。 but the must have  [ProtoMember(N)] attribute
     /// </summary>
-    public static class ProtobufUtils
+    public static class ProtobufUtils<T> where T:class
     {
+        /// <summary>
+        /// 序列化信息到文件中
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="file"></param>
+        public static void Serialize(T obj, string file)
+        {
+            //如果指定的文件不存在，则创建该文件；如果存在并且不是只读的，则将覆盖其内容。
+            using (var stream = File.Create(file))
+            {
+                Serializer.Serialize(stream,obj);
+            }
+        }
+
+        /// <summary>
+        /// 序列化为字节数组
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static byte[] Serialize(T obj)
+        {
+            //序列化的字节数组
+            byte[] buffer = null;
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                Serializer.Serialize(stream,obj);
+                stream.Seek(0, SeekOrigin.Begin);
+                //初始化buffer，并从内存流中读取数据
+                buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+            }
+
+            return buffer;
+        }
+
+        /// <summary>
+        /// 反序列化
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static T Deserialize(string file)
+        {
+            T obj = null;
+            using (var stream = File.OpenRead(file))
+            {
+                obj = Serializer.Deserialize<T>(stream);
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// 反序列化
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static T Deserialize(byte[] buffer)
+        {
+            //创建内存流
+            using (MemoryStream ms = new MemoryStream())
+            {
+                //写缓冲区数据到内存流
+                ms.Write(buffer, 0, buffer.Length);
+                //重置内存流的位置 ，与 ms.Seek(0, SeekOrigin.Begin);方法的效果一直
+                ms.Position = 0;
+                return Serializer.Deserialize<T>(ms);
+            }
+
+        }
     }
 
     [ProtoContract]
