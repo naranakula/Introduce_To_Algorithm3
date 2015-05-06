@@ -9,33 +9,48 @@ using Newtonsoft.Json.Converters;
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
     /// <summary>
-    /// json helper
+    /// JSON 帮助类
     /// </summary>
     public static class JsonHelper
     {
+        /// <summary>
+        /// Json序列器设备
+        /// </summary>
         private static readonly JsonSerializerSettings JsonSettings;
+
+        /// <summary>
+        /// 时间格式
+        /// </summary>
         private const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
+        /// <summary>
+        /// 静态构造函数
+        /// </summary>
         static JsonHelper()
         {
-            var dataTimeConverter = new IsoDateTimeConverter {DateTimeFormat = DateTimeFormat};
+            var dateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = DateTimeFormat };
             JsonSettings = new JsonSerializerSettings
             {
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 NullValueHandling = NullValueHandling.Ignore,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
-            JsonSettings.Converters.Add(dataTimeConverter);
+
+            JsonSettings.Converters.Add(dateTimeConverter);
         }
 
         /// <summary>
-        /// Convert to json string
+        /// convert to json string
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public static string ToJson(object obj)
         {
-            if (obj == null) return null;
+            if (obj == null)
+            {
+                return null;
+            }
+
             try
             {
                 return JsonConvert.SerializeObject(obj, Formatting.None, JsonSettings);
@@ -63,6 +78,5 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                 throw new JsonSerializationException(e.Message);
             }
         }
-
     }
 }
