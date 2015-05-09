@@ -84,6 +84,10 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="HPSocketCS, Version=3.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\HPSocket4CS\x86\HPSocketCS.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\log4net.dll</HintPath>
@@ -336,6 +340,7 @@
     <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\ActiveMqClientHelper.cs" />
     <Compile Include="OpenSourceLib\Cache\RedisClientHelper.cs" />
+    <Compile Include="OpenSourceLib\HP-Socket\ServiceState.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Server\BootStrapUtils.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Server\CmluBeginEndMarkReceiveFilter.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Server\CmluFixedHeaderReceiveFilter.cs" />
@@ -379,6 +384,10 @@
     <Content Include="Reference\activeMq\Apache.NMS.pdb" />
     <Content Include="Reference\Common.Logging.Core.dll" />
     <Content Include="Reference\Common.Logging.dll" />
+    <Content Include="Reference\HPSocket4CS\x64\HPSocket4C_U.dll" />
+    <Content Include="Reference\HPSocket4CS\x64\HPSocketCS.dll" />
+    <Content Include="Reference\HPSocket4CS\x86\HPSocket4C_U.dll" />
+    <Content Include="Reference\HPSocket4CS\x86\HPSocketCS.dll" />
     <Content Include="Reference\log4net.dll" />
     <Content Include="Reference\MathNet.Numerics.dll" />
     <Content Include="Reference\Newtonsoft.Json.dll" />
@@ -412,6 +421,7 @@
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="OpenSourceLib\HP-Socket\HP-Socket.docx" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket_Development_Guide_%28v3.3-20150101%29.pdf" />
     <None Include="packages.config">
       <SubType>Designer</SubType>

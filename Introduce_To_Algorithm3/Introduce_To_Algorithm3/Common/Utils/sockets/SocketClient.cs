@@ -304,7 +304,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         {
             //create a tcp socket
             Socket socket =  new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            
             //create a local point
             IPEndPoint localPoint = new IPEndPoint(IPAddress.Any,port);
 
