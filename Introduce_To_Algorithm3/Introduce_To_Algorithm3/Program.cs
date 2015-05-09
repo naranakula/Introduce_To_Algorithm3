@@ -37,7 +37,7 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            int count = CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
+            int count = CodeCounter.GetCodeLines(@"E:\Sockets\SuperSocket(1.6.4).Source");
             Console.WriteLine(count);
         }
     }

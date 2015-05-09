@@ -341,6 +341,8 @@
     <Compile Include="OpenSourceLib\ActiveMq\ActiveMqClientHelper.cs" />
     <Compile Include="OpenSourceLib\Cache\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\ServiceState.cs" />
+    <Compile Include="OpenSourceLib\SuperSocket\Common\BinaryUtil.cs" />
+    <Compile Include="OpenSourceLib\SuperSocket\Common\SocketEx.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Server\BootStrapUtils.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Server\CmluBeginEndMarkReceiveFilter.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Server\CmluFixedHeaderReceiveFilter.cs" />
