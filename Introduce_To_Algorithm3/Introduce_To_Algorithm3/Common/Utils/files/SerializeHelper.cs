@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Formatters.Soap;
 using System.Text;
@@ -134,7 +135,7 @@ namespace Com.Utility.Commons
         /// <returns></returns>
         public static byte[] SerilizeBytes(object instance)
         {
-            if(instance == null)
+            if (instance == null)
             {
                 return null;
             }
@@ -175,10 +176,39 @@ namespace Com.Utility.Commons
             using(MemoryStream ms = new MemoryStream())
             {
                 //写缓冲区数据到内存流
-                ms.Write(buffer,0,buffer.Length);
+                ms.Write(buffer, 0, buffer.Length);
                 //重置内存流的位置 ，与 ms.Seek(0, SeekOrigin.Begin);方法的效果一直
                 ms.Position = 0;
                 return (T)serializer.Deserialize(ms);
+            }
+        }
+
+        /// <summary>
+        /// 对象序列化成byte[]
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static byte[] ObjectToBytes(object obj)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(ms, obj);
+                return ms.GetBuffer();
+            }
+        }
+
+        /// <summary>
+        /// byte[]序列化成对象
+        /// </summary>
+        /// <param name="Bytes"></param>
+        /// <returns></returns>
+        public static object BytesToObject(byte[] bytes)
+        {
+            using (MemoryStream ms = new MemoryStream(bytes))
+            {
+                IFormatter formatter = new BinaryFormatter();
+                return formatter.Deserialize(ms);
             }
         }
     }

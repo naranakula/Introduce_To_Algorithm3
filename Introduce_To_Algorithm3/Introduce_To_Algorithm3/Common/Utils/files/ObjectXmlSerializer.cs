@@ -33,7 +33,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 serializer.Serialize(writer,obj);
             }
 
-            return Encoding.UTF8.GetString(mem.ToArray());
+            return Encoding.UTF8.GetString(mem.GetBuffer());
         }
 
         /// <summary>
