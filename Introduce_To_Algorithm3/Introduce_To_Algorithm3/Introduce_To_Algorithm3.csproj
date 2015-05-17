@@ -303,6 +303,7 @@
     <Compile Include="Common\Utils\ConsoleUtils\ConsoleEventUtils.cs" />
     <Compile Include="Common\Utils\ConsoleUtils\CpuMemoryUtils.cs" />
     <Compile Include="Common\Utils\ConsoleUtils\PcFunctions.cs" />
+    <Compile Include="Common\Utils\Des3Helper.cs" />
     <Compile Include="Common\Utils\files\DirectoryHold.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
     <Compile Include="Common\Utils\StartupUtils.cs" />
