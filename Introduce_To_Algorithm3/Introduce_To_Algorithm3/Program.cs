@@ -37,6 +37,7 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
+            Console.WriteLine(Path.Combine("http://ddw.com/","imag/o.pmg"));
             Console.WriteLine(DateTime.Now.ToString("yyyyMMdd"));
             int count = CodeCounter.GetCodeLines(@"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
             Console.WriteLine(count);

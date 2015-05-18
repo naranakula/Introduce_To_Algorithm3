@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -12,6 +14,34 @@ namespace Com.Utility.Commons
     /// </summary>
     public class ClientHelper
     {
+        #region 查看端口占用情况
+
+        /// <summary>
+        /// 获取正在占用的Tcp的point
+        /// </summary>
+        /// <returns></returns>
+        public static IPEndPoint[] PortInUse()
+        {
+            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
+            return ipEndPoints;
+        }
+
+        /// <summary>
+        /// 是否有tcp协议占用了端口port
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        public static bool PortInUse(int port)
+        {
+            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
+            return ipEndPoints.Any(r => r.Port == port);
+        }
+
+        #endregion
+
+
         /// <summary>
         /// 短连接实现
         /// </summary>
