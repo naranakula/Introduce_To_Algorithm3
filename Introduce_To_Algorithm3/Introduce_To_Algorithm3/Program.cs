@@ -38,7 +38,7 @@ namespace Introduce_To_Algorithm3
         private static void Main(string[] args)
         {
             Console.WriteLine(DateTime.Now.ToString("yyyyMMdd"));
-            int count = CodeCounter.GetCodeLines(@"D:\搜狗高速下载\sharp-ftp-server-master\sharp-ftp-server-master\src");
+            int count = CodeCounter.GetCodeLines(@"D:\搜狗高速下载\Microsoft.IO.RecyclableMemoryStream-master\Microsoft.IO.RecyclableMemoryStream-master\src");
             Console.WriteLine(count);
         }
     }
