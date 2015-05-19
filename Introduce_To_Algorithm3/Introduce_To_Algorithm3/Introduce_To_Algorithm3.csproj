@@ -309,6 +309,7 @@
     <Compile Include="Common\Utils\ConsoleUtils\PcFunctions.cs" />
     <Compile Include="Common\Utils\Des3Helper.cs" />
     <Compile Include="Common\Utils\files\DirectoryHold.cs" />
+    <Compile Include="Common\Utils\FTP\CLIENT\ChecksumExtension.cs" />
     <Compile Include="Common\Utils\FTP\SERVER\FTPServer.cs" />
     <Compile Include="Common\Utils\FTP\SERVER\ServerSettings.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
@@ -428,7 +429,6 @@
     <Folder Include="Common\ApproximationAlgorithm\" />
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
-    <Folder Include="Common\Utils\FTP\CLIENT\" />
     <Folder Include="OpenSourceLib\SuperSocket\Client\" />
   </ItemGroup>
   <ItemGroup>
