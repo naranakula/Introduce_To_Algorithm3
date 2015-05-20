@@ -36,6 +36,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.FTP.SERVER
                 Stop();
 
                 FTPListener = new TcpListener(IPAddress.Any,21);
+                FTPListener.Start(511);
+                
+                //start accepting the incoming clients.
+                FTPListener.BeginAcceptSocket(new AsyncCallback(NewFTPClientArrived), null);
 
                 return true;
             }
@@ -43,6 +47,27 @@ namespace Introduce_To_Algorithm3.Common.Utils.FTP.SERVER
             {
                 Stop();
                 return false;
+            }
+        }
+
+        private void NewFTPClientArrived(IAsyncResult ar)
+        {
+            try
+            {
+                FTPClients.Add(new FtpClient)
+            }
+            catch (Exception ex)
+            {
+                
+            }
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                
             }
         }
 

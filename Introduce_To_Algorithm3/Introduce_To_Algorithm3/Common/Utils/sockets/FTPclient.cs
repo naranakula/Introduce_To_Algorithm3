@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Net.Sockets;
 
-namespace iFlyTek.WireLessCityDemo10.CommonOperation
+namespace Com.Utility.Commons
 {
 	/// <summary>
 	/// FTP Client

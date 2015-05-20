@@ -325,7 +325,10 @@
     <Compile Include="Common\Utils\files\DirectoryHold.cs" />
     <Compile Include="Common\Utils\FTP\CLIENT\ChecksumExtension.cs" />
     <Compile Include="Common\Utils\FTP\CLIENT\MD5.cs" />
+    <Compile Include="Common\Utils\FTP\SERVER\FTPClient.cs" />
     <Compile Include="Common\Utils\FTP\SERVER\FTPServer.cs" />
+    <Compile Include="Common\Utils\FTP\SERVER\FTPUser.cs" />
+    <Compile Include="Common\Utils\FTP\SERVER\HTTPServer.cs" />
     <Compile Include="Common\Utils\FTP\SERVER\ServerSettings.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
     <Compile Include="Common\Utils\StartupUtils.cs" />
