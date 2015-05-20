@@ -54,7 +54,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.FTP.SERVER
         {
             try
             {
-                FTPClients.Add(new FtpClient)
             }
             catch (Exception ex)
             {
