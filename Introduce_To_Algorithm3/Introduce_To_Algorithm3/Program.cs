@@ -24,6 +24,7 @@ using Introduce_To_Algorithm3.Common.Utils.sqls;
 using Introduce_To_Algorithm3.Common.Utils.threads;
 using Introduce_To_Algorithm3.OpenSourceLib;
 using Introduce_To_Algorithm3.OpenSourceLib.Cache;
+using Introduce_To_Algorithm3.OpenSourceLib.FTPUtils;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs;
 using log4net.Util;
@@ -37,10 +38,15 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-
-            Console.WriteLine(DateTime.Now.ToString("yyyyMMdd"));
-            int count = CodeCounter.GetCodeLines(@"D:\搜狗高速下载\Microsoft.IO.RecyclableMemoryStream-master\Microsoft.IO.RecyclableMemoryStream-master\src");
-            Console.WriteLine(count);
+            SystemNetFtpClientImpl.Init("cmlu", "558276344");
+            var instance = SystemNetFtpClientImpl.GetInstance();
+            instance.Connect();
+            instance.CreateDirectory("/test/cmlu");
+            if (instance.FileExists("/index.html"))
+                instance.DeleteFile("/index.html");
+            instance.GetListing();
+            instance.WriteFile("/test/cmlu.txt");
+            instance.Close();
         }
     }
 
