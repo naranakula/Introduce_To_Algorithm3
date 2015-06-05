@@ -38,7 +38,7 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            SystemNetFtpClientImpl.Init("cmlu", "558276344");
+            SystemNetFtpClientImpl.Init("cmlu", "558276344","192.168.163.230");
             var instance = SystemNetFtpClientImpl.GetInstance();
             instance.Connect();
             instance.CreateDirectory("/test/cmlu");
