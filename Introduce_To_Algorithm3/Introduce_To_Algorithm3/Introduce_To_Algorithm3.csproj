@@ -96,6 +96,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.0.0.0\lib\net45\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Newtonsoft.Json.dll</HintPath>
@@ -374,6 +378,7 @@
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullClient.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullServer.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpServer.cs" />
+    <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Common\BinaryUtil.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Common\BufferManager.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Common\SocketEx.cs" />
@@ -454,7 +459,6 @@
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
     <Folder Include="OpenSourceLib\MSHttpClient\" />
-    <Folder Include="OpenSourceLib\RecyclableMS\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
     <Folder Include="OpenSourceLib\SuperSocket\Client\" />
   </ItemGroup>
