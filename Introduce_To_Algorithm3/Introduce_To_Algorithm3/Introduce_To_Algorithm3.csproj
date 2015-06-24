@@ -368,6 +368,7 @@
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\files\XMLHelper.cs" />
     <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
+    <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\ActiveMqClientHelper.cs" />
     <Compile Include="OpenSourceLib\Cache\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\FTPUtils\SystemNetFtpClientImpl.cs" />
