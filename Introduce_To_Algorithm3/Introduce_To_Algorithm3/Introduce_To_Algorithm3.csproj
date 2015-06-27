@@ -368,6 +368,9 @@
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\files\XMLHelper.cs" />
     <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
+    <Compile Include="HPSocket\HPClient.cs" />
+    <Compile Include="HPSocket\HPServerSocket.cs" />
+    <Compile Include="HPSocket\HPServer.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\ActiveMqClientHelper.cs" />
     <Compile Include="OpenSourceLib\Cache\RedisClientHelper.cs" />
@@ -465,7 +468,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="EasySocket\ReadMe.docx" />
+    <None Include="HPSocket\ReadMe.docx" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
