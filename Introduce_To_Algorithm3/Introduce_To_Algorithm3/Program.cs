@@ -14,16 +14,9 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            List<List<byte>> list = new List<List<byte>>();
-            for (int i = 0; i < 10000; i++)
-            {
-                List<byte> item = new List<byte>(1024);
-                list.Add(item);
-            }
-            Console.WriteLine("Hello world"+GC.GetTotalMemory(false)/1024/1024);
-            Console.ReadLine();
-            Console.ReadLine();
-            Console.WriteLine(list);
+            int count = CodeCounter.GetCodeLines(
+                    @"C:\Users\cmlu\Documents\GitHub\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
+            Console.WriteLine(count);
         }
 
     }
