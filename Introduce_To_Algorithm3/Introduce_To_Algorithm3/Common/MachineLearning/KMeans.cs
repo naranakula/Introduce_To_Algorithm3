@@ -69,7 +69,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         public void Cluster()
         {
             //第一步从N个点中随机选取K个作为中心
-            Init();
+            double[,] centriods = Init();
 
             //第二步对每个点测量其到中心的距离
         }
@@ -125,10 +125,21 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         }
 
         /// <summary>
-        /// 中心点
+        /// 两点之间距离的平方
         /// </summary>
-        private double[,] centriods;
+        /// <param name="point1"></param>
+        /// <param name="point2"></param>
+        /// <returns></returns>
+        public double DistanceSquare(double[] point1, double[] point2)
+        {
+            double result = 0;
+            for (int i = 0; i < point1.GetLength(0); i++)
+            {
+                result += (point1[i] - point2[i]) * (point1[i] - point2[i]);
+            }
 
+            return result;
+        }
         #endregion
 
 
