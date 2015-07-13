@@ -14,8 +14,8 @@ namespace Introduce_To_Algorithm3.Common.Math
         {
         }
 
-        public DoubleMatrix(double[,] @from)
-            : base(@from)
+        public DoubleMatrix(double[,] from)
+            : base(from)
         {
         }
         #endregion
