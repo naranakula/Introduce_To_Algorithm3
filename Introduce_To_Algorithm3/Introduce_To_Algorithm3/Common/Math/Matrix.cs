@@ -194,11 +194,67 @@ namespace Introduce_To_Algorithm3.Common.Math
             {
                 for (int j = 0; j < _column; j++)
                 {
-                    matrix[i, j] = this[i, j];
+                    matrix[i, j] = _matrix[i, j];
                 }
             }
             return matrix;
         }
+
+        /// <summary>
+        /// 复制
+        /// </summary>
+        /// <returns></returns>
+        public T[,] Copy()
+        {
+            T[,] matrix = new T[_row, _column];
+
+            for (int i = 0; i < _row; i++)
+            {
+                for (int j = 0; j < _column; j++)
+                {
+                    matrix[i, j] = _matrix[i, j];
+                }
+            }
+            return matrix;
+        }
+        #endregion
+
+        #region Row Column
+
+        /// <summary>
+        /// 获取第index行
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public T[] Row(int index)
+        {
+            T[] result = new T[_matrix.GetLength(1)];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = _matrix[index, i];
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取index列
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public T[] Column(int index)
+        {
+            T[] result = new T[_matrix.GetLength(0)];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = _matrix[i, index];
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }

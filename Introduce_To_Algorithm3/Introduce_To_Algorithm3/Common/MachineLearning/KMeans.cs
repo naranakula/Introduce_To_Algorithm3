@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.Common.Math;
 
 namespace Introduce_To_Algorithm3.Common.MachineLearning
 {
@@ -18,10 +19,12 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
     /// </summary>
     public class KMeans
     {
+        #region Member
         /// <summary>
         /// 底层存储
         /// </summary>
-        private double[,] _matrix;
+        private DoubleMatrix _matrix;
+
 
         /// <summary>
         /// The k OF K means
@@ -44,15 +47,24 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         private Random rand = new Random();
 
         /// <summary>
+        /// 分组结果
+        /// </summary>
+        private List<HashSet<int>> clusterResult; 
+
+        #endregion
+
+        #region 构造函数
+        /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="k"></param>
-        public KMeans(double[,] matrix, int k)
+        public KMeans(DoubleMatrix matrix, int k)
         {
             this.K = k;
             this._matrix = matrix;
         }
+        #endregion
 
 
         #region 核心算法
@@ -68,35 +80,98 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         /// </summary>
         public void Cluster()
         {
-            //第一步从N个点中随机选取K个作为中心
-            double[,] centriods = Init();
+            //第一步从N个点中随机选取K个点作为中心
+            double[][] tempcentriods = Init();
 
-            //第二步对每个点测量其到中心的距离
+            int count = 0;
+            while (count++ < LoopLimit)
+            {
+                double[][] centriods = tempcentriods;
+                //第二步对每个点测量到中心的距离,并将其归于最近中心的类
+                List<HashSet<int>> list = new List<HashSet<int>>();
+                for (int i = 0; i < K; i++)
+                {
+                    list.Add(new HashSet<int>());
+                }
+
+                for (int i = 0; i < _matrix.Rows; i++)
+                {
+                    int min = 0;
+                    double minDis = Double.MaxValue;
+                    for (int j = 0; j < K; j++)
+                    {
+                        double curDis = DistanceSquare(centriods[j], _matrix.Row(i));
+                        if (minDis > curDis)
+                        {
+                            minDis = curDis;
+                            min = j;
+                        }
+                    }
+
+                    list[min].Add(i);
+                }
+
+                //第三部重新计算中心点
+                double [][] newCent = new double[K][];
+                for (int i = 0; i < K; i++)
+                {
+                    newCent[i] = new double[_matrix.Columns];
+                }
+
+                for (int i = 0; i < K; i++)
+                {
+                    double [] sum = new double[_matrix.Columns];
+                    foreach (var index in list[i])
+                    {
+                        double[] temp = _matrix.Row(index);
+                        for (int j = 0; j < temp.Length; j++)
+                        {
+                            sum[j] += temp[j];
+                        }
+                    }
+
+                    for (int j = 0; j < sum.Length; j++)
+                    {
+                        sum[j] = sum[j]/list[i].Count;
+                    }
+
+                    newCent[i] = sum;
+                }
+
+                clusterResult = list;
+                bool isEnd = true;
+
+                for (int i = 0; i < K; i++)
+                {
+                    if (DistanceSquare(newCent[i], centriods[i]) > 1)
+                    {
+                        isEnd = false;
+                        break;
+                    }
+                }
+
+                if (isEnd)
+                {
+                    break;
+                }
+            }
         }
 
         /// <summary>
         /// 初始化
         /// </summary>
-        /// <returns>返回</returns>
-        public double[,] Init()
+        public double[][] Init()
         {
-            //1）从N个点中随机选取K个作为中心
-            int row = _matrix.GetLength(0);
-            int column = _matrix.GetLength(1);
-            double[,] matrix = new double[row,column];
-            //复制原数据
-            for (int i = 0; i < row; i++)
-            {
-                for (int j = 0; j < column; j++)
-                {
-                    matrix[i, j] = _matrix[i, j];
-                }
-            }
-
+            //1）从N个点中获取K个作为中心
+            double[,] matrix = _matrix.Copy();//获取底层数据的备份
+            int row = matrix.GetLength(0);
+            int column = matrix.GetLength(1);
+            
             //随机重排
             for (int i = 0; i < row-1; i++)
             {
                 int j = rand.Next(i, row);
+
                 double[] temp = new double[column];
                 for (int k = 0; k < column; k++)
                 {
@@ -110,14 +185,14 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
                 }
             }
 
-            //取初始化中心点
-            double[,] centriods = new double[K,column];
+            double[][] centriods = new double[K][];
 
             for (int i = 0; i < K; i++)
             {
+                centriods[i] = new double[column];
                 for (int j = 0; j < column; j++)
                 {
-                    centriods[i,j] = matrix[i, j];
+                    centriods[i][j] = matrix[i, j];
                 }
             }
 
@@ -140,8 +215,8 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
 
             return result;
         }
-        #endregion
 
+        #endregion
 
     }
 }
