@@ -15,7 +15,7 @@ namespace Com.Utility.Commons
         /// <param name="key">配置文件的键</param>
         /// <param name="defaultValue">获取不到对应的键值时的默认返回值</param>
         /// <returns></returns>
-        public static string GetString(string key,string defaultValue)
+        public static string GetString(string key,string defaultValue="")
         {
             if(string.IsNullOrEmpty(key))
             {
