@@ -24,7 +24,7 @@ namespace Com.Utility.Commons
             try
             {
                 string value = ConfigurationManager.AppSettings[key];
-                return string.IsNullOrEmpty(value) ? defaultValue : value;
+                return value ?? defaultValue ;
             }
             catch(Exception)
             {
