@@ -165,6 +165,7 @@
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -368,6 +369,7 @@
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\files\XMLHelper.cs" />
     <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
+    <Compile Include="Common\Utils\Web\CacheUtils.cs" />
     <Compile Include="HPSocket\HPClient.cs" />
     <Compile Include="HPSocket\HPServerSocket.cs" />
     <Compile Include="HPSocket\HPServer.cs" />
