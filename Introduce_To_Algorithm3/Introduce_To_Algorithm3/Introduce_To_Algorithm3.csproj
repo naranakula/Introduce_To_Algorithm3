@@ -112,6 +112,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Quartz.dll</HintPath>
     </Reference>
+    <Reference Include="RabbitMQ.Client, Version=3.5.4.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RijndaelEncryptDecrypt, Version=1.0.0.24384, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RijndaelEncryptDecrypt.1.0.0.24384\lib\net40\RijndaelEncryptDecrypt.dll</HintPath>
       <Private>True</Private>
@@ -384,6 +388,7 @@
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullClient.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullServer.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpServer.cs" />
+    <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Common\BinaryUtil.cs" />
     <Compile Include="OpenSourceLib\SuperSocket\Common\BufferManager.cs" />
