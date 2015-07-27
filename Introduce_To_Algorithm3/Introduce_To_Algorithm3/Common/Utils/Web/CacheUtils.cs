@@ -49,6 +49,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.Web
         }
 
         /// <summary>
+        /// 移除指定键的cache
+        /// </summary>
+        /// <param name="key"></param>
+        public static void Remove(string key)
+        {
+            HttpRuntime.Cache.Remove(key);
+        }
+
+        /// <summary>
         /// 获取缓存值
         /// </summary>
         /// <typeparam name="T"></typeparam>
