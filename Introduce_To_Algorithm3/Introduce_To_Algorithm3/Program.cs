@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.Common.Utils.Serial;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3
@@ -16,8 +17,8 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            int count = CodeCounter.GetCodeLines(@"E:\Github\Introduce_To_Algorithm3\Introduce_To_Algorithm3\Introduce_To_Algorithm3");
-            Console.WriteLine(count);
+            string[] arr = SerialPortUtils.GetPorts();
+            Console.WriteLine(arr);
         }
     }
 }

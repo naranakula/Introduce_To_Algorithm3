@@ -343,6 +343,7 @@
     <Compile Include="Common\Utils\FTP\SERVER\FTPUser.cs" />
     <Compile Include="Common\Utils\FTP\SERVER\HTTPServer.cs" />
     <Compile Include="Common\Utils\FTP\SERVER\ServerSettings.cs" />
+    <Compile Include="Common\Utils\Serial\SerialPortUtils.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
     <Compile Include="Common\Utils\StartupUtils.cs" />
     <Compile Include="Common\Utils\Time\DateTimeUtils.cs" />
@@ -379,7 +380,7 @@
     <Compile Include="HPSocket\HPServer.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\ActiveMqClientHelper.cs" />
-    <Compile Include="OpenSourceLib\Cache\RedisClientHelper.cs" />
+    <Compile Include="OpenSourceLib\MSHttpClient\Cache\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\FTPUtils\SystemNetFtpClientImpl.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\Sdk.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpAgent.cs" />
@@ -405,7 +406,7 @@
     <Compile Include="OpenSourceLib\SuperSocket\Server\SuperSocketServer.cs" />
     <Compile Include="OpenSourceLib\Utils\DotNetZipUtils.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
-    <Compile Include="OpenSourceLib\Cache\BeITMemcachedHelper.cs" />
+    <Compile Include="OpenSourceLib\MSHttpClient\Cache\BeITMemcachedHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\ProtobufUtils.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />
@@ -469,7 +470,6 @@
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
-    <Folder Include="OpenSourceLib\MSHttpClient\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
     <Folder Include="OpenSourceLib\SuperSocket\Client\" />
   </ItemGroup>
