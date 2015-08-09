@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Utils.Serial;
+using Introduce_To_Algorithm3.OpenSourceLib.RabbitMq;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3
@@ -17,8 +18,15 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            string[] arr = SerialPortUtils.GetPorts();
-            Console.WriteLine(arr);
+            while (true)
+            {
+                string s = Console.ReadLine();
+                if (s == "q")
+                {
+                    break;
+                }
+                RabbitMqProducer.Send2(s);
+            }
         }
     }
 }
