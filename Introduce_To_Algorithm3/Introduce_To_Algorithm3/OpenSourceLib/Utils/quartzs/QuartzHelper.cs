@@ -46,7 +46,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         }
         #endregion
 
-
         #region Private Member
 
         /// <summary>
@@ -60,7 +59,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         private IScheduler _scheduler;
 
         #endregion
-
 
         #region Public Method
 

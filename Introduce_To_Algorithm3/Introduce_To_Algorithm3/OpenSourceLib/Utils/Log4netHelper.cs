@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// </summary>
     public static class Log4netHelper
     {
-               /// <summary>
+        /// <summary>
         /// 日志名
         /// </summary>
         private const string LOGGERNAME = "CmluLog";

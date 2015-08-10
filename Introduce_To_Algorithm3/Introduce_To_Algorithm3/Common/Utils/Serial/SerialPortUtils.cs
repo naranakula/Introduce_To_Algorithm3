@@ -36,9 +36,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.Serial
         /// <summary>
         /// 构造函数
         /// </summary>
-        private SerialPortUtils()
+        private SerialPortUtils(string comName)
         {
-            _serialPort = new SerialPort("COM3",9600,Parity.None,8,StopBits.One);
+            _serialPort = new SerialPort(comName,9600,Parity.None,8,StopBits.One);
             _serialPort.Encoding = Encoding.UTF8;
             _serialPort.DataReceived += SerialPortOnDataReceived;
             _serialPort.ErrorReceived += SerialPortOnErrorReceived;
@@ -62,7 +62,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.Serial
         /// 获取底层实例
         /// </summary>
         /// <returns></returns>
-        public static SerialPortUtils GetInstance()
+        public static SerialPortUtils GetInstance(string comName)
         {
             if (_instance != null)
             {
@@ -71,7 +71,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.Serial
 
             if (_instance == null)
             {
-                _instance = new SerialPortUtils();
+                _instance = new SerialPortUtils(comName);
             }
 
             return _instance;

@@ -64,6 +64,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         {
             IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             tcpClient = new TcpClient();
+            tcpClient.ReceiveTimeout = 5000;
+            tcpClient.SendTimeout = 5000;
             tcpClient.Connect(ipEndPoint);
             isConnected = true;
         }

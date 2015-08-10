@@ -284,14 +284,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// get exception that caused the notification, if any
         /// </summary>
-        public Queue<Exception> ExceptionQueue { get; private set; }
+        public List<Exception> ExceptionQueue { get; private set; }
 
         /// <summary>
         /// constructor
         /// </summary>
         public NotifyEventArgs()
         {
-            ExceptionQueue =new Queue<Exception>();
+            ExceptionQueue =new List<Exception>();
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="ex"></param>
         public void Enqueue(Exception ex)
         {
-            ExceptionQueue.Enqueue(ex);
+            ExceptionQueue.Add(ex);
         }
     }
 
@@ -311,6 +311,20 @@ namespace Introduce_To_Algorithm3.Common.Utils
         public RetryTimeOutException(NotifyEventArgs args)
         {
             NotifyEventArgs = args;
+        }
+
+        public override string ToString()
+        {
+            if (NotifyEventArgs == null || NotifyEventArgs.ExceptionQueue == null || NotifyEventArgs.ExceptionQueue.Count == 0)
+            {
+                return string.Empty;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < NotifyEventArgs.ExceptionQueue.Count; i++)
+            {
+                sb.AppendLine("第" + (i + 1) + "次异常：" + NotifyEventArgs.ExceptionQueue[i].ToString());
+            }
+            return sb.ToString();
         }
     }
 }
