@@ -143,6 +143,19 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         }
 
         /// <summary>
+        /// create a universal ipendpoint instance
+        /// 创建一个万能的IPEndPoint
+        /// IPaddress.Any监测所有活动的网络接口
+        /// 端口0：表示所有可用端口
+        /// creates an IPEndpoint using any available IP address on the local computer, and any available port number.
+        /// </summary>
+        /// <returns></returns>
+        public static IPEndPoint CreateUniversalIPEndPoint()
+        {
+            return new IPEndPoint(IPAddress.Any, 0);
+        }
+
+        /// <summary>
         /// create a tcplistener instance
         /// </summary>
         /// <param name="port"></param>

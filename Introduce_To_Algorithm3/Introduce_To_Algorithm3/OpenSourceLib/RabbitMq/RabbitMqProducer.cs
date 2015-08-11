@@ -56,6 +56,24 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
                 }
             }
         }
+
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <param name="message"></param>
+        public static void Send3(string message)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            using (var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    channel.ExchangeDeclare("logs","fanout");
+                    byte[] body = Encoding.UTF8.GetBytes(message);
+                    channel.BasicPublish("logs", "", null, body);
+                }
+            }
+        }
     }
 
 
@@ -113,6 +131,33 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
                     };
                     channel.BasicConsume(QueueName, false, consumer);
 
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        public static void Receive3()
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using (var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    //因为有可能先启动接收者，所以预先创建队列
+                    channel.ExchangeDeclare("logs", "fanout");
+                    var queueName = channel.QueueDeclare().QueueName;
+                    channel.QueueBind(queueName,"logs","");
+                    var consumer = new EventingBasicConsumer(channel);
+                    consumer.Received += (sender, args) =>
+                    {
+                        var buffer = args.Body;
+                        string message = Encoding.UTF8.GetString(buffer);
+                        Console.WriteLine(message);
+                    };
+                    channel.BasicConsume(queueName, true, consumer);
+                    Console.ReadLine();
+                    Console.ReadLine();
                     Console.ReadLine();
                 }
             }
