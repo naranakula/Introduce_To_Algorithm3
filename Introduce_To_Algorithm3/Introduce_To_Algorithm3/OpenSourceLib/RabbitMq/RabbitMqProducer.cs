@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
 {
@@ -74,6 +75,42 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
                 }
             }
         }
+
+        /// <summary>
+        /// direct
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void Send4(string msg)
+        {
+            var factory = new ConnectionFactory() {HostName = "localhost"};
+
+            using(var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    channel.ExchangeDeclare("direct_logs","direct");
+                    var serverity = "info";
+                    channel.BasicPublish("direct_logs",serverity,null,Encoding.UTF8.GetBytes(msg));
+                }
+            }
+        }
+
+
+        public static void Send5(string msg)
+        {
+            var factory = new ConnectionFactory(){HostName = "localhost"};
+
+            using (var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    channel.ExchangeDeclare("topic_logs","topic");
+
+                    channel.BasicPublish("topic_logs","anonymous.info",null,Encoding.UTF8.GetBytes(msg));
+                }
+            }
+        }
+
     }
 
 
@@ -163,6 +200,142 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
             }
         }
 
+
+        public static void Receive4()
+        {
+            var factory = new ConnectionFactory() {HostName = "localhost"};
+            using (var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    channel.ExchangeDeclare("direct_logs","direct");
+                    var queueName = channel.QueueDeclare().QueueName;
+                    string[] arrs = new[] {"info", "error", "warn"};
+                    foreach (var item in arrs)
+                    {
+                        channel.QueueBind(queueName,"direct_logs",item);
+                    }
+
+                    var consumer = new EventingBasicConsumer(channel);
+                    consumer.Received += (model, ea) =>
+                    {
+                        Console.WriteLine( string.Format("{0}:{1}",ea.RoutingKey,Encoding.UTF8.GetString(ea.Body)));
+                    };
+                    channel.BasicConsume(queueName, true, consumer);
+                    Console.ReadLine();
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        /// <summary>
+        /// topic
+        /// </summary>
+        public static void Receive5()
+        {
+            var factory = new ConnectionFactory(){HostName = "localhost"};
+
+            using (var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    channel.ExchangeDeclare("topic_logs","topic");
+                    var queueName = channel.QueueDeclare().QueueName;
+                    string[] arr = new[] {"*.info", "#.error"};
+                    foreach (var item in arr)
+                    {
+                        channel.QueueBind(queueName,"topic_logs",item);
+                    }
+
+                    var consumer = new EventingBasicConsumer(channel);
+                    consumer.Received += (sender, args) =>
+                    {
+                        Console.WriteLine(string.Format("{0}:{1}",args.RoutingKey,Encoding.UTF8.GetString(args.Body)));
+                    };
+
+                    channel.BasicConsume(queueName, true, consumer);
+                    Console.ReadLine();
+                    Console.ReadLine();
+                }
+            }
+        }
+
+
+        public static void Receive6()
+        {
+            var factory = new ConnectionFactory(){HostName = "localhost"};
+            using (var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    channel.QueueDeclare("rpc_queue", false, false, false, null);
+                    channel.BasicQos(0,1,false);
+
+                    var consumer = new QueueingBasicConsumer(channel);
+
+                    channel.BasicConsume("rpc_queue", false, consumer);
+                    while (true)
+                    {
+                        string response = null;
+                        var ea = (BasicDeliverEventArgs) consumer.Queue.Dequeue();
+                        var body = ea.Body;
+                        var props = ea.BasicProperties;
+                        var replyProps = channel.CreateBasicProperties();
+                        replyProps.CorrelationId = props.CorrelationId;
+                        string message = Encoding.UTF8.GetString(body);
+                        Console.WriteLine("received:"+message);
+                        response = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        channel.BasicPublish("",props.ReplyTo,replyProps,Encoding.UTF8.GetBytes(response));
+                        channel.BasicAck(ea.DeliveryTag,false);
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    public class RPCClient
+    {
+        private IConnection connection;
+        private IModel channel;
+        private string replyQueueName;
+        private QueueingBasicConsumer consumer;
+
+        public RPCClient()
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            connection = factory.CreateConnection();
+            channel = connection.CreateModel();
+            replyQueueName = channel.QueueDeclare();
+            consumer = new QueueingBasicConsumer(channel);
+            channel.BasicConsume(replyQueueName, true, consumer);
+        }
+
+        public string Call(string message)
+        {
+            var corrId = Guid.NewGuid().ToString();
+            var props = channel.CreateBasicProperties();
+            props.ReplyTo = replyQueueName;
+            props.CorrelationId = corrId;
+
+            var messageBytes = Encoding.UTF8.GetBytes(message);
+            channel.BasicPublish("", "rpc_queue", props, messageBytes);
+
+            while (true)
+            {
+                var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+                if (ea.BasicProperties.CorrelationId == corrId)
+                {
+                    return Encoding.UTF8.GetString(ea.Body);
+                }
+            }
+        }
+
+        public void Close()
+        {
+            connection.Close();
+        }
     }
 
 

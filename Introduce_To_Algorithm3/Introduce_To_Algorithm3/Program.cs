@@ -22,20 +22,6 @@ namespace Introduce_To_Algorithm3
     {
         private static void Main(string[] args)
         {
-            UdpClientHelper client = new UdpClientHelper("192.168.163.47",8985);
-            client.Connect();
-            while (true)
-            {
-                string s = Console.ReadLine();
-                if (!string.IsNullOrEmpty(s))
-                {
-                    client.Send(s,Encoding.UTF8);
-                }
-            }
-            //UdpServerHelper server = new UdpServerHelper(8985,Encoding.UTF8);
-            //Console.ReadLine();
-            //Console.ReadLine();
-            //Console.WriteLine(server);
         }
     }
 }
