@@ -345,7 +345,7 @@
     <Compile Include="Common\Utils\FTP\SERVER\ServerSettings.cs" />
     <Compile Include="Common\Utils\SafeInvoke.cs" />
     <Compile Include="Common\Utils\Serial\SerialPortUtils.cs" />
-    <Compile Include="Common\Utils\sockets\TcpConnection.cs" />
+    <Compile Include="Common\Utils\sockets\StandardSocket.cs" />
     <Compile Include="Common\Utils\sockets\UdpClientHelper.cs" />
     <Compile Include="Common\Utils\sockets\UdpServerHelper.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
