@@ -35,7 +35,7 @@ namespace Introduce_To_Algorithm3.Models
     public enum OperationResultType
     {
         /// <summary>
-        /// 发生错位引起的失败
+        /// 发生错误引起的失败
         /// </summary>
         Error,
 

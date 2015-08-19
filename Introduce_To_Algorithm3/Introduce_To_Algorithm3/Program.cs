@@ -18,7 +18,7 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3
 {
-    internal class Program
+    public class Program
     {
         private static void Main(string[] args)
         {

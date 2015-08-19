@@ -20,7 +20,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// </summary>
         private const string LOGGERNAME = "CmluLog";
 
-
         #region 静态初始化
 
         /// <summary>
@@ -32,7 +31,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         }
 
         #endregion
-
 
         #region error
         /// <summary>
@@ -243,5 +241,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
 
         #endregion
+
+        /// <summary>
+        /// 格式化数据
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static string FormatWith(this string format, params object[] args)
+        {
+            return string.Format(format, args);
+        }
+
     }
 }
