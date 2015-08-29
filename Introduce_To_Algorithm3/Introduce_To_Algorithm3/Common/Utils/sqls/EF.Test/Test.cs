@@ -1,46 +1,33 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
-using System.IO;
-using System.IO.Ports;
 using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Timers;
-using Com.Utility.Commons;
-using Introduce_To_Algorithm3.Common.Utils;
-using Introduce_To_Algorithm3.Common.Utils.sockets;
-using Introduce_To_Algorithm3.Common.Utils.Serial;
-using Introduce_To_Algorithm3.Models;
-using Introduce_To_Algorithm3.OpenSourceLib.RabbitMq;
-using Introduce_To_Algorithm3.OpenSourceLib.Utils;
-using Quartz.Util;
+using System.Threading.Tasks;
 
-namespace Introduce_To_Algorithm3
+namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF.Test
 {
-    internal class Program
+    class Test
     {
-        private static void Main(string[] args)
+        public void test()
         {
             Database.SetInitializer(new Initializer());
             using (BaseContext context = new BaseContext())
             {
-                Phone phone = context.People.Include(p=>p.Phones).First(r=>r.FirstName=="A").Phones.FirstOrDefault();
-                
+                Phone phone = context.Phone.Find(1);
                 Console.WriteLine(phone);
             }
             Thread.Sleep(1000);
-        
+
         }
     }
 
-    public class Initializer:CreateDatabaseIfNotExists<BaseContext>
+    public class Initializer : CreateDatabaseIfNotExists<BaseContext>
     {
         public override void InitializeDatabase(BaseContext context)
         {
@@ -50,22 +37,23 @@ namespace Introduce_To_Algorithm3
         protected override void Seed(BaseContext context)
         {
             //可以在数据库创建后运行的程序，如添加初始数据的代码
-            Person person = new Person() {FirstName = "A", LastName = "N", MidName = "L"};
-            person.Companies.Add(new Company(){CompanyName = "com"});
-            person.Phones.Add(new Phone(){PhoneNumber = "1522121"});
-            person.Student = new Student(){CollegeName = "zhejiang"};
+            Person person = new Person() { FirstName = "A", LastName = "N", MidName = "L" };
+            person.Companies.Add(new Company() { CompanyName = "com" });
+            person.Phones.Add(new Phone() { PhoneNumber = "1522121" });
+            person.Student = new Student() { CollegeName = "zhejiang" };
 
             context.People.Add(person);
-            
+
             context.SaveChanges();
         }
     }
 
     public class BaseContext : DbContext
     {
-        public BaseContext() : base("name=ConnString")
+        public BaseContext()
+            : base("name=ConnString")
         {
-            
+
         }
 
         /// <summary>
@@ -74,7 +62,7 @@ namespace Introduce_To_Algorithm3
         public DbSet<Person> People { get; set; }
 
 
-        public DbSet<Phone> Phone { get; set; } 
+        public DbSet<Phone> Phone { get; set; }
 
         /// <summary>
         /// 创建数据库的第一个实例时仅调用此方法一次
@@ -99,8 +87,9 @@ namespace Introduce_To_Algorithm3
         public PersonMap()
         {
             ToTable("Person");
-            Property(p => p.FirstName).HasMaxLength(30)/*.IsOptional().IsFixedLength()*/.IsVariableLength().IsUnicode(true).IsRequired();
-            HasMany(p => p.Phones).WithOptional(phone=>  phone.Person ).HasForeignKey(ph => ph.PersonId)/*.WillCascadeOnDelete(true)*/;
+            Property(p => p.FirstName).HasColumnName("FirstName").HasMaxLength(30)/*.IsOptional().IsFixedLength()*/.IsVariableLength().IsUnicode(true).IsRequired();
+            Ignore(p => p.MidName);
+            HasMany(p => p.Phones).WithOptional(phone => phone.Person).HasForeignKey(ph => ph.PersonId)/*.WillCascadeOnDelete(true)*/;
             HasMany(p => p.Companies).WithMany(c => c.Persons).Map(m =>
             {
                 m.MapLeftKey("PersonId");
@@ -115,7 +104,7 @@ namespace Introduce_To_Algorithm3
     {
         public StudentMap()
         {
-            HasKey(s=>s.PersonId).HasRequired(s => s.Person).WithOptional(p => p.Student);
+            HasKey(s => s.PersonId).HasRequired(s => s.Person).WithOptional(p => p.Student);
         }
     }
 
@@ -130,7 +119,7 @@ namespace Introduce_To_Algorithm3
     {
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
-        public virtual ICollection<Person> Persons { get; set; } 
+        public virtual ICollection<Person> Persons { get; set; }
     }
 
     public class Person
@@ -151,7 +140,7 @@ namespace Introduce_To_Algorithm3
 
         public virtual ICollection<Phone> Phones { get; set; }
 
-        public virtual ICollection<Company> Companies { get; set; } 
+        public virtual ICollection<Company> Companies { get; set; }
 
     }
 

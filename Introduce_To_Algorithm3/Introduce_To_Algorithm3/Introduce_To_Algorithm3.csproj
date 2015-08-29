@@ -78,11 +78,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Common.Logging.Core.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework">
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -349,6 +351,9 @@
     <Compile Include="Common\Utils\sockets\UdpClientHelper.cs" />
     <Compile Include="Common\Utils\sockets\UdpServerHelper.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
+    <Compile Include="Common\Utils\sqls\EF.Test\Test.cs" />
+    <Compile Include="Common\Utils\sqls\EF\BaseContext.cs" />
+    <Compile Include="Common\Utils\sqls\EF\EFHelper.cs" />
     <Compile Include="Common\Utils\StartupUtils.cs" />
     <Compile Include="Common\Utils\Time\DateTimeUtils.cs" />
     <Compile Include="Common\Utils\DESHelper.cs" />
@@ -478,7 +483,10 @@
     <Folder Include="OpenSourceLib\SuperSocket\Client\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Common\Utils\sqls\EF\EF.docx" />
     <None Include="HPSocket\ReadMe.docx" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
