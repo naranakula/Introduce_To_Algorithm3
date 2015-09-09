@@ -266,6 +266,7 @@
     <Compile Include="Common\GreedyAlgorithm\ActivitySelection.cs" />
     <Compile Include="Common\GreedyAlgorithm\HuffmanTree.cs" />
     <Compile Include="Common\GreedyAlgorithm\Knapsack.cs" />
+    <Compile Include="Common\MachineLearning\ClusterCategorical.cs" />
     <Compile Include="Common\MachineLearning\DecisionTree.cs" />
     <Compile Include="Common\MachineLearning\KMeans.cs" />
     <Compile Include="Common\MachineLearning\KNN.cs" />

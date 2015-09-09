@@ -24,11 +24,23 @@ using Quartz.Util;
 
 namespace Introduce_To_Algorithm3
 {
-    internal class Program
+    public class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            
+            Console.WriteLine("Begin categorical data clustering demo");
+
+            string[][] rawData = new string[7][];
+            rawData[0] = new string[] { "Blue", "Small", "False" }; 
+            rawData[1] = new string[] { "Green", "Medium", "True" };
+            rawData[2] = new string[] { "Red", "Large", "False" };
+            rawData[3] = new string[] { "Red", "Small", "True" };
+            rawData[4] = new string[] { "Green", "Medium", "False" };
+            rawData[5] = new string[] { "Yellow", "Medium", "False" };
+            rawData[6] = new string[] { "Red", "Large", "False" };
+            Console.WriteLine("Raw unclustered data: ");
+            Console.WriteLine(" Color Size Heavy");
+            Console.WriteLine("-----------------------------");
         }
     }
 }
