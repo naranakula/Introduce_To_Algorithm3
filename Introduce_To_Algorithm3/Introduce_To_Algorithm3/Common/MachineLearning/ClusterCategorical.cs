@@ -14,5 +14,73 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
     /// </summary>
     public class ClusterCategorical
     {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="numClusters"></param>
+        /// <param name="rawData"></param>
+        public ClusterCategorical(int numClusters, string[][] rawData)
+        {
+            
+        }
+
+        private int[] Cluster(int numRestarts, out double cu)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void TestMain()
+        {
+            Console.WriteLine("Begin categorical data clustering demo");
+
+            string[][] rawData = new string[7][];
+            rawData[0] = new string[] { "Blue", "Small", "False" };
+            rawData[1] = new string[] { "Green", "Medium", "True" };
+            rawData[2] = new string[] { "Red", "Large", "False" };
+            rawData[3] = new string[] { "Red", "Small", "True" };
+            rawData[4] = new string[] { "Green", "Medium", "False" };
+            rawData[5] = new string[] { "Yellow", "Medium", "False" };
+            rawData[6] = new string[] { "Red", "Large", "False" };
+            Console.WriteLine("Raw unclustered data: ");
+            Console.WriteLine(" Color Size Heavy");
+            Console.WriteLine("-----------------------------");
+
+            ShowData(rawData);
+
+            int numClusters = 2;
+            Console.WriteLine("Setting numClusters to "+numClusters);
+            int numRestarts = 4;
+            Console.WriteLine("Setting numRestarts to "+numRestarts);
+
+            Console.WriteLine("Starting clustering using greedy CU algorithm");
+
+            ClusterCategorical cc = new ClusterCategorical(numClusters,rawData);
+            double cu;
+            int[] clustering = cc.Cluster(numRestarts, out cu);
+            Console.WriteLine("Clustering complete");
+            Console.WriteLine("Final clustering in internal form:");
+            ShowVector(clustering, true);
+            Console.WriteLine("Final CU value = "+cu.ToString("F4"));
+
+            Console.WriteLine("Raw data grouped by cluster:");
+            ShowClustering(numClusters, clustering, rawData);
+            Console.WriteLine("end categorical data");
+        }
+
+        private static void ShowClustering(int numClusters, int[] clustering, string[][] rawData)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void ShowVector(int[] clustering, bool p)
+        {
+            throw new NotImplementedException();
+        }
+
+        
+
+        private static void ShowData(string[][] rawData)
+        {
+        }
     }
 }
