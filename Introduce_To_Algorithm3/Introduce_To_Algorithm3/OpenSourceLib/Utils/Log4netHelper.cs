@@ -39,6 +39,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="msg"> The message object to log.</param>
         public static void Error(string msg)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Error(msg);
         }
         /// <summary>
@@ -47,6 +51,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="msg"> The message object to log.</param>
         public static void Error(object msg)
         {
+            if (msg == null)
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Error(msg);
         }
 
@@ -57,6 +65,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="args">格式化参数</param>
         public static void Error(string msg,string args)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Error(string.Format(msg,args));
         }
 
@@ -67,6 +79,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="ex">The exception to log, including its stack trace.</param>
         public static void Error(string msg, Exception exception)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Error(msg, exception);
         }
 
@@ -90,6 +106,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="msg"></param>
         public static void Warn(string msg)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Warn(msg);
         }
 
@@ -100,6 +120,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="exception"></param>
         public static void Warn(string msg, Exception exception)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Warn(msg, exception);
         }
 
@@ -110,6 +134,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="msg"> The message object to log.</param>
         public static void Warn(object msg)
         {
+            if (msg == null)
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Warn(msg);
         }
 
@@ -120,6 +148,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="args">格式化参数</param>
         public static void Warn(string msg, string args)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Warn(string.Format(msg, args));
         }
 
@@ -143,6 +175,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="msg"> The message object to log.</param>
         public static void Info(string msg)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Info(msg);
         }
 
@@ -153,6 +189,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="ex">The exception to log, including its stack trace.</param>
         public static void Info(string msg, Exception exception)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Info(msg, exception);
         }
 
@@ -162,6 +202,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="msg"> The message object to log.</param>
         public static void Info(object msg)
         {
+            if (msg == null)
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Info(msg);
         }
 
@@ -172,6 +216,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="args">格式化参数</param>
         public static void Info(string msg, string args)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Info(string.Format(msg, args));
         }
 
@@ -196,6 +244,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="msg"></param>
         public static void Debug(string msg)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Debug(msg);
         }
 
@@ -206,6 +258,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="exception"></param>
         public static void Debug(string msg, Exception exception)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Debug(msg, exception);
         }
 
@@ -226,6 +282,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="msg"> The message object to log.</param>
         public static void Debug(object msg)
         {
+            if (msg == null)
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Debug(msg);
         }
 
@@ -236,6 +296,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="args">格式化参数</param>
         public static void Debug(string msg, string args)
         {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
             log4net.LogManager.GetLogger(LOGGERNAME).Debug(string.Format(msg, args));
         }
 
