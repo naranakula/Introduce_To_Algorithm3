@@ -28,7 +28,7 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-            
+
         }
     }
 }
