@@ -13,6 +13,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Timers;
+using AutoMapper;
 using Com.Utility.Commons;
 using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Utils.sockets;
