@@ -71,6 +71,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\activeMq\Apache.NMS.ActiveMQ.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -396,6 +400,7 @@
     <Compile Include="HPSocket\HPServer.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\ActiveMqClientHelper.cs" />
+    <Compile Include="OpenSourceLib\Autofac\AutofacHelper.cs" />
     <Compile Include="OpenSourceLib\AutoMapper\AutoMapperUtils.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\FTPUtils\SystemNetFtpClientImpl.cs" />
