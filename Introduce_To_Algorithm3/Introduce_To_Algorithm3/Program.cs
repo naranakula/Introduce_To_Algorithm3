@@ -19,6 +19,7 @@ using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Utils.sockets;
 using Introduce_To_Algorithm3.Common.Utils.Serial;
 using Introduce_To_Algorithm3.Models;
+using Introduce_To_Algorithm3.OpenSourceLib.Autofac;
 using Introduce_To_Algorithm3.OpenSourceLib.RabbitMq;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using Quartz.Util;
@@ -29,7 +30,7 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-
+            AutofacHelper.Test();
         }
     }
 }
