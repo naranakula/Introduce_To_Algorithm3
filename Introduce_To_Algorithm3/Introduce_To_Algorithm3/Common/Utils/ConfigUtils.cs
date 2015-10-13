@@ -163,5 +163,23 @@ namespace Com.Utility.Commons
                 return false;
             }
         }
+
+        /// <summary>
+        /// 获取连接字符串
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static string GetConnString(string key, string defaultValue = "")
+        {
+            try
+            {
+                return ConfigurationManager.ConnectionStrings[key].ConnectionString;
+            }
+            catch (Exception)
+            {
+                return defaultValue;
+            }
+        }
     }
 }
