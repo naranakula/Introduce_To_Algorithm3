@@ -354,6 +354,7 @@
     <Compile Include="Common\Utils\FTP\SERVER\FTPUser.cs" />
     <Compile Include="Common\Utils\FTP\SERVER\HTTPServer.cs" />
     <Compile Include="Common\Utils\FTP\SERVER\ServerSettings.cs" />
+    <Compile Include="Common\Utils\OneRunAtSameTime.cs" />
     <Compile Include="Common\Utils\SafeInvoke.cs" />
     <Compile Include="Common\Utils\Serial\SerialPortUtils.cs" />
     <Compile Include="Common\Utils\sockets\StandardSocket.cs" />
