@@ -18,7 +18,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <summary>
         /// 日志名
         /// </summary>
-        private const string LOGGERNAME = "CmluLog";
+        private const string LOGGERNAME = "CustomLog";
 
         #region 静态初始化
 
