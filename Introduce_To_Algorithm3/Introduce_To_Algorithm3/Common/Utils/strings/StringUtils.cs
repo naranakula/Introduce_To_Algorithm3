@@ -70,7 +70,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
-        /// 组合字符串，并且如果为null，则用String.Empty连接
+        /// 组合字符串，并且如果数据项为null，则用String.Empty连接
         /// </summary>
         /// <param name="arr"></param>
         /// <param name="isTrim">是否去掉字符串前后的空格</param>
@@ -85,6 +85,32 @@ namespace Introduce_To_Algorithm3.Common.Utils
             StringBuilder sb = new StringBuilder();
 
             foreach (var item in arr)
+            {
+                if (item != null)
+                {
+                    sb.Append(isTrim ? item.Trim() : item);
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// 组合字符串，并且如果数据项为null，则用String.Empty连接
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="isTrim">是否去掉字符串前后的空格</param>
+        /// <returns></returns>
+        public static string CombineEx(List<string> list, bool isTrim = true)
+        {
+            if (list == null || list.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var item in list)
             {
                 if (item != null)
                 {
