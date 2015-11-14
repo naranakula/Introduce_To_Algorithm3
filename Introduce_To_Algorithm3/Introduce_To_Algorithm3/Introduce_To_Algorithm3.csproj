@@ -435,7 +435,7 @@
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
-    <Compile Include="Common\Utils\strings\StringExtension.cs" />
+    <Compile Include="Common\Utils\strings\StringUtils.cs" />
     <Compile Include="Common\Utils\threads\SynchronizationHelper.cs" />
     <Compile Include="Common\Utils\threads\TaskHelper.cs" />
     <Compile Include="Common\Utils\threads\ThreadPoolHelper.cs" />
