@@ -53,8 +53,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 DateTime expireTime;//过期时间
                 if (driveInfo != null && driveInfo.AvailableFreeSpace < driveInfo.TotalSize*DriveAvailableLimit)
                 {
-                    //保留30天
-                    expireTime = DateTime.Now.Subtract(new TimeSpan(60, 0, 0, 0));
+                    //当到达硬盘利用极限时，保存的天数
+                    expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDaysWhenAvailableLimit, 0, 0, 0));
                 }
                 else
                 {
@@ -110,9 +110,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
         /// <summary>
         /// 硬盘空间极限可用值。
-        /// 当硬盘可用空间小于当前值时，清理日志,只保存60天，否则保存KeepDays天
+        /// 当硬盘可用空间小于当前值时，清理日志,只保存KeepDaysWhenAvailableLimit天，否则保存KeepDays天
         /// </summary>
-        private const double DriveAvailableLimit = 0.1;
+        private const double DriveAvailableLimit = 0.09;
+
+        /// <summary>
+        /// 当到达硬盘利用极限时，保存的天数
+        /// </summary>
+        private const int KeepDaysWhenAvailableLimit = 90;
 
         /// <summary>
         /// 锁
