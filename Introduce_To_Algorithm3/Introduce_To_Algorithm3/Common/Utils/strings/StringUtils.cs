@@ -131,6 +131,46 @@ namespace Introduce_To_Algorithm3.Common.Utils
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 判断数组是否包含指定字符串。
+        /// 如果数组本身为null或者空，返回false.
+        /// 
+        /// 比较字符串是空、null、空白是相同的。
+        /// 比较字符串时忽略开头结尾的空白，忽略大小写
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool ContainsEx(String[] arr, string s)
+        {
+            if (arr == null || arr.Length == 0)
+            {
+                return false;
+            }
+
+            return arr.Any(item => EqualsEx(item, s));
+        }
+
+        /// <summary>
+        /// 判断列表是否包含指定字符串。
+        /// 如果列表本身为null或者空，返回false.
+        /// 
+        /// 比较字符串是空、null、空白是相同的。
+        /// 比较字符串时忽略开头结尾的空白，忽略大小写
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool ContainsEx(List<string> list, string s)
+        {
+            if (list == null || list.Count == 0)
+            {
+                return false;
+            }
+
+            return list.Any(item => EqualsEx(item, s));
+        }
+
         #endregion
 
         #region UnCommon

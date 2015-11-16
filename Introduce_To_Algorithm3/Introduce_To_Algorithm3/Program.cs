@@ -14,6 +14,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Timers;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs;
 
 namespace Introduce_To_Algorithm3
 {
@@ -21,7 +22,7 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-             
+            new CleanLogJob().Execute(null);
         }
     }
 }

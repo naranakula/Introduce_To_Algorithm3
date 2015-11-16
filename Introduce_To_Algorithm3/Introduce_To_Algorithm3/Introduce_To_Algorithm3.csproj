@@ -432,6 +432,7 @@
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\BeITMemcachedHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\ProtobufUtils.cs" />
+    <Compile Include="OpenSourceLib\Utils\quartzs\CleanLogJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
