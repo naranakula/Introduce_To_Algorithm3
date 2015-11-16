@@ -18,8 +18,18 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="s"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static string FormatWith(this string s, params object[] args)
+        public static string FormatWith(string s, params object[] args)
         {
+            if (s == null)
+            {
+                return string.Empty;
+            }
+
+            if (args == null || args.Length == 0)
+            {
+                return s;
+            }
+
             return string.Format(s, args);
         }
 
@@ -29,7 +39,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static string TrimEx(this string s)
+        public static string TrimEx(string s)
         {
             if (string.IsNullOrEmpty(s))
             {
@@ -40,13 +50,13 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
-        /// 忽略空白，比较字符串是否相同
+        /// 忽略字符串前后空白，比较字符串是否相同
         /// </summary>
         /// <param name="s1"></param>
         /// <param name="s2"></param>
         /// <param name="ignoreCase"></param>
         /// <returns></returns>
-        public static bool EqualsEx(this string s1, string s2,bool ignoreCase = true)
+        public static bool EqualsEx(string s1, string s2,bool ignoreCase = true)
         {
             if (string.IsNullOrWhiteSpace(s1) && string.IsNullOrWhiteSpace(s2))
             {
