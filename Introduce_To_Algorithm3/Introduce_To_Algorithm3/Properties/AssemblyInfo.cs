@@ -32,5 +32,8 @@ using System.Runtime.InteropServices;
 // 可以指定所有这些值，也可以使用“内部版本号”和“修订号”的默认值
 // 方法是按如下所示使用“*”:
 // [assembly: AssemblyVersion("1.0.*")]
+//AssemblyVersion 是程序集的版本, CLR 用
+//AssemblyFileVersion 是程序集所在 PE 文件的版本, 也就是在资源管理器里查看属性时看到的版本
+//只需修改AssemblyFileVersion
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.1")]
