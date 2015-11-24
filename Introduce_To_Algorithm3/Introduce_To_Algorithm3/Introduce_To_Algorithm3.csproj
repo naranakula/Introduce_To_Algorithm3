@@ -363,10 +363,9 @@
     <Compile Include="Common\Utils\sockets\UdpServerHelper.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
     <Compile Include="Common\Utils\sqls\EF.Test\Test.cs" />
-    <Compile Include="Common\Utils\sqls\EF2\EfHelper.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\EfDbContext.cs" />
     <Compile Include="Common\Utils\sqls\EF\BaseContext.cs" />
     <Compile Include="Common\Utils\sqls\EF\DALHelper.cs" />
-    <Compile Include="Common\Utils\sqls\EF\EFHelper.cs" />
     <Compile Include="Common\Utils\StartupUtils.cs" />
     <Compile Include="Common\Utils\threads\ApplicationUtils.cs" />
     <Compile Include="Common\Utils\threads\TimerEx.cs" />

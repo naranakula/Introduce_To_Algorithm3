@@ -100,7 +100,12 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
             return ioca == null ? null : ioca.ObjectContext;
         }
 
-
+        /// <summary>
+        ///  Saves all changes made in this context to the underlying database.
+        /// 返回影响的行数
+        /// SaveChanges不调用不会保存到数据库
+        /// </summary>
+        /// <param name="dbContext"></param>
         public static void SaveChanges(DbContext dbContext)
         {
             dbContext.SaveChanges();
@@ -171,7 +176,7 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
         /// <param name="dbSet"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static T Attch(DbSet<T> dbSet, T entity)
+        public static T Attach(DbSet<T> dbSet, T entity)
         {
             return dbSet.Attach(entity);
         }
@@ -214,7 +219,6 @@ You can also use EntityConnection and EntityCommand to execute Entity SQL as sho
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="entity"></param>
-        /// <param name="state"></param>
         public static void Update(DbContext dbContext, T entity)
         {
             dbContext.Entry(entity).State = EntityState.Modified;

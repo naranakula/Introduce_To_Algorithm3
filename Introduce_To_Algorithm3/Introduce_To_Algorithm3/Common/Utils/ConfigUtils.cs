@@ -9,6 +9,16 @@ namespace Com.Utility.Commons
     /// </summary>
     public static class ConfigUtils
     {
+        #region Settings
+
+        /*
+         * 1 通过Settings.Default来访问Setting
+         * 2 Setting项有两个作用域：用户作用域和应用程序作用域。应用程序域只能读，用户作用域可以读可以写。
+         * 3 Settings.Default.Save();保存对用户设置所做的更改
+         */
+
+        #endregion
+
         /// <summary>
         /// 获取配置字符串
         /// </summary>

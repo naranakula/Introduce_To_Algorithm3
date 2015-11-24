@@ -61,10 +61,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
         /// 私有的连接字符串，它默认使用配置文件中的连接字符串。
         /// </summary>
         private string _connectionString;
-        //User ID=sa;Initial Catalog=WirelessCity_POI;Data Source=192.168.85.136;Password=smssdev
+        //Data Source=192.168.163.204;Initial Catalog=Fids;User ID=fids;Password=fids
         //<add name="ConnectionString" connectionString="Data Source=192.168.163.204;Initial Catalog=Fids;User ID=fids;Password=fids" />
         //private string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MyStock.Properties.Settings.SmartStockConnectionString"].ConnectionString;
-        
+       // <connectionStrings>
+       //    <add name="ConnectionStringName" connectionString="Data Source=服务器名;Initial Catalog=数据库名;User ID=用户;Password=密码" providerName="System.Data.SqlClient" />
+      //  </connectionStrings>
         /// <summary>
         /// 默认的构造函数。
         /// </summary>
