@@ -4,9 +4,11 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 {
@@ -67,13 +69,21 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            #region 设置默认的Schema
             //Configures the default database schema name.
             modelBuilder.HasDefaultSchema("dbo");
+            #endregion
 
+            #region 设置Map
             //设置所有的表定义映射
             //modelBuilder.Configurations.Add(new ProvinceMap());
+            #endregion
 
+            #region 定义Relation   One-To-Many（OneOrZero-To-Many) Many-To-Many One-to-One(单向双向) (or One-to-Zero-to-One).
+            //建议在该方法中定义Relation,而不是在Map中定义
+            //删除的级联在这里定义，默认是不级联删除的
+
+            #endregion
         }
 
         #endregion
@@ -121,6 +131,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// Uses the primary key value to attempt to find an entity tracked by the context. If the entity is not in the context then a query will be executed and evaluated against the data in the data source, and null is returned if the entity is not found in the context or in the data source. Note that the Find also returns entities that have been added to the context but have not yet been saved to the database.
         /// 查询使用 Linq Method 或者 Linq Query
+        /// 注：Find本质上转换为了SingleOrDefault，每个主键只能对应一项数据
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dbSet"></param>
@@ -144,8 +155,17 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             return dbSet.Find(id);
         }
 
+        /// <summary>
+        /// Entities returned as AsNoTracking, will not be tracked by DBContext. This will be significant performance boost for read only entities. 
+        /// </summary>
+        /// <param name="dbQuery"></param>
+        /// <returns></returns>
+        public static DbQuery<T> AsNoTracking<T>(DbQuery<T> dbQuery) where T : class
+        {
+            return dbQuery.AsNoTracking();
+        }
 
-        #region 尽量不用
+        #region 直接执行命令
         /// <summary>
         ///  Creates a raw SQL query that will return entities in this set. By default, the entities returned are tracked by the context; this can be changed by calling AsNoTracking on theDbSqlQuery<T> returned from this method.
         /// </summary>
@@ -182,15 +202,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             return dbContext.Database.ExecuteSqlCommand(sql, parameters);
         }
 
-        /// <summary>
-        /// Entities returned as AsNoTracking, will not be tracked by DBContext. This will be significant performance boost for read only entities. 
-        /// </summary>
-        /// <param name="dbQuery"></param>
-        /// <returns></returns>
-        public static DbQuery<T> AsNoTracking<T>(DbQuery<T> dbQuery) where T:class 
-        {
-            return dbQuery.AsNoTracking();
-        }
         #endregion
 
         #endregion
@@ -199,7 +210,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         ///  Adds the given entity to the context the Added state. When the changes are being saved, the entities in the Added states are inserted into the database. After the changes are saved, the object state changes to Unchanged. 
-        /// 
+        /// Add 会把关联的表的数据插入到数据库  Modify不会。When you set the state to modified, Entity Framework does not propagate  this change to the entire object graph.
         /// 实体有5种状态： Detached,Unchanged,Added,Deleted,Modified
         /// </summary>
         /// <param name="dbSet"></param>
@@ -227,6 +238,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// Marks the given entity as Deleted. When the changes are saved, the entity is deleted from the database. The entity must exist in the context in some other state before this method is called. 
+        /// 
+        /// 由于默认是不级联删除的，可以删除所有子项，再删除父项
+        /// 尽管传递的是一个对象，实际上只有主键在起作用
+        /// Remove之间必须被context管理状态，直接更改State不需要之间被Context管理
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dbSet"></param>
@@ -370,6 +385,184 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
+        #region 关系Relation
+
+        #region OneToOne 
+
+        /*
+         * 注：实际上这是一个One-To-ZeroOrOne接口
+         * One对应OneToOneLeft    ZeroOrOne对应OneToOneRight
+         * 存在左边的项，并不一定存在右边的项，如果存在右边的项，右边的项只能一条
+         */
+
+        /// <summary>
+        /// 对应One-To-ZeroOrOne的左边One
+        /// </summary>
+        public class OneToOneLeft
+        {
+            /// <summary>
+            /// Id作为主键
+            /// </summary>
+            public Guid Id { get; set; }
+
+            public virtual OneToOneRight Right { get; set; }
+        }
+
+        /// <summary>
+        /// 对应One-To-ZeroOrOne的右边ZeroOrOne
+        /// </summary>
+        public class OneToOneRight
+        {
+            /// <summary>
+            /// 作为主键和关联到Left的外键
+            /// </summary>
+            public Guid Id { get; set; }
+            public virtual OneToOneLeft Left { get; set; }
+        }
+
+        /// <summary>
+        /// 创建一个OneToZeroOrOne映射
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        public static void CreateOneToOneMap(DbModelBuilder modelBuilder)
+        {
+            //Right是可选的，Left是必选的，删除是级联的， 这样可以删除right，并不会删除left，删除left时级联的删除Right
+            modelBuilder.Entity<OneToOneLeft>().HasOptional(s=>s.Right).WithRequired(s=>s.Left).WillCascadeOnDelete(true);
+            //两种写法选择一种
+            //modelBuilder.Entity<OneToOneRight>().HasRequired(s=>s.Left).WithOptional(s=>s.Right).WillCascadeOnDelete(true);
+        }
+
+        #endregion
+
+        #region OneToMany
+
+        /*
+         * 这实际上是 OneToZeroMany 模式
+         * 左边是One,它可以有零个或者多个Right
+         * 
+         */
+
+        /// <summary>
+        /// 对应OneToMany的One
+        /// </summary>
+        public class OneToManyLeft
+        {
+            public OneToManyLeft()
+            {
+                //EF默认反射成HashSet
+                Rights = new HashSet<OneToManyRight>();
+            }
+
+            /// <summary>
+            /// 主键
+            /// </summary>
+            public Guid Id { get; set; }
+            /// <summary>
+            /// 
+            /// </summary>
+            public virtual ICollection<OneToManyRight> Rights { get; set; } 
+        }
+
+        /// <summary>
+        /// 对应OneToMany的Many
+        /// </summary>
+        public class OneToManyRight
+        {
+            /// <summary>
+            /// 主键
+            /// </summary>
+            public Guid Id { get; set; }
+
+            /// <summary>
+            /// 外键
+            /// </summary>
+            public Guid LeftId { get; set; }
+
+            /// <summary>
+            /// 可以有也可以没有
+            /// </summary>
+            public virtual OneToManyLeft Left { get; set; } 
+        }
+
+        /// <summary>
+        /// 创建一个One To Many Map
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        public static void CreateOneToManyMap(DbModelBuilder modelBuilder)
+        {
+            //一对多关系，可以级联删除，删除右边不会影响左边，删除左边会删除右边
+            modelBuilder.Entity<OneToManyRight>().HasRequired(s=>s.Left).WithMany(s=>s.Rights).HasForeignKey(s=>s.LeftId).WillCascadeOnDelete(true);
+        }
+
+        #endregion
+
+        #region ManyToMany
+
+        /*
+         * 这是一个ManyToMany的映射,实际上是ZeroOrMany-To-ZeroOrMany映射
+         * 在ManyToMany中左和右是没有主次之分的
+         * 在删除时，删除一边，不会删除另一边，但会删除掉相应的连接表项
+         */
+
+        /// <summary>
+        /// 在ManyToMany中左和右是没有主次之分的
+        /// 在删除时，删除一边，不会删除另一边，但会删除掉相应的连接表项
+        /// </summary>
+        public class ManyToManyLeft
+        {
+            public ManyToManyLeft()
+            {
+                Rights = new HashSet<ManyToManyRight>();
+            }
+            /// <summary>
+            /// 主键
+            /// </summary>
+            public Guid Id { get; set; }
+            /// <summary>
+            /// 外键是通过关联表来实现的，类中不需要外键
+            /// </summary>
+            public virtual ICollection<ManyToManyRight> Rights { get; set; } 
+        }
+
+        /// <summary>
+        /// 在ManyToMany中左和右是没有主次之分的
+        /// 在删除时，删除一边，不会删除另一边，但会删除掉相应的连接表项
+        /// </summary>
+        public class ManyToManyRight
+        {
+            public ManyToManyRight()
+            {
+                Lefts = new HashSet<ManyToManyLeft>();
+            }
+            /// <summary>
+            /// 主键
+            /// </summary>
+            public Guid Id { get; set; }
+            /// <summary>
+            /// 外键是通过关联表来实现的，类中不需要外键
+            /// </summary>
+            public virtual ICollection<ManyToManyLeft> Lefts { get; set; } 
+        }
+
+        /// <summary>
+        /// 创建一个ManyToMany Map
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        public static void CreateManyToManyMap(DbModelBuilder modelBuilder)
+        {
+            //在删除时，删除一边，不会删除另一边，但会删除掉相应的连接表项
+            modelBuilder.Entity<ManyToManyLeft>().HasMany(s => s.Rights).WithMany(s => s.Lefts).Map(m =>
+            {
+                m.MapLeftKey("LeftId");
+                m.MapRightKey("RightId");
+                m.ToTable("LeftRight");
+            });
+        }
+
+        #endregion
+
+        #endregion
+
         #region 很少使用
 
         #region SaveChange
@@ -481,9 +674,16 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public BaseMap()
         {
             //配置表T的属性
-
+            #region 设置表名和主键
+            //设置表名和主键
             // ToTable("Person").HasKey(p=>p.PersonId);//设置表名和主键
+            // Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            #endregion
+
+            #region 设置属性列字段
+
             //设置属性列字段
+            //字符串
             //Property(p => p.FirstName)
             //    .HasColumnName("FirstName")
             //    .IsOptional()
@@ -491,9 +691,20 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //    .IsUnicode()
             //    .IsVariableLength();
             //Property(p => p.MiddleName).IsOptional().IsFixedLength().IsUnicode(false).HasMaxLength(1);
+
+            #endregion
+
+            #region 设置关系 One-To-One  One-To-Many  Many-To-Many
+
+            //建议在OnModelCreating中设置，不要在Map中设置
+            #endregion
         } 
     }
 
     #endregion
 
+    #region 样例
+
+
+    #endregion
 }
