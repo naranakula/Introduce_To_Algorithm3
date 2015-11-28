@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Hosting;
@@ -69,6 +72,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             #region 设置默认的Schema
             //Configures the default database schema name.
             modelBuilder.HasDefaultSchema("dbo");
@@ -77,9 +81,19 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             #region 设置Map
             //设置所有的表定义映射
             //modelBuilder.Configurations.Add(new ProvinceMap());
+
+            //以下代码自动注册所有的Map，自动获取当前代码中的Map,并注册
+            var typesToRegister = Assembly.GetExecutingAssembly().GetTypes().Where(type=>type.BaseType != null && !type.IsGenericType && type.BaseType.IsGenericType&&type.BaseType.GetGenericTypeDefinition()==typeof(EntityTypeConfiguration<>));
+            foreach (var type in typesToRegister)
+            {
+                dynamic configurationInstance = Activator.CreateInstance(type);
+                modelBuilder.Configurations.Add(configurationInstance);
+            }
+           
             #endregion
 
             #region 定义Relation   One-To-Many（OneOrZero-To-Many) Many-To-Many One-to-One(单向双向) (or One-to-Zero-to-One).
+
             //建议在该方法中定义Relation,而不是在Map中定义
             //删除的级联在这里定义，默认是不级联删除的
 
@@ -128,6 +142,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #region 查询 应尽量使用 Linq Method 或者 Linq Query
 
+        /*
+         * EF支持的String操作：First FirstOrDefault Single SinglrOrDefault Any All StartsWith EndsWith Count Sum Min Max Average ToUpper ToLower Contains Skip Take Distinct Union Intersect Except
+         * 尽量使用DbFunctions来执行操作
+         */
+
         /// <summary>
         /// Uses the primary key value to attempt to find an entity tracked by the context. If the entity is not in the context then a query will be executed and evaluated against the data in the data source, and null is returned if the entity is not found in the context or in the data source. Note that the Find also returns entities that have been added to the context but have not yet been saved to the database.
         /// 查询使用 Linq Method 或者 Linq Query
@@ -166,8 +185,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         }
 
         #region 直接执行命令
+
         /// <summary>
         ///  Creates a raw SQL query that will return entities in this set. By default, the entities returned are tracked by the context; this can be changed by calling AsNoTracking on theDbSqlQuery<T> returned from this method.
+        /// 该方法用于查询。直到迭代返回结果时，sql才执行。
         /// </summary>
         /// <param name="dbSet"></param>
         /// <param name="sql"></param>
@@ -180,6 +201,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// A SQL query returning instances of any type, including primitive types,
+        /// 该方法用于查询。直到迭代返回结果时，sql才执行。
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="sql"></param>
@@ -196,7 +218,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <param name="dbContext"></param>
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <returns>影响的行数</returns>
         public static int ExecuteSqlCommand(DbContext dbContext, string sql, params object[] parameters)
         {
             return dbContext.Database.ExecuteSqlCommand(sql, parameters);
@@ -563,6 +585,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
+        #region DbFunctions
+
+        //推荐使用DbFunctions SqlDbFunctions
+
+        #endregion
+
         #region 很少使用
 
         #region SaveChange
@@ -586,13 +614,27 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// if a database with the same name does not already exist on the server, Create it.
         /// True if the database did not exist and was created; false otherwise.
         /// //注：该函数创建数据库，同时创建其中的表
-        /// //注：或者不需要显示调用，数据库在第一次查询、修改或者插入时，自动创建
+        /// //注：或者不需要显式调用，数据库在第一次查询、修改或者插入时，自动创建
         /// </summary>
         public static bool CreateIfNotExists()
         {
             using (EfDbContext context = new EfDbContext())
             {
                 return context.Database.CreateIfNotExists();
+            }
+        }
+
+        /// <summary>
+        /// 强制检查初始化
+        /// 在程序启动时，第一次查询时，会自动初始化。所以可以不显式调用
+        /// By default, Code First runs the database initialization logic once per AppDomain when the context is used for the first time. 
+        /// </summary>
+        /// <param name="force">Specifying false will skip the initialization process if it has already executed. A value of true will initialize the database again even if it was already initialized.</param>
+        public static void Initialize(bool force = true)
+        {
+            using (EfDbContext context = new EfDbContext())
+            {
+                context.Database.Initialize(force);
             }
         }
 
@@ -624,7 +666,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
-        #endregion 
+        #endregion
 
         #endregion
 
@@ -636,8 +678,122 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
     /*
      * 常用的Database Initializer有如下几种：
+     * null(不自动创建数据库,not to execute any initialization logic at all.),CreateDatabaseIfNotExists(默认的),DropCreateDatabaseWhenModelChanges,DropCreateDatabaseAlways,MigrateDatabaseToLatestVersion
+     * 
+     * CreateDatabaseIfNotExists class creates a database only if it doesn't exist. 这是默认的
+     * 
+     * DropCreateDatabaseWhenModelChanges creates a database if it doesn't exist already. Additionally, if a database is already present but there is a mismatch between the model classes and table schema then it deletes the database and re-creates it. 
+     * 
+     * DropCreateDatabaseAlways class deletes and creates a database whether or not it is already present or not. 
+     * 
      * 
      */
+
+    /// <summary>
+    /// CreateDatabaseIfNotExists class creates a database only if it doesn't exist.
+    /// </summary>
+    public class EfCreateDatabaseIfNotExists : CreateDatabaseIfNotExists<EfDbContext>
+    {
+        /// <summary>
+        /// Seed方法在每次新建数据库后调用，如果已经存在则不调用
+        /// </summary>
+        /// <param name="context"></param>
+        protected override void Seed(EfDbContext context)
+        {
+            base.Seed(context);
+            
+            //在数据库中加入初始化数据
+            //为了安全起见，尽量使用AddOrUpdate 实际上没有必要，只有在数据迁移时，使用AddOrUpdate
+            //context.Persons.AddOrUpdate();
+        }
+    }
+
+    /// <summary>
+    /// DropCreateDatabaseWhenModelChanges creates a database if it doesn't exist already. Additionally, if a database is already present but there is a mismatch between the model classes and table schema then it deletes the database and re-creates it. 
+    /// </summary>
+    public class DropCreateDatabaseIfModelChanges : DropCreateDatabaseIfModelChanges<EfDbContext>
+    {
+        /// <summary>
+        /// Seed方法在每次新建数据库后调用，如果没有新建数据库或者model不变，则不调用
+        /// </summary>
+        /// <param name="context"></param>
+        protected override void Seed(EfDbContext context)
+        {
+            base.Seed(context);
+
+            //在数据库中加入初始化数据
+            //为了安全起见，尽量使用AddOrUpdate，实际上没有必要，只有在数据迁移时，使用AddOrUpdate
+            //context.Persons.AddOrUpdate();
+        }
+    }
+
+    /// <summary>
+    ///DropCreateDatabaseAlways class deletes and creates a database whether or not it is already present or not. 
+    /// </summary>
+    public class EfDropCreateDatabaseAlways : DropCreateDatabaseAlways<EfDbContext>
+    {
+        /// <summary>
+        /// Seed方法在每次新建数据库后调用
+        /// </summary>
+        /// <param name="context"></param>
+        protected override void Seed(EfDbContext context)
+        {
+            base.Seed(context);
+
+            //在数据库中加入初始化数据
+            //为了安全起见，尽量使用AddOrUpdate 实际上没有必要，只有在数据迁移时，使用AddOrUpdate
+            //context.Persons.AddOrUpdate();
+        }
+    }
+
+
+    #region 数据库迁移
+
+    /// <summary>
+    /// 配置数据迁移
+    /// </summary>
+    public class MigrationConfiguration : DbMigrationsConfiguration<EfDbContext>
+    {
+        public MigrationConfiguration()
+        {
+            //必须支持允许自动迁移，这样当数据库结构改变后就可以自动迁移了
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = false;
+            //Gets or sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database.
+            ContextKey = "CmluMigrationConfiguration";
+        }
+
+        /// <summary>
+        /// If the System.Data.Entity.MigrateDatabaseToLatestVersion<TContext,TMigrationsConfiguration>database initializer is being used, then this method will be called each time that the initializer runs.
+        /// 意味着每次程序启动，都会执行Seed,而不是仅仅迁移后执行
+        /// </summary>
+        /// <param name="context"></param>
+        protected override void Seed(EfDbContext context)
+        {
+            //  每次程序启动，都会执行Seed,而不是仅仅迁移后执行
+
+            //  You can use the DbSet<T>.AddOrUpdate() helper extension method to avoid creating duplicate seed data. E.g.
+            //
+            //    context.People.AddOrUpdate(
+            //      p => p.FullName,
+            //      new Person { FullName = "Andrew Peters" },
+            //      new Person { FullName = "Brice Lambson" },
+            //      new Person { FullName = "Rowan Miller" }
+            //    );
+            //
+        }
+    }
+
+    /// <summary>
+    /// 当AutomaticMigrationsEnabled = true时，该初始化器自动初始化到最新的Model版本
+    /// </summary>
+    public class DbMigrateDatabaseInitier : MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>
+    {
+
+    }
+
+
+    #endregion
 
     #endregion
 
@@ -645,11 +801,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
     /// <summary>
     /// 基类Entity
+    /// EF支持枚举
     /// </summary>
     public class BaseEntity
     {
         /// <summary>
         /// 主键
+        /// DatabaseGeneratedOption.Identity is used to create an auto-increment column in the table by a unique value.int类型需要，Guid类型不需要
         /// </summary>
         public Guid Id { get; set; }
 
@@ -662,6 +820,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 最近一次修改时间
         /// </summary>
         public DateTime ModifyTime { get; set; }
+
+        /// <summary>
+        /// 乐观锁来支持并发控制
+        /// 如果同时多个用户修改，只有第一个用户修改成功，第二个用户需要处理DbUpdateConcurrencyException异常
+        /// </summary>
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 
     /// <summary>
@@ -691,6 +856,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //    .IsUnicode()
             //    .IsVariableLength();
             //Property(p => p.MiddleName).IsOptional().IsFixedLength().IsUnicode(false).HasMaxLength(1);
+
+            //设置Timestamp属性和调用IsRowVersion两选一
+            //Property(t => t.RowVersion).IsRowVersion();
 
             #endregion
 
