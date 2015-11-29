@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net.Core;
 using MathNet.Numerics;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
