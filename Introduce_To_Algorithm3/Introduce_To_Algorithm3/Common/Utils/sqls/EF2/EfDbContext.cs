@@ -106,6 +106,17 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         //public DbSet<Person> Persons{get; set;}
 
+        /// <summary>
+        ///  Returns a System.Data.Entity.DbSet<TEntity> instance for access to entities of the given type in the context and the underlying store.
+        /// 有了该方法，可以不用定义DbSet Properties了
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public DbSet<T> DbSet<T>() where T : class
+        {
+            return Set<T>();
+        }
+
         #endregion
 
         #region 静态方法
