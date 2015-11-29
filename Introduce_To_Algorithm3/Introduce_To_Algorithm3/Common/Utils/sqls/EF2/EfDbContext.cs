@@ -882,8 +882,4 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
     #endregion
 
-    #region 样例
-
-
-    #endregion
 }
