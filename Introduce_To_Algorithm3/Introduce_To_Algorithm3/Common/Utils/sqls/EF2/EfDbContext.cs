@@ -26,6 +26,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
+        /// name=ConnString
         /// </summary>
         private static string nameOrConnectionString;
 
@@ -58,7 +59,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         static EfDbContext()
         {
-            Database.SetInitializer<EfDbContext>(null);
+            //Database.SetInitializer<EfDbContext>(null);
         }
 
         #endregion
@@ -96,6 +97,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
             //建议在该方法中定义Relation,而不是在Map中定义
             //删除的级联在这里定义，默认是不级联删除的
+            //CreateOneToManyMap(modelBuilder);
 
             #endregion
         }
@@ -272,7 +274,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// Marks the given entity as Deleted. When the changes are saved, the entity is deleted from the database. The entity must exist in the context in some other state before this method is called. 
         /// 
-        /// 由于默认是不级联删除的，可以删除所有子项，再删除父项
+        /// 在不级联删除的情况下，它会将子项关联标志为 null（如果子项外键可null,否则抛出异常说不能置为null）,可以删除所有子项，再删除父项
         /// 尽管传递的是一个对象，实际上只有主键在起作用
         /// Remove之间必须被context管理状态，直接更改State不需要之间被Context管理
         /// </summary>
@@ -450,6 +452,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             /// 作为主键和关联到Left的外键
             /// </summary>
             public Guid Id { get; set; }
+
             public virtual OneToOneLeft Left { get; set; }
         }
 
@@ -510,7 +513,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             /// 外键
             /// </summary>
             public Guid LeftId { get; set; }
-
+            
             /// <summary>
             /// 可以有也可以没有
             /// </summary>
