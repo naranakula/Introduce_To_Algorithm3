@@ -416,19 +416,6 @@
     <Compile Include="OpenSourceLib\HP-Socket\TcpServer.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Common\BinaryUtil.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Common\BufferManager.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Common\SocketEx.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\BootStrapUtils.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\CmluBeginEndMarkReceiveFilter.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\CmluFixedHeaderReceiveFilter.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\CmluFixedSizeReceiveFilter.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\CustomServer.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\CustomSession.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\Custom\CustomBinaryRequestInfo.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\Custom\CustomReceiveFilter.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\Custom\CustomStringRequestInfo.cs" />
-    <Compile Include="OpenSourceLib\SuperSocket\Server\SuperSocketServer.cs" />
     <Compile Include="OpenSourceLib\Utils\DotNetZipUtils.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\BeITMemcachedHelper.cs" />
@@ -497,7 +484,6 @@
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
-    <Folder Include="OpenSourceLib\SuperSocket\Client\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

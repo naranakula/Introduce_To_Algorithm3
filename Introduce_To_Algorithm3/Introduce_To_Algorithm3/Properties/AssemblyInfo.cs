@@ -37,3 +37,5 @@ using System.Runtime.InteropServices;
 //只需修改AssemblyFileVersion
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.1")]
+//定义该程序集为cls兼容的
+//[assembly: System.CLSCompliant(true)]
