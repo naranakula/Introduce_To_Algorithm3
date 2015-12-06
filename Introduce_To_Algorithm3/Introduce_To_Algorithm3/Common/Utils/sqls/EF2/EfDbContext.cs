@@ -156,7 +156,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         #region 查询 应尽量使用 Linq Method 或者 Linq Query
 
         /*
-         * EF支持的String操作：First FirstOrDefault Single SinglrOrDefault Any All StartsWith EndsWith Count Sum Min Max Average ToUpper ToLower Contains Skip Take Distinct Union Intersect Except
+         * EF支持的String操作：First FirstOrDefault Single SinglrOrDefault Any All StartsWith EndsWith Count Sum Min Max Average ToUpper ToLower Contains Skip Take Distinct Union Intersect Except  
+         * 注：string的contains类似于sql的like  IEnumerable<string>(集合中可以有null)的contains类似于 sql的 IN
          * 尽量使用DbFunctions来执行操作
          */
 
