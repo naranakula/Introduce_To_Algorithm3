@@ -52,7 +52,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 }
                 else
                 {
-                    registry.SetValue(keyName, false);
+                    registry.DeleteValue(keyName,false);
+                    //registry.SetValue(keyName, false);
                 }
 
                 if (setCurrentDir)
