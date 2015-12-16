@@ -20,7 +20,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// <summary>
     /// DbContext类型
     /// </summary>
-    public class EfDbContext:DbContext
+    public class EfDbContext : DbContext
     {
         #region Private Member
 
@@ -35,7 +35,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         public static string NameOrConnectionString
         {
-            get { return nameOrConnectionString;}
+            get { return nameOrConnectionString; }
             set { nameOrConnectionString = value; }
         }
         #endregion
@@ -45,7 +45,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// </summary>
-        public EfDbContext() : base(nameOrConnectionString)
+        public EfDbContext()
+            : base(nameOrConnectionString)
         {
 
         }
@@ -60,22 +61,22 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         static EfDbContext()
         {
             //Database.SetInitializer<EfDbContext>(null);
-            using (EfDbContext context = new EfDbContext())
-            {
-                IDatabaseInitializer<EfDbContext> initializer;
-                if (!context.Database.Exists())
-                {
-                    initializer = new CreateDatabaseIfNotExists<EfDbContext>();
-                }
-                else
-                {
-                    initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
-                }
 
-                // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
-                //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
-                Database.SetInitializer(initializer);
+            IDatabaseInitializer<EfDbContext> initializer;
+            if (Database.Exists(nameOrConnectionString))
+            {
+                //初始化代码放在CreateDatabaseIfNotExists中
+                initializer = new CreateDatabaseIfNotExists<EfDbContext>();
             }
+            else
+            {
+                //初始化代码不要放在MigrateDatabaseToLatestVersion中
+                initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
+            }
+
+            // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
+            //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
+            Database.SetInitializer(initializer);
         }
 
         #endregion
@@ -100,13 +101,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //modelBuilder.Configurations.Add(new ProvinceMap());
 
             //以下代码自动注册所有的Map，自动获取当前代码中的Map,并注册
-            var typesToRegister = Assembly.GetExecutingAssembly().GetTypes().Where(type=>type.BaseType != null && !type.IsGenericType && type.BaseType.IsGenericType&&type.BaseType.GetGenericTypeDefinition()==typeof(EntityTypeConfiguration<>));
+            var typesToRegister = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.BaseType != null && !type.IsGenericType && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>));
             foreach (var type in typesToRegister)
             {
                 dynamic configurationInstance = Activator.CreateInstance(type);
                 modelBuilder.Configurations.Add(configurationInstance);
             }
-           
+
             #endregion
 
             #region 定义Relation   One-To-Many（OneOrZero-To-Many) Many-To-Many One-to-One(单向双向) (or One-to-Zero-to-One).
@@ -157,7 +158,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 使用EfDbContext执行通用任务,并返回一个值
         /// </summary>
         /// <param name="func"></param>
-        public static T Func<T>(Func<EfDbContext,T> func) 
+        public static T Func<T>(Func<EfDbContext, T> func)
         {
             using (EfDbContext context = new EfDbContext())
             {
@@ -224,7 +225,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static DbSqlQuery<T> SqlQuery<T>(DbSet<T> dbSet, string sql, params object[] parameters) where T:class
+        public static DbSqlQuery<T> SqlQuery<T>(DbSet<T> dbSet, string sql, params object[] parameters) where T : class
         {
             return dbSet.SqlQuery(sql, parameters);
         }
@@ -237,7 +238,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static DbRawSqlQuery<T> SqlQuery<T>(DbContext dbContext, string sql, params object[] parameters) where T:class
+        public static DbRawSqlQuery<T> SqlQuery<T>(DbContext dbContext, string sql, params object[] parameters) where T : class
         {
             return dbContext.Database.SqlQuery<T>(sql, parameters);
         }
@@ -328,7 +329,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <param name="dbContext"></param>
         /// <param name="entity"></param>
         /// <param name="state"></param>
-        public static void StateChange<T>(DbContext dbContext, T entity, EntityState state) where T:class
+        public static void StateChange<T>(DbContext dbContext, T entity, EntityState state) where T : class
         {
             dbContext.Entry(entity).State = state;
         }
@@ -366,7 +367,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             dbContext.Entry(entity).State = EntityState.Deleted;
         }
 
-        #endregion 
+        #endregion
 
         #region DbEntity相关
 
@@ -385,7 +386,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// Reloads the entity from the database overwriting any property values with values from the database. The entity will be in the Unchanged state after calling this method.
         /// </summary>
         /// <param name="entry"></param>
-        public static void Reload<T>(DbEntityEntry<T> entry) where T:class
+        public static void Reload<T>(DbEntityEntry<T> entry) where T : class
         {
             entry.Reload();
         }
@@ -394,7 +395,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 一个使用DbEntityEntry的例子
         /// </summary>
         /// <param name="entry"></param>
-        public static void ShowDbEntityEntry<T>(DbEntityEntry<T> entry)where T:class
+        public static void ShowDbEntityEntry<T>(DbEntityEntry<T> entry) where T : class
         {
             System.Console.WriteLine(entry.State);
             Console.WriteLine(entry.Entity);
@@ -439,7 +440,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #region 关系Relation
 
-        #region OneToOne 
+        #region OneToOne
 
         /*
          * 注：实际上这是一个One-To-ZeroOrOne接口
@@ -480,7 +481,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public static void CreateOneToOneMap(DbModelBuilder modelBuilder)
         {
             //Right是可选的，Left是必选的，删除是级联的， 这样可以删除right，并不会删除left，删除left时级联的删除Right
-            modelBuilder.Entity<OneToOneLeft>().HasOptional(s=>s.Right).WithRequired(s=>s.Left).WillCascadeOnDelete(true);
+            modelBuilder.Entity<OneToOneLeft>().HasOptional(s => s.Right).WithRequired(s => s.Left).WillCascadeOnDelete(true);
             //两种写法选择一种
             //modelBuilder.Entity<OneToOneRight>().HasRequired(s=>s.Left).WithOptional(s=>s.Right).WillCascadeOnDelete(true);
         }
@@ -513,7 +514,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             /// <summary>
             /// 
             /// </summary>
-            public virtual ICollection<OneToManyRight> Rights { get; set; } 
+            public virtual ICollection<OneToManyRight> Rights { get; set; }
         }
 
         /// <summary>
@@ -530,11 +531,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             /// 外键
             /// </summary>
             public Guid LeftId { get; set; }
-            
+
             /// <summary>
             /// 可以有也可以没有
             /// </summary>
-            public virtual OneToManyLeft Left { get; set; } 
+            public virtual OneToManyLeft Left { get; set; }
         }
 
         /// <summary>
@@ -544,7 +545,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public static void CreateOneToManyMap(DbModelBuilder modelBuilder)
         {
             //一对多关系，可以级联删除，删除右边不会影响左边，删除左边会删除右边
-            modelBuilder.Entity<OneToManyRight>().HasRequired(s=>s.Left).WithMany(s=>s.Rights).HasForeignKey(s=>s.LeftId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<OneToManyRight>().HasRequired(s => s.Left).WithMany(s => s.Rights).HasForeignKey(s => s.LeftId).WillCascadeOnDelete(true);
         }
 
         #endregion
@@ -574,7 +575,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             /// <summary>
             /// 外键是通过关联表来实现的，类中不需要外键
             /// </summary>
-            public virtual ICollection<ManyToManyRight> Rights { get; set; } 
+            public virtual ICollection<ManyToManyRight> Rights { get; set; }
         }
 
         /// <summary>
@@ -594,7 +595,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             /// <summary>
             /// 外键是通过关联表来实现的，类中不需要外键
             /// </summary>
-            public virtual ICollection<ManyToManyLeft> Lefts { get; set; } 
+            public virtual ICollection<ManyToManyLeft> Lefts { get; set; }
         }
 
         /// <summary>
@@ -732,7 +733,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         protected override void Seed(EfDbContext context)
         {
             base.Seed(context);
-            
+
             //在数据库中加入初始化数据
             //为了安全起见，尽量使用AddOrUpdate 实际上没有必要，只有在数据迁移时，使用AddOrUpdate
             //context.Persons.AddOrUpdate();
@@ -799,7 +800,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 意味着每次程序启动，都会执行Seed,而不是仅仅迁移后执行
         /// Runs after upgrading to the latest migration to allow seed data to be updated.
         /// 
-        /// if AutomaticMigrationsEnabled=true,the DbMigrationsConfiguration Seed method will run after each migration is applied or every time that the initializer runs.意味着每次迁移后或者每次重启程序后都会调用seed，但不是每次DbContext创建时调用。 
+        /// if AutomaticMigrationsEnabled=true,the DbMigrationsConfiguration Seed method will run after each migration is applied or every time that the initializer runs.initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.意味着每次迁移后或者第一次DbContext访问数据库时会调用seed，但不是每次DbContext创建时调用。 
         /// </summary>
         /// <param name="context"></param>
         protected override void Seed(EfDbContext context)
@@ -900,7 +901,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
             //建议在OnModelCreating中设置，不要在Map中设置
             #endregion
-        } 
+        }
     }
 
     #endregion
