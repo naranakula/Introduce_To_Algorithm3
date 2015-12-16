@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF.Test
         public void test()
         {
             Database.SetInitializer(new Initializer());
-            using (BaseContext context = new BaseContext())
+            using (TestContext context = new TestContext())
             {
                 Phone phone = context.Phone.Find(1);
                 Console.WriteLine(phone);
@@ -27,14 +28,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF.Test
         }
     }
 
-    public class Initializer : CreateDatabaseIfNotExists<BaseContext>
+    public class Initializer : CreateDatabaseIfNotExists<TestContext>
     {
-        public override void InitializeDatabase(BaseContext context)
+        public override void InitializeDatabase(TestContext context)
         {
             base.InitializeDatabase(context);
         }
 
-        protected override void Seed(BaseContext context)
+        protected override void Seed(TestContext context)
         {
             //可以在数据库创建后运行的程序，如添加初始数据的代码
             Person person = new Person() { FirstName = "A", LastName = "N", MidName = "L" };
@@ -48,9 +49,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF.Test
         }
     }
 
-    public class BaseContext : DbContext
+    public class TestContext : DbContext
     {
-        public BaseContext()
+        public TestContext()
             : base("name=ConnString")
         {
 
@@ -79,6 +80,23 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF.Test
 
             modelBuilder.Configurations.Add(new PersonMap());
             modelBuilder.Configurations.Add(new StudentMap());
+        }
+    }
+
+    public class BaseMigrationConfiguration : DbMigrationsConfiguration<TestContext>
+    {
+        public BaseMigrationConfiguration()
+        {
+            //必须支持允许自动迁移，这样当数据库结构改变后就可以自动迁移了
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = false;
+            //Gets or sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database.
+            ContextKey = "CmluMigrationConfiguration";
+        }
+
+        protected override void Seed(TestContext context)
+        {
+            Console.WriteLine("Seed called");
         }
     }
 

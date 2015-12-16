@@ -60,6 +60,22 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         static EfDbContext()
         {
             //Database.SetInitializer<EfDbContext>(null);
+            using (EfDbContext context = new EfDbContext())
+            {
+                IDatabaseInitializer<EfDbContext> initializer;
+                if (!context.Database.Exists())
+                {
+                    initializer = new CreateDatabaseIfNotExists<EfDbContext>();
+                }
+                else
+                {
+                    initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
+                }
+
+                // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
+                //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
+                Database.SetInitializer(initializer);
+            }
         }
 
         #endregion
@@ -781,6 +797,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// If the System.Data.Entity.MigrateDatabaseToLatestVersion<TContext,TMigrationsConfiguration>database initializer is being used, then this method will be called each time that the initializer runs.
         /// 意味着每次程序启动，都会执行Seed,而不是仅仅迁移后执行
+        /// Runs after upgrading to the latest migration to allow seed data to be updated.
+        /// 
+        /// if AutomaticMigrationsEnabled=true,the DbMigrationsConfiguration Seed method will run after each migration is applied or every time that the initializer runs.意味着每次迁移后或者每次重启程序后都会调用seed，但不是每次DbContext创建时调用。 
         /// </summary>
         /// <param name="context"></param>
         protected override void Seed(EfDbContext context)
