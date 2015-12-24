@@ -790,7 +790,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         {
             //必须支持允许自动迁移，这样当数据库结构改变后就可以自动迁移了
             AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = false;
+            AutomaticMigrationDataLossAllowed = true;//允许数据损失
             //Gets or sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database.
             ContextKey = "CmluMigrationConfiguration";
         }
