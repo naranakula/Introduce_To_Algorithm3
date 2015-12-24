@@ -13,6 +13,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// log4net日志
     /// 通过log4net配置来支持多线程
     /// 支持error\ warn\ info\ debug日志
+    /// 
+    /// 在高性能条件下：建立一个队列和线程专门负责写日志，其它线程只需将要写的日志放到队列中即可
     /// </summary>
     public static class Log4netHelper
     {
@@ -28,7 +30,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// </summary>
         static Log4netHelper()
         {
-            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo("log4net.config"));
+            //获取应用程序的目录，并查找log4net.config文件
+            string dir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+
+            FileInfo file = new FileInfo(Path.Combine(dir, "log4net.config"));
+            if (file.Exists)
+            {
+                log4net.Config.XmlConfigurator.ConfigureAndWatch(file);
+            }
         }
 
         #endregion
