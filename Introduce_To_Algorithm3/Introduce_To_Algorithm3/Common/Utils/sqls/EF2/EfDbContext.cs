@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web.Hosting;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
@@ -163,6 +164,52 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             using (EfDbContext context = new EfDbContext())
             {
                 return func(context);
+            }
+        }
+
+        /// <summary>
+        /// 使用EfDbContext执行通用任务
+        /// 带有事务
+        /// 尽量使用隐式事务
+        /// you should always call Complete() within a transaction scope to commit the transaction, even if there are only select statements within the scope. If you want to roll back the transaction, there is no specific rollback method, but rather you just don’t call Complete() and let the scope get disposed.
+        /// </summary>
+        /// <param name="action"></param>
+        public static void ActionWithTransaction(Action<EfDbContext> action)
+        {
+            using (EfDbContext context = new EfDbContext())
+            {
+                //该范围需要一个事务。 如果已经存在环境事务，则使用该环境事务。 否则，在进入范围之前创建新的事务。 这是默认值。
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required))
+                {
+                    action(context);
+                    //在Complete之前的SaveChanges调用，并不会真正的保存的数据库
+                    //you should always call Complete() within a transaction scope to commit the transaction, even if there are only select statements within the scope. If you want to roll back the transaction, there is no specific rollback method, but rather you just don’t call Complete() and let the scope get disposed.
+                    ts.Complete();
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// 使用EfDbContext执行通用任务,并返回一个值
+        /// 带有事务
+        /// 尽量使用隐式事务
+        /// you should always call Complete() within a transaction scope to commit the transaction, even if there are only select statements within the scope. If you want to roll back the transaction, there is no specific rollback method, but rather you just don’t call Complete() and let the scope get disposed.
+        /// </summary>
+        /// <param name="func"></param>
+        public static T FuncWithTransaction<T>(Func<EfDbContext, T> func)
+        {
+            using (EfDbContext context = new EfDbContext())
+            {
+                //该范围需要一个事务。 如果已经存在环境事务，则使用该环境事务。 否则，在进入范围之前创建新的事务。 这是默认值。
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required))
+                {
+                    T result = func(context);
+                    //在Complete之前的SaveChanges调用，并不会真正的保存的数据库
+                    //you should always call Complete() within a transaction scope to commit the transaction, even if there are only select statements within the scope. If you want to roll back the transaction, there is no specific rollback method, but rather you just don’t call Complete() and let the scope get disposed.
+                    ts.Complete();
+                    return result;
+                }
             }
         }
 
