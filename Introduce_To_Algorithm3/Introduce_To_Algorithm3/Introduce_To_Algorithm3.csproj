@@ -385,6 +385,7 @@
     <Compile Include="Common\Utils\sqls\EF.Test\Test.cs" />
     <Compile Include="Common\Utils\sqls\EF2\EfDbContext.cs" />
     <Compile Include="Common\Utils\sqls\EF2\MySqlDbContext.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\SqliteDbContext.cs" />
     <Compile Include="Common\Utils\sqls\EF\BaseContext.cs" />
     <Compile Include="Common\Utils\sqls\EF\DALHelper.cs" />
     <Compile Include="Common\Utils\StartupUtils.cs" />
@@ -509,6 +510,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Common\Utils\sqls\EF2\EF适用于各种数据库.docx" />
+    <None Include="Common\Utils\sqls\EF2\SQLite.NET.chm" />
     <None Include="Common\Utils\sqls\EF\EF.docx" />
     <None Include="HPSocket\ReadMe.docx" />
     <None Include="log4net.config">

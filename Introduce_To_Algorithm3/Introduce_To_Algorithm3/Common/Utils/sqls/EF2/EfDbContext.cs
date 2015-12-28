@@ -891,6 +891,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 主键
         /// DatabaseGeneratedOption.Identity is used to create an auto-increment column in the table by a unique value.int类型需要，Guid类型不需要
+        /// 除Sql Server外，MySql Sqlite尽量使用long或者int类型作为主键
         /// </summary>
         public Guid Id { get; set; }
 
