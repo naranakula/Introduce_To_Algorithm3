@@ -16,7 +16,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>36590b3f</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>87989481</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -166,7 +166,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net45\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -385,7 +384,7 @@
     <Compile Include="Common\Utils\sqls\EF.Test\Test.cs" />
     <Compile Include="Common\Utils\sqls\EF2\EfDbContext.cs" />
     <Compile Include="Common\Utils\sqls\EF2\MySqlDbContext.cs" />
-    <Compile Include="Common\Utils\sqls\EF2\SqliteDbContext.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\Sqlite\SqliteDbContext.cs" />
     <Compile Include="Common\Utils\sqls\EF\BaseContext.cs" />
     <Compile Include="Common\Utils\sqls\EF\DALHelper.cs" />
     <Compile Include="Common\Utils\StartupUtils.cs" />
@@ -496,7 +495,6 @@
     <Content Include="Reference\SuperSocket\SuperSocket.SocketEngine.dll" />
     <Content Include="Reference\SuperSocket\SuperSocket.SocketEngine.pdb" />
     <Content Include="Reference\SuperSocket\SuperSocket.SocketEngine.XML" />
-    <Content Include="Reference\System.Data.SQLite.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\ApproximationAlgorithm\" />
@@ -510,7 +508,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Common\Utils\sqls\EF2\EF适用于各种数据库.docx" />
-    <None Include="Common\Utils\sqls\EF2\SQLite.NET.chm" />
+    <None Include="Common\Utils\sqls\EF2\Sqlite\SQLite.NET.chm" />
+    <None Include="Common\Utils\sqls\EF2\Sqlite\sqlitestudio-3.0.7.zip" />
     <None Include="Common\Utils\sqls\EF\EF.docx" />
     <None Include="HPSocket\ReadMe.docx" />
     <None Include="log4net.config">

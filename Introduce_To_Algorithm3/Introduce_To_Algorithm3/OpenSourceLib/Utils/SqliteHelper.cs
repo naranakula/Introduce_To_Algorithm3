@@ -8,6 +8,12 @@ using System.Data.SQLite;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
+    /// <summary>
+    /// If the database file doesn't exist, the default behaviour is to create a new file. 
+    /// 当你Open时，如果数据库不存在，则创建一个
+    /// Date 表示年月日 Time表示时间 DateTime表示时间
+    /// 实际上日期可以通过Text类型存储
+    /// </summary>
     public class SqliteHelper
     {
         /// <summary>
@@ -94,6 +100,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         /// <summary>
         /// 执行sql语句, 返回受影响的行数
+        /// CREATE TABLE [Person] (
+        /// [Id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+        /// [Name] TEXT  NULL,
+        /// [CreateTime] DATE  NULL
+        /// )
+        /// CREATE TABLE [Person] (
+        /// [Id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+        /// [Name] NVARCHAR(50)  NULL,
+        /// [CreateTime] DATE  NULL
+        /// );
+        /// 
+        /// If the database file doesn't exist, the default behaviour is to create a new file. 
+        /// 当你Open时，如果数据库不存在，则创建一个
         /// </summary>
         /// <param name="connString"></param>
         /// <param name="sql"></param>
