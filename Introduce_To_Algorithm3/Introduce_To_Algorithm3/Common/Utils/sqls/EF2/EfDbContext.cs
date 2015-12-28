@@ -29,15 +29,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString
         /// </summary>
-        private static string nameOrConnectionString;
+        private static string _nameOrConnectionString;
 
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// </summary>
         public static string NameOrConnectionString
         {
-            get { return nameOrConnectionString; }
-            set { nameOrConnectionString = value; }
+            get { return _nameOrConnectionString; }
+            set { _nameOrConnectionString = value; }
         }
         #endregion
 
@@ -46,8 +46,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// </summary>
-        public EfDbContext()
-            : base(nameOrConnectionString)
+        public EfDbContext() : base(_nameOrConnectionString)
         {
 
         }
@@ -64,7 +63,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //Database.SetInitializer<EfDbContext>(null);
 
             IDatabaseInitializer<EfDbContext> initializer;
-            if (Database.Exists(nameOrConnectionString))
+            if (Database.Exists(_nameOrConnectionString))
             {
                 //初始化代码放在CreateDatabaseIfNotExists中
                 initializer = new CreateDatabaseIfNotExists<EfDbContext>();
