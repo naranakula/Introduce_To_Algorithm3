@@ -907,6 +907,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 乐观锁来支持并发控制
         /// 如果同时多个用户修改，只有第一个用户修改成功，第二个用户需要处理DbUpdateConcurrencyException异常
+        /// 目前只在Sql Server中支持，其它数据库的并发自行百度
         /// </summary>
         [Timestamp]
         public byte[] RowVersion { get; set; }
@@ -940,7 +941,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //    .IsVariableLength();
             //Property(p => p.MiddleName).IsOptional().IsFixedLength().IsUnicode(false).HasMaxLength(1);
 
-            //设置Timestamp属性和调用IsRowVersion两选一
+            //设置Timestamp属性和调用IsRowVersion两选一，目前只在Sql Server中支持，其它数据库的并发自行百度
             //Property(t => t.RowVersion).IsRowVersion();
 
             #endregion
