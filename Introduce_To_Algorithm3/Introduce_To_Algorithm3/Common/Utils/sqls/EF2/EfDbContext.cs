@@ -27,12 +27,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
-        /// name=ConnString
+        /// name=ConnString格式
         /// </summary>
         private static string _nameOrConnectionString;
 
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
+        /// name=ConnString格式
         /// </summary>
         public static string NameOrConnectionString
         {
@@ -45,6 +46,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
+        /// name=ConnString格式
         /// </summary>
         public EfDbContext() : base(_nameOrConnectionString)
         {
