@@ -23,7 +23,7 @@
         2、修改app.maifest为 requestedExecutionLevel level="requireAdministrator" uiAccess="false" 
         3、禁用 安全性 ClickOnce安全设置
         -->
-        <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
       </requestedPrivileges>
       <applicationRequestMinimum>
         <defaultAssemblyRequest permissionSetReference="Custom" />
