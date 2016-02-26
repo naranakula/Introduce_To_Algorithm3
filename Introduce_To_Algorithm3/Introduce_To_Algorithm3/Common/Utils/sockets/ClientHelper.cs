@@ -317,5 +317,57 @@ namespace Com.Utility.Commons
                 }
             }
         }
+
+
+        #region 主机序  网络序
+
+        /// <summary>
+        /// 将机器上整型转为网络序长度为 4 的字节数组。
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static byte[] ToNetWorkBytes(int i)
+        {
+            int m = IPAddress.HostToNetworkOrder(i);
+            return BitConverter.GetBytes(m);
+        }
+
+        /// <summary>
+        /// 将网络序4个字节转换为机器上整型
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public static int ToHostInt(byte[] bytes)
+        {
+            int netI = BitConverter.ToInt32(bytes, 0);
+            return IPAddress.NetworkToHostOrder(netI);
+        }
+
+        /// <summary>
+        /// 将机器上长整型转为网络序长度为 8 的字节数组。
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static byte[] ToNetWorkBytes(long i)
+        {
+            long m = IPAddress.HostToNetworkOrder(i);
+            return BitConverter.GetBytes(m);
+        }
+
+        /// <summary>
+        /// 将网络序8个字节转换为机器上长整型
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public static long ToHostLong(byte[] bytes)
+        {
+            long netL = BitConverter.ToInt64(bytes, 0);
+            return IPAddress.NetworkToHostOrder(netL);
+        }
+
+        #endregion
+
+
+
     }
 }
