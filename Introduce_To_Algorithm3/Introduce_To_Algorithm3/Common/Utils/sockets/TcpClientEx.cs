@@ -19,6 +19,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         private TcpClient tcpClient;
 
         /// <summary>
+        /// 需要保持一个引用，以便最后关闭
+        /// 关闭TcpClient，不会关闭NetworkStream
+        /// </summary>
+        private NetworkStream networkStream;
+
+        /// <summary>
         /// the ip you want to connect
         /// </summary>
         private string ip;
@@ -67,6 +73,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
             tcpClient.ReceiveTimeout = 5000;
             tcpClient.SendTimeout = 5000;
             tcpClient.Connect(ipEndPoint);
+            networkStream = tcpClient.GetStream();
             isConnected = true;
         }
 
@@ -81,6 +88,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                 IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
                 tcpClient = new TcpClient();
                 tcpClient.Connect(ipEndPoint);
+                networkStream = tcpClient.GetStream();
                 isConnected = true;
                 return true;
             }
@@ -109,7 +117,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         /// </summary>
         public void Close()
         {
+            tcpClient.GetStream().Flush();
+            tcpClient.GetStream().Close();//You must close the NetworkStream when you are through sending and receiving data.//建议先关闭stream，在关闭client  关闭NetworkStream会隐含的关闭Socket close the NetworkStream that will implicitly close the underlying socket. Closing a TcpClient does not free the resources of its NetworkStream.
             tcpClient.Close();
+            //tcpClient.GetStream().Close();//You must close the NetworkStream when you are through sending and receiving data.//你必须保持一个NetStream引用，不能再这里调用GetStream()，因为client已经关闭，会抛异常。先关闭client，在关闭stream
+            //Closing the tcpClient instance does not close the network stream
+            //因此不建议用TcpClient，建议使用Socket
             isConnected = false;
         }
 
@@ -121,8 +134,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         {
             try
             {
+                tcpClient.GetStream().Flush();
+                tcpClient.GetStream().Close();//You must close the NetworkStream when you are through sending and receiving data.//建议先关闭stream，在关闭client  关闭NetworkStream会隐含的关闭Socket close the NetworkStream that will implicitly close the underlying socket. Closing a TcpClient does not free the resources of its NetworkStream.
                 tcpClient.Close();
+               
                 isConnected = false;
+                //Closing the tcpClient instance does not close the network stream
+                //因此不建议用TcpClient，建议使用Socket
                 return true;
             }
             catch
@@ -245,6 +263,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                 Log4netHelper.Error(ex.ToString());
                 return new Tuple<bool, string>(false, string.Empty);
             }
+        }
+
+
+        public bool IsAnyDataToRead()
+        {
+            return networkStream.DataAvailable;// 如果远程主机处于关机状态或关闭了连接，DataAvailable 可能会引发 SocketException。
         }
 
         /// <summary>

@@ -2,6 +2,8 @@
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace Introduce_To_Algorithm3
 {
@@ -9,13 +11,39 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-            string host = Dns.GetHostName();
-            IPHostEntry hostEntry = Dns.Resolve(host);
-            Console.WriteLine("Canonical name:"+hostEntry.HostName);
+            Console.WriteLine(0x10000);
 
-            hostEntry.AddressList.ToList().ForEach(r=>Console.WriteLine(r));
-            Console.WriteLine("-------------------");
-            hostEntry.Aliases.ToList().ForEach(r=>Console.WriteLine(r));
+
+            //IPAddress[] addresses = Dns.GetHostAddresses(Dns.GetHostName());
+            //Console.WriteLine(addresses[1]);
+            //IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234);
+            //UdpClient client = new UdpClient();
+            //while (true)
+            //{
+            //    Console.WriteLine("输入:");
+            //    string s = Console.ReadLine();
+            //    byte[] buffer = Encoding.UTF8.GetBytes(s);
+            //    client.Send(buffer, buffer.Length, endPoint);
+            //    IPEndPoint point = null;
+            //    byte[] buffer2 = client.Receive(ref point);
+            //    Console.WriteLine(point);
+            //    Console.WriteLine("接收到:" + Encoding.UTF8.GetString(buffer2));
+            //}
+
+
+            //IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, 1233);
+            //Console.WriteLine(1233);
+            //UdpClient client = new UdpClient(endPoint);
+
+            //while (true)
+            //{
+            //    IPEndPoint point = new IPEndPoint(IPAddress.Any, 1233);
+            //    byte[] buffer = client.Receive(ref point);
+            //    Console.WriteLine("接收到:" + Encoding.UTF8.GetString(buffer));
+            //    client.Send(buffer, buffer.Length, point);
+            //}
+
+
 
         }
     }

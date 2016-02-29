@@ -146,7 +146,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         {
             isRunning = false;
             tcpThread.Join(1000);
-            tcpListener.Stop();
+            tcpListener.Stop();//接入的socket应该单独关闭
+            //Any accepted TcpClient or Socket instances should be closed separately.
         }
 
         /// <summary>

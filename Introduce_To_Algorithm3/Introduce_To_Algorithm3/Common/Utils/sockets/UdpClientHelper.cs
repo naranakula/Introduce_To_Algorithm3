@@ -9,6 +9,40 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sockets
 {
+    //IPAddress[] addresses = Dns.GetHostAddresses(Dns.GetHostName());
+    //Console.WriteLine(addresses[1]);
+    //IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.1.100"), 1235);
+    //UdpClient client = new UdpClient();
+    //while (true)
+    //{
+    //    Console.WriteLine("输入:");
+    //    string s = Console.ReadLine();
+    //    byte[] buffer = Encoding.UTF8.GetBytes(s);
+    //    client.Send(buffer, buffer.Length, endPoint);
+    //    IPEndPoint  point = new IPEndPoint(IPAddress.Any, 0);
+    //    byte[] buffer2 = client.Receive(ref point);
+    //    Console.WriteLine(point);
+    //    Console.WriteLine("接收到:"+Encoding.UTF8.GetString(buffer2));
+    //}
+
+
+    //IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, 1235);
+    //UdpClient client = new UdpClient(endPoint);
+
+    //while (true)
+    //{
+    //    IPEndPoint point = new IPEndPoint(IPAddress.Any, 0);
+    //    byte[] buffer = client.Receive(ref point);
+    //    Console.WriteLine("接收到:"+Encoding.UTF8.GetString(buffer));
+    //    client.Send(buffer, buffer.Length, point);
+    //}
+    //经过Reflector，Receive中的IpEndPoint应该是Out，而不应该是ref
+    //如果是IPV4  ，内部使用 IPEndPoint Any = new IPEndPoint(IPAddress.Any, 0);
+    //如果是IPV6 ,  内部使用 IPEndPoint IPv6Any = new IPEndPoint(IPAddress.IPv6Any, 0);
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class UdpClientHelper:IDisposable
     {
         /// <summary>
@@ -59,6 +93,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         /// <summary>
         /// Connect方法将UdpClient与默认的远程机器绑定，从此该UdpClient只能访问该默认主机。Send方法调用时不需指定远程主机，如果指定其它主机将出错
         /// 注:不同于Tcp,Connect并没有实际建立连接,实际上Udp是无连接的
+        /// 不要使用connect
         /// </summary>
         public void Connect()
         {
@@ -119,6 +154,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
 
         /// <summary>
         /// 接收一个数据报
+        /// 接收和发送使用相同的IPEndPoint。因为服务器使用其绑定的ip和接口用来发送和接收数据
         /// </summary>
         /// <param name="remoteIpEndPoint">远程主机</param>
         /// <returns></returns>
@@ -126,6 +162,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         {
             //Receive 方法将阻止，直到数据报从远程主机到达为止。
             //如果在 Connect 方法中指定了默认远程主机，则 Receive 方法将只接受来自该主机的数据报。 其他所有数据报将被丢弃。
+            //receive从指定的endpoint接受数据
+            //实际上经过测试，IPEndPoint可以接收和send指定的不同的IP和端口，仍然能够收到send指定的IPEndPoint回传的数据，并且IPEndpoint会被修改为正确的数据
+            //经过测试，这里receive传入的IPEndPoint可以为null，并传回实际的IPEndPoint
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, 0);//0表示任何可用端口 Any表示任何地址,实际使用时应该指定ip地址
+            //实际上应该是out，而不应该是ref
             return _udpClient.Receive(ref remoteIpEndPoint);
         }
         /// <summary>

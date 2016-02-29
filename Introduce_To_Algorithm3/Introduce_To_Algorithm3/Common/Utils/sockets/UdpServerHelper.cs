@@ -9,6 +9,36 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sockets
 {
+    //IPAddress[] addresses = Dns.GetHostAddresses(Dns.GetHostName());
+    //Console.WriteLine(addresses[1]);
+    //IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.1.100"), 1235);
+    //UdpClient client = new UdpClient();
+    //while (true)
+    //{
+    //    Console.WriteLine("输入:");
+    //    string s = Console.ReadLine();
+    //    byte[] buffer = Encoding.UTF8.GetBytes(s);
+    //    client.Send(buffer, buffer.Length, endPoint);
+    //    IPEndPoint  point = new IPEndPoint(IPAddress.Any, 0);
+    //    byte[] buffer2 = client.Receive(ref point);
+    //    Console.WriteLine(point);
+    //    Console.WriteLine("接收到:"+Encoding.UTF8.GetString(buffer2));
+    //}
+
+
+    //IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, 1235);
+    //UdpClient client = new UdpClient(endPoint);
+
+    //while (true)
+    //{
+    //    IPEndPoint point = new IPEndPoint(IPAddress.Any, 0);
+    //    byte[] buffer = client.Receive(ref point);
+    //    Console.WriteLine("接收到:"+Encoding.UTF8.GetString(buffer));
+    //    client.Send(buffer, buffer.Length, point);
+    //}
+    //经过Reflector，Receive中的IpEndPoint应该是Out，而不应该是ref
+    //如果是IPV4  ，内部使用 IPEndPoint Any = new IPEndPoint(IPAddress.Any, 0);
+    //如果是IPV6 ,  内部使用 IPEndPoint IPv6Any = new IPEndPoint(IPAddress.IPv6Any, 0);
     /// <summary>
     /// UdpServer帮助类
     /// </summary>
@@ -39,6 +69,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         {
             this._localPort = localPort;
             this._encoding = encoding;
+            //服务端使用该IP和端口发送和接收数据
+            //an IPEndPoint using the IP address and port number from which you intend to send and receive data.
             _udpClient = new UdpClient(new IPEndPoint(IPAddress.Any, _localPort));
             //可以采用异步调用
             _udpClient.BeginReceive(new AsyncCallback(AsyncCallback), _udpClient);
@@ -51,7 +83,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         private void AsyncCallback(IAsyncResult ar)
         {
             //Object obj = ar.AsyncState;//获取传递的数据,本例中为UdpClient
-            IPEndPoint remoteIpEp = null;
+            IPEndPoint remoteIpEp = new IPEndPoint(IPAddress.Any, 0);
+            //虽然端口指定了0，表示任意端口，但该server只能接收构造函数中绑定的端口中的数据
+            //构造函数中指定的端口是唯一的端口用来发送和接收数据的
             byte[] buffer  = _udpClient.EndReceive(ar, ref remoteIpEp);
             if (remoteIpEp != null)
             {

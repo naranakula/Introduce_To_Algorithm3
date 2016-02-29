@@ -105,6 +105,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
 
             try
             {
+                //在阻塞情况下，send会返回整数正好等于要发送的数据数据,
+                //If space is not available at the sending socket to hold the message to be transmitted, and the socket file descriptor does not have O_NONBLOCK（非阻塞状态） set, send() shall block until space is available. If space is not available at the sending socket to hold the message to be transmitted, and the socket file descriptor does have O_NONBLOCK set, send() shall fail.
                 retry.Invoke(() => socket.Send(buffer, 0, buffer.Length, SocketFlags.None));
                 return true;
             }

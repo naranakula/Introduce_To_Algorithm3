@@ -417,6 +417,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         public static void Send(Socket socket, string msg, Encoding encoding)
         {
             byte[] buffer = encoding.GetBytes(msg);
+            //返回The number of bytes sent to the System.Net.Sockets.Socket.
+            //返回实际发送的数目，可能没完全发送完，需要一个循环继续发送数据
             socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
 
@@ -446,6 +448,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
             }
             
             //pool for 1 seconds
+            // true if data is available for reading; -or- true if the
+            //     connection has been closed, reset, or terminated; otherwise, returns false.
+            //如果socket有数据可读或者socket已经关闭，返回true
             if (!socket.Poll(1000 * 1000, SelectMode.SelectRead))
             {
                 return null;
