@@ -145,7 +145,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                         Thread.Sleep(1);
                         continue;
                     }
-
+                    
                     //accept the pending connection
                     Socket client = listener.AcceptSocket();
                    // TcpClient client = listener.AcceptTcpClient();

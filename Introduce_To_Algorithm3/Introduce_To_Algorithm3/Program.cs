@@ -11,8 +11,6 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(0x10000);
-
 
             //IPAddress[] addresses = Dns.GetHostAddresses(Dns.GetHostName());
             //Console.WriteLine(addresses[1]);

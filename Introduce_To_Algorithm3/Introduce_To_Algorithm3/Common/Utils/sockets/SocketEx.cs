@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -44,5 +45,24 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                 socket = null;
             }
         }
+
+        /// <summary>
+        /// 确定一个或多个套接字的状态。
+        /// Select 是一种静态方法，它可确定一个或多个 Socket 实例的状态。必须先将一个或多个套接字放入 IList 中，然后才能使用 Select 方法。通过调用 Select（将 IList 作为 checkRead 参数,其它设置为null），可检查是否具有可读性。若要检查套接字是否具有可写性，请使用 checkWrite 参数，其它设置为null。若要检测错误条件，请使用 checkError，其它设置为NULL。在调用 Select 之后，IList 中将仅填充那些满足条件的套接字。
+        /// </summary>
+        /// <param name="checkRead">要检查可读性的 Socket 实例的 IList。</param>
+        /// <param name="checkWrite">一个 Socket 实例的 IList，用于检查可写性。</param>
+        /// <param name="checkError">要检查错误的 Socket 实例的 IList。</param>
+        /// <param name="microSeconds">超时值（以毫秒为单位）。A -1 值指示超时值为无限大。</param>
+        public static void Select(List<Socket> checkRead,List<Socket> checkWrite, List<Socket> checkError, int microSeconds)
+        {
+            Socket.Select(checkRead,checkWrite,checkError,microSeconds);
+        }
+
+
+        #region IsReadable
+
+        #endregion
+
     }
 }

@@ -185,7 +185,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                 Thread.Sleep(100);
                 return;
             }
-
+            
             if (socket.Poll(200000, SelectMode.SelectRead))
             {
                 //512k
