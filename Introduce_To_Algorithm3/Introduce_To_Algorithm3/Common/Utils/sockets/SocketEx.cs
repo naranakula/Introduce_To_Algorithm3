@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,7 +61,40 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         }
 
 
-        #region IsReadable
+        #region Options
+
+        /// <summary>
+        /// 在多播中需要设置TTl值（Time to live），每一个ip数据报文中都包含一个TTL，每当有路由器转发该报文时，TTL减1，知道减为0时，生命周期结束，报文即时没有到达目的地，也立即宣布死亡。
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="ttl"></param>
+        public static void SetSocketTtl(Socket socket, int ttl)
+        {
+            socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive,ttl);
+        }
+
+        /// <summary>
+        /// 注册到某个多播地址
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="address"></param>
+        public static void JoinMulticastGroup(Socket socket, string address)
+        {
+            IPAddress ipAddress = IPAddress.Parse(address);
+            socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(ipAddress,IPAddress.Any));
+        }
+
+
+        /// <summary>
+        /// 注销到某个多播地址
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="address"></param>
+        public static void DropMulticastGroup(Socket socket, string address)
+        {
+            IPAddress ipAddress = IPAddress.Parse(address);
+            socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.DropMembership, new MulticastOption(ipAddress, IPAddress.Any));
+        }
 
         #endregion
 
