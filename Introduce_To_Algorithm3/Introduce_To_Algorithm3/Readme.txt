@@ -11,4 +11,7 @@
 Entity framework
 AutoMapper
 Log4net
-Ninject
+Quartz.net
+
+
+如果要用IOC,建议用Ninject>Autofac,
