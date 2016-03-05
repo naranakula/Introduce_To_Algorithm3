@@ -902,16 +902,24 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 最近一次修改时间
+        /// ConcurrencyCheck用于检查在读取该字段到再次更新该字段时，之间是否有其他人更改过该字段，如果有抛出DbUpdateConcurrencyException异常
+        /// 用于非sqlserver的并行检查，该数据类型可以是DateTime或者Guid
+        /// ConcurrencyCheck只用于检查该字段
+        /// DateTime可以精确到千万分之一秒
         /// </summary>
+        [ConcurrencyCheck]
         public DateTime ModifyTime { get; set; }
 
         /// <summary>
         /// 乐观锁来支持并发控制
         /// 如果同时多个用户修改，只有第一个用户修改成功，第二个用户需要处理DbUpdateConcurrencyException异常
-        /// 目前只在Sql Server中支持，其它数据库的并发自行百度
+        /// 目前只在Sql Server中支持，
         /// </summary>
         [Timestamp]
         public byte[] RowVersion { get; set; }
+
+
+        
     }
 
     /// <summary>
@@ -944,6 +952,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
             //设置Timestamp属性和调用IsRowVersion两选一，目前只在Sql Server中支持，其它数据库的并发自行百度
             //Property(t => t.RowVersion).IsRowVersion();
+
+            //用于非sqlserver数据库的并行检查
+            //Property(p => p.ModifyTime).IsConcurrencyToken();
 
             #endregion
 

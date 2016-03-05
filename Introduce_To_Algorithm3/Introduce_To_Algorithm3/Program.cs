@@ -42,7 +42,8 @@ namespace Introduce_To_Algorithm3
             //}
 
 
-
+            DateTime now = DateTime.Now;
+            Console.WriteLine(now);
         }
     }
 }
