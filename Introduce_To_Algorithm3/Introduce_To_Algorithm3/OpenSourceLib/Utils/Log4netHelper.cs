@@ -12,7 +12,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// <summary>
     /// log4net日志
     /// 通过log4net配置来支持多线程
-    /// 支持error\ warn\ info\ debug日志
+    /// 支持fatal\ error\ warn\ info\ debug日志
     /// 
     /// 在高性能条件下：建立一个队列和线程专门负责写日志，其它线程只需将要写的日志放到队列中即可
     /// </summary>
@@ -41,6 +41,73 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         }
 
         #endregion
+
+        #region fatal
+        /// <summary>
+        /// 写Fatal日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        public static void Fatal(string msg)
+        {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
+            log4net.LogManager.GetLogger(LOGGERNAME).Fatal(msg);
+        }
+        /// <summary>
+        /// 写Fatal日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        public static void Fatal(object msg)
+        {
+            if (msg == null)
+            {
+                return;
+            }
+            log4net.LogManager.GetLogger(LOGGERNAME).Fatal(msg);
+        }
+
+        /// <summary>
+        /// 写Fatal日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        /// <param name="args">格式化参数</param>
+        public static void Fatal(string msg, string args)
+        {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
+            log4net.LogManager.GetLogger(LOGGERNAME).Fatal(string.Format(msg, args));
+        }
+
+        /// <summary>
+        /// 写Fatal日志
+        /// </summary>
+        /// <param name="msg"> The message object to log.</param>
+        /// <param name="ex">The exception to log, including its stack trace.</param>
+        public static void Fatal(string msg, Exception exception)
+        {
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return;
+            }
+            log4net.LogManager.GetLogger(LOGGERNAME).Fatal(msg, exception);
+        }
+
+        /// <summary>
+        /// 写日志
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        public static void FatalFormat(string format, params object[] args)
+        {
+            log4net.LogManager.GetLogger(LOGGERNAME).FatalFormat(format, args);
+        }
+
+        #endregion
+
 
         #region error
         /// <summary>

@@ -914,6 +914,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 乐观锁来支持并发控制
         /// 如果同时多个用户修改，只有第一个用户修改成功，第二个用户需要处理DbUpdateConcurrencyException异常
         /// 目前只在Sql Server中支持，
+        /// RowVerion和ConcurrencyCheck的区别是每次Add和Update,rowVersion会自动incremented
         /// </summary>
         [Timestamp]
         public byte[] RowVersion { get; set; }
