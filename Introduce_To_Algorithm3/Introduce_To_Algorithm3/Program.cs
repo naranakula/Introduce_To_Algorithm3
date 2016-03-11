@@ -14,7 +14,8 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-
+            Console.WriteLine(Math.Log(1000000,2));
+            Console.WriteLine(BigInteger.Pow(new BigInteger(2),1000 ));
         }
     }
 }
