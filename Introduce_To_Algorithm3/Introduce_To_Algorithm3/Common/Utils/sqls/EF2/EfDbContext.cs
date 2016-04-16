@@ -29,7 +29,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString格式
         /// </summary>
-        private static string _nameOrConnectionString;
+        private static string _nameOrConnectionString = "name=ConnString";
 
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
@@ -117,6 +117,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //建议在该方法中定义Relation,而不是在Map中定义
             //删除的级联在这里定义，默认是不级联删除的
             //CreateOneToManyMap(modelBuilder);
+            //CreateManyToManyMap(modelBuilder);
+            //CreateOneToOneMap(modelBuilder);
 
             #endregion
         }
