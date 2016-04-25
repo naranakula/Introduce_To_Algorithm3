@@ -538,6 +538,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Common\MachineLearning\Machine Learning Using C# Succinctly.docx" />
     <None Include="Common\Utils\sqls\EF2\EF适用于各种数据库.docx" />
     <None Include="Common\Utils\sqls\EF2\Sqlite\SQLite.NET.chm" />
     <None Include="Common\Utils\sqls\EF2\Sqlite\sqlitestudio-3.0.7.zip" />
