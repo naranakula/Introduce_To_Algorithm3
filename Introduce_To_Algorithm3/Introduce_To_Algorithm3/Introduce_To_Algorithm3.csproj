@@ -322,6 +322,7 @@
     <Compile Include="Common\MachineLearning\KNN.cs" />
     <Compile Include="Common\MachineLearning\LogisticRegression.cs" />
     <Compile Include="Common\MachineLearning\LogisticClassifier.cs" />
+    <Compile Include="Common\MachineLearning\NaiveBayer.cs" />
     <Compile Include="Common\MachineLearning\NaiveBayes.cs" />
     <Compile Include="Common\Math\DoubleMatrix.cs" />
     <Compile Include="Common\Math\DoubleVector.cs" />
