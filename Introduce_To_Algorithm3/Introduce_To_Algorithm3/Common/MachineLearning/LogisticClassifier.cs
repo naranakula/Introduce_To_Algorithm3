@@ -186,7 +186,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
 
                 solutions[other].error = Error(trainData, otherWts);
             }
-            Array.Sort(solutions);
+            //Array.Sort(solutions);
             Array.Copy(solutions[best].weights, this.weights, numFeatures + 1);
             return this.weights;
         }
@@ -306,7 +306,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
                 double desired = datas[i][yIndex];//0 or 1
 
                 //computed == desired
-                if (System.Math.Abs(computed - desired) < 0.000001)
+                if (System.Math.Abs(computed - desired) <= 0.00001)
                 {
                     ++numCorrect;
                 }

@@ -324,6 +324,7 @@
     <Compile Include="Common\MachineLearning\LogisticClassifier.cs" />
     <Compile Include="Common\MachineLearning\NaiveBayer.cs" />
     <Compile Include="Common\MachineLearning\NaiveBayes.cs" />
+    <Compile Include="Common\MachineLearning\NeuralNetworkClassifier.cs" />
     <Compile Include="Common\Math\DoubleMatrix.cs" />
     <Compile Include="Common\Math\DoubleVector.cs" />
     <Compile Include="Common\Math\Fibonacci.cs" />
