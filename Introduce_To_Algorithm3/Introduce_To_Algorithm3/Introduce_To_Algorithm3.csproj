@@ -316,12 +316,14 @@
     <Compile Include="Common\GreedyAlgorithm\ActivitySelection.cs" />
     <Compile Include="Common\GreedyAlgorithm\HuffmanTree.cs" />
     <Compile Include="Common\GreedyAlgorithm\Knapsack.cs" />
+    <Compile Include="Common\MachineLearning\ANNHelper.cs" />
     <Compile Include="Common\MachineLearning\ClusterCategorical.cs" />
     <Compile Include="Common\MachineLearning\DecisionTree.cs" />
     <Compile Include="Common\MachineLearning\KMeans.cs" />
     <Compile Include="Common\MachineLearning\KNN.cs" />
     <Compile Include="Common\MachineLearning\LogisticRegression.cs" />
     <Compile Include="Common\MachineLearning\LogisticClassifier.cs" />
+    <Compile Include="Common\MachineLearning\MlHelper.cs" />
     <Compile Include="Common\MachineLearning\NaiveBayer.cs" />
     <Compile Include="Common\MachineLearning\NaiveBayes.cs" />
     <Compile Include="Common\MachineLearning\NeuralNetworkClassifier.cs" />
@@ -541,6 +543,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Common\MachineLearning\Machine Learning Using C# Succinctly.docx" />
+    <None Include="Common\MachineLearning\Neural Networks Using C# Succinctly.docx" />
     <None Include="Common\Utils\sqls\EF2\EF适用于各种数据库.docx" />
     <None Include="Common\Utils\sqls\EF2\Sqlite\SQLite.NET.chm" />
     <None Include="Common\Utils\sqls\EF2\Sqlite\sqlitestudio-3.0.7.zip" />
