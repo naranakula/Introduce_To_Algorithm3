@@ -339,13 +339,74 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         /// <summary>
         /// 对指定的列进行最大最小归一化
         /// 计算公式  (x-min)/(max-min)
+        /// 计算是在源矩阵上操作的
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">在data上执行操作，不创建新的矩阵</param>
         /// <param name="column">需要进行归一化的列</param>
         public static void MinMaxNormal(double[][] data, int column)
         {
-            
+            double min = data[0][column];
+            double max = data[0][column];
+            for (int i = 0; i < data.Length; i++)
+            {
+                double cur = data[i][column];
+                if (cur < min)
+                {
+                    min = cur;
+                }
+
+                if (cur > max)
+                {
+                    max = cur;
+                }
+            }
+
+            double diff = max - min;
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i][column] = (data[i][column] - min)/diff;
+            }
+
         }
+
+
+        /// <summary>
+        /// 对指定的列进行高斯归一化
+        /// 计算公式  (x-mean)/stdDev  即(x-均值)/标准差
+        /// 标准差  = sqrt(方差)
+        /// 方差 = 和[(x-mean)*(x-mean)]/data.length
+        /// 计算是在源矩阵上操作的
+        /// </summary>
+        /// <param name="data">在data上执行操作，不创建新的矩阵</param>
+        /// <param name="column">需要进行归一化的列</param>
+        public static void GaussNormal(double[][] data, int column)
+        {
+            double sum = 0;
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                sum += data[i][column];
+            }
+            //求均值
+            double mean = sum/data.Length;
+
+            //求标准差
+            double stdDev = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                stdDev += (data[i][column] - mean)*(data[i][column] - mean);
+            }
+
+            stdDev = System.Math.Sqrt(stdDev/data.Length);
+
+            //原地进行高斯归一化
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i][column] = (data[i][column] - mean)/stdDev;
+            }
+        }
+
         
         #endregion
 
@@ -402,6 +463,8 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
 
         /// <summary>
         /// 对于y值的 1-Of-N Dummy Encoding，
+        /// 
+        /// 当只有两个值时，也可以解析为0和1
         /// </summary>
         /// <param name="index">第几个y值</param>
         /// <param name="N">总共有多少y值</param>
