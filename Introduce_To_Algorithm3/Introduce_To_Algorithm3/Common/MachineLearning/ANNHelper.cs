@@ -281,4 +281,156 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
     }
 
     #endregion
+
+    #region 反向传播
+
+    /// <summary>
+    /// 反向传播
+    /// </summary>
+    public class BackPropagation
+    {
+
+        #region private member
+        /// <summary>
+        /// 输入节点的数目
+        /// </summary>
+        private int numInput;
+        /// <summary>
+        /// 隐藏节点的数目
+        /// </summary>
+        private int numHidden;
+        /// <summary>
+        /// 输出节点的数目
+        /// </summary>
+        private int numOutput;
+
+
+        private double[] inputs;
+        /// <summary>
+        /// 从输入节点到隐藏节点的权重
+        /// ihWeights[0][2]是从输入节点0到隐藏节点2的权重
+        /// </summary>
+        private double[][] ihWeights;
+        /// <summary>
+        /// hBiases[i] = 隐藏节点i的偏差
+        /// </summary>
+        private double[] hBiases;
+        /// <summary>
+        /// 输出 隐藏层应用tanh函数之后的输出
+        /// </summary>
+        private double[] hOutputs;
+
+        /// <summary>
+        /// hoWeights[i][j] = 从隐藏节点i到输出节点j的权重
+        /// </summary>
+        private double[][] hoWeights;
+        /// <summary>
+        /// 输出偏差
+        /// </summary>
+        private double[] oBiases;
+        /// <summary>
+        /// 输出  最终的输出
+        /// </summary>
+        private double[] outputs;
+
+        /// <summary>
+        /// Output gradients for back-propagation
+        /// </summary>
+        private double[] oGrads;
+
+        /// <summary>
+        /// Hidden gradients for back-propagation
+        /// </summary>
+
+        private double[] hGrads;
+
+        private double[][] ihPrevWeightsDelta; // For momentum with back-propagation. 
+        private double[] hPrevBiasesDelta; 
+        private double[][] hoPrevWeightsDelta; 
+        private double[] oPrevBiasesDelta;
+
+        /// <summary>
+        /// 随机数
+        /// </summary>
+        private Random rnd;
+
+        #endregion
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="numInput">输入项个数</param>
+        /// <param name="numHidden">隐藏项个数</param>
+        /// <param name="numOutput">输出项个数</param>
+        public BackPropagation(int numInput, int numHidden, int numOutput)
+        {
+            
+        }
+
+
+        /// <summary>
+        /// 设置权重
+        /// </summary>
+        /// <param name="weights"></param>
+        private void SetWeights(double[] weights)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 找到权重
+        /// </summary>
+        /// <param name="tValues"></param>
+        /// <param name="xValues"></param>
+        /// <param name="learnRate"></param>
+        /// <param name="momentum"></param>
+        /// <param name="maxEpochs"></param>
+        private void FindWeights(double[][] tValues, double[][] xValues, double learnRate, double momentum, int maxEpochs)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        public static void TestMain()
+        {
+            BackPropagation bp = new BackPropagation(3,4,2);
+
+            double[] weights = new double[26]
+            {
+                0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.20, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26
+            };
+
+            bp.SetWeights(weights);
+            
+            //学习速率
+            double learnRate = 0.05; 
+            //动量 早期的back-propagation没有使用momentum，使用动量主要是为了当学习速率较小是加速训练，设置动量为0，可以忽略该项。
+            double momentum = 0.01; 
+            //最大尝试次数
+            int maxEpochs = 1000;
+
+            //每个输入对应一个输出
+            double[][] xValues = new double[1][];
+            xValues[0] = new double[]{ 1.0, 2.0, 3.0 }; // Inputs. 
+            double[][] tValues = new double[1][];
+            tValues[0] = new double[]{ 0.2500, 0.7500 }; // Target outputs.
+
+            bp.FindWeights(tValues, xValues, learnRate, momentum, maxEpochs);
+            double[] bestWeights = bp.GetWeights();
+        }
+
+        private double[] GetWeights()
+        {
+            throw new NotImplementedException();
+        }
+
+        
+
+
+    }
+    
+    #endregion
+
+
 }
