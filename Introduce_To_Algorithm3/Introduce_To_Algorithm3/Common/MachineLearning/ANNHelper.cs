@@ -817,6 +817,25 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
 
         private static Random rnd;
 
+        private double[] inputs; 
+
+        private double[][] ihWeights; // input-hidden 
+        private double[] hBiases; 
+        private double[] hOutputs;
+
+        private double[][] hoWeights; // hidden-output 
+        private double[] oBiases; 
+
+        private double[] outputs; // Back-propagation specific arrays.
+
+        private double[] oGrads; // Output gradients. 
+        private double[] hGrads; // Back-propagation momentum-specific arrays.
+
+        private double[][] ihPrevWeightsDelta;
+        private double[] hPrevBiasesDelta; 
+        private double[][] hoPrevWeightsDelta; 
+        private double[] oPrevBiasesDelta;
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -825,7 +844,48 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         /// <param name="numOutput"></param>
         public IncrementalTraining(int numInput, int numHidden, int numOutput)
         {
-            
+            rnd = new Random(0);
+            this.numInput = numInput;
+            this.numHidden = numHidden;
+            this.numOutput = numOutput;
+
+            this.inputs = new double[numInput]; 
+            this.ihWeights = MakeMatrix(numInput, numHidden);
+            this.hBiases = new double[numHidden]; 
+            this.hOutputs = new double[numHidden]; 
+            this.hoWeights = MakeMatrix(numHidden, numOutput); 
+            this.oBiases = new double[numOutput]; 
+            this.outputs = new double[numOutput]; 
+            this.InitializeWeights();
+            // Back-propagation related arrays below. 
+            this.hGrads = new double[numHidden]; 
+            this.oGrads = new double[numOutput]; 
+            this.ihPrevWeightsDelta = MakeMatrix(numInput, numHidden); 
+            this.hPrevBiasesDelta = new double[numHidden];
+            this.hoPrevWeightsDelta = MakeMatrix(numHidden, numOutput); 
+            this.oPrevBiasesDelta = new double[numOutput];
+        }
+
+        private void InitializeWeights()
+        {
+            int numWeights = (numInput * numHidden) + (numHidden * numOutput) + numHidden + numOutput;
+            double[] initialWeights = new double[numWeights]; 
+            double lo = -0.01; 
+            double hi = 0.01; 
+            for (int i = 0; i < initialWeights.Length; ++i) 
+                initialWeights[i] = (hi - lo) * rnd.NextDouble() + lo; 
+            this.SetWeights(initialWeights);
+        }
+
+        private double[][] MakeMatrix(int rows, int cols)
+        {
+            double[][] result = new double[rows][];
+            for (int r = 0; r < result.Length; ++r)
+            {
+                result[r] = new double[cols];
+            }
+
+            return result;
         }
 
 
@@ -838,7 +898,437 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
         /// <param name="momentum"></param>
         private void Train(double[][] trainData, int maxEpochs, double learnRate, double momentum)
         {
-            throw new NotImplementedException();
+            int epoch = 0;
+            //inputs
+            double[] xValues = new double[numInput];
+            //target values
+            double[] tValues = new double[numOutput];
+
+            int[] sequence = new int[trainData.Length];
+            for (int i = 0; i < sequence.Length; i++)
+            {
+                sequence[i] = i;
+            }
+
+            while (epoch < maxEpochs)
+            {
+                epoch++;
+
+                if (epoch % 100 == 0)
+                {
+                    double mse = MeanSquaredError(trainData);
+                    //当错误率小于0.04时，退出
+                    if (mse < 0.040)
+                    {
+                        break; // Consider passing value in as parameter.
+                    }
+                }
+
+                //double mse = MeanSquaredError(trainData); 
+                ////当错误率小于0.04时，退出
+                //if (mse < 0.040) 
+                //{
+                //    break; // Consider passing value in as parameter.
+                //}
+
+                Shuffle(sequence);
+
+                for (int i = 0; i < trainData.Length; ++i)
+                {
+                    int idx = sequence[i];
+                    Array.Copy(trainData[idx], xValues, numInput);
+                    Array.Copy(trainData[idx], numInput, tValues, 0, numOutput); 
+                    ComputeOutputs(xValues); // Copy xValues in, compute outputs (store them internally). 
+                    UpdateWeights(tValues, learnRate, momentum); // Find better weights and biases.
+                }
+            }
+        }
+
+        /// <summary>
+        /// 计算输出
+        /// </summary>
+        /// <param name="xValues"></param>
+        private double[] ComputeOutputs(double[] xValues)
+        {
+            double[] hSums = new double[numHidden];
+            double[] oSums = new double[numOutput];
+
+            for (int i = 0; i < numInput; i++)
+            {
+                inputs[i] = xValues[i];
+            }
+
+            for (int j = 0; j < numHidden; j++)
+            {
+                for (int i = 0; i < numInput; i++)
+                {
+                    hSums[j] += inputs[i] * ihWeights[i][j];
+                }
+            }
+
+            for (int i = 0; i < numHidden; i++)
+            {
+                hSums[i] += hBiases[i];
+            }
+
+            for (int i = 0; i < numHidden; i++)
+            {
+                hOutputs[i] = HyperTan(hSums[i]);
+            }
+
+            for (int j = 0; j < numOutput; j++)
+            {
+                for (int i = 0; i < numHidden; i++)
+                {
+                    oSums[j] += hOutputs[i] * hoWeights[i][j];
+                }
+            }
+
+            for (int i = 0; i < numOutput; i++)
+            {
+                oSums[i] += oBiases[i];
+            }
+
+            double[] softOut = Softmax(oSums);
+
+            for (int i = 0; i < outputs.Length; i++)
+            {
+                outputs[i] = softOut[i];
+            }
+
+            double[] result = new double[numOutput];
+            for (int i = 0; i < outputs.Length; i++)
+            {
+                result[i] = outputs[i];
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// 活化函数
+        /// </summary>
+        /// <param name="oSums"></param>
+        /// <returns></returns>
+        private double[] Softmax(double[] oSums)
+        {
+            double max = oSums[0];
+            for (int i = 0; i < oSums.Length; i++)
+            {
+                if (oSums[i] > max)
+                {
+                    max = oSums[i];
+                }
+            }
+
+            double scale = 0;
+            for (int i = 0; i < oSums.Length; i++)
+            {
+                scale += System.Math.Exp(oSums[i] - max);
+            }
+
+            double[] result = new double[oSums.Length];
+            for (int i = 0; i < oSums.Length; i++)
+            {
+                result[i] = System.Math.Exp(oSums[i] - max) / scale;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// tanh
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        private double HyperTan(double v)
+        {
+            if (v < -20)
+            {
+                return -1;
+            }
+            else if (v > 20)
+            {
+                return 1;
+            }
+            else
+            {
+                return System.Math.Tanh(v);
+            }
+        }
+
+        /// <summary>
+        /// 更新权重
+        /// </summary>
+        /// <param name="tValues"></param>
+        /// <param name="learnRate"></param>
+        /// <param name="momentum"></param>
+        private void UpdateWeights(double[] tValues, double learnRate, double momentum)
+        {
+            if (tValues.Length != numOutput)
+            {
+                throw new Exception("target array's length should be numOutput");
+            }
+
+            //计算输出的 梯度  assumes softmax
+            for (int i = 0; i < oGrads.Length; i++)
+            {
+                double derivative = (1 - outputs[i]) * outputs[i];//softmax的导数 y(1-y)
+                oGrads[i] = derivative * (tValues[i] - outputs[i]);
+            }
+
+            //计算hidden layer的gradient  assume tanh
+            for (int i = 0; i < hGrads.Length; i++)
+            {
+                double derivative = (1 - hOutputs[i]) * (1 + hOutputs[i]);//计算 hyperbolic tangent函数的导数  (1-y)(1+y)
+                double sum = 0;
+                //求 downstream gradient*hidden-to-output weight 的和
+                for (int j = 0; j < numOutput; j++)
+                {
+                    sum += oGrads[j] * hoWeights[i][j];
+                }
+                hGrads[i] = derivative * sum;
+            }
+
+            //更新input to hidden的weights
+            for (int i = 0; i < ihWeights.Length; i++)
+            {
+                for (int j = 0; j < ihWeights[i].Length; j++)
+                {
+                    double delta = learnRate * hGrads[j] * inputs[i];
+                    ihWeights[i][j] += delta;
+                    ihWeights[i][j] += momentum * ihPrevWeightsDelta[i][j];
+                    ihPrevWeightsDelta[i][j] = delta;//save the delta
+                }
+            }
+
+            //更新hidden的bias
+            for (int i = 0; i < hBiases.Length; i++)
+            {
+                double delta = learnRate * hGrads[i];
+                hBiases[i] += delta;
+                hBiases[i] += momentum * hPrevBiasesDelta[i];
+                hPrevBiasesDelta[i] = delta;//save delta
+            }
+
+            //更新hidden to output 的 weights
+            for (int i = 0; i < hoWeights.Length; i++)
+            {
+                for (int j = 0; j < hoWeights[i].Length; j++)
+                {
+                    double delta = learnRate * oGrads[j] * hOutputs[i];
+                    hoWeights[i][j] += delta;
+                    hoWeights[i][j] += momentum * hoPrevWeightsDelta[i][j];
+                    hoPrevWeightsDelta[i][j] = delta;//save delta
+                }
+            }
+
+            //更新 output 的 bias
+            for (int i = 0; i < oBiases.Length; i++)
+            {
+                double delta = learnRate * oGrads[i];
+                oBiases[i] += delta;
+                oBiases[i] += momentum * oPrevBiasesDelta[i];
+                oPrevBiasesDelta[i] = delta;//save delta
+            }
+        }
+
+        /// <summary>
+        /// 重排
+        /// </summary>
+        /// <param name="sequence"></param>
+        private void Shuffle(int[] sequence)
+        {
+            for (int i = 0; i < sequence.Length; ++i)
+            {
+                int r = rnd.Next(i, sequence.Length);
+                int tmp = sequence[r];
+                sequence[r] = sequence[i];
+                sequence[i] = tmp;
+            }
+        }
+
+        /// <summary>
+        /// 计算均方差错误
+        /// </summary>
+        /// <param name="trainData"></param>
+        /// <returns></returns>
+        private double MeanSquaredError(double[][] trainData)
+        {
+
+            double[] xValues = new double[numInput]; // inputs 
+            double[] tValues = new double[numOutput]; // targets
+            double sumSquaredError = 0;
+            for (int i = 0; i < trainData.Length; i++)
+            {
+                //following assumes data has all x-values first, followed by y-values!
+                Array.Copy(trainData[i], xValues, numInput);//提取输入
+                Array.Copy(trainData[i], numInput, tValues, 0, numOutput);//提取目标值
+                double[] yValues = this.ComputeOutputs(xValues);
+                for (int j = 0; j < yValues.Length; j++)
+                {
+                    sumSquaredError += (yValues[j] - tValues[j]) * (yValues[j] - tValues[j]);
+                }
+            }
+            return sumSquaredError / trainData.Length;
+        }
+
+        /// <summary>
+        /// 平均交叉熵错误
+        /// </summary>
+        /// <param name="trainData"></param>
+        /// <returns></returns>
+        private double MeanCrossEntropyError(double[][] trainData)
+        {
+            double sumError = 0.0; 
+            double[] xValues = new double[numInput]; // First numInput values in trainData. 
+            double[] tValues = new double[numOutput]; // Last numOutput values.
+            for (int i = 0; i < trainData.Length; ++i) // Training data: (6.9 3.2 5.7 2.3) (0 0 1). 
+            { 
+                Array.Copy(trainData[i], xValues, numInput); // Get xValues. 
+                Array.Copy(trainData[i], numInput, tValues, 0, numOutput); // Get target values. 
+                double[] yValues = this.ComputeOutputs(xValues); // Compute output using current weights. 
+                for (int j = 0; j < numOutput; ++j) 
+                {
+                    sumError += System.Math.Log(yValues[j]) * tValues[j]; // CE error for one training data. 
+                } 
+            } 
+            return -1.0 * sumError / trainData.Length;
+        }
+
+
+        private void SetWeights(double[] weights)
+        {
+            //Copy weights and biases in weights[] array to i-h weights,i-h biases,h-o weights, h-o biases
+
+            int numWeights = (numInput * numHidden) + (numHidden * numOutput) + numHidden + numOutput;
+
+            if (weights.Length != numWeights)
+            {
+                throw new Exception("Bad weights array length");
+            }
+
+            int k = 0;
+
+            for (int i = 0; i < numInput; i++)
+            {
+                for (int j = 0; j < numHidden; j++)
+                {
+                    ihWeights[i][j] = weights[k++];
+                }
+            }
+
+            for (int i = 0; i < numHidden; i++)
+            {
+                hBiases[i] = weights[k++];
+            }
+
+            for (int i = 0; i < numHidden; i++)
+            {
+                for (int j = 0; j < numOutput; j++)
+                {
+                    hoWeights[i][j] = weights[k++];
+                }
+            }
+
+            for (int i = 0; i < numOutput; i++)
+            {
+                oBiases[i] = weights[k++];
+            }
+
+        }
+
+        /// <summary>
+        /// 获取权重
+        /// </summary>
+        /// <returns></returns>
+        private double[] GetWeights()
+        {
+            int numWeights = (numInput * numHidden) + numHidden + (numHidden * numOutput) + numOutput;
+
+            double[] result = new double[numWeights];
+            int k = 0;
+
+            for (int i = 0; i < numInput; i++)
+            {
+                for (int j = 0; j < numHidden; j++)
+                {
+                    result[k++] = ihWeights[i][j];
+                }
+            }
+
+            for (int i = 0; i < numHidden; i++)
+            {
+                result[k++] = hBiases[i];
+            }
+
+            for (int i = 0; i < numHidden; i++)
+            {
+                for (int j = 0; j < numOutput; j++)
+                {
+                    result[k++] = hoWeights[i][j];
+                }
+            }
+
+            for (int i = 0; i < numOutput; i++)
+            {
+                result[k++] = oBiases[i];
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// 数据的正确率
+        /// </summary>
+        /// <param name="testData"></param>
+        /// <returns></returns>
+        private double Accuracy(double[][] testData)
+        {
+            int numCorrect = 0;
+            int numWrong = 0;
+
+            double[] xValues = new double[numInput];//输入
+            double[] tValues = new double[numOutput];//目标值
+            double[] yValues;//计算的y
+
+            for (int i = 0; i < testData.Length; i++)
+            {
+                Array.Copy(testData[i], xValues, numInput); // parse test data 
+                Array.Copy(testData[i], numInput, tValues, 0, numOutput);
+
+                yValues = this.ComputeOutputs(xValues);
+                int maxIndex = MaxIndex(yValues); // which cell in yValues has largest value?
+
+                if (System.Math.Abs(tValues[maxIndex] - 1) < 0.00001)
+                {
+                    ++numCorrect;
+                }
+                else
+                {
+                    ++numWrong;
+                }
+            }
+
+            return (numCorrect * 1.0) / (numCorrect + numWrong);
+        }
+
+        private int MaxIndex(double[] vector)
+        {
+            // index of largest value 
+            int bigIndex = 0;
+            double biggestVal = vector[0];
+            for (int i = 0; i < vector.Length; ++i)
+            {
+                if (vector[i] > biggestVal)
+                {
+                    biggestVal = vector[i];
+                    bigIndex = i;
+                }
+            }
+            return bigIndex;
         }
 
 
@@ -1019,7 +1509,16 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning
             double momentum = 0.01;
             it.Train(trainData, maxEpochs, learnRate, momentum);
 
+            double[] weights = it.GetWeights();
+            Console.WriteLine(MlHelper.ToString(weights));
+
+            double trainAcc = it.Accuracy(trainData);
+            Console.WriteLine("\nAccuracy on training data = " + trainAcc.ToString("F4"));
+            double testAcc = it.Accuracy(testData);
+            Console.WriteLine("\nAccuracy on test data = " + testAcc.ToString("F4"));
+            Console.WriteLine("\nEnd neural network training demo\n");
         }
+
 
         /// <summary>
         /// 将数据分为trainPercent比例训练数据，1-trainPercent  测试数据
