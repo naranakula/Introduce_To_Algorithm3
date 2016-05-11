@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading;
 using Introduce_To_Algorithm3.Common.MachineLearning;
+using Introduce_To_Algorithm3.Common.Utils.sqls.EF2;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3
@@ -15,7 +16,7 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-            IncrementalTraining.TestMain();
+            //OracleDbContext.TestMain();
         }
     }
 }

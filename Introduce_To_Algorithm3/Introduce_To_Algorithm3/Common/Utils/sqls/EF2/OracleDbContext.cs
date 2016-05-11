@@ -15,11 +15,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     public class OracleDbContext:DbContext
     {
         public OracleDbContext()
-            : base("name=OracleDbContext")
+            : base("name=OracleConStr")
         {
 
         }
 
+        /// <summary>
+        /// 覆盖父类方法，创建模型
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -27,6 +31,22 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             modelBuilder.HasDefaultSchema("CMLU");
 
             modelBuilder.Configurations.Add(new PersonMap());
+        }
+
+
+        /// <summary>
+        /// 测试
+        /// </summary>
+        public static void TestMain()
+        {
+            using (OracleDbContext context = new OracleDbContext())
+            {
+                Person person = new Person(){Name="Test",CreateTime = DateTime.Now};
+                context.Set<Person>().Add(person);
+                context.SaveChanges();
+                int count = context.Set<Person>().Count();
+                Console.WriteLine("共有"+count+"个数据");
+            }
         }
 
     }
