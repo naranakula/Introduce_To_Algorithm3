@@ -65,7 +65,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //Database.SetInitializer<EfDbContext>(null);
 
             IDatabaseInitializer<EfDbContext> initializer;
-            if (Database.Exists(_nameOrConnectionString))
+            if (!Database.Exists(_nameOrConnectionString))
             {
                 //初始化代码放在CreateDatabaseIfNotExists中
                 initializer = new CreateDatabaseIfNotExists<EfDbContext>();
@@ -74,6 +74,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             {
                 //初始化代码不要放在MigrateDatabaseToLatestVersion中
                 initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
+
+                ////相当于null，不进行初始化
+                //initializer = new NullDatabaseInitializer<EfDbContext>();
             }
 
             // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
@@ -761,6 +764,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /*
      * 常用的Database Initializer有如下几种：
      * null(不自动创建数据库,not to execute any initialization logic at all.),CreateDatabaseIfNotExists(默认的),DropCreateDatabaseWhenModelChanges,DropCreateDatabaseAlways,MigrateDatabaseToLatestVersion
+     * 
+     * null等价于new NullDatabaseInitializer<T>()
      * 
      * CreateDatabaseIfNotExists class creates a database only if it doesn't exist. 这是默认的
      * 
