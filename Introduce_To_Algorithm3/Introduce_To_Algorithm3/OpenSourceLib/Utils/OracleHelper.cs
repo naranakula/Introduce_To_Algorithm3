@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Data;
+using Oracle.ManagedDataAccess.Client;
+
 //using System.Data.OracleClient;
 //System.Data.OracleClient是微软实现的，已经废弃
-using Oracle.ManagedDataAccess.Client;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {

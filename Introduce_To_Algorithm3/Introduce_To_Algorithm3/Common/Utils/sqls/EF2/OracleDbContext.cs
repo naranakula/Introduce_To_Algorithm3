@@ -14,8 +14,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// </summary>
     public class OracleDbContext:DbContext
     {
+        /// <summary>
+        /// 给定字符串用作将连接到的数据库的名称或连接字符串
+        /// name=ConnString格式
+        /// </summary>
+        private static string _nameOrConnectionString = "name=OracleConStr";
+
+
         public OracleDbContext()
-            : base("name=OracleConStr")
+            : base(_nameOrConnectionString)
         {
 
         }
