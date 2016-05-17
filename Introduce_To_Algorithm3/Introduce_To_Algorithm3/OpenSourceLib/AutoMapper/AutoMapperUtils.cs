@@ -21,6 +21,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
         {
             //初始化Map
             //Mapper.CreateMap<CalendarEvent, CalendarEventForm>().ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.Date.Date)).ForMember(dest => dest.EventHour, opt => opt.MapFrom(src => src.Date.Hour)).ForMember(dest => dest.EventMinute, opt => opt.MapFrom(src => src.Date.Minute));
+            
             //createmap的顺序是不重要的
         }
 

@@ -19,7 +19,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 锁
         /// </summary>
-        private static object locker = new object();
+        private static readonly object locker = new object();
 
         /// <summary>
         /// 同一时刻只能运行一个方法
