@@ -475,6 +475,7 @@
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\BeITMemcachedHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netQueueHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\MySqlHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\OracleHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\ProtobufUtils.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\CleanLogJob.cs" />
