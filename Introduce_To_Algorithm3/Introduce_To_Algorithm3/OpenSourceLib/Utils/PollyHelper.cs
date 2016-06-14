@@ -271,6 +271,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 //onhalfopen The action to call when the circuit transitions to Polly.CircuitBreaker.CircuitState.HalfOpen state, ready to try action executions again.
             });
+
+            //policy.ExecuteAndCapture();//执行action或func
             return policy;
 
 /*
@@ -304,7 +306,7 @@ CircuitState.Isolated - Circuit held manually in an open state. Execution of act
         }
                 );
 
-            
+            //policy.ExecuteAndCapture();//执行action或func
             return policy;
         }
 
