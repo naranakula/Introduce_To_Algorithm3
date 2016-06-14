@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Polly;
+using Polly.CircuitBreaker;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
@@ -258,6 +259,54 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         #region Circuit Breaker 断路器
 
+        //断路器在制定数量的错误以后，断路一段时间后重启
+
+        public static CircuitBreakerPolicy CircuitBreaker()
+        {
+            CircuitBreakerPolicy policy = Policy.Handle<Exception>().CircuitBreaker(10,new TimeSpan(0,0,60),(exception, span) => {
+                //onbreak  断路时执行
+            },() => {
+                //onreset  闭路之后执行
+            },() =>
+            {
+                //onhalfopen The action to call when the circuit transitions to Polly.CircuitBreaker.CircuitState.HalfOpen state, ready to try action executions again.
+            });
+            return policy;
+
+/*
+CircuitState.Closed - Normal operation. Execution of actions allowed.
+CircuitState.Open - The automated controller has opened the circuit. Execution of actions blocked.
+CircuitState.HalfOpen - Recovering from open state, after the automated break duration has expired. Execution of actions permitted. Success of subsequent action/s controls onward transition to Open or Closed state.
+CircuitState.Isolated - Circuit held manually in an open state. Execution of actions blocked.
+*/
+        }
+
+        /// <summary>
+        /// 断路器
+        /// </summary>
+        /// <returns></returns>
+        public static CircuitBreakerPolicy AdvancedCircuitBreaker()
+        {
+            CircuitBreakerPolicy policy = Policy.Handle<Exception>().AdvancedCircuitBreaker(
+         0.5, // Break on >=50% actions result in handled exceptions...失败比例达到上限时断路
+        TimeSpan.FromSeconds(10), // ... over any 10 second period 统计失败比例的时间段
+        8, // ... provided at least 8 actions in the 10 second period. 统计时间段内需执行最少的action，才会认为该时间段有效
+         TimeSpan.FromSeconds(30), // Break for 30 seconds. 断路的时间，之后电路重置
+        (exception, span) =>
+        {
+            //onbreak  断路时执行
+        }, () =>
+        {
+            //onreset  闭路之后执行
+        }, () =>
+        {
+            //onhalfopen The action to call when the circuit transitions to Polly.CircuitBreaker.CircuitState.HalfOpen state, ready to try action executions again.
+        }
+                );
+
+            
+            return policy;
+        }
 
         #endregion
 
