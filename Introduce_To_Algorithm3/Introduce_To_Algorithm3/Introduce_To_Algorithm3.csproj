@@ -151,6 +151,10 @@
       <HintPath>..\packages\Oracle.ManagedDataAccess.EntityFramework.12.1.2400\lib\net45\Oracle.ManagedDataAccess.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Polly, Version=4.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.4.2.3\lib\net45\Polly.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\protobuf-net.dll</HintPath>
@@ -482,6 +486,7 @@
     <Compile Include="OpenSourceLib\Utils\MySqlHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\NLogHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\OracleHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\PollyHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\ProtobufUtils.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\CleanLogJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
