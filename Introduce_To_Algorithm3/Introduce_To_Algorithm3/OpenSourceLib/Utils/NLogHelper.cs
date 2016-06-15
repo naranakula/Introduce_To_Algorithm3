@@ -138,7 +138,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 记录Fetal日志
         /// </summary>
         /// <param name="message"></param>
-        public static void Fetal(string message)
+        public static void Fatal(string message)
         {
             if (string.IsNullOrEmpty(message))
             {
