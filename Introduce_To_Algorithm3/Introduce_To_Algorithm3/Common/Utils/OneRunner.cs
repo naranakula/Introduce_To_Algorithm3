@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
@@ -48,6 +49,33 @@ namespace Common
                 System.Environment.Exit(-1);
             }
         }
+
+        /// <summary>
+        /// 将制定进程界面置前
+        /// </summary>
+        /// <param name="instance"></param>
+        public static void HandleRunningInstance(Process instance)
+        {
+            ShowWindowAsync(instance.MainWindowHandle, WS_SHOWNORMAL); //置窗口为正常状态
+
+            SetForegroundWindow(instance.MainWindowHandle);
+        }
+
+ 
+
+        #region 调用系统api
+
+        [DllImport("User32.dll ")]
+        private static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);
+
+        [DllImport("User32.dll ")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        private const int WS_SHOWNORMAL = 1;
+
+        #endregion
+
+
 
     }
 }
