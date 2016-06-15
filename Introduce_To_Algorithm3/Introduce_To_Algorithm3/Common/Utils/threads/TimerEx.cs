@@ -66,13 +66,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
                     return _isRunning;
                 }
             }
-            set
-            {
-                lock (_locker)
-                {
-                    _isRunning = value;
-                }
-            }
+            
         }
 
 
@@ -132,7 +126,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
             }
             finally
             {
-                IsRunning = false;
+                lock (_locker)
+                {
+                    _isRunning = false;
+                }
             }
         }
 

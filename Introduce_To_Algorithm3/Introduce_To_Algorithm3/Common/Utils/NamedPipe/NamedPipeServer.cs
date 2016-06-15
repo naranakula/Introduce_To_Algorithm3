@@ -119,12 +119,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.NamedPipe
                         }
 
                         //对line进行处理
-                        Console.WriteLine(line);
+                        //Console.WriteLine(line);
                     }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    //Console.WriteLine(e);
                 }
                 finally
                 {

@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.Entity.SqlServer;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -25,12 +26,26 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
+            Process[] processes = Process.GetProcesses();
+            foreach (var item in processes)
+            {
+                try
+                {
+                    NLogHelper.Info(item.MainModule.FileName);
+                }
+                catch (Exception)
+                {
+                    
+                }
+               
+            }
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");
             NLogHelper.Warn("Warn");
             NLogHelper.Error("Error");
             NLogHelper.Fatal("Fatal");
+            Console.ReadLine();
 //            string sqlConStr = "Data Source=192.168.163.218;Initial Catalog=FidsContext0317;User ID=sa;Password=system2000,.";
 //            string mySqlConStr = "server=192.168.163.225;port=3306;database=qdcargo;uid=root;password=123456";
 //            MySqlHelper mySqlHelper = MySqlHelper.GetInstance(mySqlConStr);
