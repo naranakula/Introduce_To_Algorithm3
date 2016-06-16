@@ -33,9 +33,9 @@ namespace Introduce_To_Algorithm3
                 {
                     NLogHelper.Info(item.MainModule.FileName);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    
+                    NLogHelper.Error(ex.ToString());
                 }
                
             }
