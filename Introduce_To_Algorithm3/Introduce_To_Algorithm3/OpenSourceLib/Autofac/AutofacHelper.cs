@@ -10,6 +10,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Autofac
 {
     /// <summary>
     /// Autofac帮助类
+    /// 使用ninject，根据GitHub和Nuget上的下载量和Stars，Ninject比Autofac要好
     /// </summary>
     public static class AutofacHelper
     {
