@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity.SqlServer;
@@ -17,6 +18,9 @@ using Introduce_To_Algorithm3.Common.Utils.sqls;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using MySql.Data.MySqlClient;
+using Quartz;
+using Quartz.Impl.Matchers;
+using Quartz.Util;
 using MySqlHelper = Introduce_To_Algorithm3.OpenSourceLib.Utils.MySqlHelper;
 
 
@@ -26,19 +30,7 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-            Process[] processes = Process.GetProcesses();
-            foreach (var item in processes)
-            {
-                try
-                {
-                    NLogHelper.Info(item.MainModule.FileName);
-                }
-                catch (Exception ex)
-                {
-                    NLogHelper.Error(ex.ToString());
-                }
-               
-            }
+
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");

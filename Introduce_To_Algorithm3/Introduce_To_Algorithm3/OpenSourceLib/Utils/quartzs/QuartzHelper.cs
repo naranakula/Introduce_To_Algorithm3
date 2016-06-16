@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Quartz;
 using Quartz.Impl;
+using Quartz.Impl.Matchers;
 using Quartz.Impl.Triggers;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
@@ -68,6 +69,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         public void Start()
         {
             _scheduler.Start();
+            //_scheduler.StartDelayed(new TimeSpan(0,0,2));
         }
 
         /// <summary>
@@ -85,7 +87,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <returns></returns>
         public IScheduler GetScheduler()
         {
-            return _schedulerFactory.GetScheduler();
+            return _scheduler;
         }
 
         /// <summary>
@@ -96,6 +98,26 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         public IScheduler GetScheduler(String name)
         {
             return _schedulerFactory.GetScheduler(name);
+        }
+
+        /// <summary>
+        /// 获取所有的job
+        /// </summary>
+        /// <returns></returns>
+        public Quartz.Collection.ISet<JobKey> GetAllJobs()
+        {
+            var matcher = GroupMatcher<JobKey>.AnyGroup();
+            return _scheduler.GetJobKeys(matcher);
+        }
+
+        /// <summary>
+        /// 获取job信息
+        /// </summary>
+        /// <param name="jobName"></param>
+        /// <returns></returns>
+        public IJobDetail GetJobByKey(string jobName)
+        {
+            return _scheduler.GetJobDetail(new JobKey(jobName));
         }
 
         /// <summary>
@@ -114,9 +136,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// </summary>
         /// <param name="jobName">job名字，必须唯一</param>
         /// <param name="job"></param>
-        public IJobDetail CreateJob(String jobName,IJob job)
+        /// <param name="data"></param>
+        public IJobDetail CreateJob(String jobName, IJob job, JobDataMap data = null)
         {
             IJobDetail jobDetail = new JobDetailImpl(jobName,null,job.GetType(),true,false);
+            
+            if (data != null)
+            {
+                foreach (var keyValuePair in data)
+                {
+                    jobDetail.JobDataMap.Add(keyValuePair.Key, keyValuePair.Value);
+                }
+            }
+            //添加job的关联数据
             return jobDetail;
         }
 
@@ -126,9 +158,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// </summary>
         /// <param name="jobName">job名字，必须唯一</param>
         /// <param name="jobtype"></param>
-        public IJobDetail CreateJob(String jobName, Type jobtype)
+        /// <param name="data"></param>
+        public IJobDetail CreateJob(String jobName, Type jobtype,JobDataMap data = null)
         {
             IJobDetail jobDetail = new JobDetailImpl(jobName, null, jobtype, true, false);
+            if (data != null)
+            {
+                foreach (var keyValuePair in data)
+                {
+                    jobDetail.JobDataMap.Add(keyValuePair.Key,keyValuePair.Value);
+                }
+            }
+            //设置其他信息
             //jobDetail.JobDataMap.Add();
             //添加job的关联数据
             return jobDetail;

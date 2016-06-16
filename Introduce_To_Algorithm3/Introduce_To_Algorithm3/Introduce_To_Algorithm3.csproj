@@ -398,6 +398,7 @@
     <Compile Include="Common\Utils\CodeCounter.cs" />
     <Compile Include="Common\Utils\ConfigUtils.cs" />
     <Compile Include="Common\Utils\ConsoleUtils\ConsoleEventUtils.cs" />
+    <Compile Include="Common\Utils\ConsoleUtils\ConsoleUtils.cs" />
     <Compile Include="Common\Utils\ConsoleUtils\CpuMemoryUtils.cs" />
     <Compile Include="Common\Utils\ConsoleUtils\PcFunctions.cs" />
     <Compile Include="Common\Utils\Des3Helper.cs" />
@@ -463,7 +464,8 @@
     <Compile Include="HPSocket\HPServer.cs" />
     <Compile Include="MachineLearning\ReadMe.cs" />
     <Compile Include="Models\OperationResult.cs" />
-    <Compile Include="OpenSourceLib\ActiveMq\ActiveMqClientHelper.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\MQConsumer.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\MQProducer.cs" />
     <Compile Include="OpenSourceLib\Autofac\AutofacHelper.cs" />
     <Compile Include="OpenSourceLib\AutoMapper\AutoMapperUtils.cs" />
     <Compile Include="OpenSourceLib\Json\JsonHelper.cs" />
