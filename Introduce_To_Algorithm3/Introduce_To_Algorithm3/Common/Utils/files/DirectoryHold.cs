@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,7 +32,18 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
 
         public static void ResetAppDir()
         {
-            Directory.SetCurrentDirectory(FileUtils.GetAppDir());
+            try
+            {
+                string dirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                if (!string.IsNullOrEmpty(dirPath))
+                {
+                    Directory.SetCurrentDirectory(dirPath);
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
         #endregion

@@ -46,7 +46,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
-        /// 安全调用
+        /// 安全调用 调用失败，返回default(TR)
         /// </summary>
         /// <param name="func"></param>
         public static TR Safe<TR>(this Func<TR> func)
@@ -62,7 +62,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
-        /// 安全调用
+        /// 安全调用 调用失败，返回default(TR)
         /// </summary>
         /// <param name="func"></param>
         /// <param name="obj"></param>
