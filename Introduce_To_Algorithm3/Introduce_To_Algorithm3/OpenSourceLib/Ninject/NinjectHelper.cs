@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Introduce_To_Algorithm3.Common.MachineLearning;
 using Ninject;
+using Ninject.Activation;
 using Ninject.Modules;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Ninject
@@ -51,6 +52,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Ninject
             //ninjectKernel.Bind<接口>().To<接口实现类>();
             //Person类型自绑定到了单例模式
             //ninjectKernel.Bind<Person>().ToSelf().InSingletonScope();
+            //.ToMethod(Func<IContext, T> method)
+            //实质上binding是从接口类型到provider上，默认是StandardProvider，可以通过ToMethod定制对象初始化
+            //ninjectKernel.Bind<IWeapon>().ToMethod(context => new Sword()).InTransientScope();
         }
 
 

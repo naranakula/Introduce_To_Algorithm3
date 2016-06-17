@@ -167,6 +167,10 @@
       <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RijndaelEncryptDecrypt, Version=1.0.0.24384, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RijndaelEncryptDecrypt.1.0.0.24384\lib\net40\RijndaelEncryptDecrypt.dll</HintPath>
       <Private>True</Private>
@@ -481,6 +485,7 @@
     <Compile Include="OpenSourceLib\Ninject\NinjectHelper.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
+    <Compile Include="OpenSourceLib\RestSharp\RestSharpHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\DotNetZipUtils.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\BeITMemcachedHelper.cs" />
