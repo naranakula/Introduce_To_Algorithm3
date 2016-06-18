@@ -14,7 +14,7 @@ Polly(重试执行框架)
 Quartz.net
 RestSharp (Simple REST and HTTP API Client for .NET)
 Ninject>Autofac
-aspose.cells  不需要安装office
+aspose.cells NPOI  两者均不需要安装office
 SharpZipLib   压缩包库
 System.Net.FtpClient
 

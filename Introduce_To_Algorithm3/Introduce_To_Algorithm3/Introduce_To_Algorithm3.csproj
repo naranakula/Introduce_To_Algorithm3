@@ -580,6 +580,7 @@
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
+    <Folder Include="OpenSourceLib\SharpZipLib\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
   </ItemGroup>
   <ItemGroup>
