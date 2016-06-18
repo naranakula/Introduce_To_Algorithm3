@@ -18,6 +18,10 @@ aspose.cells NPOI  两者均不需要安装office
 SharpZipLib   压缩包库
 System.Net.FtpClient
 
+//webservice
+Nancy
+SeviceStack
+
 //中间件
 ActiveMq
 Redis>memcached
