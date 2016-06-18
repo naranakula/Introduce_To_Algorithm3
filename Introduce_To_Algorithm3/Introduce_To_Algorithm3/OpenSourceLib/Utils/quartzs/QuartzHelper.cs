@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
 using Quartz.Impl.Triggers;
 
-namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
+namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 {
     /// <summary>
     /// Quartz任务调度类
@@ -181,7 +176,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="jobName"></param>
         public void Pause(String jobName)
         {
-            GetScheduler().PauseJob(new JobKey(jobName));
+            _scheduler.PauseJob(new JobKey(jobName));
         }
 
         /// <summary>
@@ -190,7 +185,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="jobName"></param>
         public void Resume(string jobName)
         {
-            GetScheduler().ResumeJob(new JobKey(jobName));
+            _scheduler.ResumeJob(new JobKey(jobName));
         }
 
         /// <summary>
@@ -199,7 +194,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="jobName"></param>
         public void Delete(string jobName)
         {
-            GetScheduler().DeleteJob(new JobKey(jobName));
+            _scheduler.DeleteJob(new JobKey(jobName));
         }
 
         /// <summary>
