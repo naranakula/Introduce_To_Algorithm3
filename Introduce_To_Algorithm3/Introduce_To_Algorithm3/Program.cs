@@ -16,6 +16,7 @@ using System.Web.UI.WebControls;
 using Introduce_To_Algorithm3.Common.MachineLearning;
 using Introduce_To_Algorithm3.Common.Utils.sqls;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2;
+using Introduce_To_Algorithm3.OpenSourceLib.Excel;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using MySql.Data.MySqlClient;
 using Quartz;
@@ -30,13 +31,13 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
+            
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");
             NLogHelper.Warn("Warn");
             NLogHelper.Error("Error");
             NLogHelper.Fatal("Fatal");
-            Console.ReadLine();
 //            string sqlConStr = "Data Source=192.168.163.218;Initial Catalog=FidsContext0317;User ID=sa;Password=system2000,.";
 //            string mySqlConStr = "server=192.168.163.225;port=3306;database=qdcargo;uid=root;password=123456";
 //            MySqlHelper mySqlHelper = MySqlHelper.GetInstance(mySqlConStr);

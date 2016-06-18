@@ -14,7 +14,9 @@ Polly(重试执行框架)
 Quartz.net
 RestSharp (Simple REST and HTTP API Client for .NET)
 Ninject>Autofac
-NPOI (POI is an open source project which can help you read/write xls, doc, ppt files)
+aspose.cells  不需要安装office
+SharpZipLib   压缩包库
+System.Net.FtpClient
 
 //中间件
 ActiveMq
