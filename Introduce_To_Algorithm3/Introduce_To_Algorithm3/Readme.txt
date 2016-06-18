@@ -24,6 +24,7 @@ SeviceStack
 
 //中间件
 ActiveMq
+Kafka
 Redis>memcached
 Sqlite
 Ftp
