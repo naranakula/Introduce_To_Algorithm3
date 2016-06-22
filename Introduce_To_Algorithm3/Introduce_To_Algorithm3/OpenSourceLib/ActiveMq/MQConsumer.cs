@@ -71,9 +71,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 connection = factory.CreateConnection();
                 connection.ExceptionListener += connection_ExceptionListener;
                 connection.ConnectionInterruptedListener += connection_ConnectionInterruptedListener;
-
+                //超时16s
+                connection.RequestTimeout = new TimeSpan(0, 0, 20);
                 //创建回话
                 session = connection.CreateSession();
+                session.RequestTimeout = new TimeSpan(0, 0, 20);
                 bool isTopic = StringUtils.EqualsEx("1", ConfigUtils.GetString("TopicOrQueue", "1"));
                 Log4netHelper.Info("建立名为{0}的{1}连接".FormatWith(ConfigUtils.GetString("NaomsConsumerTopic"), isTopic ? "Topic" : "Queue"));
                 //创建消费者
@@ -110,11 +112,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 #region 获取消息
                 ITextMessage txtMsg = message as ITextMessage;
               
-                if (string.IsNullOrWhiteSpace(txtMsg.Text))
+                if (txtMsg == null || string.IsNullOrWhiteSpace(txtMsg.Text))
                 {
+                    Log4netHelper.Warn("接收到空消息");
                     return;
                 }
                 #endregion
+
+                string msg = txtMsg.Text.Trim();
+                Log4netHelper.Info("接收到消息：" + msg);
                
             }
             catch (Exception ex)

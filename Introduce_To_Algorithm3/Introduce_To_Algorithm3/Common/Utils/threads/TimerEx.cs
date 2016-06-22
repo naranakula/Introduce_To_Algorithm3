@@ -75,7 +75,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// </summary>
         public TimerEx()
         {
-            _timer = new Timer(new TimerCallback(TimerCallback), null, 1000, 8000);
+            //实际上初始化完成后，回调已经开始执行
+            _timer = new Timer(new TimerCallback(TimerCallback), null, 1000, 9000);
         }
 
         /// <summary>
@@ -143,10 +144,23 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         }
 
         /// <summary>
+        /// 关闭
+        /// </summary>
+        public void Close()
+        {
+            IsStarted = false;
+            if (_timer != null)
+            {
+                _timer.Dispose();
+            }
+        }
+
+        /// <summary>
         /// 释放资源
         /// </summary>
         public void Dispose()
         {
+            IsStarted = false;
             if (_timer != null)
             {
                 _timer.Dispose();
