@@ -1,6 +1,7 @@
 ﻿using Apache.NMS;
 using Apache.NMS.ActiveMQ;
 using Com.Utility.Commons;
+using Introduce_To_Algorithm3.Common.Utils;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 {

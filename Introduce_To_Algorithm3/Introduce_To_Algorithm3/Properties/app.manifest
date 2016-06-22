@@ -16,7 +16,6 @@
             如果要利用文件和注册表虚拟化实现向后 
             兼容性，则删除 requestedExecutionLevel 节点。
         -->
-        
         <!--
         如何添加管理员运行
         1、右键属性>安全性>启用ClickOnce安全设置,自动在Properties下生成app.manifest

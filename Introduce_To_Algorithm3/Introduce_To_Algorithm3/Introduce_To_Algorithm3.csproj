@@ -378,6 +378,7 @@
     <Compile Include="Common\Search\BinarySearch.cs" />
     <Compile Include="Common\Search\LinearSearch.cs" />
     <Compile Include="Common\Search\OrderStatics.cs" />
+    <Compile Include="Common\Utils\SettingHelper.cs" />
     <Compile Include="Common\Sort\BubbleSort.cs" />
     <Compile Include="Common\Sort\BucketSort.cs" />
     <Compile Include="Common\Sort\CountingSort.cs" />
@@ -532,6 +533,11 @@
     <Compile Include="Common\Utils\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Reference\memcached\HashAlgorithms.cs" />
     <Compile Include="Reference\memcached\LogAdapter.cs" />
     <Compile Include="Reference\memcached\MemcachedClient.cs" />
@@ -612,6 +618,10 @@
     </None>
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

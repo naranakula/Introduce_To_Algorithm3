@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 
-namespace Com.Utility.Commons
+namespace Introduce_To_Algorithm3.Common.Utils
 {
     /// <summary>
     /// 获取应用程序配置的工具类
@@ -17,6 +16,33 @@ namespace Com.Utility.Commons
          * 3 Settings.Default.Save();保存对用户设置所做的更改
          */
 
+        /// <summary>
+        /// get
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string GetString(string name)
+        {
+            //使用如下属性名的方式更常见，使用索引只是为了演示
+            //Properties.Settings.Default.myColor;
+            return Introduce_To_Algorithm3.Properties.Settings.Default[name] as string;
+        }
+
+        /// <summary>
+        /// 设置
+        /// </summary>
+        /// <param name="name"></param>
+        public static void SetString(string name)
+        {
+            //使用如下属性名的方式更常见，使用索引只是为了演示
+            //只能用于User类型
+            //Properties.Settings.Default.myColor = Color.AliceBlue;
+            Introduce_To_Algorithm3.Properties.Settings.Default[name] = ConsoleColor.Black;
+
+            //一定记住保存
+            Introduce_To_Algorithm3.Properties.Settings.Default.Save();
+        }
+
         #endregion
 
         /// <summary>
@@ -25,18 +51,18 @@ namespace Com.Utility.Commons
         /// <param name="key">配置文件的键</param>
         /// <param name="defaultValue">获取不到对应的键值时的默认返回值</param>
         /// <returns></returns>
-        public static string GetString(string key,string defaultValue="")
+        public static string GetString(string key, string defaultValue = "")
         {
-            if(string.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
             {
                 return defaultValue;
             }
             try
             {
                 string value = ConfigurationManager.AppSettings[key];
-                return value ?? defaultValue ;
+                return value == null ? defaultValue : value.Trim();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return defaultValue;
             }
@@ -48,10 +74,10 @@ namespace Com.Utility.Commons
         /// <param name="key">配置文件中的键</param>
         /// <param name="resultValue">获取到键对应的值，仅在返回值为true时，有意义</param>
         /// <returns>是否获取成功</returns>
-        public static bool GetString(string key,out string resultValue)
+        public static bool GetString(string key, out string resultValue)
         {
             resultValue = string.Empty;
-            if(string.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
             {
                 return false;
             }
@@ -72,16 +98,16 @@ namespace Com.Utility.Commons
         /// <param name="key">配置文件的键</param>
         /// <param name="defaultValue">获取不到对应的键值时的默认返回值</param>
         /// <returns></returns>
-        public static int GetInteger(string key,int defaultValue)
+        public static int GetInteger(string key, int defaultValue)
         {
-            if(string.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
             {
                 return defaultValue;
             }
             try
             {
                 int value;
-                if(int.TryParse(ConfigurationManager.AppSettings[key],out value))
+                if (int.TryParse(ConfigurationManager.AppSettings[key], out value))
                 {
                     return value;
                 }
@@ -102,17 +128,17 @@ namespace Com.Utility.Commons
         /// <param name="key">配置文件中的键</param>
         /// <param name="resultValue">获取到键对应的值，仅在返回值为true时，有意义</param>
         /// <returns>是否获取成功</returns>
-        public static bool GetInteger(string key,out int resultValue)
+        public static bool GetInteger(string key, out int resultValue)
         {
             resultValue = -1;
-            if(string.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
             {
                 return false;
             }
 
             try
             {
-                return int.TryParse(ConfigurationManager.AppSettings[key],out resultValue);
+                return int.TryParse(ConfigurationManager.AppSettings[key], out resultValue);
             }
             catch (Exception)
             {
@@ -126,16 +152,16 @@ namespace Com.Utility.Commons
         /// <param name="key">配置文件的键</param>
         /// <param name="defaultValue">获取不到对应的键值时的默认返回值</param>
         /// <returns></returns>
-        public static double GetDouble(string key,double defaultValue)
+        public static double GetDouble(string key, double defaultValue)
         {
-            if(string.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
             {
                 return defaultValue;
             }
             try
             {
                 double value;
-                if(double.TryParse(ConfigurationManager.AppSettings[key],out value))
+                if (double.TryParse(ConfigurationManager.AppSettings[key], out value))
                 {
                     return value;
                 }
@@ -156,17 +182,17 @@ namespace Com.Utility.Commons
         /// <param name="key">配置文件中的键</param>
         /// <param name="resultValue">获取到的结果值，仅在返回值为true时，有效</param>
         /// <returns></returns>
-        public static bool GetDouble(string key,out double resultValue)
+        public static bool GetDouble(string key, out double resultValue)
         {
             resultValue = -1.0;
-            if(string.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
             {
                 return false;
             }
 
             try
             {
-                return double.TryParse(ConfigurationManager.AppSettings[key], out resultValue) ;
+                return double.TryParse(ConfigurationManager.AppSettings[key], out resultValue);
             }
             catch (Exception)
             {
