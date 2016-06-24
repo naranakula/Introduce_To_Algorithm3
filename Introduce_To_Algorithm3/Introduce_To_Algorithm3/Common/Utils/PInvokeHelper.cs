@@ -9,9 +9,28 @@ namespace Introduce_To_Algorithm3.Common.Utils
 {
     public class PInvokeHelper
     {
+        /// <summary>
+        /// 创建指定窗口的线程设置到前台，并且激活该窗口。
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll", EntryPoint = "SetForegroundWindow")]
+        public static extern IntPtr SetForegroundWindow(IntPtr hwnd);
+        /// <summary>
+        /// 显示隐藏窗口
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <param name="nCmdShow"></param>
+        /// <returns></returns>
+
         [DllImport("user32.dll", EntryPoint = "ShowWindow", CharSet = CharSet.Auto)]
         public static extern int ShowWindow(IntPtr hwnd, int nCmdShow);
-
+        /// <summary>
+        /// 根据标题查找窗口句柄
+        /// </summary>
+        /// <param name="lpClassName"></param>
+        /// <param name="lpWindowName"></param>
+        /// <returns></returns>
         [DllImport("User32.dll", EntryPoint = "FindWindow")]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
         [DllImport("User32.dll", EntryPoint = "FindWindowEx")]
