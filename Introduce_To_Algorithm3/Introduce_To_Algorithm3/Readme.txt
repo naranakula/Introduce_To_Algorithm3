@@ -19,8 +19,7 @@ SharpZipLib   压缩包库
 System.Net.FtpClient
 
 //webservice
-Nancy
-SeviceStack
+Nancy > SeviceStack
 
 //中间件
 ActiveMq
