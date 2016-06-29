@@ -6,10 +6,11 @@
 
 //组件
 Entity framework
+Dapper (轻量级 半自动的sqlhelper替代品)
 AutoMapper
 NLog（建议使用 NLog>Log4net）
 Log4net
-Newtonsoft.Json
+Newtonsoft.Json (Json)
 Polly(重试执行框架)
 Quartz.net
 RestSharp (Simple REST and HTTP API Client for .NET)
@@ -17,6 +18,8 @@ Ninject>Autofac
 aspose.cells NPOI  两者均不需要安装office
 SharpZipLib   压缩包库
 System.Net.FtpClient
+CefSharp  （wpf和winform的chromium嵌入）
+Topshelf (构建windows service)
 
 //webservice
 Nancy > SeviceStack
@@ -37,3 +40,4 @@ Opserver  (监控)
 Cat (监控)
 MyCat (开源分布式数据库中间件)
 FileZilla  (FTP)
+Zookeeper
