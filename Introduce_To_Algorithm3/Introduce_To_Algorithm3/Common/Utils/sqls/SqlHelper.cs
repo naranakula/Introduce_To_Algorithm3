@@ -131,7 +131,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
         /// </summary>
         /// <param name="sql">要执行的SQL语句 </param>
         /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
-        /// <param name="parameters">参数数组 </param>
+        /// <param name="parameters">参数数组 参数使用@名称表示 前面加@表示参数 </param>
         /// <returns> </returns>
         public int ExecuteNonQuery(string sql, CommandType commandType, SqlParameter[] parameters)
         {
@@ -184,7 +184,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
         /// </summary>
         /// <param name="sql">要执行的SQL语句 </param>
         /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
-        /// <param name="parameters">参数数组 </param>
+        /// <param name="parameters">参数数组  前面加@表示参数</param>
         /// <returns>DataSet代表了select语句的结果。</returns>
         public DataSet ExecuteDataSet(string sql, CommandType commandType, SqlParameter[] parameters)
         {
@@ -237,7 +237,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
         /// </summary>
         /// <param name="sql">要执行的SQL语句 </param>
         /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
-        /// <param name="parameters">参数数组 </param>
+        /// <param name="parameters">参数数组  前面加@表示参数</param>
         /// <returns> </returns>
         public DataTable ExecuteDataTable(string sql, CommandType commandType, SqlParameter[] parameters)
         {
