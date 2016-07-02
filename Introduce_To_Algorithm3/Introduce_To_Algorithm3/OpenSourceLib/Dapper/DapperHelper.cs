@@ -103,6 +103,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Dapper
                 {
                     return func(connection);
                 }
+                else
+                {
+                    return default(T);
+                }
             }
         }
 

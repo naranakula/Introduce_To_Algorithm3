@@ -360,7 +360,7 @@
     <Compile Include="Common\MachineLearning\ANNHelper.cs" />
     <Compile Include="Common\MachineLearning\ClusterCategorical.cs" />
     <Compile Include="Common\MachineLearning\DecisionTree.cs" />
-    <Compile Include="Common\MachineLearning\GeneticAlgorithm.cs" />
+    <Compile Include="Common\MachineLearning\GA\GeneticAlgorithm.cs" />
     <Compile Include="Common\MachineLearning\KMeans.cs" />
     <Compile Include="Common\MachineLearning\KNN.cs" />
     <Compile Include="Common\MachineLearning\LogisticRegression.cs" />
