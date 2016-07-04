@@ -25,7 +25,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
     /// </summary>
     public class GeneticAlgorithm:IGeneticAlgorithm
     {
-        #region 遗传算法需要调节的三个参数
+        #region 遗传算法需要调节的三个参数   实际运行中可以考虑根据代数自动调整参数
         /// <summary>
         /// 种群大小
         /// </summary>
@@ -40,7 +40,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         public double MutationRate { get; set; }
 
         /// <summary>
-        /// 保留的精英数 0表示保留1个，1表示保留2个
+        /// 保留的精英数 1表示保留1个，2表示保留2个
         /// 即每一代到下一代保留最好的的个数,最好不要只保留一个
         /// </summary>
         public int ElitismCount { get; set; }
@@ -84,7 +84,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <summary>
         /// 最高进化多少代
         /// </summary>
-        public const int MaxGenerationLimit = 1000;
+        public const int MaxGenerationLimit = 10000;
 
         /// <summary>
         /// 构造函数
@@ -102,7 +102,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// </summary>
         /// <param name="chromosomeLength"></param>
         /// <returns></returns>
-        public Population InitPopulation(int chromosomeLength)
+        public virtual Population InitPopulation(int chromosomeLength)
         {
             Population population = new Population(this.PopulationSize,chromosomeLength);
             return population;
@@ -113,7 +113,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// </summary>
         /// <param name="individual"></param>
         /// <returns></returns>
-        public double CalcFitness(Individual individual)
+        public virtual double CalcFitness(Individual individual)
         {
             int correctGenes = 0;
             for (int i = 0; i < individual.GetChromosomeLength(); i++)
@@ -135,7 +135,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// 计算种群的适应度
         /// </summary>
         /// <param name="population"></param>
-        public void EvalPopulation(Population population)
+        public virtual void EvalPopulation(Population population)
         {
             double populationFitness = 0;
             foreach (var individual in population.GetIndividuals())
@@ -152,7 +152,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// </summary>
         /// <param name="population"></param>
         /// <returns></returns>
-        public Individual SelectParent(Population population)
+        public virtual Individual SelectParent(Population population)
         {
             Individual[] individuals = population.GetIndividuals();
 
@@ -180,22 +180,23 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// </summary>
         /// <param name="population"></param>
         /// <returns></returns>
-        public Population CrossoverPopulation(Population population)
+        public virtual Population CrossoverPopulation(Population population)
         {
             Population newPopulation = new Population(population.Size());
 
-            //按照适应度从高到低便利
+            //按照适应度从高到低排序
+            population.Sort();
             for (int i = 0; i < population.Size(); i++)
             {
                 //按照适应度从高到低 
                 //注：这种实现是有性能问题的，不要每次getFittest排序
                 Individual parent1 = population.GetFittest(i);
                 //ElitismCount表示直接保留到下一代的当前最优解的个数
-                if (Rand.NextDouble() < this.CrossoverRate && i > this.ElitismCount)
+                if (Rand.NextDouble() < this.CrossoverRate && i >= this.ElitismCount)
                 {
                     //初始化后台
                     Individual offspring = new Individual(parent1.GetChromosomeLength());
-                    //找到第二个父类
+                    //找到第二个父类 
                     Individual parent2 = SelectParent(population);
                     //从两个父类中随机选择每个基因，来交叉
                     for (int geneIndex = 0; geneIndex < parent1.GetChromosomeLength(); geneIndex++)
@@ -223,11 +224,55 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
 
         /// <summary>
+        /// 变异种群
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        public virtual Population MutatePopulation(Population population)
+        {
+            //初始化一个新的种群
+            Population newPopulation = new Population(population.Size());
+
+            //遍历当前的种群 适应度从高到低顺序 不同于交叉，在变异过程中population的个体已经变了，排序也变了，但只考虑初始的顺序
+            population.Sort();
+            for (int index = 0; index < population.Size(); index++)
+            {
+                Individual individual = population.GetFittest(index);
+
+                if (index >= this.ElitismCount)
+                {
+                    //保留ElitismCount个最好解不动
+
+                    for (int geneIndex = 0; geneIndex < individual.GetChromosomeLength(); geneIndex++)
+                    {
+                        //变异
+                        if (Rand.NextDouble() < this.MutationRate)
+                        {
+                            //变异
+                            int newGene = 1;
+                            //反转当前基因位  0变为1 1变为0
+                            if (individual.GetGene(geneIndex) == 1)
+                            {
+                                newGene = 0;
+                            }
+
+                            individual.SetGene(geneIndex,newGene);
+                        }
+                    }
+                }
+                newPopulation.SetIndividual(index,individual);
+            }
+
+            return newPopulation;
+        }
+
+
+        /// <summary>
         /// 种群是否到达了结束条件
         /// </summary>
         /// <param name="population"></param>
         /// <returns></returns>
-        public bool IsTerminationConditionMet(Population population)
+        public virtual bool IsTerminationConditionMet(Population population)
         {
             foreach(Individual individual in population.GetIndividuals())
             {
@@ -247,7 +292,8 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// </summary>
         public static void TestMain()
         {
-            AllOnesGA ga = new AllOnesGA(100,0.01,0.95,3);
+            //保留3个最优解
+            AllOnesGA ga = new AllOnesGA(100,0.001,0.95,10);
             //初始化种群
             Population population = ga.InitPopulation(50);
             //计算适应度
@@ -258,13 +304,18 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             while (ga.IsTerminationConditionMet(population) == false)
             {
                 //排序，并打印最好的
-                NLogHelper.Info("最好的解决方案："+population.GetFittest(0).ToString());
-
+                if (generation%50 == 0)
+                {
+                    population.Sort();
+                    NLogHelper.Info("最好的解决方案：" + population.GetFittest(0).ToString());
+                }
                 //选择和交叉
                 population = ga.CrossoverPopulation(population);
-
+                //种群变了，要重新计算
+                ga.EvalPopulation(population);
                 //变异
-
+                population = ga.MutatePopulation(population);
+                //种群变了，要重新计算
                 ga.EvalPopulation(population);
                 generation++;
                 if (generation > MaxGenerationLimit)
@@ -274,7 +325,9 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                 }
             }
 
-            NLogHelper.Info("最终最好的方案："+population.GetFittest(0).ToString()+"，代数："+generation);
+            population.Sort();
+            Individual finalIndividual = population.GetFittest(0);
+            NLogHelper.Info(String.Format("最终最好的解决方案：{0},最终的代数：{1},最好的适应度：{2}",finalIndividual,generation,finalIndividual.GetFitness()));
         }
     }
 
@@ -454,27 +507,35 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
 
         /// <summary>
-        /// 获取第offset个最大适应度的个体
+        /// 按适应度从高到低排序
         /// </summary>
-        /// <param name="offset"></param>
-        /// <returns></returns>
-        public Individual GetFittest(int offset)
+        public void Sort()
         {
-            Array.Sort(this.population,new Comparison<Individual>((individual1, individual2) =>
+            Array.Sort(this.population, new Comparison<Individual>((individual1, individual2) =>
             {
                 //倒序排列
                 if (individual1.GetFitness() > individual2.GetFitness())
                 {
                     return -1;
                 }
-                else if(individual1.GetFitness()<individual2.GetFitness())
+                else if (individual1.GetFitness() < individual2.GetFitness())
                 {
                     return 1;
                 }
 
                 return 0;
             }));
+        }
 
+
+        /// <summary>
+        /// 获取第offset个最大适应度的个体
+        /// 在调用该方法置前，要先排序
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public Individual GetFittest(int offset)
+        {
             return population[offset];
         }
 
