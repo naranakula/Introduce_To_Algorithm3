@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data.Odbc;
 using System.Text;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
@@ -601,6 +602,153 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             }
         }
     }
+
+    #endregion
+
+    #region RobotController 机器人
+
+    public class Robot
+    {
+        
+    }
+
+    /// <summary>
+    /// 机器人控制器
+    /// 有六个传感器，前面3个，后面1个，左边1个右边1个  移动方式有四种：不动 00 前移01  左转 10 右转11
+    /// 使用128位 表示输入输出
+    /// </summary>
+    public class RobotController
+    {
+        
+    }
+
+    /// <summary>
+    /// 迷宫
+    /// 1表示墙 2表示起点
+    /// </summary>
+    public class Maze
+    {
+        /// <summary>
+        /// 迷宫底层表示
+        /// </summary>
+        private int[][] maze;
+
+        /// <summary>
+        /// 迷宫的起始位置
+        /// </summary>
+        private int[] startPosition = {-1, -1};
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="maze"></param>
+        public Maze(int[][] maze)
+        {
+            this.maze = maze;
+        }
+
+        /// <summary>
+        /// 获取起始位置
+        /// </summary>
+        /// <returns></returns>
+        public int[] GetStartPosition()
+        {
+            if (this.startPosition[0] != -1 && this.startPosition[1] != -1)
+            {
+                return this.startPosition;
+            }
+
+            //默认起始位置
+            startPosition = new int[] {0, 0};
+
+            for (int rowIndex = 0; rowIndex < this.maze.Length; rowIndex++)
+            {
+                for (int colIndex = 0; colIndex < this.maze[rowIndex].Length; colIndex++)
+                {
+                    if (this.maze[rowIndex][colIndex] == 2)
+                    {
+                        //2表示起点
+                        this.startPosition = new int[] {colIndex, rowIndex};
+                        return this.startPosition;
+                    }
+                }
+            }
+
+            return startPosition;
+        }
+
+        /// <summary>
+        /// 获取迷宫上的位置值
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public int GetPositionValue(int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= this.maze.Length || y >= this.maze[0].Length)
+            {
+                return 1;
+            }
+
+            return this.maze[y][x];
+        }
+
+        /// <summary>
+        /// 是否是墙
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public bool IsWall(int x, int y)
+        {
+            return this.GetPositionValue(x, y) == 1;
+        }
+
+        /// <summary>
+        /// 获取最大的x
+        /// </summary>
+        /// <returns></returns>
+        public int GetMaxX()
+        {
+            return this.maze[0].Length - 1;
+        }
+
+        /// <summary>
+        /// 获取最大的y
+        /// </summary>
+        /// <returns></returns>
+        public int GetMaxY()
+        {
+            return this.maze.Length - 1;
+        }
+
+        /// <summary>
+        /// 对路径打分
+        /// </summary>
+        /// <param name="route"></param>
+        /// <returns></returns>
+        public int ScoreRoute(List<int[]> route)
+        {
+            int score = 0;
+
+            bool[,] visited = new bool[this.GetMaxY()+1,this.GetMaxX()+1];
+
+            foreach (var routeStep in route)
+            {
+                int[] step = routeStep;
+
+                if (this.maze[step[1]][step[2]] == 3 && visited[step[1], step[0]] == false)
+                {
+                    score++;
+                    visited[step[1], step[0]] = true;
+                }
+            }
+
+            return score;
+        }
+
+    }
+
 
     #endregion
 
