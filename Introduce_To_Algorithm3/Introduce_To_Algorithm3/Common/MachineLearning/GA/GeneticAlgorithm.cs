@@ -43,6 +43,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <summary>
         /// 保留的精英数 1表示保留1个，2表示保留2个
         /// 即每一代到下一代保留最好的的个数,最好不要只保留一个
+        /// 优化方案：让最好的个体也参与交叉变异，每次用List保存下来最好的。
         /// </summary>
         public int ElitismCount { get; set; }
 
@@ -639,10 +640,14 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// </summary>
         private Direction heading;
 
-
+        /// <summary>
+        /// 最大允许移动的次数
+        /// </summary>
         private int maxMoves;
 
-
+        /// <summary>
+        /// 当前移动的次数
+        /// </summary>
         private int moves;
 
         /// <summary>
@@ -650,7 +655,9 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// </summary>
         private int sensorVal;
 
-
+        /// <summary>
+        /// sensor对应的action 0-3
+        /// </summary>
         private int[] sensorActions;
 
         /// <summary>
@@ -663,18 +670,148 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// </summary>
         private List<int[]> route;
 
-        
+        /// <summary>
+        /// 初始化控制器
+        /// </summary>
+        /// <param name="sensorActions"></param>
+        /// <param name="maze"></param>
+        /// <param name="maxMoves"></param>
         public Robot(int[] sensorActions,Maze maze,int maxMoves)
         {
             this.sensorActions = this.calcSensorActions(sensorActions);
             this.maze = maze;
             //获取起始位置
             int[] startPos = this.maze.GetStartPosition();
+            this.xPosition = startPos[0];
+            this.yPosition = startPos[1];
+            this.sensorVal = -1;
+            this.heading = Direction.EAST;
+            this.maxMoves = maxMoves;
+            this.moves = 0;
+            this.route = new List<int[]>();
+            this.route.Add(startPos);
         }
 
-        private int[] calcSensorActions(int[] sensorActions)
+        /// <summary>
+        /// run the robot's action based on sensor input
+        /// </summary>
+        public void Run()
+        {
+            while (true)
+            {
+                this.moves++;
+
+                //break if the robot stop moving
+                if (this.GetNextAction() == 0)
+                {
+                    return;
+                }
+
+                //break if we read the goal
+                if (this.maze.GetPositionValue(this.xPosition, this.yPosition) == 4)
+                {
+                    return;
+                }
+
+                if (this.moves > this.maxMoves)
+                {
+                    return;
+                }
+
+                //Run action
+                this.MakeNextAction();
+            }
+        }
+
+        /// <summary>
+        /// runs the next action
+        /// </summary>
+        private void MakeNextAction()
+        {
+            //移动方式有四种：不动 00 前移01  左转 10 右转11
+            if (this.GetNextAction() == 1)
+            {
+                int currentX = this.xPosition;
+                int currentY = this.yPosition;
+
+                //move depending on current direction
+                if (Direction.NORTH == this.heading)
+                {
+                    this.yPosition += -1;
+                    if (this.yPosition < 0)
+                    {
+                        this.yPosition = 0;
+                    }
+                }
+                else if (Direction.EAST == this.heading)
+                {
+                    this.xPosition += 1;
+                    if (this.xPosition > this.maze.GetMaxX())
+                    {
+                        this.xPosition = this.maze.GetMaxX();
+                    }
+                }
+                else if (Direction.SOUTH == this.heading)
+                {
+                    this.yPosition += 1;
+                    if (this.yPosition > this.maze.GetMaxY())
+                    {
+                        this.yPosition = this.maze.GetMaxY();
+                    }
+                }
+                else if (Direction.WEST == this.heading)
+                {
+                    this.xPosition += -1;
+                    if (this.xPosition < 0)
+                    {
+                        this.xPosition = 0;
+                    }
+                }
+
+                //we can't move here
+
+            }
+        }
+
+        private int GetNextAction()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// map robot's sensor data to action from binary string
+        /// </summary>
+        /// <param name="sensorActionsStr">传感器输入 binary ga 染色体</param>
+        /// <returns>将传感器输入映射为action</returns>
+        private int[] calcSensorActions(int[] sensorActionsStr)
+        {
+            //how many actions are there
+            int numActions = (int) sensorActionsStr.Length/2;
+            int[] sensorActions = new int[numActions];
+
+            //Loop through action
+            for (int sensorValue = 0; sensorValue < numActions; sensorValue++)
+            {
+                int sensorAction = 0;
+
+                //高位加2
+                if (sensorActionsStr[sensorValue*2] == 1)
+                {
+                    sensorAction += 2;
+                }
+
+                //低位加1
+                if (sensorActionsStr[sensorValue*2 + 1] == 1)
+                {
+                    sensorAction += 1;
+                }
+
+                //add to sensor action map
+                //sensorValue表示传感器输入 sensorAction表示对应的action
+                sensorActions[sensorValue] = sensorAction;
+            }
+
+            return sensorActions;
         }
 
     }
