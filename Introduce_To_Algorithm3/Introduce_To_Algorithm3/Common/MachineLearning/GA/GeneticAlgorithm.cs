@@ -24,7 +24,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
     ///     找到了最优解
     ///     连续n代当前最优解无变化
     /// </summary>
-    public class GeneticAlgorithm:IGeneticAlgorithm
+    public class GeneticAlgorithm : IGeneticAlgorithm
     {
         #region 遗传算法需要调节的三个参数   实际运行中可以考虑根据代数自动调整参数
         /// <summary>
@@ -61,7 +61,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <param name="mutationRate"></param>
         /// <param name="crossoverRate"></param>
         /// <param name="elitismCount"></param>
-        public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate,int elitismCount)
+        public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount)
         {
             this.PopulationSize = populationSize;
             this.MutationRate = mutationRate;
@@ -78,10 +78,10 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
     /// <summary>
     /// 一个测试问题，查找所有位置为1的字符串
     /// </summary>
-    public class AllOnesGA:GeneticAlgorithm
+    public class AllOnesGA : GeneticAlgorithm
     {
 
-        
+
         /// <summary>
         /// 最高进化多少代
         /// </summary>
@@ -94,7 +94,8 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <param name="mutationRate"></param>
         /// <param name="crossoverRate"></param>
         /// <param name="elitismCount"></param>
-        public AllOnesGA(int populationSize, double mutationRate, double crossoverRate, int elitismCount) : base(populationSize, mutationRate, crossoverRate,elitismCount)
+        public AllOnesGA(int populationSize, double mutationRate, double crossoverRate, int elitismCount)
+            : base(populationSize, mutationRate, crossoverRate, elitismCount)
         {
         }
 
@@ -105,7 +106,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <returns></returns>
         public virtual Population InitPopulation(int chromosomeLength)
         {
-            Population population = new Population(this.PopulationSize,chromosomeLength);
+            Population population = new Population(this.PopulationSize, chromosomeLength);
             return population;
         }
 
@@ -126,7 +127,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             }
 
             //计算适应度， 1占得比例
-            double fitness = correctGenes*1.0/individual.GetChromosomeLength();
+            double fitness = correctGenes * 1.0 / individual.GetChromosomeLength();
 
             individual.SetFitness(fitness);
             return fitness;
@@ -160,7 +161,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             //获取种群的适应度
             double populationFitness = population.GetPopulationFitness();
             //轮盘赌旋转到的位置
-            double rouletteWheelPosition = Rand.NextDouble()*populationFitness;
+            double rouletteWheelPosition = Rand.NextDouble() * populationFitness;
 
             double spinWheel = 0;
             foreach (var item in individuals)
@@ -204,7 +205,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                     {
                         if (Rand.NextDouble() < 0.5)
                         {
-                            offspring.SetGene(geneIndex,parent1.GetGene(geneIndex));
+                            offspring.SetGene(geneIndex, parent1.GetGene(geneIndex));
                         }
                         else
                         {
@@ -212,12 +213,12 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                         }
                     }
 
-                    newPopulation.SetIndividual(i,offspring);
+                    newPopulation.SetIndividual(i, offspring);
                 }
                 else
                 {
                     //保留前elitismCount个最好的个体
-                    newPopulation.SetIndividual(i,parent1);
+                    newPopulation.SetIndividual(i, parent1);
                 }
             }
 
@@ -257,11 +258,11 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                                 newGene = 0;
                             }
 
-                            individual.SetGene(geneIndex,newGene);
+                            individual.SetGene(geneIndex, newGene);
                         }
                     }
                 }
-                newPopulation.SetIndividual(index,individual);
+                newPopulation.SetIndividual(index, individual);
             }
 
             return newPopulation;
@@ -275,7 +276,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <returns></returns>
         public virtual bool IsTerminationConditionMet(Population population)
         {
-            foreach(Individual individual in population.GetIndividuals())
+            foreach (Individual individual in population.GetIndividuals())
             {
                 //本问题我们知道最优解是1
                 if (System.Math.Abs(individual.GetFitness() - 1) < 0.001)
@@ -294,7 +295,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         public static void TestMain()
         {
             //保留3个最优解
-            AllOnesGA ga = new AllOnesGA(100,0.001,0.95,10);
+            AllOnesGA ga = new AllOnesGA(100, 0.001, 0.95, 10);
             //初始化种群
             Population population = ga.InitPopulation(50);
             //计算适应度
@@ -305,7 +306,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             while (ga.IsTerminationConditionMet(population) == false)
             {
                 //排序，并打印最好的
-                if (generation%50 == 0)
+                if (generation % 50 == 0)
                 {
                     population.Sort();
                     NLogHelper.Info("最好的解决方案：" + population.GetFittest(0).ToString());
@@ -321,14 +322,14 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                 generation++;
                 if (generation > MaxGenerationLimit)
                 {
-                    NLogHelper.Info("到达了最大代次数："+generation);
+                    NLogHelper.Info("到达了最大代次数：" + generation);
                     break;
                 }
             }
 
             population.Sort();
             Individual finalIndividual = population.GetFittest(0);
-            NLogHelper.Info(String.Format("最终最好的解决方案：{0},最终的代数：{1},最好的适应度：{2}",finalIndividual,generation,finalIndividual.GetFitness()));
+            NLogHelper.Info(String.Format("最终最好的解决方案：{0},最终的代数：{1},最好的适应度：{2}", finalIndividual, generation, finalIndividual.GetFitness()));
         }
     }
 
@@ -463,7 +464,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// 种群
         /// </summary>
         private Individual[] population;
-        
+
         /// <summary>
         /// 种群的适应度 = 所有个体适应度之和
         /// </summary>
@@ -472,7 +473,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <summary>
         /// 初始化与时间相关的随机数
         /// </summary>
-        private static  Random random = new Random();
+        private static Random random = new Random();
 
         /// <summary>
         /// 构造函数
@@ -593,7 +594,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         public void Shuffle()
         {
             //-1是因为最后一个只能是它自己
-            for (int i = 0; i < population.Length-1; i++)
+            for (int i = 0; i < population.Length - 1; i++)
             {
                 int index = random.Next(i, population.Length);
                 Individual temp = population[index];
@@ -607,9 +608,75 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
 
     #region RobotController 机器人
 
+    /// <summary>
+    /// 机器人 根据指令 在 迷宫中行驶
+    /// </summary>
     public class Robot
     {
+        /// <summary>
+        /// 方向
+        /// </summary>
+        private enum  Direction
+        {
+            NORTH,
+            EAST,
+            SOUTH,
+            WEST
+        }
+
+        /// <summary>
+        /// 机器人当前x位置
+        /// </summary>
+        private int xPosition;
+
+        /// <summary>
+        /// 机器人y位置
+        /// </summary>
+        private int yPosition;
+
+        /// <summary>
+        /// 方向
+        /// </summary>
+        private Direction heading;
+
+
+        private int maxMoves;
+
+
+        private int moves;
+
+        /// <summary>
+        /// 传感器编码后的值  0-63
+        /// </summary>
+        private int sensorVal;
+
+
+        private int[] sensorActions;
+
+        /// <summary>
+        /// 迷宫
+        /// </summary>
+        private Maze maze;
+
+        /// <summary>
+        /// 路径
+        /// </summary>
+        private List<int[]> route;
+
         
+        public Robot(int[] sensorActions,Maze maze,int maxMoves)
+        {
+            this.sensorActions = this.calcSensorActions(sensorActions);
+            this.maze = maze;
+            //获取起始位置
+            int[] startPos = this.maze.GetStartPosition();
+        }
+
+        private int[] calcSensorActions(int[] sensorActions)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
     /// <summary>
@@ -617,14 +684,91 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
     /// 有六个传感器，前面3个，后面1个，左边1个右边1个  移动方式有四种：不动 00 前移01  左转 10 右转11
     /// 使用128位 表示输入输出
     /// </summary>
-    public class RobotController
+    public class RobotController : AllOnesGA
     {
-        
+        /// <summary>
+        /// 遗传算法应用的最大代数
+        /// </summary>
+        public static int MaxGenerations = 1000;
+
+        /// <summary>
+        /// 每次锦标赛种群选择的size  tournament selection
+        /// </summary>
+        public int TournamentSize;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="populationSize">种群大小</param>
+        /// <param name="mutationRate">变异率</param>
+        /// <param name="crossoverRate">交叉率</param>
+        /// <param name="elitismCount">保留的最优个数</param>
+        /// <param name="tournamentSize">每次锦标赛种群选择的size</param>
+        public RobotController(int populationSize, double mutationRate, double crossoverRate, int elitismCount,int tournamentSize)
+            : base(populationSize, mutationRate, crossoverRate, elitismCount)
+        {
+            this.TournamentSize = tournamentSize;
+        }
+
+        /// <summary>
+        /// 测试主体
+        /// </summary>
+        public static void TestMain()
+        {
+            /**
+             * 0 Empty
+             * 1 Wall
+             * 2 Starting Position
+             * 3 Route
+             * 4 Goal Position
+             */
+
+            int[][] mazeArr = new int[9][];
+            mazeArr[0] = new int[] { 0, 0, 0, 0, 1, 0, 1, 3, 2 };
+            mazeArr[1] = new int[] { 1, 0, 1, 1, 1, 0, 1, 3, 1 };
+            mazeArr[2] = new int[] { 1, 0, 0, 1, 3, 3, 3, 3, 1 };
+            mazeArr[3] = new int[] { 3, 3, 3, 1, 3, 1, 1, 0, 1 };
+            mazeArr[4] = new int[] { 3, 1, 3, 3, 3, 1, 1, 0, 0 };
+            mazeArr[5] = new int[] { 3, 3, 1, 1, 1, 1, 0, 1, 1 };
+            mazeArr[6] = new int[] { 1, 3, 0, 1, 3, 3, 3, 3, 3 };
+            mazeArr[7] = new int[] { 0, 3, 1, 1, 3, 1, 0, 1, 3 };
+            mazeArr[8] = new int[] { 1, 3, 3, 3, 3, 1, 1, 1, 4 };
+
+            //初始化迷宫
+            Maze maze = new Maze(mazeArr);
+
+            RobotController ga = new RobotController(200,0.05,0.9,2,10);
+
+            //初始化种群
+            Population population = ga.InitPopulation(128);
+
+            //评估种群
+
+
+            int generation = 1;
+
+            while (false)
+            {
+                //打印最优个体
+
+                //应用交叉
+
+                //评估种群
+
+                //应用变异
+
+                //评估种群
+
+                generation++;
+            }
+
+            //打印最终结果
+        }
     }
 
     /// <summary>
     /// 迷宫
-    /// 1表示墙 2表示起点
+    /// 0 Empty 1表示墙 2表示起点 3Route可通行的路  4终点 Goal position
     /// </summary>
     public class Maze
     {
@@ -636,7 +780,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <summary>
         /// 迷宫的起始位置
         /// </summary>
-        private int[] startPosition = {-1, -1};
+        private int[] startPosition = { -1, -1 };
 
         /// <summary>
         /// 构造函数
@@ -659,7 +803,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             }
 
             //默认起始位置
-            startPosition = new int[] {0, 0};
+            startPosition = new int[] { 0, 0 };
 
             for (int rowIndex = 0; rowIndex < this.maze.Length; rowIndex++)
             {
@@ -668,7 +812,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                     if (this.maze[rowIndex][colIndex] == 2)
                     {
                         //2表示起点
-                        this.startPosition = new int[] {colIndex, rowIndex};
+                        this.startPosition = new int[] { colIndex, rowIndex };
                         return this.startPosition;
                     }
                 }
@@ -723,7 +867,8 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
 
         /// <summary>
-        /// 对路径打分
+        /// 对路径打分 作为适应度函数 
+        /// 评估正确的路径，不考虑回头路， 实际上应该有更好的适应度函数，如回头路适当的减分等
         /// </summary>
         /// <param name="route"></param>
         /// <returns></returns>
@@ -731,7 +876,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         {
             int score = 0;
 
-            bool[,] visited = new bool[this.GetMaxY()+1,this.GetMaxX()+1];
+            bool[,] visited = new bool[this.GetMaxY() + 1, this.GetMaxX() + 1];
 
             foreach (var routeStep in route)
             {
@@ -739,13 +884,18 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
 
                 if (this.maze[step[1]][step[2]] == 3 && visited[step[1], step[0]] == false)
                 {
+                    //正确的移动加分
                     score++;
+                    //移除reward
                     visited[step[1], step[0]] = true;
                 }
             }
 
             return score;
         }
+
+
+
 
     }
 
