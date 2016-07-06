@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Odbc;
 using System.Text;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
+using NPOI.SS.Formula.Functions;
 
 namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
 {
@@ -312,11 +313,11 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                     population.Sort();
                     NLogHelper.Info("最好的解决方案：" + population.GetFittest(0).ToString());
                 }
-                //选择和交叉
+                //选择和交叉  交叉中做了排序
                 population = ga.CrossoverPopulation(population);
                 //种群变了，要重新计算
                 ga.EvalPopulation(population);
-                //变异
+                //变异   变异中做了排序
                 population = ga.MutatePopulation(population);
                 //种群变了，要重新计算
                 ga.EvalPopulation(population);
@@ -617,7 +618,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <summary>
         /// 方向
         /// </summary>
-        private enum  Direction
+        private enum Direction
         {
             NORTH,
             EAST,
@@ -656,7 +657,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         private int sensorVal;
 
         /// <summary>
-        /// sensor对应的action 0-3
+        /// sensor对应的action 0-3  不动 00 前移01  左转 10 右转11
         /// </summary>
         private int[] sensorActions;
 
@@ -676,7 +677,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <param name="sensorActions"></param>
         /// <param name="maze"></param>
         /// <param name="maxMoves"></param>
-        public Robot(int[] sensorActions,Maze maze,int maxMoves)
+        public Robot(int[] sensorActions, Maze maze, int maxMoves)
         {
             this.sensorActions = this.calcSensorActions(sensorActions);
             this.maze = maze;
@@ -701,7 +702,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             {
                 this.moves++;
 
-                //break if the robot stop moving
+                //break if the robot stop moving  如果不动，实际上可以根据传感器变更方向，而不是返回
                 if (this.GetNextAction() == 0)
                 {
                     return;
@@ -713,6 +714,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                     return;
                 }
 
+                //到达最大移动次数
                 if (this.moves > this.maxMoves)
                 {
                     return;
@@ -731,6 +733,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             //移动方式有四种：不动 00 前移01  左转 10 右转11
             if (this.GetNextAction() == 1)
             {
+                //前移
                 int currentX = this.xPosition;
                 int currentY = this.yPosition;
 
@@ -768,14 +771,184 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                     }
                 }
 
-                //we can't move here
-
+                //当是墙时，we can't move here
+                if (this.maze.IsWall(this.xPosition, this.yPosition))
+                {
+                    //不能移动，置回原来位置
+                    this.xPosition = currentX;
+                    this.yPosition = currentY;
+                }
+                else
+                {
+                    if (currentX != this.xPosition || currentY != this.yPosition)
+                    {
+                        //移动了1个位置 添加到路径中
+                        this.route.Add(this.GetPosition());
+                    }
+                }
             }
+            else if (this.GetNextAction() == 2)
+            {
+                //左转 10 右转11
+                if (Direction.NORTH == this.heading)
+                {
+                    this.heading = Direction.WEST;
+                }
+                else if (Direction.EAST == this.heading)
+                {
+                    this.heading = Direction.NORTH;
+                }
+                else if (Direction.SOUTH == this.heading)
+                {
+                    this.heading = Direction.EAST;
+                }
+                else if (Direction.WEST == this.heading)
+                {
+                    this.heading = Direction.SOUTH;
+                }
+            }
+            else if (this.GetNextAction() == 3)
+            {
+                //右转11
+                if (Direction.NORTH == this.heading)
+                {
+                    this.heading = Direction.EAST;
+                }
+                else if (Direction.EAST == this.heading)
+                {
+                    this.heading = Direction.SOUTH;
+                }
+                else if (Direction.SOUTH == this.heading)
+                {
+                    this.heading = Direction.WEST;
+                }
+                else if (Direction.WEST == this.heading)
+                {
+                    this.heading = Direction.NORTH;
+                }
+            }
+
+            //重置传感器 传感器取值范围[0,63]
+            this.sensorVal = -1;
         }
 
+        /// <summary>
+        /// 获取机器当前位置
+        /// </summary>
+        /// <returns></returns>
+        private int[] GetPosition()
+        {
+            return new int[] { this.xPosition, this.yPosition };
+        }
+
+        /// <summary>
+        /// 获取下一次行动值
+        /// </summary>
+        /// <returns></returns>
         private int GetNextAction()
         {
-            throw new NotImplementedException();
+            return this.sensorActions[this.GetSensorValue()];
+        }
+
+        /// <summary>
+        /// 获取当前传感器的值  0到64
+        /// </summary>
+        /// <returns></returns>
+        private int GetSensorValue()
+        {
+            if (this.sensorVal > -1)
+            {
+                //传感器值已经计算出来了，直接返回
+                return this.sensorVal;
+            }
+
+            //从高位到低位 依次是 B R L FR FL F
+            bool frontSensor, frontLeftSensor, frontRightSensor, leftSensor, rightSensor, backSensor;
+            frontSensor = frontLeftSensor = frontRightSensor = leftSensor = rightSensor = backSensor = false;
+            if (this.GetHeading() == Direction.NORTH)
+            {
+                frontSensor = this.maze.IsWall(this.xPosition, this.yPosition - 1);
+                frontLeftSensor = this.maze.IsWall(this.xPosition - 1, this.yPosition - 1);
+                frontRightSensor = this.maze.IsWall(this.xPosition + 1, this.yPosition - 1);
+                leftSensor = this.maze.IsWall(this.xPosition - 1, this.yPosition);
+                rightSensor = this.maze.IsWall(this.xPosition + 1, this.yPosition);
+                backSensor = this.maze.IsWall(this.xPosition, this.yPosition + 1);
+            }
+            else if (this.GetHeading() == Direction.EAST)
+            {
+                frontSensor = this.maze.IsWall(this.xPosition + 1, this.yPosition);
+                frontLeftSensor = this.maze.IsWall(this.xPosition + 1, this.yPosition - 1);
+                frontRightSensor = this.maze.IsWall(this.xPosition + 1, this.yPosition + 1);
+                leftSensor = this.maze.IsWall(this.xPosition, this.yPosition - 1);
+                rightSensor = this.maze.IsWall(this.xPosition, this.yPosition + 1);
+                backSensor = this.maze.IsWall(this.xPosition - 1, this.yPosition);
+            }
+            else if (this.GetHeading() == Direction.SOUTH)
+            {
+                frontSensor = this.maze.IsWall(this.xPosition, this.yPosition + 1);
+                frontLeftSensor = this.maze.IsWall(this.xPosition + 1, this.yPosition + 1);
+                frontRightSensor = this.maze.IsWall(this.xPosition - 1, this.yPosition + 1);
+                leftSensor = this.maze.IsWall(this.xPosition + 1, this.yPosition);
+                rightSensor = this.maze.IsWall(this.xPosition - 1, this.yPosition);
+                backSensor = this.maze.IsWall(this.xPosition, this.yPosition - 1);
+            }
+            else if (this.GetHeading() == Direction.WEST)
+            {
+                frontSensor = this.maze.IsWall(this.xPosition - 1,this.yPosition);
+                frontLeftSensor = this.maze.IsWall(this.xPosition - 1, this.yPosition + 1);
+                frontRightSensor = this.maze.IsWall(this.xPosition - 1, this.yPosition - 1);
+                leftSensor = this.maze.IsWall(this.xPosition, this.yPosition + 1);
+                rightSensor = this.maze.IsWall(this.xPosition, this.yPosition - 1);
+                backSensor = this.maze.IsWall(this.xPosition + 1, this.yPosition);
+            }
+
+            // Calculate sensor value
+            int tempSensorVal = 0;
+            if (frontSensor == true)
+            {
+                tempSensorVal += 1;
+            }
+            if (frontLeftSensor == true)
+            {
+                tempSensorVal += 2;
+            }
+            if (frontRightSensor == true)
+            {
+                tempSensorVal += 4;
+            }
+            if (leftSensor == true)
+            {
+                tempSensorVal += 8;
+            }
+            if (rightSensor == true)
+            {
+                tempSensorVal += 16;
+            }
+            if (backSensor == true)
+            {
+                tempSensorVal += 32;
+            }
+            this.sensorVal = tempSensorVal;
+            return tempSensorVal;
+        }
+
+        /// <summary>
+        /// 获取路径
+        /// </summary>
+        /// <returns></returns>
+        public List<int[]> GetRoute()
+        {
+            return this.route;
+        }
+
+
+        /// <summary>
+        /// 获取方向
+        /// </summary>
+        /// <returns></returns>
+        private Direction GetHeading()
+        {
+            return this.heading;
         }
 
         /// <summary>
@@ -786,22 +959,23 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         private int[] calcSensorActions(int[] sensorActionsStr)
         {
             //how many actions are there
-            int numActions = (int) sensorActionsStr.Length/2;
+            int numActions = (int)sensorActionsStr.Length / 2;
             int[] sensorActions = new int[numActions];
-
+            
             //Loop through action
             for (int sensorValue = 0; sensorValue < numActions; sensorValue++)
             {
+                //不动 00 前移01  左转 10 右转11
                 int sensorAction = 0;
 
                 //高位加2
-                if (sensorActionsStr[sensorValue*2] == 1)
+                if (sensorActionsStr[sensorValue * 2] == 1)
                 {
                     sensorAction += 2;
                 }
 
                 //低位加1
-                if (sensorActionsStr[sensorValue*2 + 1] == 1)
+                if (sensorActionsStr[sensorValue * 2 + 1] == 1)
                 {
                     sensorAction += 1;
                 }
@@ -814,12 +988,28 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             return sensorActions;
         }
 
+        /// <summary>
+        /// 打印路径
+        /// </summary>
+        /// <returns></returns>
+        public String PrintRoute()
+        {
+            StringBuilder sBuilder = new StringBuilder();
+            foreach (var routeStep in this.route)
+            {
+                sBuilder.Append("{"+routeStep[0]+","+routeStep[1]+"},");
+            }
+
+            return sBuilder.ToString().TrimEnd(',');
+        }
+
     }
 
     /// <summary>
     /// 机器人控制器
     /// 有六个传感器，前面3个，后面1个，左边1个右边1个  移动方式有四种：不动 00 前移01  左转 10 右转11
     /// 使用128位 表示输入输出
+    /// 这里有一个明显的缺点，即只根据当前的传感器来移动，没有考虑上下文 即即使同一个传感器输入，但考虑之前的移动，当前的移动应该有所不同
     /// </summary>
     public class RobotController : AllOnesGA
     {
@@ -841,11 +1031,64 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <param name="crossoverRate">交叉率</param>
         /// <param name="elitismCount">保留的最优个数</param>
         /// <param name="tournamentSize">每次锦标赛种群选择的size</param>
-        public RobotController(int populationSize, double mutationRate, double crossoverRate, int elitismCount,int tournamentSize)
+        public RobotController(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int tournamentSize)
             : base(populationSize, mutationRate, crossoverRate, elitismCount)
         {
             this.TournamentSize = tournamentSize;
         }
+
+        /// <summary>
+        /// 计算适应度
+        /// </summary>
+        /// <param name="individual"></param>
+        /// <param name="maze"></param>
+        /// <returns></returns>
+        public virtual double CalcFitness(Individual individual,Maze maze)
+        {
+            int[] chromosome = individual.GetChromosome();
+            //最大100步
+            Robot robot = new Robot(chromosome,maze,100);
+            robot.Run();
+            //走的步数越多，适应度越大
+            int fitness = maze.ScoreRoute(robot.GetRoute());
+            individual.SetFitness(fitness);
+            return fitness;
+        }
+
+        /// <summary>
+        /// 评估种群
+        /// </summary>
+        /// <param name="population"></param>
+        /// <param name="maze"></param>
+        public virtual void EvalPopulation(Population population, Maze maze)
+        {
+            double populationFitness = 0;
+            foreach (var individual in population.GetIndividuals())
+            {
+                populationFitness += this.CalcFitness(individual, maze);
+            }
+
+            population.SetPopulationFitness(populationFitness);
+        }
+
+        /// <summary>
+        /// 是否满足结束条件
+        /// </summary>
+        /// <param name="generation"></param>
+        /// <param name="maxGeneration"></param>
+        /// <returns></returns>
+        public virtual bool IsTerminationConditionMet(int generation, int maxGeneration)
+        {
+            if (generation > maxGeneration)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// 测试主体
@@ -874,32 +1117,44 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             //初始化迷宫
             Maze maze = new Maze(mazeArr);
 
-            RobotController ga = new RobotController(200,0.05,0.9,2,10);
+            RobotController ga = new RobotController(200, 0.05, 0.9, 2, 10);
 
             //初始化种群
             Population population = ga.InitPopulation(128);
 
             //评估种群
-
+            ga.EvalPopulation(population,maze);
 
             int generation = 1;
 
-            while (false)
+            while (!ga.IsTerminationConditionMet(generation,MaxGenerations))
             {
                 //打印最优个体
+                if (generation%50 == 0)
+                {
+                    population.Sort();
+                    var indivial = population.GetFittest(0);
+                    NLogHelper.Info("G"+generation+" best solution ="+indivial+" 适应度="+indivial.GetFitness());
+                }
 
-                //应用交叉
+                //应用交叉 交叉中做了排序
 
                 //评估种群
+                ga.EvalPopulation(population, maze);
 
-                //应用变异
+                //应用变异 变异中做了排序
+                population = ga.MutatePopulation(population);
 
                 //评估种群
+                ga.EvalPopulation(population, maze);
 
                 generation++;
             }
 
+            population.Sort();
+            var fitestItem = population.GetFittest(0);
             //打印最终结果
+            NLogHelper.Info("最终结果："+fitestItem+"  适应度="+fitestItem.GetFitness());
         }
     }
 
@@ -949,7 +1204,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                     if (this.maze[rowIndex][colIndex] == 2)
                     {
                         //2表示起点
-                        this.startPosition = new int[] { colIndex, rowIndex };
+                        this.startPosition = new int[] { rowIndex, colIndex };
                         return this.startPosition;
                     }
                 }
@@ -971,7 +1226,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                 return 1;
             }
 
-            return this.maze[y][x];
+            return this.maze[x][y];
         }
 
         /// <summary>
@@ -991,7 +1246,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <returns></returns>
         public int GetMaxX()
         {
-            return this.maze[0].Length - 1;
+            return this.maze.Length - 1;
         }
 
         /// <summary>
@@ -1000,7 +1255,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <returns></returns>
         public int GetMaxY()
         {
-            return this.maze.Length - 1;
+            return this.maze[0].Length - 1;
         }
 
         /// <summary>
@@ -1013,18 +1268,18 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         {
             int score = 0;
 
-            bool[,] visited = new bool[this.GetMaxY() + 1, this.GetMaxX() + 1];
+            bool[,] visited = new bool[this.GetMaxX() + 1, this.GetMaxY() + 1];
 
             foreach (var routeStep in route)
             {
                 int[] step = routeStep;
 
-                if (this.maze[step[1]][step[2]] == 3 && visited[step[1], step[0]] == false)
+                if (this.maze[step[0]][step[1]] == 3 && visited[step[0], step[1]] == false)
                 {
                     //正确的移动加分
                     score++;
                     //移除reward
-                    visited[step[1], step[0]] = true;
+                    visited[step[0], step[1]] = true;
                 }
             }
 
