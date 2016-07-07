@@ -105,10 +105,11 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// 初始化种群大小
         /// </summary>
         /// <param name="chromosomeLength"></param>
+        /// <param name="isRand">是否随机初始化</param>
         /// <returns></returns>
-        public virtual Population InitPopulation(int chromosomeLength)
+        public virtual Population InitPopulation(int chromosomeLength,bool isRand = true)
         {
-            Population population = new Population(this.PopulationSize, chromosomeLength);
+            Population population = new Population(this.PopulationSize, chromosomeLength,isRand);
             return population;
         }
 
@@ -367,20 +368,35 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <summary>
         /// 构造函数
         /// 随机初始化
+        ///  在旅行商问题中，一个合格的染色体 如 1，2，3、、、
+        /// 包含所有的城市基因，且不能有重复
+        /// 基因的顺序表示访问的顺序
         /// </summary>
         /// <param name="chromosomeLength">染色体长度</param>
-        public Individual(int chromosomeLength)
+        /// <param name="isRandom">true 随机初始化；false 顺序初始化</param>
+        public Individual(int chromosomeLength,bool isRandom = true)
         {
-            this.chromosome = new int[chromosomeLength];
-            for (int gene = 0; gene < chromosomeLength; gene++)
+            if (isRandom)
             {
-                if (rnd.NextDouble() > 0.5)
+                this.chromosome = new int[chromosomeLength];
+                for (int gene = 0; gene < chromosomeLength; gene++)
                 {
-                    this.chromosome[gene] = 1;
+                    if (rnd.NextDouble() > 0.5)
+                    {
+                        this.chromosome[gene] = 1;
+                    }
+                    else
+                    {
+                        this.chromosome[gene] = 0;
+                    }
                 }
-                else
+            }
+            else
+            {
+                this.chromosome = new int[chromosomeLength];
+                for (int gene = 0; gene < chromosomeLength; gene++)
                 {
-                    this.chromosome[gene] = 0;
+                    this.chromosome[gene] = gene;
                 }
             }
         }
@@ -491,12 +507,13 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// </summary>
         /// <param name="populationSize">种群大小</param>
         /// <param name="chromosomeLength">染色体长度</param>
-        public Population(int populationSize, int chromosomeLength)
+        /// <param name="isRand">是否随机初始化</param>
+        public Population(int populationSize, int chromosomeLength,bool isRand=true)
         {
             this.population = new Individual[populationSize];
             for (int i = 0; i < populationSize; i++)
             {
-                Individual individual = new Individual(chromosomeLength);
+                Individual individual = new Individual(chromosomeLength,isRand);
                 this.population[i] = individual;
             }
         }
@@ -1010,6 +1027,11 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
     /// 有六个传感器，前面3个，后面1个，左边1个右边1个  移动方式有四种：不动 00 前移01  左转 10 右转11
     /// 使用128位 表示输入输出
     /// 这里有一个明显的缺点，即只根据当前的传感器来移动，没有考虑上下文 即即使同一个传感器输入，但考虑之前的移动，当前的移动应该有所不同
+    /// 
+    /// 本例中使用了锦标赛选择和单点交叉
+    /// 选择的标准仍然是适应度越高，参与交叉的概率越大
+    /// 单点交叉：随机选择一个交叉位置，这个位置之前的来自parent1，这个位置之后来自parent2
+    /// 两点交叉：随机选择两个交叉位置，两个之间的部分来自parent1,其他部分来自parent2
     /// </summary>
     public class RobotController : AllOnesGA
     {
@@ -1019,7 +1041,9 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         public static int MaxGenerations = 1000;
 
         /// <summary>
-        /// 每次锦标赛种群选择的size  tournament selection
+        /// 每次锦标赛种群选择的size  tournament selection  锦标赛选择用于交叉个体参与锦标赛的个数
+        /// 锦标赛是随机选择TournamentSize个个体，然后从中选择适应度最好的
+        /// 一种优化方案是设置一个概率p,如0.6， p的概率选择最好的，如果没有选择最好的，再p的概率选择第二好的，直到选到最后一个
         /// </summary>
         public int TournamentSize;
 
@@ -1089,6 +1113,80 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             }
         }
 
+        /// <summary>
+        /// 使用锦标赛选择个体  锦标赛是随机选择TournamentSize个个体，然后从中选择适应度最好的
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        public override Individual SelectParent(Population population)
+        {
+            //创建锦标赛团体
+            Population tournament = new Population(this.TournamentSize);
+            //种群重排
+            population.Shuffle();
+
+            for (int i = 0; i < this.TournamentSize; i++)
+            {
+                Individual tournamentIndividual = population.GetIndividual(i);
+                tournament.SetIndividual(i,tournamentIndividual);
+            }
+
+            // 锦标赛是随机选择TournamentSize个个体，然后从中选择适应度最好的
+            // 一种优化方案是设置一个概率p,如0.6， p的概率选择最好的，如果没有选择最好的，再p的概率选择第二好的，直到选到最后一个
+
+            tournament.Sort();
+            return tournament.GetFittest(0);
+        }
+
+        /// <summary>
+        /// 选择和交叉
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        public override Population CrossoverPopulation(Population population)
+        {
+            //创建结果
+            Population resultPopulation = new Population(population.Size());
+
+            for (int populationIndex = 0; populationIndex < population.Size(); populationIndex++)
+            {
+                //因为selectParent会重排，所以每次循环要排序 这里实际上还是可以优化的
+                //优化方法：创建population的副本，参与selectparent
+                population.Sort();
+                Individual parent1 = population.GetFittest(populationIndex);
+                if (Rand.NextDouble() < this.CrossoverRate && populationIndex >= this.ElitismCount)
+                {
+                    //需要交叉
+                    //初始化后代 
+                    Individual offspring = new Individual(parent1.GetChromosomeLength());
+                    //选择第二个父
+                    Individual parent2 = this.SelectParent(population);
+
+                    //获取随机交换点， 可以考虑交换点不要在最前或最后的位置
+                    int swapPoint = (int) (Rand.NextDouble()*(parent1.GetChromosomeLength() + 1));
+                    for (int geneIndex = 0; geneIndex < parent1.GetChromosomeLength(); geneIndex++)
+                    {
+                        if (geneIndex < swapPoint)
+                        {
+                            offspring.SetGene(geneIndex, parent1.GetGene(geneIndex));
+                        }
+                        else
+                        {
+                            offspring.SetGene(geneIndex,parent2.GetGene(geneIndex));
+                        }
+                    }
+
+                    resultPopulation.SetIndividual(populationIndex,offspring);
+                }
+                else
+                {
+                    resultPopulation.SetIndividual(populationIndex,parent1);
+                }
+            }
+
+            return resultPopulation;
+        }
+
 
         /// <summary>
         /// 测试主体
@@ -1137,7 +1235,10 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                     NLogHelper.Info("G"+generation+" best solution ="+indivial+" 适应度="+indivial.GetFitness());
                 }
 
-                //应用交叉 交叉中做了排序
+                //应用交叉 交叉中做了排序 
+                //原来的交叉是可以的，这里使用了一个新的交叉方案
+                population = ga.CrossoverPopulation(population);
+
 
                 //评估种群
                 ga.EvalPopulation(population, maze);
@@ -1153,7 +1254,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
 
             population.Sort();
             var fitestItem = population.GetFittest(0);
-            //打印最终结果
+            //打印最终结果  本问题中最优解适应度29
             NLogHelper.Info("最终结果："+fitestItem+"  适应度="+fitestItem.GetFitness());
         }
     }
@@ -1291,6 +1392,150 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
 
     }
 
+
+    #endregion
+
+    #region 旅行商问题
+
+    /*
+     * 有一个推销员，要到n个城市推销商品，他要找出一个包含所有n个城市的具有最短路程的环路。
+     * 除起点外，每个城市只能访问一次
+     * 
+     * 一种解决方案：随机找一个起始点， 找到离该点最近的点，前进到该点，再找到离当前位置最近的点，直到结束
+     */
+
+    public class TravelingSalesman : RobotController
+    {
+        /// <summary>
+        /// 最大的代数
+        /// </summary>
+        public const int MaxGenerations = 3000;
+
+        /// <summary>
+        /// 测试方法
+        /// </summary>
+        public static void TestMain()
+        {
+            //城市个数
+            int numCities = 100;
+            City[] cities = new City[numCities];
+
+            //随机初始化位置
+            for (int i = 0; i < numCities; i++)
+            {
+                int xPos = (int) (Rand.NextDouble()*100);
+                int yPos = (int)(Rand.NextDouble() * 100);
+                cities[i] = new City(xPos,yPos);
+            }
+
+            TravelingSalesman ga = new TravelingSalesman(100,0.001,0.9,2,5);
+
+            //顺序初始化
+            Population population = ga.InitPopulation(cities.Length,false);
+
+            //评估种群
+
+
+            //当前的代数
+            int generation = 1;
+            //是否结束条件满足
+            while (!ga.IsTerminationConditionMet(generation, MaxGenerations))
+            {
+                //打印最好的个体
+
+
+                //应用交叉
+
+
+                //评估种群
+
+
+                //应用变异
+
+
+                //评估种群
+
+
+                //增加代数
+                generation++;
+            }
+
+            //打印最终结果
+
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="populationSize"></param>
+        /// <param name="mutationRate"></param>
+        /// <param name="crossoverRate"></param>
+        /// <param name="elitismCount"></param>
+        /// <param name="tournamentSize"></param>
+        public TravelingSalesman(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int tournamentSize) : base(populationSize, mutationRate, crossoverRate, elitismCount, tournamentSize)
+        {
+
+        }
+    }
+
+    /// <summary>
+    /// 城市
+    /// </summary>
+    public class City
+    {
+        /// <summary>
+        /// x坐标
+        /// </summary>
+        private int x;
+        /// <summary>
+        /// y坐标
+        /// </summary>
+        private int y;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public City(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
+        /// <summary>
+        /// 距离·
+        /// </summary>
+        /// <param name="city"></param>
+        /// <returns></returns>
+        public double DistanceFrom(City city)
+        {
+            double distance =
+                System.Math.Sqrt((city.GetX() - this.x)*(city.GetX() - this.x) +
+                                 (city.GetY() - this.y)*(city.GetY() - y));
+
+            return distance;
+        }
+
+        /// <summary>
+        /// 获取x坐标
+        /// </summary>
+        /// <returns></returns>
+        public int GetX()
+        {
+            return this.x;
+        }
+
+        /// <summary>
+        /// 获取y坐标
+        /// </summary>
+        /// <returns></returns>
+        public int GetY()
+        {
+            return this.y;
+        }
+
+    }
 
     #endregion
 
