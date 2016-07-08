@@ -458,6 +458,25 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
 
         /// <summary>
+        /// 是否包含指定基因
+        /// </summary>
+        /// <param name="gene"></param>
+        /// <returns></returns>
+        public bool ContainsGene(int gene)
+        {
+            for (int i = 0; i < this.chromosome.Length; i++)
+            {
+                if (this.chromosome[i] == gene)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
         /// 覆盖tostring
         /// </summary>
         /// <returns></returns>
@@ -1187,7 +1206,6 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             return resultPopulation;
         }
 
-
         /// <summary>
         /// 测试主体
         /// </summary>
@@ -1402,6 +1420,9 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
      * 除起点外，每个城市只能访问一次
      * 
      * 一种解决方案：随机找一个起始点， 找到离该点最近的点，前进到该点，再找到离当前位置最近的点，直到结束
+     * 
+     * 采用Ordered cross, 假设要从parent1和parent2中产生offspring，
+     *      第一步：从parent1中产生一个子集，加入offspring中相同的位置，然后从parent2对应的子集分割点之后遍历，加入offspring从头开始的位置
      */
 
     public class TravelingSalesman : RobotController
@@ -1410,6 +1431,189 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// 最大的代数
         /// </summary>
         public const int MaxGenerations = 3000;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="populationSize"></param>
+        /// <param name="mutationRate"></param>
+        /// <param name="crossoverRate"></param>
+        /// <param name="elitismCount"></param>
+        /// <param name="tournamentSize"></param>
+        public TravelingSalesman(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int tournamentSize)
+            : base(populationSize, mutationRate, crossoverRate, elitismCount, tournamentSize)
+        {
+
+        }
+
+        /// <summary>
+        /// 计算适应度
+        /// </summary>
+        /// <param name="individual"></param>
+        /// <param name="cities"></param>
+        /// <returns></returns>
+        public virtual double CalcFitness(Individual individual, City[] cities)
+        {
+            Route route = new Route(individual, cities);
+            // 路径越长适应度越低， 但倒数这个方法是值得商量的
+            double fitness = 1 / route.GetDistance();
+
+            //存储适应度
+            individual.SetFitness(fitness);
+            return fitness;
+        }
+
+        /// <summary>
+        /// 计算种群的适应度
+        /// </summary>
+        /// <param name="population"></param>
+        /// <param name="cities"></param>
+        public virtual void EvalPopulation(Population population, City[] cities)
+        {
+            double populationFitness = 0;
+            //计算每个个体的适应度
+            foreach (Individual individual in population.GetIndividuals())
+            {
+                populationFitness += this.CalcFitness(individual, cities);
+            }
+
+            //种群的适应度为平均适应度，之前均为适应度之和
+            double avgFitness = populationFitness / population.Size();
+            population.SetPopulationFitness(avgFitness);
+        }
+
+        /// <summary>
+        /// 交叉
+        /// 采用Ordered cross, 假设要从parent1和parent2中产生offspring，
+        ///       第一步：从parent1中产生一个子集，加入offspring中相同的位置，然后从parent2对应的子集分割点之后遍历，加入offspring从头开始的位置
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        public override Population CrossoverPopulation(Population population)
+        {
+            //创建一个新的种群
+            Population resultPopulation = new Population(population.Size());
+
+            //遍历当前种群
+            for (int populationIndex = 0; populationIndex < population.Size(); populationIndex++)
+            {
+                //从高到低排序  放到这个位置是因为后面种群随机重排了
+                population.Sort();
+                //获取parent1
+                Individual parent1 = population.GetFittest(populationIndex);
+                
+                //应用交叉
+                if (Rand.NextDouble() < this.CrossoverRate && populationIndex >= this.ElitismCount)
+                {
+                    //找到parent2 使用锦标赛选择
+                    Individual parent2 = this.SelectParent(population);
+
+                    //创建空白后代
+                    int[] offSpringChromosome = new int[parent1.GetChromosomeLength()];
+                    for (int i = 0; i < offSpringChromosome.Length; i++)
+                    {
+                        //空白后代
+                        offSpringChromosome[i] = -1;
+                    }
+
+                    Individual offspring = new Individual(offSpringChromosome);
+
+                    //从parent1中获取连续子集
+                    int subPos1 = (int) (Rand.NextDouble()*parent1.GetChromosomeLength());
+                    int subPos2 = (int) (Rand.NextDouble() * parent1.GetChromosomeLength());
+
+                    int startPos = System.Math.Min(subPos1, subPos2);
+                    int endPos = System.Math.Max(subPos1, subPos2);
+                    //从parent1中取连续子集
+                    for (int i = startPos; i < endPos; i++)
+                    {
+                        offspring.SetGene(i,parent1.GetGene(i));
+                    }
+
+                    //遍历parent2分割后半部分
+                    for (int i = endPos; i < parent2.GetChromosomeLength(); i++)
+                    {
+                        if (!offspring.ContainsGene(parent2.GetGene(i)))
+                        {
+                            for (int j = 0; j < offspring.GetChromosomeLength(); j++)
+                            {
+                                if (offspring.GetGene(j) < 0)
+                                {
+                                    offspring.SetGene(j,parent2.GetGene(i));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    //遍历parent2前半部分
+                    for (int i = 0; i < endPos; i++)
+                    {
+                        if (!offspring.ContainsGene(parent2.GetGene(i)))
+                        {
+                            for (int j = 0; j < offspring.GetChromosomeLength(); j++)
+                            {
+                                if (offspring.GetGene(j) < 0)
+                                {
+                                    offspring.SetGene(j, parent2.GetGene(i));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    resultPopulation.SetIndividual(populationIndex,offspring);
+                }
+                else
+                {
+                    resultPopulation.SetIndividual(populationIndex,parent1);
+                }
+            }
+
+            return resultPopulation;
+        }
+
+        /// <summary>
+        /// 根据变异率选择变异点，然后再随机找一个进行交换 这叫做 swap mutation
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        public override Population MutatePopulation(Population population)
+        {
+            Population resultPopulation = new Population(this.PopulationSize);
+
+            //从高到低排序
+            population.Sort();
+            //循环
+            for (int populationIndex = 0; populationIndex < population.Size(); populationIndex++)
+            {
+                Individual individual = population.GetFittest(populationIndex);
+
+                if (populationIndex >= this.ElitismCount)
+                {
+                    for (int geneIndex = 0; geneIndex < individual.GetChromosomeLength(); geneIndex++)
+                    {
+                        if (Rand.NextDouble() < this.MutationRate)
+                        {
+                            int secondIndex = (int) (Rand.NextDouble()*individual.GetChromosomeLength());
+                            int gene1 = individual.GetGene(secondIndex);
+                            int gene2 = individual.GetGene(geneIndex);
+                            //交换
+                            individual.SetGene(geneIndex,gene1);
+                            individual.SetGene(secondIndex,gene2);
+                        }
+                    }
+
+                    resultPopulation.SetIndividual(populationIndex, individual);
+                }
+                else
+                {
+                    resultPopulation.SetIndividual(populationIndex,individual);
+                }
+            }
+
+            return resultPopulation;
+        }
 
         /// <summary>
         /// 测试方法
@@ -1434,7 +1638,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             Population population = ga.InitPopulation(cities.Length,false);
 
             //评估种群
-
+            ga.EvalPopulation(population,cities);
 
             //当前的代数
             int generation = 1;
@@ -1442,18 +1646,24 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             while (!ga.IsTerminationConditionMet(generation, MaxGenerations))
             {
                 //打印最好的个体
+                if (generation%50 == 0)
+                {
+                    population.Sort();
+                    Route route = new Route(population.GetFittest(0),cities);
+                    NLogHelper.Info("G" + generation+", best distance:"+route.GetDistance());
+                }
 
-
-                //应用交叉
-
+                //应用交叉 交叉中做了排序
+                population = ga.CrossoverPopulation(population);
 
                 //评估种群
+                ga.EvalPopulation(population,cities);
 
-
-                //应用变异
-
+                //应用变异 变异中做了排序
+                ga.MutatePopulation(population);
 
                 //评估种群
+                ga.EvalPopulation(population,cities);
 
 
                 //增加代数
@@ -1461,21 +1671,11 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             }
 
             //打印最终结果
-
+            population.Sort();
+            Route resultRoute = new Route(population.GetFittest(0), cities);
+            NLogHelper.Info("最终结果：G" + generation + ", best distance:" + resultRoute.GetDistance());
         }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="populationSize"></param>
-        /// <param name="mutationRate"></param>
-        /// <param name="crossoverRate"></param>
-        /// <param name="elitismCount"></param>
-        /// <param name="tournamentSize"></param>
-        public TravelingSalesman(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int tournamentSize) : base(populationSize, mutationRate, crossoverRate, elitismCount, tournamentSize)
-        {
-
-        }
     }
 
     /// <summary>
@@ -1536,6 +1736,65 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
 
     }
+
+    /// <summary>
+    /// 可以以路径的长度作为适应度，长度越大适应度越小，长度越小，适应度越大
+    /// </summary>
+    public class Route
+    {
+        /// <summary>
+        /// 路径
+        /// </summary>
+        private City[] route;
+
+        /// <summary>
+        /// 距离
+        /// </summary>
+        private double distance = -1;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="individual"></param>
+        /// <param name="cities"></param>
+        public Route(Individual individual, City[] cities)
+        {
+            //获取染色体
+            int[] chromosome = individual.GetChromosome();
+            //创建路径
+            this.route = new City[cities.Length];
+
+            for (int geneIndex = 0; geneIndex < chromosome.Length; geneIndex++)
+            {
+                this.route[geneIndex] = cities[chromosome[geneIndex]];
+            }
+        }
+
+        /// <summary>
+        /// 获取距离
+        /// </summary>
+        /// <returns></returns>
+        public double GetDistance()
+        {
+            if (this.distance > 0)
+            {
+                return this.distance;
+            }
+
+            //循环路径，计算距离
+            double totalDistance = 0;
+
+            for (int cityIndex = 0; cityIndex+1 < this.route.Length; cityIndex++)
+            {
+                totalDistance += this.route[cityIndex].DistanceFrom(this.route[cityIndex + 1]);
+            }
+            //回到原点
+            totalDistance += this.route[this.route.Length - 1].DistanceFrom(this.route[0]);
+            return totalDistance;
+        }
+
+    }
+
 
     #endregion
 
