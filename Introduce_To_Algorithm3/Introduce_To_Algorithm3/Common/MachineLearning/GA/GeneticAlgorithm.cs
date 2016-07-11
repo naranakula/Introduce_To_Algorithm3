@@ -1798,6 +1798,286 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
 
     #endregion
 
+    #region 调度问题
+
+    /// <summary>
+    /// 调度
+    /// </summary>
+    public class Scheduling:TravelingSalesman
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="populationSize"></param>
+        /// <param name="mutationRate"></param>
+        /// <param name="crossoverRate"></param>
+        /// <param name="elitismCount"></param>
+        /// <param name="tournamentSize"></param>
+        public Scheduling(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int tournamentSize) : base(populationSize, mutationRate, crossoverRate, elitismCount, tournamentSize)
+        {
+        }
+
+        /// <summary>
+        /// 使用锦标赛选择个体  锦标赛是随机选择TournamentSize个个体，然后从中选择适应度最好的
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        public override Individual SelectParent(Population population)
+        {
+            //创建锦标赛团体
+            Population tournament = new Population(this.TournamentSize);
+            //种群重排
+            population.Shuffle();
+
+            for (int i = 0; i < this.TournamentSize; i++)
+            {
+                Individual tournamentIndividual = population.GetIndividual(i);
+                tournament.SetIndividual(i, tournamentIndividual);
+            }
+
+            // 锦标赛是随机选择TournamentSize个个体，然后从中选择适应度最好的
+            // 一种优化方案是设置一个概率p,如0.6， p的概率选择最好的，如果没有选择最好的，再p的概率选择第二好的，直到选到最后一个
+
+            tournament.Sort();
+            return tournament.GetFittest(0);
+        }
+
+        /// <summary>
+        /// 选择和交叉
+        /// 交叉采用各个基因随机从两个父亲中选择一个
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        public virtual Population CrossoverPopulation(Population population)
+        {
+            Population newPopulation = new Population(population.Size());
+
+            //按照适应度从高到低排序
+            population.Sort();
+            for (int i = 0; i < population.Size(); i++)
+            {
+                //按照适应度从高到低 
+                //注：这种实现是有性能问题的，不要每次getFittest排序
+                Individual parent1 = population.GetFittest(i);
+                //ElitismCount表示直接保留到下一代的当前最优解的个数
+                if (Rand.NextDouble() < this.CrossoverRate && i >= this.ElitismCount)
+                {
+                    //初始化后台
+                    Individual offspring = new Individual(parent1.GetChromosomeLength());
+                    //找到第二个父类 
+                    Individual parent2 = SelectParent(population);
+                    //从两个父类中随机选择每个基因，来交叉
+                    for (int geneIndex = 0; geneIndex < parent1.GetChromosomeLength(); geneIndex++)
+                    {
+                        if (Rand.NextDouble() < 0.5)
+                        {
+                            offspring.SetGene(geneIndex, parent1.GetGene(geneIndex));
+                        }
+                        else
+                        {
+                            offspring.SetGene(geneIndex, parent2.GetGene(geneIndex));
+                        }
+                    }
+
+                    newPopulation.SetIndividual(i, offspring);
+                }
+                else
+                {
+                    //保留前elitismCount个最好的个体
+                    newPopulation.SetIndividual(i, parent1);
+                }
+            }
+
+            return newPopulation;
+        }
+
+        /// <summary>
+        /// 主测试程序
+        /// </summary>
+        public static void TestMain()
+        {
+            
+        }
+
+    }
+
+    /// <summary>
+    /// 教室
+    /// </summary>
+    public class Room
+    {
+        /// <summary>
+        /// 房间id
+        /// </summary>
+        public int RoomId { get; set; }
+
+        /// <summary>
+        /// 房间编码
+        /// </summary>
+        public string RoomNumber { get; set; }
+
+        /// <summary>
+        /// 教室容纳的人数
+        /// </summary>
+        public int Capacity { get; set; }
+        
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Room()
+        {
+            
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <param name="roomNumber"></param>
+        /// <param name="capacity"></param>
+        public Room(int roomId, String roomNumber, int capacity)
+        {
+            this.RoomId = roomId;
+            this.RoomNumber = roomNumber;
+            this.Capacity = capacity;
+        }
+
+    }
+
+    /// <summary>
+    /// 时间槽
+    /// </summary>
+    public class Timeslot
+    {
+        /// <summary>
+        /// 时间槽id
+        /// </summary>
+        public int TimeslotId { get; set; }
+
+        /// <summary>
+        /// 时间槽  格式：  Mon 9:00 – 10:00
+        /// </summary>
+        public string TheTimeslot { get; set; }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Timeslot()
+        {
+            
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="timeslotId"></param>
+        /// <param name="timeslot"></param>
+        public Timeslot(int timeslotId, String timeslot)
+        {
+            this.TimeslotId = timeslotId;
+            this.TheTimeslot = timeslot;
+        }
+
+    }
+
+    /// <summary>
+    /// 教授
+    /// </summary>
+    public class Professor
+    {
+        /// <summary>
+        /// 教授id
+        /// </summary>
+        public int ProfessorId { get; set; }
+
+        /// <summary>
+        /// 教授名
+        /// </summary>
+        public String ProfessorName { get; set; }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Professor()
+        {
+            
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="professorId"></param>
+        /// <param name="professorName"></param>
+        public Professor(int professorId, String professorName)
+        {
+            this.ProfessorId = professorId;
+            this.ProfessorName = professorName;
+        }
+
+    }
+
+    /// <summary>
+    /// 课程 如：Calculus 101
+    /// </summary>
+    public class Course
+    {
+        /// <summary>
+        /// 课程id
+        /// </summary>
+        public int CourseId { get; set; }
+
+        /// <summary>
+        /// 课程代码
+        /// </summary>
+        public String CourseCode { get; set; }
+
+        /// <summary>
+        /// 课程名称
+        /// </summary>
+        public String CourseName { get; set; }
+
+        /// <summary>
+        /// 教授这门课的老师
+        /// </summary>
+        public int[] ProfessorIds { get; set; }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Course()
+        {
+            
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="courseCode"></param>
+        /// <param name="courseName"></param>
+        /// <param name="professorIds"></param>
+        public Course(int courseId, String courseCode, String courseName, int[] professorIds)
+        {
+            this.CourseId = courseId;
+            this.CourseCode = courseCode;
+            this.CourseName = courseName;
+            this.ProfessorIds = professorIds;
+        }
+
+        /// <summary>
+        /// 返回随机的教授id
+        /// </summary>
+        /// <returns></returns>
+        public int GetRandomProfessorId()
+        {
+            int professorId = ProfessorIds[(int) (ProfessorIds.Length*new Random().NextDouble())];
+            return professorId;
+        }
+    }
+
+
+    #endregion
+
     #region 遗传算法接口
 
     /// <summary>
