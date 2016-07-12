@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Odbc;
+using System.Linq;
 using System.Text;
+using System.Web.Hosting;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using NPOI.SS.Formula.Functions;
 
@@ -402,6 +404,48 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
 
         /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="timetable"></param>
+        public Individual(Timetable timetable)
+        {
+            int numClasses = timetable.GetNumClasses();
+
+            // 1 for timeslot 1 for room 1 for professor
+            int chromosomeLength = numClasses*3;
+            //创建随机个体
+            int[] newChromosome = new int[chromosomeLength];
+
+            int chromosomeIndex = 0;
+            //Loop through groups
+
+            foreach (var group in timetable.GetGroupAsArray())
+            {
+                foreach (int courseId in group.CourseIds)
+                {
+                    //添加随机时间
+                    int timeslotId = timetable.GetRandomTimeslot().TimeslotId;
+                    newChromosome[chromosomeIndex] = timeslotId;
+                    chromosomeIndex++;
+
+                    //添加随机room
+                    int roomId = timetable.GetRandomRoom().RoomId;
+                    newChromosome[chromosomeIndex] = roomId;
+                    chromosomeIndex++;
+
+                    //添加随机professor
+                    Course course = timetable.GetCourse(courseId);
+                    newChromosome[chromosomeIndex] = course.GetRandomProfessorId();
+                    chromosomeIndex++;
+                }
+            }
+
+
+            this.chromosome = newChromosome;
+        }
+
+
+        /// <summary>
         /// 返回染色体
         /// </summary>
         /// <returns></returns>
@@ -536,6 +580,24 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                 this.population[i] = individual;
             }
         }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="populationSize"></param>
+        /// <param name="timetable"></param>
+        public Population(int populationSize, Timetable timetable)
+        {
+            //初始化种群
+            this.population = new Individual[populationSize];
+
+            for (int individualIndex = 0; individualIndex < populationSize; individualIndex++)
+            {
+                Individual individual = new Individual(timetable);
+                this.population[individualIndex] = individual;
+            }
+        }
+
 
         /// <summary>
         /// 获取种群的底层表示
@@ -1892,11 +1954,168 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
 
         /// <summary>
+        /// 初始化种群
+        /// </summary>
+        /// <param name="timetable"></param>
+        /// <returns></returns>
+        public virtual Population InitPopulation(Timetable timetable)
+        {
+            //初始化种群
+            Population population = new Population(this.PopulationSize,timetable);
+            return population;
+        }
+
+        /// <summary>
+        /// 计算适应度
+        /// </summary>
+        /// <param name="individual"></param>
+        /// <param name="timetable"></param>
+        /// <returns></returns>
+        public virtual double CalcFitness(Individual individual, Timetable timetable)
+        {
+            //创建一个新的timetable
+            Timetable threadTimetable = new Timetable(timetable);
+            threadTimetable.CreateClasses(individual);
+
+            //计算适应度
+            int clashes = threadTimetable.CalcClashes();
+            double fitness = 1.0/(clashes + 1.0);
+
+            individual.SetFitness(fitness);
+
+            return fitness;
+        }
+
+        /// <summary>
+        /// 计算种群适应度
+        /// </summary>
+        /// <param name="population"></param>
+        /// <param name="timetable"></param>
+        public virtual void EvalPopulation(Population population, Timetable timetable)
+        {
+            double populationFitness = 0;
+
+            //循环种群计算适应度
+            foreach (Individual individual in population.GetIndividuals())
+            {
+                populationFitness += this.CalcFitness(individual, timetable);
+            }
+
+            population.SetPopulationFitness(populationFitness);
+        }
+
+        /// <summary>
+        /// 是否满足结束条件
+        /// </summary>
+        /// <param name="population"></param>
+        /// <returns></returns>
+        public virtual bool IsTerminationConditionMet(Population population)
+        {
+            return System.Math.Abs(population.GetFittest(0).GetFitness() - 1.0) < 0.001;
+        }
+
+
+        /// <summary>
         /// 主测试程序
         /// </summary>
         public static void TestMain()
         {
-            
+            // TODO: Create Timetable and initialize with all the available courses, rooms, timeslots, professors, modules, and groups
+            // Create timetable
+            Timetable timetable = new Timetable();
+            // Set up rooms
+            timetable.AddRoom(1, "A1", 15);
+            timetable.AddRoom(2, "B1", 30);
+            timetable.AddRoom(4, "D1", 20);
+            timetable.AddRoom(5, "F1", 25);
+
+            // Set up timeslots
+            timetable.AddTimeslot(1, "Mon 9:00 - 11:00");
+            timetable.AddTimeslot(2, "Mon 11:00 - 13:00");
+            timetable.AddTimeslot(3, "Mon 13:00 - 15:00");
+            timetable.AddTimeslot(4, "Tue 9:00 - 11:00");
+            timetable.AddTimeslot(5, "Tue 11:00 - 13:00");
+            timetable.AddTimeslot(6, "Tue 13:00 - 15:00");
+            timetable.AddTimeslot(7, "Wed 9:00 - 11:00");
+            timetable.AddTimeslot(8, "Wed 11:00 - 13:00");
+            timetable.AddTimeslot(9, "Wed 13:00 - 15:00");
+            timetable.AddTimeslot(10, "Thu 9:00 - 11:00");
+            timetable.AddTimeslot(11, "Thu 11:00 - 13:00");
+            timetable.AddTimeslot(12, "Thu 13:00 - 15:00");
+            timetable.AddTimeslot(13, "Fri 9:00 - 11:00");
+            timetable.AddTimeslot(14, "Fri 11:00 - 13:00");
+            timetable.AddTimeslot(15, "Fri 13:00 - 15:00");
+
+
+            // Set up professors
+            timetable.AddProfessor(1, "Dr P Smith");
+            timetable.AddProfessor(2, "Mrs E Mitchell");
+            timetable.AddProfessor(3, "Dr R Williams");
+            timetable.AddProfessor(4, "Mr A Thompson");
+
+            // Set up modules and define the professors that teach them
+            timetable.AddCourse(1, "cs1", "Computer Science", new int[] { 1, 2 });
+            timetable.AddCourse(2, "en1", "English", new int[] { 1, 3 });
+            timetable.AddCourse(3, "ma1", "Maths", new int[] { 1, 2 });
+            timetable.AddCourse(4, "ph1", "Physics", new int[] { 3, 4 });
+            timetable.AddCourse(5, "hi1", "History", new int[] { 4 });
+            timetable.AddCourse(6, "dr1", "Drama", new int[] { 1, 4 });
+            // Set up student groups and the modules they take.
+            timetable.AddGroup(1, 10, new int[] { 1, 3, 4 });
+            timetable.AddGroup(2, 30, new int[] { 2, 3, 5, 6 });
+            timetable.AddGroup(3, 18, new int[] { 3, 4, 5 });
+            timetable.AddGroup(4, 25, new int[] { 1, 4 });
+            timetable.AddGroup(5, 20, new int[] { 2, 3, 5 });
+            timetable.AddGroup(6, 22, new int[] { 1, 4, 5 });
+            timetable.AddGroup(7, 16, new int[] { 1, 3 });
+            timetable.AddGroup(8, 18, new int[] { 2, 6 });
+            timetable.AddGroup(9, 24, new int[] { 1, 6 });
+            timetable.AddGroup(10, 25, new int[] { 3, 4 });
+
+
+            //初始化ga
+            Scheduling ga = new Scheduling(100,0.01,0.9,2,5);
+
+            //初始化种群
+            Population population = ga.InitPopulation(timetable);
+
+            //评估种群
+            ga.EvalPopulation(population,timetable);
+
+            int generation = 1;
+
+            while (ga.IsTerminationConditionMet(generation,1000)==false && ga.IsTerminationConditionMet(population)==false)
+            {
+                //打印最好的适应度
+                if (generation%50 == 0)
+                {
+                    population.Sort();
+                    NLogHelper.Info("G" + generation + " best fitness:" + population.GetFittest(0).GetFitness());
+                }
+
+                //交叉 使用的是uniform crossover
+                population = ga.CrossoverPopulation(population);
+
+                //评估种群
+                ga.EvalPopulation(population, timetable);
+
+                //变异
+
+                //评估种群
+                ga.EvalPopulation(population, timetable);
+
+                //排序
+                population.Sort();
+
+                //代数加1
+                generation++;
+            }
+
+
+            //打印最好的
+            population.Sort();
+            timetable.CreateClasses(population.GetFittest(0));
+            NLogHelper.Info("Final result -- G" + generation + " best fitness:" + population.GetFittest(0).GetFitness()+ "  冲突数："+timetable.CalcClashes());
         }
 
     }
@@ -2075,6 +2294,453 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
     }
 
+    /// <summary>
+    /// 学生小组
+    /// </summary>
+    public class Group
+    {
+        /// <summary>
+        /// 小组个数
+        /// </summary>
+        public int GroupSize { get; set; }
+
+        /// <summary>
+        /// 课程id
+        /// </summary>
+        public int[] CourseIds { get; set; }
+
+        /// <summary>
+        /// 小组id
+        /// </summary>
+        public int GroupId { get; set; }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="groupSize"></param>
+        /// <param name="courseIds"></param>
+        public Group(int groupId, int groupSize, int[] courseIds)
+        {
+            this.GroupId = groupId;
+            this.GroupSize = groupSize;
+            this.CourseIds = courseIds;
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Group()
+        {
+            
+        }
+
+    }
+
+    /// <summary>
+    /// 一个班级
+    /// 由 student group 在固定时间timeslot上指定Course，在指定room，由指定professor
+    /// </summary>
+    public class Class
+    {
+        /// <summary>
+        /// class id
+        /// </summary>
+        public int ClassId { get; set; }
+
+        /// <summary>
+        /// 组id
+        /// </summary>
+        public int GroupId { get; set; }
+
+        /// <summary>
+        /// 课程id
+        /// </summary>
+        public int CourseId { get; set; }
+
+        /// <summary>
+        /// 教授id
+        /// </summary>
+        public int ProfessorId { get; set; }
+
+        /// <summary>
+        /// 时间槽id
+        /// </summary>
+        public int TimeslotId { get; set; }
+
+        /// <summary>
+        /// 教室id
+        /// </summary>
+        public int RoomId { get; set; }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Class()
+        {
+            
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <param name="groupId"></param>
+        /// <param name="courseId"></param>
+        public Class(int classId, int groupId, int courseId)
+        {
+            this.ClassId = classId;
+            this.GroupId = groupId;
+            this.CourseId = courseId;
+        }
+
+    }
+
+    /// <summary>
+    /// 时间表
+    /// </summary>
+    public class Timetable
+    {
+        /// <summary>
+        /// 教室
+        /// </summary>
+        public Dictionary<int,Room> Rooms { get; set; }
+
+        /// <summary>
+        /// 教授
+        /// </summary>
+        public Dictionary<int, Professor> Professors { get; set; }
+
+        /// <summary>
+        /// 课程
+        /// </summary>
+        public Dictionary<int, Course> Courses { get; set; }
+
+        /// <summary>
+        /// 分组
+        /// </summary>
+        public Dictionary<int, Group> Groups { get; set; }
+
+        /// <summary>
+        /// 时间槽
+        /// </summary>
+        public Dictionary<int, Timeslot> Timeslots { get; set; }
+
+        /// <summary>
+        /// 课程数
+        /// </summary>
+        public int NumClasses { get; set; }
+
+        /// <summary>
+        /// 班级
+        /// </summary>
+        public Class[] Classes { get; set; }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Timetable()
+        {
+            this.Rooms = new Dictionary<int, Room>();
+            this.Professors = new Dictionary<int, Professor>();
+            this.Courses = new Dictionary<int, Course>();
+            this.Groups = new Dictionary<int, Group>();
+            this.Timeslots = new Dictionary<int, Timeslot>();
+            NumClasses = 0;
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="timetable"></param>
+        public Timetable(Timetable timetable)
+        {
+            this.Rooms = timetable.Rooms;
+            this.Professors = timetable.Professors;
+            this.Courses = timetable.Courses;
+            this.Groups = timetable.Groups;
+            this.Timeslots = timetable.Timeslots;
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <param name="roomName"></param>
+        /// <param name="capacity"></param>
+        public void AddRoom(int roomId, String roomName, int capacity)
+        {
+            this.Rooms.Add(roomId,new Room(roomId,roomName,capacity));
+        }
+
+        /// <summary>
+        /// 增加一个教授
+        /// </summary>
+        /// <param name="professorId"></param>
+        /// <param name="professorName"></param>
+        public void AddProfessor(int professorId, string professorName)
+        {
+            this.Professors.Add(professorId,new Professor(professorId,professorName));
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="courseCode"></param>
+        /// <param name="courseName"></param>
+        /// <param name="professorIds"></param>
+        public void AddCourse(int courseId, String courseCode, String courseName, int[] professorIds)
+        {
+            this.Courses.Add(courseId,new Course(courseId,courseCode,courseName,professorIds));
+        }
+
+        /// <summary>
+        /// 添加一个学生族
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="groupSize"></param>
+        /// <param name="courseIds"></param>
+        public void AddGroup(int groupId, int groupSize, int[] courseIds)
+        {
+            this.Groups.Add(groupId,new Group(groupId,groupSize,courseIds));
+            this.NumClasses = 0;
+        }
+
+        /// <summary>
+        /// 添加一个时间槽
+        /// </summary>
+        /// <param name="timeslotId"></param>
+        /// <param name="timeslot"></param>
+        public void AddTimeslot(int timeslotId, String timeslot)
+        {
+            this.Timeslots.Add(timeslotId,new Timeslot(timeslotId,timeslot));
+        }
+
+        /// <summary>
+        /// 创建班级
+        /// </summary>
+        /// <param name="individual"></param>
+        public void CreateClasses(Individual individual)
+        {
+            Class[] classes = new Class[this.GetNumClasses()];
+
+            //获取个体染色体
+            int[] chromosome = individual.GetChromosome();
+            int chromosomePos = 0;
+            int classIndex = 0;
+            foreach (Group group in this.GetGroupAsArray())
+            
+            {
+                int[] courseIds = group.CourseIds;
+                foreach (int courseId in courseIds)
+                {
+                    //班级
+                    classes[classIndex] = new Class(classIndex,group.GroupId,courseId);
+
+                    //染色体第一个位置是时间槽 第二个位置是room  第三个位置是professor
+                    //添加时间槽
+                    classes[classIndex].TimeslotId = chromosome[chromosomePos];
+                    chromosomePos++;
+
+                    //add room
+                    classes[classIndex].RoomId = chromosome[chromosomePos];
+                    chromosomePos++;
+
+                    //add professor
+                    classes[classIndex].ProfessorId = chromosome[chromosomePos];
+                    chromosomePos++;
+
+                    classIndex++;
+                }
+            }
+
+
+            this.Classes = classes;
+        }
+
+        /// <summary>
+        /// 获取room
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <returns></returns>
+        public Room GetRoom(int roomId)
+        {
+            if (!this.Rooms.ContainsKey(roomId))
+            {
+                NLogHelper.Error("Rooms doesn't contain key "+roomId);
+                return null;
+            }
+
+            return (Room) this.Rooms[roomId];
+        }
+
+        /// <summary>
+        /// 获取随机的room
+        /// </summary>
+        /// <returns></returns>
+        public Room GetRandomRoom()
+        {
+            Room[] roomArry = this.Rooms.Values.ToArray();
+
+            Room room = roomArry[(int) (roomArry.Length*new Random().NextDouble())];
+            return room;
+        }
+
+        /// <summary>
+        /// 根据professorId获取教授
+        /// </summary>
+        /// <param name="professorId"></param>
+        /// <returns></returns>
+        public Professor GetProfessor(int professorId)
+        {
+            return this.Professors[professorId];
+        }
+
+        /// <summary>
+        /// 获取课程
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        public Course GetCourse(int courseId)
+        {
+            return this.Courses[courseId];
+        }
+
+        /// <summary>
+        /// get courseids of student group
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        public int[] GetGroupCourses(int groupId)
+        {
+            Group group = this.Groups[groupId];
+            return group.CourseIds;
+        }
+
+        /// <summary>
+        /// 获取group
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        public Group GetGroup(int groupId)
+        {
+            return this.Groups[groupId];
+        }
+
+        /// <summary>
+        /// 获取group array
+        /// </summary>
+        /// <returns></returns>
+        public Group[] GetGroupAsArray()
+        {
+            return this.Groups.Values.ToArray();
+        }
+
+        /// <summary>
+        /// 获取timeslot
+        /// </summary>
+        /// <param name="timeslotId"></param>
+        /// <returns></returns>
+        public Timeslot GetTimeslot(int timeslotId)
+        {
+            return this.Timeslots[timeslotId];
+        }
+
+        /// <summary>
+        /// 返回随机timeslot
+        /// </summary>
+        /// <returns></returns>
+        public Timeslot GetRandomTimeslot()
+        {
+            Timeslot[] timeslotArray = this.Timeslots.Values.ToArray();
+
+            Timeslot timeslot = timeslotArray[(int) (timeslotArray.Length*new Random().NextDouble())];
+
+            return timeslot;
+        }
+
+        /// <summary>
+        /// 获取classes
+        /// </summary>
+        /// <returns></returns>
+        public Class[] GetClasses()
+        {
+            return this.Classes;
+        }
+
+        /// <summary>
+        /// 获取班级数
+        /// </summary>
+        /// <returns></returns>
+        public int GetNumClasses()
+        {
+            if (this.NumClasses > 0)
+            {
+                return this.NumClasses;
+            }
+
+            int numClasses = 0;
+            Group[] groups = this.Groups.Values.ToArray();
+
+            foreach (Group group in groups)
+            {
+                numClasses += group.CourseIds.Length;
+            }
+
+            this.NumClasses = numClasses;
+            return this.NumClasses;
+        }
+
+        /// <summary>
+        /// 计算冲突数  冒犯的限制越多适应度越低
+        /// </summary>
+        /// <returns></returns>
+        public int CalcClashes()
+        {
+            int clashes = 0;
+
+            foreach (Class classA in this.Classes)
+            {
+                //教室的容量
+                int roomCapacity = this.GetRoom(classA.RoomId).Capacity;
+                int groupSize = this.GetGroup(classA.GroupId).GroupSize;
+
+                if (roomCapacity < groupSize)
+                {
+                    //冲突了
+                    clashes++;
+                }
+
+                //check if room is taken
+                foreach (Class classB in this.Classes)
+                {
+                    if (classA.RoomId == classB.RoomId && classA.TimeslotId == classB.TimeslotId &&
+                        classA.ClassId != classB.ClassId)
+                    {
+                        clashes++;
+                        break;
+                    }
+                }
+
+                //check if professor is available
+                foreach (var classB in this.Classes)
+                {
+                    if (classA.ProfessorId == classB.ProfessorId && classA.TimeslotId == classB.TimeslotId &&
+                        classA.ClassId != classB.ClassId)
+                    {
+                        clashes++;
+                        break;
+                    }
+                }
+
+            }
+
+            return clashes;
+        }
+
+
+    }
 
     #endregion
 
