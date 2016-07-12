@@ -2087,7 +2087,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
             while (ga.IsTerminationConditionMet(generation,1000)==false && ga.IsTerminationConditionMet(population)==false)
             {
                 //打印最好的适应度
-                if (generation%50 == 0)
+                if (generation%50 == 0||generation<20)
                 {
                     population.Sort();
                     NLogHelper.Info("G" + generation + " best fitness:" + population.GetFittest(0).GetFitness());
@@ -2241,6 +2241,11 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
     public class Course
     {
         /// <summary>
+        /// 随机数产生器
+        /// </summary>
+        private static Random Rand = new Random();
+
+        /// <summary>
         /// 课程id
         /// </summary>
         public int CourseId { get; set; }
@@ -2289,7 +2294,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// <returns></returns>
         public int GetRandomProfessorId()
         {
-            int professorId = ProfessorIds[(int) (ProfessorIds.Length*new Random().NextDouble())];
+            int professorId = ProfessorIds[(int) (ProfessorIds.Length*Rand.NextDouble())];
             return professorId;
         }
     }
@@ -2435,6 +2440,11 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         /// 班级
         /// </summary>
         public Class[] Classes { get; set; }
+
+        /// <summary>
+        /// 随机数产生器
+        /// </summary>
+        private static Random Rand = new Random();
 
         /// <summary>
         /// 构造函数
@@ -2583,7 +2593,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         {
             Room[] roomArry = this.Rooms.Values.ToArray();
 
-            Room room = roomArry[(int) (roomArry.Length*new Random().NextDouble())];
+            Room room = roomArry[(int) (roomArry.Length*Rand.NextDouble())];
             return room;
         }
 
@@ -2655,7 +2665,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         {
             Timeslot[] timeslotArray = this.Timeslots.Values.ToArray();
 
-            Timeslot timeslot = timeslotArray[(int) (timeslotArray.Length*new Random().NextDouble())];
+            Timeslot timeslot = timeslotArray[(int) (timeslotArray.Length*Rand.NextDouble())];
 
             return timeslot;
         }
