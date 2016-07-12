@@ -609,6 +609,26 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
 
         /// <summary>
+        /// 获取平均适应度
+        /// </summary>
+        /// <returns></returns>
+        public double GetAvgFitness()
+        {
+            if (this.populationFitness < 0)
+            {
+                double totalFitness = 0;
+                foreach (var individual in population)
+                {
+                    totalFitness += individual.GetFitness();
+                }
+
+                this.populationFitness = totalFitness;
+            }
+
+            return populationFitness/this.Size();
+        }
+
+        /// <summary>
         /// 按适应度从高到低排序
         /// </summary>
         public void Sort()
@@ -1987,6 +2007,47 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
         }
 
         /// <summary>
+        /// Uniform 变异
+        /// 本质上是要变异的点随机选取一个允许的值
+        /// </summary>
+        /// <param name="population"></param>
+        /// <param name="timetable"></param>
+        /// <returns></returns>
+        public virtual Population MutatePopulation(Population population, Timetable timetable)
+        {
+            //初始化种群
+            Population newPopulation = new Population(this.PopulationSize);
+
+            population.Sort();
+            //按适应度从高到低循环
+            for (int populationIndex = 0; populationIndex < population.Size(); populationIndex++)
+            {
+                Individual individual = population.GetFittest(populationIndex);
+
+                //创建随机生成的个体
+                Individual randomIndividual = new Individual(timetable);
+                //循环
+                for (int geneIndex = 0; geneIndex < individual.GetChromosomeLength(); geneIndex++)
+                {
+                    //保留最好的
+                    if (populationIndex >= this.ElitismCount)
+                    {
+                        if (Rand.NextDouble() < this.MutationRate)
+                        {
+                            //交换基因
+                            individual.SetGene(geneIndex,randomIndividual.GetGene(geneIndex));
+                        }
+                    }
+                }
+
+                newPopulation.SetIndividual(populationIndex,individual);
+            }
+
+            return newPopulation;
+        }
+
+
+        /// <summary>
         /// 计算种群适应度
         /// </summary>
         /// <param name="population"></param>
@@ -2017,6 +2078,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
 
         /// <summary>
         /// 主测试程序
+        /// 硬限制占主导作用，软限制占从属作用，如：违反一个硬限制减100分 遵守一个软限制加1分 重要的软限制加更多的分
         /// </summary>
         public static void TestMain()
         {
@@ -2100,6 +2162,7 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
                 ga.EvalPopulation(population, timetable);
 
                 //变异
+                population = ga.MutatePopulation(population, timetable);
 
                 //评估种群
                 ga.EvalPopulation(population, timetable);
@@ -2751,6 +2814,194 @@ namespace Introduce_To_Algorithm3.Common.MachineLearning.GA
 
 
     }
+
+    #endregion
+
+    #region 适应性遗传算法
+
+    /*
+     * 适应性遗传算法：动态的调优交叉率和变异率等参数，来达到更好的性能。
+     * 一般使用种群平均适应度和当前最优适应度来更新参数。
+     * 
+     * 当算法运行到后面，个体之间差异就变小了，可以增加变异率。
+     * 一般认为当 最优适应度-平均适应度的差值 减小时，需要增加变异率
+     * 
+     * 计算变异率 Pm = (Fmax-Fi)/(Fmax-Favg)*m, Fi>Favg  Pm = m Fi<=Favg  m表示设置的固定的变异率
+     */
+
+    /// <summary>
+    /// 适应性遗传算法
+    /// </summary>
+    public class AdaptiveGeneticAlgorithm : Scheduling
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="populationSize"></param>
+        /// <param name="mutationRate"></param>
+        /// <param name="crossoverRate"></param>
+        /// <param name="elitismCount"></param>
+        /// <param name="tournamentSize"></param>
+        public AdaptiveGeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int tournamentSize) : base(populationSize, mutationRate, crossoverRate, elitismCount, tournamentSize)
+        {
+        }
+
+        /// <summary>
+        /// 变异
+        /// </summary>
+        /// <param name="population"></param>
+        /// <param name="timetable"></param>
+        /// <returns></returns>
+        public override Population MutatePopulation(Population population, Timetable timetable)
+        {
+            //初始化种群
+            Population newPopulation = new Population(this.PopulationSize);
+
+            population.Sort();
+            //获取最好的适应度
+            double bestFitness = population.GetFittest(0).GetFitness();
+
+            for (int populationIndex = 0; populationIndex < population.Size(); populationIndex++)
+            {
+                Individual individual = population.GetFittest(populationIndex);
+                //创建随机个体
+                Individual randomIndividual = new Individual(timetable);
+
+                //计算适应度
+                double adaptiveMutationRate = this.MutationRate;
+                if (individual.GetFitness() > population.GetAvgFitness())
+                {
+                    double fitnessDelta1 = bestFitness - individual.GetFitness();
+                    double fitnessDelta2 = bestFitness - population.GetAvgFitness();
+                    adaptiveMutationRate = fitnessDelta1/fitnessDelta2*this.MutationRate;
+                }
+
+
+                for (int geneIndex = 0; geneIndex < individual.GetChromosomeLength(); geneIndex++)
+                {
+                    //跳过最优
+                    if (populationIndex >= this.ElitismCount)
+                    {
+                        if (Rand.NextDouble() < adaptiveMutationRate)
+                        {
+                            individual.SetGene(geneIndex,randomIndividual.GetGene(geneIndex));
+                        }
+                    }
+                }
+
+                newPopulation.SetIndividual(populationIndex,individual);
+            }
+
+            return newPopulation;
+        }
+
+
+    }
+
+
+    /*
+     * 多启发
+     * 两个常用的启发方法：simulated annealing（模拟退火） and Tabu search（禁忌搜索）.
+     * 模拟退火：逐渐降低变异率和交叉率， 初始时高的变异率和交叉率可以使遗传算法搜索更多的区域， 逐渐降低后集中搜索适应度较高的区域
+     */
+
+    public class MultiHeuristic : Scheduling
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="populationSize"></param>
+        /// <param name="mutationRate"></param>
+        /// <param name="crossoverRate"></param>
+        /// <param name="elitismCount"></param>
+        /// <param name="tournamentSize"></param>
+        public MultiHeuristic(int populationSize, double mutationRate, double crossoverRate, int elitismCount, int tournamentSize) : base(populationSize, mutationRate, crossoverRate, elitismCount, tournamentSize)
+        {
+        }
+
+        /// <summary>
+        /// 初始温度
+        /// </summary>
+        public double Temperature = 1.0;
+
+
+        /// <summary>
+        /// 冷却速率
+        /// </summary>
+        public double CoolingRate=0.001;
+
+        /// <summary>
+        /// 最小图文
+        /// </summary>
+        public double MinTemperature = 0.1;
+
+        /// <summary>
+        /// 冷却问题
+        /// </summary>
+        public void CoolTemperature()
+        {
+            if (this.Temperature <= this.MinTemperature)
+            {
+                this.Temperature = this.MinTemperature;
+                return;
+            }
+            else
+            {
+                this.Temperature *= (1 - this.CoolingRate);
+            }
+        }
+
+
+        public override Population CrossoverPopulation(Population population)
+        {
+            Population newPopulation = new Population(population.Size());
+
+            //按照适应度从高到低排序
+            population.Sort();
+            for (int i = 0; i < population.Size(); i++)
+            {
+                //按照适应度从高到低 
+                //注：这种实现是有性能问题的，不要每次getFittest排序
+                Individual parent1 = population.GetFittest(i);
+                //降温 模拟退火
+                CoolTemperature();
+                //ElitismCount表示直接保留到下一代的当前最优解的个数
+                if (Rand.NextDouble() < this.CrossoverRate*this.Temperature && i >= this.ElitismCount)
+                {
+                    //初始化后台
+                    Individual offspring = new Individual(parent1.GetChromosomeLength());
+                    //找到第二个父类 
+                    Individual parent2 = SelectParent(population);
+                    //从两个父类中随机选择每个基因，来交叉
+                    for (int geneIndex = 0; geneIndex < parent1.GetChromosomeLength(); geneIndex++)
+                    {
+                        if (Rand.NextDouble() < 0.5)
+                        {
+                            offspring.SetGene(geneIndex, parent1.GetGene(geneIndex));
+                        }
+                        else
+                        {
+                            offspring.SetGene(geneIndex, parent2.GetGene(geneIndex));
+                        }
+                    }
+
+                    newPopulation.SetIndividual(i, offspring);
+                }
+                else
+                {
+                    //保留前elitismCount个最好的个体
+                    newPopulation.SetIndividual(i, parent1);
+                }
+            }
+
+            return newPopulation;
+        }
+    }
+
+    /**
+     * 多线程处理， 增加缓存避免重复计算
+     * 
+     */
 
     #endregion
 
