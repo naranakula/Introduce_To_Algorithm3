@@ -20,6 +20,7 @@ SharpZipLib   压缩包库
 System.Net.FtpClient
 CefSharp  （wpf和winform的chromium嵌入）
 Topshelf (构建windows service)
+EntityFramework.Extended (Entity framework的拓展，谨慎使用)
 
 //webservice
 Nancy > SeviceStack
@@ -28,7 +29,7 @@ Nancy > SeviceStack
 ActiveMq
 RocketMq (阿里的MQ)
 Kafka
-RabbitMq>ActiveMq
+RabbitMq>ActiveMq  (可以肯定的是rabbitmq好于activemq)
 Redis>memcached
 Sqlite
 Ftp
@@ -41,3 +42,9 @@ Cat (监控)
 MyCat (开源分布式数据库中间件)
 FileZilla  (FTP)
 Zookeeper
+akka
+
+
+//机器学习
+accord-net
+mathnet-numerics 
