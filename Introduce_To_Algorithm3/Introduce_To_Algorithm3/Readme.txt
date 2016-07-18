@@ -48,3 +48,12 @@ akka
 //机器学习
 accord-net
 mathnet-numerics 
+
+
+
+//UI
+FineUI
+WinForm
+Wpf
+
+Jquery+Bootstrap
