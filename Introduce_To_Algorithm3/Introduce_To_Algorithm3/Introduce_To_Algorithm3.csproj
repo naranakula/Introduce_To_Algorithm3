@@ -590,6 +590,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\ApproximationAlgorithm\" />
+    <Folder Include="Common\Compiler\" />
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
