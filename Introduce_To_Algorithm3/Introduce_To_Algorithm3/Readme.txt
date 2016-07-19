@@ -43,6 +43,8 @@ MyCat (开源分布式数据库中间件)
 FileZilla  (FTP)
 Zookeeper
 akka
+Hadoop
+Docker
 
 
 //机器学习
