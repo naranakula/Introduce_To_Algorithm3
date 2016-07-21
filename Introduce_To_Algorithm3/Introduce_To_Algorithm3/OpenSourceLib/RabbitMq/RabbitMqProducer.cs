@@ -263,7 +263,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
 
         public static void Receive6()
         {
-            var factory = new ConnectionFactory(){HostName = "localhost"};
+            var factory = new ConnectionFactory(){HostName = "localhost",AutomaticRecoveryEnabled = true};
+       
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
