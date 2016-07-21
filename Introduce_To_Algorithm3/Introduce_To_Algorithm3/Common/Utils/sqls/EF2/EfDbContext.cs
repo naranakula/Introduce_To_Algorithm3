@@ -47,20 +47,50 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString格式
+        /// 设置为保护或者私有的，是希望通过通用的action或Func实例化
         /// </summary>
-        public EfDbContext() : base(_nameOrConnectionString)
+        protected EfDbContext() : base(_nameOrConnectionString)
         {
-
+            
         }
 
         #endregion
 
-        #region 静态构造函数
+        #region 设置上下文
+
+        ///// <summary>
+        ///// 静态构造函数，设置 database initializer to use for the given context type. The database initializer is called when a the given System.Data.Entity.DbContext type  is used to access a database for the first time.The default strategy for Code First contexts is an instance of System.Data.Entity.CreateDatabaseIfNotExists&lt;TContext>.
+        ///// </summary>
+        //static EfDbContext()
+        //{
+        //    //Database.SetInitializer<EfDbContext>(null);
+
+        //    IDatabaseInitializer<EfDbContext> initializer;
+        //    if (!Database.Exists(_nameOrConnectionString))
+        //    {
+        //        //初始化代码放在CreateDatabaseIfNotExists中
+        //        initializer = new CreateDatabaseIfNotExists<EfDbContext>();
+        //    }
+        //    else
+        //    {
+        //        //初始化代码不要放在MigrateDatabaseToLatestVersion中
+        //        initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
+
+        //        ////相当于null，不进行初始化
+        //        //initializer = new NullDatabaseInitializer<EfDbContext>();
+        //    }
+
+        //    // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
+        //    //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
+        //    Database.SetInitializer(initializer);
+            
+        //}
 
         /// <summary>
-        /// 静态构造函数，设置 database initializer to use for the given context type. The database initializer is called when a the given System.Data.Entity.DbContext type  is used to access a database for the first time.The default strategy for Code First contexts is an instance of System.Data.Entity.CreateDatabaseIfNotExists&lt;TContext>.
+        /// 不再静态构造函数，设置 database initializer to use for the given context type. The database initializer is called when a the given System.Data.Entity.DbContext type  is used to access a database for the first time.The default strategy for Code First contexts is an instance of System.Data.Entity.CreateDatabaseIfNotExists&lt;TContext>.
+        /// 程序启动时执行
         /// </summary>
-        static EfDbContext()
+        public static void Init()
         {
             //Database.SetInitializer<EfDbContext>(null);
 
@@ -83,6 +113,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
             Database.SetInitializer(initializer);
         }
+
 
         #endregion
 
@@ -119,6 +150,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
             //建议在该方法中定义Relation,而不是在Map中定义
             //删除的级联在这里定义，默认是不级联删除的
+            //添加默认是级联的，添加父项会自动把关联的子项添加
+            //修改是级联的，因为修改的数据实际上是查出来的数据，是被context管理状态的
             //CreateOneToManyMap(modelBuilder);
             //CreateManyToManyMap(modelBuilder);
             //CreateOneToOneMap(modelBuilder);
@@ -715,7 +748,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// By default, Code First runs the database initialization logic once per AppDomain when the context is used for the first time. 
         /// </summary>
         /// <param name="force">Specifying false will skip the initialization process if it has already executed. A value of true will initialize the database again even if it was already initialized.</param>
-        public static void Initialize(bool force = true)
+        public static void Initialize(bool force = false)
         {
             using (EfDbContext context = new EfDbContext())
             {

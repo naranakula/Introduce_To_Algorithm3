@@ -3,7 +3,6 @@
         2、修改app.maifest为 requestedExecutionLevel level="requireAdministrator" uiAccess="false" 
         3、禁用 安全性 ClickOnce安全设置
 
-
 //组件
 Entity framework
 Dapper (轻量级 半自动的sqlhelper替代品)
@@ -32,7 +31,7 @@ Kafka
 RabbitMq>ActiveMq  (可以肯定的是rabbitmq好于activemq)
 Redis>memcached
 Sqlite
-Ftp
+FileZilla  (FTP)
 Wcf
 Web api
 Wpf
@@ -40,18 +39,14 @@ NServicebus (服务总线)
 Opserver  (监控)
 Cat (监控)
 MyCat (开源分布式数据库中间件)
-FileZilla  (FTP)
 Zookeeper
 akka
 Hadoop
 Docker
 
-
 //机器学习
 accord-net
 mathnet-numerics 
-
-
 
 //UI
 FineUI
@@ -59,3 +54,8 @@ WinForm
 Wpf
 
 Jquery+Bootstrap
+
+//网络框架
+Netty>Mina(Mina社区不活跃)
+DotNetty
+Wcf
