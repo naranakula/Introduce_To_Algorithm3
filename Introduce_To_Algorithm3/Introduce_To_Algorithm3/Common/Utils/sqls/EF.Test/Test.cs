@@ -107,7 +107,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF.Test
             ToTable("Person");
             Property(p => p.FirstName).HasColumnName("FirstName").HasMaxLength(30)/*.IsOptional().IsFixedLength()*/.IsVariableLength().IsUnicode(true).IsOptional();
             Ignore(p => p.MidName);
-            Property(p=>p.RowVersion).IsFixedLength().HasMaxLength(8).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed).IsRowVersion();
+            Property(p => p.RowVersion).IsFixedLength().HasMaxLength(8).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed).IsRowVersion();
             HasMany(p => p.Phones).WithOptional(phone => phone.Person).HasForeignKey(ph => ph.PersonId)/*.WillCascadeOnDelete(true)*/;
             HasMany(p => p.Companies).WithMany(c => c.Persons).Map(m =>
             {
