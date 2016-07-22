@@ -37,7 +37,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //这里指定的是用户名，注意大写
             modelBuilder.HasDefaultSchema("CMLU");
 
-            //modelBuilder.Configurations.Add(new PersonMap());
+            modelBuilder.Configurations.Add(new PersonMap());
         }
 
 
@@ -66,14 +66,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public DateTime CreateTime { get; set; }
     }
 
-    //public class PersonMap : EntityTypeConfiguration<Person>
-    //{
-    //    public PersonMap()
-    //    {
-    //        ToTable("Person").HasKey(t => t.Id);
-    //        Property(t => t.Name).HasColumnName("Name").IsOptional().HasMaxLength(512);
-    //        Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime");
-    //    }
-    //}
+    public class PersonMap : EntityTypeConfiguration<Person>
+    {
+        public PersonMap()
+        {
+            ToTable("Person").HasKey(t => t.Id);
+            Property(t => t.Name).HasColumnName("Name").IsOptional().HasMaxLength(512);
+            Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime");
+        }
+    }
 
 }

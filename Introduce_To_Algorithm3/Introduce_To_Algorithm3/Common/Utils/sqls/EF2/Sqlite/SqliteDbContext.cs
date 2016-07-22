@@ -14,7 +14,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// 文档：
     /// http://system.data.sqlite.org/index.html/doc/trunk/www/index.wiki
     /// 
-    /// 现在应该支持了
     /// </summary>
     public class SqliteDbContext:EfDbContext
     {

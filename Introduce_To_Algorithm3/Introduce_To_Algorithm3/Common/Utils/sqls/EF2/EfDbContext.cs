@@ -47,9 +47,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString格式
-        /// 设置为保护或者私有的，是希望通过通用的action或Func实例化
+        /// //设置为保护或者私有的，是希望通过通用的action或Func实例化
+        /// 必须是共有的，因为DbIniter需要
         /// </summary>
-        protected EfDbContext() : base(_nameOrConnectionString)
+        public EfDbContext() : base(_nameOrConnectionString)
         {
             
         }
@@ -74,10 +75,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             else
             {
                 //初始化代码不要放在MigrateDatabaseToLatestVersion中
-                initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
+                //initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
 
                 ////相当于null，不进行初始化
-                //initializer = new NullDatabaseInitializer<EfDbContext>();
+                initializer = new NullDatabaseInitializer<EfDbContext>();
             }
 
             // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
@@ -137,7 +138,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //modelBuilder.Configurations.Add(new ProvinceMap());
 
             //以下代码自动注册所有的Map，自动获取当前代码中的Map,并注册
-            var typesToRegister = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.BaseType != null && !type.IsGenericType && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>));
+            var typesToRegister = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.BaseType != null && !type.IsGenericType && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>)).ToList();
             foreach (var type in typesToRegister)
             {
                 dynamic configurationInstance = Activator.CreateInstance(type);
