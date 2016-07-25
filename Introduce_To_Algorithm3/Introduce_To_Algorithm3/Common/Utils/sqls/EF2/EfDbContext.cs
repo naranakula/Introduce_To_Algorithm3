@@ -67,10 +67,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //Database.SetInitializer<EfDbContext>(null);
 
             IDatabaseInitializer<EfDbContext> initializer;
+
             if (!Database.Exists(_nameOrConnectionString))
             {
                 //初始化代码放在CreateDatabaseIfNotExists中
-                initializer = new CreateDatabaseIfNotExists<EfDbContext>();
+                //initializer = new CreateDatabaseIfNotExists<EfDbContext>();
+                initializer = new EfCreateDatabaseIfNotExists();
             }
             else
             {
@@ -96,18 +98,20 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //Database.SetInitializer<EfDbContext>(null);
 
             IDatabaseInitializer<EfDbContext> initializer;
+
             if (!Database.Exists(_nameOrConnectionString))
             {
                 //初始化代码放在CreateDatabaseIfNotExists中
-                initializer = new CreateDatabaseIfNotExists<EfDbContext>();
+                //initializer = new CreateDatabaseIfNotExists<EfDbContext>();
+                initializer = new EfCreateDatabaseIfNotExists();
             }
             else
             {
                 //初始化代码不要放在MigrateDatabaseToLatestVersion中
-                initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
+                //initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
 
                 ////相当于null，不进行初始化
-                //initializer = new NullDatabaseInitializer<EfDbContext>();
+                initializer = new NullDatabaseInitializer<EfDbContext>();
             }
 
             // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
