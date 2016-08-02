@@ -37,20 +37,7 @@ namespace Introduce_To_Algorithm3
 
         public static void Main(string[] args)
         {
-            String code = @"using System;
-namespace HelloWorld
-{
-class Program
-{
-static void Main(string[] args)
-{
-Console.Out.WriteLine(""Hello compiled world"");
-}
-}
-}";
-            var tree = SyntaxFactory.ParseSyntaxTree(code);
-            
-           
+              Scheduling.TestMain();
 
 //            string sqlConStr = "Data Source=192.168.163.218;Initial Catalog=FidsContext0317;User ID=sa;Password=system2000,.";
 //            string mySqlConStr = "server=192.168.163.225;port=3306;database=qdcargo;uid=root;password=123456";

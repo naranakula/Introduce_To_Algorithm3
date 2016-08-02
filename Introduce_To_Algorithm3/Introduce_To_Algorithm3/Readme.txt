@@ -20,6 +20,7 @@ System.Net.FtpClient
 CefSharp  （wpf和winform的chromium嵌入）
 Topshelf (构建windows service)
 EntityFramework.Extended (Entity framework的拓展，谨慎使用)
+MailKit
 
 //webservice
 Nancy > SeviceStack
@@ -30,12 +31,12 @@ RocketMq (阿里的MQ)
 Kafka
 RabbitMq>ActiveMq  (可以肯定的是rabbitmq好于activemq)
 Redis>memcached
-Sqlite
+Sqlite LiteDB
 FileZilla  (FTP)
 Wcf
 Web api
 Wpf
-NServicebus (服务总线)
+NServicebus (服务总线) >  MassTransit >Rebus
 Opserver  (监控)
 Cat (监控)
 MyCat (开源分布式数据库中间件)
@@ -47,6 +48,7 @@ Docker
 //机器学习
 accord-net
 mathnet-numerics 
+AForge.NET
 
 //UI
 FineUI
@@ -60,3 +62,10 @@ Netty>Mina(Mina社区不活跃)
 DotNetty
 Wcf
 ZeroMQ (NetMq是C#实现)
+
+
+//winform wpf
+Live-Charts
+
+//python
+pythonnet
