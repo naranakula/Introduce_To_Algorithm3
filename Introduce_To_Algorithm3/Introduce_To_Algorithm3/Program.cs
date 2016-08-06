@@ -16,6 +16,7 @@ using System.Threading;
 using System.Web.UI.WebControls;
 using Introduce_To_Algorithm3.Common.MachineLearning;
 using Introduce_To_Algorithm3.Common.MachineLearning.GA;
+using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Utils.sqls;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2;
 using Introduce_To_Algorithm3.OpenSourceLib.Excel;
@@ -38,11 +39,14 @@ namespace Introduce_To_Algorithm3
         public static void Main(string[] args)
         {
 
+            Console.WriteLine(DeviceId.UniqueDeviceId());
 
-//            string sqlConStr = "Data Source=192.168.163.218;Initial Catalog=FidsContext0317;User ID=sa;Password=system2000,.";
-//            string mySqlConStr = "server=192.168.163.225;port=3306;database=qdcargo;uid=root;password=123456";
-//            MySqlHelper mySqlHelper = MySqlHelper.GetInstance(mySqlConStr);
-//            SqlHelper sqlHelper = SqlHelper.GetInstance(sqlConStr);
+            Console.WriteLine(DeviceId.UniqueDeviceId());
+            Console.WriteLine(DeviceId.UniqueDeviceId());
+            //            string sqlConStr = "Data Source=192.168.163.218;Initial Catalog=FidsContext0317;User ID=sa;Password=system2000,.";
+            //            string mySqlConStr = "server=192.168.163.225;port=3306;database=qdcargo;uid=root;password=123456";
+            //            MySqlHelper mySqlHelper = MySqlHelper.GetInstance(mySqlConStr);
+            //            SqlHelper sqlHelper = SqlHelper.GetInstance(sqlConStr);
 
             //            String sql = @"SELECT [Id]
             //      ,[Iata]
