@@ -22,6 +22,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         /// <summary>
         /// 获取设备唯一id  32位 小写英文字母
+        /// 此函数第1次调用耗时1-2秒
         /// </summary>
         /// <returns></returns>
         public static string UniqueDeviceId()
