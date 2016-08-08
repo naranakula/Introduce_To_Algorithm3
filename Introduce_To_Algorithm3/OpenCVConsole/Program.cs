@@ -13,18 +13,11 @@ namespace OpenCVConsole
     {
         static void Main(string[] args)
         {
-
-            string id = biosId();    
-            Console.WriteLine(id);
-            Console.WriteLine(cpuId());
-            Console.WriteLine(diskId());
-            Console.WriteLine(baseId());
-            return;
-
+            
             //图片名称
             string imgFile = @"./Images/check1.jpg";
             //光线模式文件
-            string lightPatternFile = @"";
+            string lightPatternFile = @"./Images/blank.jpg";
             //移除背景光线的方法  0 different差  1 div 除
             int lightMethod = 0;
             // 分割的方法  1 connected component    2 connected components with statistic(统计)  3 find contour(轮廓线)
@@ -37,7 +30,7 @@ namespace OpenCVConsole
             img = img.MedianBlur(3);
             
             //使用光照模型去除背景， 拍摄同样一张图片但是不带物体
-            Mat light = Cv2.ImRead(@"./Images/blank.jpg", ImreadModes.GrayScale);
+            Mat light = Cv2.ImRead(lightPatternFile, ImreadModes.GrayScale);
             light = light.MedianBlur(3);
             if (lightMethod == 0)
             {
@@ -74,7 +67,7 @@ namespace OpenCVConsole
 
             using (Window window = new Window("check"))
             {
-                window.ShowImage(outputArray.GetMat());
+                window.ShowImage(img);
                 Cv2.WaitKey(0);
             }
 
@@ -173,122 +166,5 @@ namespace OpenCVConsole
             //}
         }
 
-        private static void Window_OnMouseCallback(MouseEvent @event, int x, int y, MouseEvent flags)
-        {
-            Console.WriteLine(flags);
-
-        }
-
-
-        //Return a hardware identifier
-        private static string identifier
-        (string wmiClass, string wmiProperty, string wmiMustBeTrue)
-        {
-            string result = "";
-            System.Management.ManagementClass mc =
-        new System.Management.ManagementClass(wmiClass);
-            System.Management.ManagementObjectCollection moc = mc.GetInstances();
-            foreach (System.Management.ManagementObject mo in moc)
-            {
-                if (mo[wmiMustBeTrue].ToString() == "True")
-                {
-                    //Only get the first one
-                    if (result == "")
-                    {
-                        try
-                        {
-                            result = mo[wmiProperty].ToString();
-                            break;
-                        }
-                        catch
-                        {
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
-
-        //Return a hardware identifier
-        private static string identifier(string wmiClass, string wmiProperty)
-        {
-            string result = "";
-            System.Management.ManagementClass mc =
-        new System.Management.ManagementClass(wmiClass);
-            System.Management.ManagementObjectCollection moc = mc.GetInstances();
-            foreach (System.Management.ManagementObject mo in moc)
-            {
-                //Only get the first one
-                if (result == "")
-                {
-                    try
-                    {
-                        result = mo[wmiProperty].ToString();
-                        break;
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
-            return result;
-        }
-
-        private static string cpuId()
-        {
-            //Uses first CPU identifier available in order of preference
-            //Don't get all identifiers, as it is very time consuming
-            string retVal = identifier("Win32_Processor", "UniqueId");
-            if (retVal == "") //If no UniqueID, use ProcessorID
-            {
-                retVal = identifier("Win32_Processor", "ProcessorId");
-                if (retVal == "") //If no ProcessorId, use Name
-                {
-                    retVal = identifier("Win32_Processor", "Name");
-                    if (retVal == "") //If no Name, use Manufacturer
-                    {
-                        retVal = identifier("Win32_Processor", "Manufacturer");
-                    }
-                    //Add clock speed for extra security
-                    retVal += identifier("Win32_Processor", "MaxClockSpeed");
-                }
-            }
-            return retVal;
-        }
-
-        //BIOS Identifier
-        private static string biosId()
-        {
-            return identifier("Win32_BIOS", "Manufacturer")
-            + identifier("Win32_BIOS", "SMBIOSBIOSVersion")
-            + identifier("Win32_BIOS", "IdentificationCode")
-            + identifier("Win32_BIOS", "SerialNumber")
-            + identifier("Win32_BIOS", "ReleaseDate")
-            + identifier("Win32_BIOS", "Version");
-        }
-        //Main physical hard drive ID
-        private static string diskId()
-        {
-            return identifier("Win32_DiskDrive", "Model")
-            + identifier("Win32_DiskDrive", "Manufacturer")
-            + identifier("Win32_DiskDrive", "Signature")
-            + identifier("Win32_DiskDrive", "TotalHeads");
-        }
-
-        //Motherboard ID
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private static string baseId()
-        {
-            //return identifier("Win32_BaseBoard", "Model")
-            //+ identifier("Win32_BaseBoard", "Manufacturer")
-            //+ identifier("Win32_BaseBoard", "Name")
-            //+ identifier("Win32_BaseBoard", "SerialNumber");
-
-            return identifier("Win32_BaseBoard", "SerialNumber");
-        }
     }
 }

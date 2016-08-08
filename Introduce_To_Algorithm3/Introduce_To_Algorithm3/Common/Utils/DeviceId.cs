@@ -5,6 +5,8 @@ using System.Management;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.Common.Search;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
@@ -30,8 +32,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
 
             //bios是固化到主板的程序，有了主板id，可以忽略biosid
-            string deviceId = CpuId() + "_" + DiskId() + "_" + MotherboardId();
-            Console.WriteLine(deviceId);
+            string deviceId = CpuId() + "_"+ BiosId() + "_" + DiskId() + "_" + MotherboardId();
+            NLogHelper.Info("DeviceId="+deviceId);
             cacheDeviceId = GetMD5HashFromString(deviceId);
             return cacheDeviceId;
         }
@@ -126,7 +128,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         private static string BiosId()
         {
-            return Identifier("Win32_BIOS", "SerialNumber");
+            return Identifier("Win32_BIOS", "IdentificationCode")+Identifier("Win32_BIOS", "SerialNumber");
             //return Identifier("Win32_BIOS", "Manufacturer")
             //+ Identifier("Win32_BIOS", "SMBIOSBIOSVersion")
             //+ Identifier("Win32_BIOS", "IdentificationCode")
@@ -162,6 +164,47 @@ namespace Introduce_To_Algorithm3.Common.Utils
             //+ identifier("Win32_BaseBoard", "SerialNumber");
 
             return Identifier("Win32_BaseBoard", "SerialNumber");
+        }
+
+        //Primary video controller ID
+        private static string VideoId()
+        {
+            return Identifier("Win32_VideoController", "DriverVersion")
+            + Identifier("Win32_VideoController", "Name");
+        }
+        //First enabled network card ID
+        private static string MacId()
+        {
+            return Identifier("Win32_NetworkAdapterConfiguration",
+                "MACAddress", "IPEnabled");
+        }
+
+        //Return a hardware identifier
+        private static string Identifier(string wmiClass, string wmiProperty, string wmiMustBeTrue)
+        {
+            string result = "";
+            System.Management.ManagementClass mc =
+        new System.Management.ManagementClass(wmiClass);
+            System.Management.ManagementObjectCollection moc = mc.GetInstances();
+            foreach (System.Management.ManagementObject mo in moc)
+            {
+                if (mo[wmiMustBeTrue].ToString() == "True")
+                {
+                    //Only get the first one
+                    if (result == "")
+                    {
+                        try
+                        {
+                            result = mo[wmiProperty].ToString();
+                            break;
+                        }
+                        catch
+                        {
+                        }
+                    }
+                }
+            }
+            return result;
         }
     }
 }
