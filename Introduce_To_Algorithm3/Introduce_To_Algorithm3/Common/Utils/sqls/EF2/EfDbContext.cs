@@ -635,7 +635,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <param name="modelBuilder"></param>
         public static void CreateOneToManyMap(DbModelBuilder modelBuilder)
         {
-            //一对多关系，可以级联删除，删除右边不会影响左边，删除左边会删除右边
+            //一对多关系，可以级联删除，删除右边不会影响左边，删除左边会删除右边 默认是不级联的
             modelBuilder.Entity<OneToManyRight>().HasRequired(s => s.Left).WithMany(s => s.Rights).HasForeignKey(s => s.LeftId).WillCascadeOnDelete(true);
         }
 

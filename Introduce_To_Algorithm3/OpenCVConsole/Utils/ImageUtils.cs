@@ -36,6 +36,16 @@ namespace OpenCVConsole.Utils
         }
 
         /// <summary>
+        /// 将bitmap转换为mat
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static Mat ConvertToMat(Bitmap bitmap)
+        {
+            return bitmap.ToMat();
+        }
+        
+        /// <summary>
         /// 转换为bitmap
         /// </summary>
         /// <param name="mat"></param>

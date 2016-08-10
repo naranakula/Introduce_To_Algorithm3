@@ -54,20 +54,87 @@ namespace OpenCVConsole
                 img = img.Threshold(140, 255, ThresholdTypes.BinaryInv);
             }
 
-            Mat mat = new Mat(new Size(img.Rows,img.Cols),MatType.CV_8U);
-            OutputArray outputArray = OutputArray.Create(mat);
-            if (segmentMethod == 6)
+            
+            if (segmentMethod == 1)
             {
                 // 1 connected component    2 connected components with statistic(统计)  3 find contour(轮廓线)
+                //int nLabels = Cv2.ConnectedComponents(img, label, PixelConnectivity.Connectivity8, MatType.CV_32S);
                 
-                int i = img.ConnectedComponents(outputArray);
-                Console.WriteLine(i);
+                ConnectedComponents components = img.ConnectedComponentsEx();
+                int nLabels = components.LabelCount;
+                Point[][] points =img.FindContoursAsArray(RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+                int findCount = 0;
+                for (int i = 0; i < points.Length; i++)
+                {
+                    if (points[i].Length > 100)
+                    {
+                        findCount++;
+                    }
+                }
+                findCount--;
+                Console.WriteLine(points.Length+"=find"+findCount);
+                Console.WriteLine("number of objects = "+components.LabelCount);
+                int count = 0;
+                List<ConnectedComponents.Blob> list = new List<ConnectedComponents.Blob>();
+
+                for (int i = 0; i < components.Blobs.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        continue;
+                    }
+                    ConnectedComponents.Blob blob = components.Blobs[i];
+                    //实际区域大小
+                    if (blob.Area > 2000)
+                    {
+                        count++;
+                        list.Add(blob);
+                    }
+                }
+
+
+                list = list.OrderBy(r => r.Centroid.X).ToList();
+                Console.WriteLine("实际个数是：" + count);
+                Console.WriteLine("width="+img.Width+",height="+img.Height);
+                foreach (var blob in list)
+                {
+                    Console.WriteLine("area="+blob.Area+", ("+blob.Centroid.X+","+ blob.Centroid.Y+")  width="+blob.Width+",height="+blob.Height+"left="+blob.Left);
+                }
+
+                Mat output = Mat.Zeros(img.Rows, img.Cols, MatType.CV_8UC3);
+       
+                for (int m = 1; m < nLabels; m++)
+                {
+                    //Mat mask = label.Equals(m);
+                    //output.SetTo(Scalar.RandomColor(),mask);
+                    
+                    Scalar scalar = Scalar.RandomColor();
+                    Vec3b vec3B = scalar.ToVec3b();
+                    for (int i = 0; i < img.Rows; i++)
+                    {
+                        for (int j = 0; j < img.Cols; j++)
+                        {
+                            int num = components.Labels[i,j];
+                            
+                            if (num==m)
+                            {
+                                output.Set<Vec3b>(i, j, vec3B);
+                            }
+                        }
+                    }
+                }
+
+                using (Window window = new Window("check"))
+                {
+                    window.ShowImage(output);
+                    Cv2.WaitKey(0);
+                }
             }
 
 
             using (Window window = new Window("check"))
             {
-                window.ShowImage(img);
+                window.ShowImage(cloneImg);
                 Cv2.WaitKey(0);
             }
 
