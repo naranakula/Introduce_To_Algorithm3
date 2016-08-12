@@ -374,7 +374,7 @@ namespace OpenCVConsole.Utils
                 return false;
             }
 
-            if (Math.Abs(blob1.Area - blob2.Area) >= 3000)
+            if (Math.Abs(blob1.Area - blob2.Area) >= 3500)
             {
                 return false;
             }
