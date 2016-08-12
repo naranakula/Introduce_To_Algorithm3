@@ -42,7 +42,7 @@ namespace Introduce_To_Algorithm3
         public static void Main(string[] args)
         {
 
-            string s = LCS.LcsConsecutive("hello", "world");
+            string s = LCS.LcsConsecutive("hello", "woselrld");
 
             NLogHelper.Info(s);
 
@@ -57,6 +57,8 @@ namespace Introduce_To_Algorithm3
             NLogHelper.Warn(DeviceId.UniqueDeviceId());
             NLogHelper.Error(DeviceId.UniqueDeviceId());
             NLogHelper.Fatal(DeviceId.UniqueDeviceId());
+
+
             //            string sqlConStr = "Data Source=192.168.163.218;Initial Catalog=FidsContext0317;User ID=sa;Password=system2000,.";
             //            string mySqlConStr = "server=192.168.163.225;port=3306;database=qdcargo;uid=root;password=123456";
             //            MySqlHelper mySqlHelper = MySqlHelper.GetInstance(mySqlConStr);

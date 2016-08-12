@@ -50,6 +50,7 @@ Docker
 accord-net
 mathnet-numerics 
 AForge.NET
+OpenCv
 
 //UI
 FineUI
