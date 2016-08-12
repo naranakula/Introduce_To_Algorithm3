@@ -20,8 +20,10 @@ namespace OpenCVConsole
                 string fileName = @"./Images/";
                 Console.WriteLine("输入图片名称");
                 fileName += Console.ReadLine();
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss fff"));
                 bool isNeedToSave = BlobUtils.IsNeedToSave(fileName);
                 Console.WriteLine("IsNeedToSave = "+isNeedToSave);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss fff"));
             }
 
             

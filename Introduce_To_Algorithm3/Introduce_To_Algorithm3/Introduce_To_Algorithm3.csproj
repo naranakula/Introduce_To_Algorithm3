@@ -553,7 +553,6 @@
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullClient.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullServer.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpServer.cs" />
-    <Compile Include="OpenSourceLib\NetworkComms\NetworkCommsHelper.cs" />
     <Compile Include="OpenSourceLib\Ninject\NinjectHelper.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
