@@ -15,6 +15,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Web.UI.WebControls;
+using Introduce_To_Algorithm3.Common.DynamicProgramming;
 using Introduce_To_Algorithm3.Common.MachineLearning;
 using Introduce_To_Algorithm3.Common.MachineLearning.GA;
 using Introduce_To_Algorithm3.Common.Utils;
@@ -40,6 +41,11 @@ namespace Introduce_To_Algorithm3
 
         public static void Main(string[] args)
         {
+
+            string s = LCS.Lcs("hello", "world");
+
+            NLogHelper.Info(s);
+
             NLogHelper.Info(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
             NLogHelper.Info(Assembly.GetExecutingAssembly().Location);
             NLogHelper.Info(AppDomain.CurrentDomain.BaseDirectory);

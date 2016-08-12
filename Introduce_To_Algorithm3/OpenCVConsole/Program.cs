@@ -18,8 +18,9 @@ namespace OpenCVConsole
             string imgFile = @"./Images/check1.jpg";
             //光线模式文件
             string lightPatternFile = @"./Images/blank.jpg";
-            //移除背景光线的方法  0 different差  1 div 除
+            //移除背景光线的方法  0 different差  1 div 除 (根据测试除的效果略好于差，均大幅好于不用)
             int lightMethod = 0;
+            Console.WriteLine("lightmethod = "+lightMethod);
             // 分割的方法  1 connected component    2 connected components with statistic(统计)  3 find contour(轮廓线)
             int segmentMethod = 1;
 
@@ -85,8 +86,9 @@ namespace OpenCVConsole
                     }
                     ConnectedComponents.Blob blob = components.Blobs[i];
                     //实际区域大小
-                    if (blob.Area > 2000)
+                    if (blob.Area > 2200 && blob.Width>50 && blob.Height>50)
                     {
+                        //一瓶矿泉水  width = 227 height=171 area=15907
                         count++;
                         list.Add(blob);
                     }

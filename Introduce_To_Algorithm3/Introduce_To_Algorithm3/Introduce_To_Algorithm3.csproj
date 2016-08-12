@@ -535,6 +535,7 @@
     <Compile Include="HPSocket\HPServerSocket.cs" />
     <Compile Include="HPSocket\HPServer.cs" />
     <Compile Include="MachineLearning\ReadMe.cs" />
+    <Compile Include="Models\CleanJob.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\MQConsumer.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\MQProducer.cs" />
@@ -552,6 +553,7 @@
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullClient.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullServer.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpServer.cs" />
+    <Compile Include="OpenSourceLib\NetworkComms\NetworkCommsHelper.cs" />
     <Compile Include="OpenSourceLib\Ninject\NinjectHelper.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />

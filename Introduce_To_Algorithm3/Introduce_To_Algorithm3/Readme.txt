@@ -42,6 +42,7 @@ Cat (监控)
 MyCat (开源分布式数据库中间件)
 Zookeeper
 akka
+Orleans（微软分布式框架）
 Hadoop
 Docker
 
@@ -62,7 +63,9 @@ Netty>Mina(Mina社区不活跃)
 DotNetty
 Wcf
 ZeroMQ (NetMq是C#实现)
-
+NetworkComms.Net（已开源，建议使用）
+HP-Socket(开源  http://www.jessma.org/)
+SuperSocket(bug太多)
 
 //winform wpf
 Live-Charts
