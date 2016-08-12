@@ -47,6 +47,7 @@ namespace Introduce_To_Algorithm3.Common.DynamicProgramming
                     //the one in diagonal line before current one
                     int n = (i - 1 >= 0 && j - 1 >= 0) ? matrix[i - 1, j - 1] : 0;
                     matrix[i, j] = (s1[i] == s2[j]) ? n + 1 : 0;
+                    //更新当前lcs
                     if (matrix[i, j] > length)
                     {
                         length = matrix[i, j];
