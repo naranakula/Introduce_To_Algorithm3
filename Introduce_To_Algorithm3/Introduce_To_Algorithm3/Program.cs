@@ -42,7 +42,7 @@ namespace Introduce_To_Algorithm3
         public static void Main(string[] args)
         {
 
-            string s = LCS.Lcs("hello", "world");
+            string s = LCS.LcsConsecutive("hello", "world");
 
             NLogHelper.Info(s);
 

@@ -131,7 +131,7 @@ namespace OpenCVConsole.Utils
             {
                 if (lightMethod == 0)
                 {
-                    mat = mat - usedBackgroundMat;
+                    mat = usedBackgroundMat - mat;
                     usedLightMethod = true;
                 }
                 else
@@ -208,7 +208,7 @@ namespace OpenCVConsole.Utils
             if (oldLastBlobs == null || oldLastBlobs.Count == 0)
             {
                 //之前没有图片 或者 中间范围内没有图片
-                if (maxItem.Width > width*0.7)
+                if (maxItem.Width > width*0.7 && maxItem.Height>height*0.4)
                 {
                     //最大的物体很大
                     return true;
@@ -231,10 +231,16 @@ namespace OpenCVConsole.Utils
             }
             else
             {
+                if (maxItem.Width > width*0.7 && maxItem.Height> height*0.4)
+                {
+                    //最大的物体很大
+                    return true;
+                }
+
                 //之前图片有物体
-                List<ConnectedComponents.Blob> newMiddleBlobs = FindMiddleObjects(width, blobList, 0.79);
+                List<ConnectedComponents.Blob> newMiddleBlobs = FindMiddleObjects(width, blobList, 0.81);
                 //获取中间旧的
-                List<ConnectedComponents.Blob> oldMiddleBlobs = FindMiddleObjects(width, oldLastBlobs, 0.79);
+                List<ConnectedComponents.Blob> oldMiddleBlobs = FindMiddleObjects(width, oldLastBlobs, 0.81);
 
                 if (newMiddleBlobs.Count == 0)
                 {
@@ -252,7 +258,7 @@ namespace OpenCVConsole.Utils
                 {
                     int minDiff = 1;//任务现在和之前相差超过minDiff个物体需要截图
                     //现在和以前均有图片
-                    if (Math.Abs(newMiddleBlobs.Count - oldMiddleBlobs.Count) > minDiff)
+                    if ((newMiddleBlobs.Count - oldMiddleBlobs.Count) > minDiff)
                     {
                         //现在跟置前有两个以上的不同图片
                         return true;
@@ -304,6 +310,28 @@ namespace OpenCVConsole.Utils
         }
 
         /// <summary>
+        /// 根据图片判断是否需要保存
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static bool IsNeedToSave(String fileName)
+        {
+            try
+            {
+                using (Mat img = Cv2.ImRead(fileName, ImreadModes.GrayScale))
+                {
+                    return IsNeedToSave(img);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
+        }
+
+
+        /// <summary>
         /// 找到位于中心的个体数数量
         /// </summary>
         /// <param name="width">图片的整体宽度</param>
@@ -328,25 +356,25 @@ namespace OpenCVConsole.Utils
         /// <param name="blob1"></param>
         /// <param name="blob2"></param>
         /// <returns></returns>
-        public static bool IsSame(ConnectedComponents.Blob blob1, ConnectedComponents.Blob blob2)
+        private static bool IsSame(ConnectedComponents.Blob blob1, ConnectedComponents.Blob blob2)
         {
             //如果两个物体 ，宽度 高度，中心点 area 接近则认为它们是相同的
-            if (Math.Abs(blob1.Width - blob2.Width) >= 30)
+            if (Math.Abs(blob1.Width - blob2.Width) >= 32)
             {
                 return false;
             }
 
-            if (Math.Abs(blob1.Height - blob2.Height) >= 30)
+            if (Math.Abs(blob1.Height - blob2.Height) >= 32)
             {
                 return false;
             }
 
-            if (Math.Abs(blob1.Centroid.Y - blob2.Centroid.Y) >= 20)
+            if (Math.Abs(blob1.Centroid.Y - blob2.Centroid.Y) >= 22)
             {
                 return false;
             }
 
-            if (Math.Abs(blob1.Area - blob2.Area) >= 5000)
+            if (Math.Abs(blob1.Area - blob2.Area) >= 6000)
             {
                 return false;
             }
@@ -366,9 +394,76 @@ namespace OpenCVConsole.Utils
             List<ConnectedComponents.Blob> lcsList = new List<ConnectedComponents.Blob>();//公共
             List<ConnectedComponents.Blob> onlyNewList = new List<ConnectedComponents.Blob>();//只在最新中的
             List<ConnectedComponents.Blob> onlyOldList = new List<ConnectedComponents.Blob>();//只在old中的
+            if (newList == null || newList.Count == 0)
+            {
+                return new Tuple<List<ConnectedComponents.Blob>, List<ConnectedComponents.Blob>, List<ConnectedComponents.Blob>>(lcsList,onlyNewList,oldList);
+            }
 
+            if (oldList == null || oldList.Count == 0)
+            {
+                return new Tuple<List<ConnectedComponents.Blob>, List<ConnectedComponents.Blob>, List<ConnectedComponents.Blob>>(lcsList,newList,onlyOldList);
+            }
 
+            int newIndex = 0;//新个体的最后索引
+            int oldIndex = 0;//旧个体的最后索引
+            int length = 0;//lcs长度
+            int[,] matrix = new int[newList.Count,oldList.Count];
 
+            for (int i = 0; i < newList.Count; i++)
+            {
+                for (int j = 0; j < oldList.Count; j++)
+                {
+                    //当前个体对角线之前的那一个
+                    int n = (i - 1 >= 0 && j - 1 >= 0) ? matrix[i - 1, j - 1] : 0;
+                    if (IsSame(newList[i], oldList[j]))
+                    {
+                        //blob相同加1
+                        matrix[i, j] = n + 1;
+                    }
+                    else
+                    {
+                        matrix[i, j] = 0;
+                    }
+
+                    //更新当前lcs
+                    if (matrix[i, j] > length)
+                    {
+                        length = matrix[i, j];
+                        newIndex = i;
+                        oldIndex = j;
+                    }
+                }
+            }
+            if (length > 0)
+            {
+                //获取lcs
+                for (int i = newIndex - length + 1; i <= newIndex; i++)
+                {
+                    lcsList.Add(newList[i]);
+                }
+
+                //only new
+                for (int i = 0; i < newList.Count; i++)
+                {
+                    if (i < newIndex - length + 1 || i > newIndex)
+                    {
+                        onlyNewList.Add(newList[i]);
+                    }
+                }
+
+                //only old
+                for (int i = 0; i < oldList.Count; i++)
+                {
+                    if (i < oldIndex - length + 1 || i > oldIndex)
+                    {
+                        onlyOldList.Add(oldList[i]);
+                    }
+                }
+            }
+            else
+            {
+                return new Tuple<List<ConnectedComponents.Blob>, List<ConnectedComponents.Blob>, List<ConnectedComponents.Blob>>(lcsList,newList,oldList);
+            }
 
             return new Tuple<List<ConnectedComponents.Blob>, List<ConnectedComponents.Blob>, List<ConnectedComponents.Blob>>(lcsList,onlyNewList,onlyOldList);
         }

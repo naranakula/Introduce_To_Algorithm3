@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenCvSharp;
+using OpenCVConsole.Utils;
 
 namespace OpenCVConsole
 {
@@ -13,6 +14,16 @@ namespace OpenCVConsole
     {
         static void Main(string[] args)
         {
+
+            while (true)
+            {
+                string fileName = @"./Images/";
+                Console.WriteLine("输入图片名称");
+                fileName += Console.ReadLine();
+                bool isNeedToSave = BlobUtils.IsNeedToSave(fileName);
+                Console.WriteLine("IsNeedToSave = "+isNeedToSave);
+            }
+
             
             //图片名称
             string imgFile = @"./Images/check1.jpg";
