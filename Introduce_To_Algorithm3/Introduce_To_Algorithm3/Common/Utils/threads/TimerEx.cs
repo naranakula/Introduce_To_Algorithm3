@@ -8,7 +8,6 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.threads
 {
-
     public class TimerEx : IDisposable
     {
         /// <summary>
@@ -66,7 +65,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
                     return _isRunning;
                 }
             }
-            
+            private set
+            {
+                lock (_locker)
+                {
+                    _isRunning = value;
+                }
+            }
         }
 
 
@@ -109,12 +114,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
 
             lock (_locker)
             {
-                if (_isRunning)
+                if (IsRunning)
                 {
                     //回调正在运行
                     return;
                 }
-                _isRunning = true;
+                IsRunning = true;
             }
 
             try
@@ -123,14 +128,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
             }
             catch (Exception ex)
             {
-                Log4netHelper.Error("定时器回调函数发生异常："+ex);
+                NLogHelper.Error("定时器回调函数发生异常：" + ex);
             }
             finally
             {
-                lock (_locker)
-                {
-                    _isRunning = false;
-                }
+                IsRunning = false;
             }
         }
 

@@ -77,3 +77,6 @@ pythonnet
 
 //图片
 http://www.easyicon.net/
+
+//负载均衡
+（HAProxy>Ngnix）+ keepalived
