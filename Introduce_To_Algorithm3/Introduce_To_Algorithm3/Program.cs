@@ -15,6 +15,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Web.UI.WebControls;
+using System.Xml.Linq;
 using Introduce_To_Algorithm3.Common.DynamicProgramming;
 using Introduce_To_Algorithm3.Common.MachineLearning;
 using Introduce_To_Algorithm3.Common.MachineLearning.GA;
@@ -37,11 +38,8 @@ namespace Introduce_To_Algorithm3
 {
     public class Program
     {
-       
-
         public static void Main(string[] args)
         {
-
             string s = LCS.LcsConsecutive("hello", "woselrld");
 
             NLogHelper.Info(s);

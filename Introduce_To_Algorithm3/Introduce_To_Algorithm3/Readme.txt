@@ -67,6 +67,7 @@ ZeroMQ (NetMq是C#实现)
 NetworkComms.Net（已开源，建议使用）
 HP-Socket(开源  http://www.jessma.org/)
 SuperSocket(bug太多)
+Griffin.Framework(待考察)
 
 //winform wpf
 Live-Charts
