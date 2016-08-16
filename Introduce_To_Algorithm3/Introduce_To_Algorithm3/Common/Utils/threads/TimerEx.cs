@@ -21,38 +21,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         private object _locker = new object();
 
         /// <summary>
-        /// 定时器是否开启
-        /// 这里并不是指的是定时器是否真的启动，而是定时器的功能是否启动
-        /// </summary>
-        private bool _isStarted = false;
-
-        /// <summary>
         /// 是否回调在运行
         /// </summary>
         private bool _isRunning = false;
 
         /// <summary>
-        /// 定时器是否开启
-        /// 这里并不是指的是定时器是否真的启动，而是定时器的功能是否启动
+        /// 底层的回调
         /// </summary>
-        public bool IsStarted
-        {
-            get
-            {
-                lock (_locker)
-                {
-                    return _isStarted;
-                }
-            }
-            set
-            {
-                lock (_locker)
-                {
-                    _isStarted = value;
-                }
-            }
-        }
-
+        private readonly Action<object> actionCallback=null;
+        
         /// <summary>
         /// 是否回调在运行
         /// </summary>
@@ -80,38 +57,28 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// </summary>
         public TimerEx()
         {
+            this.actionCallback = CallBack;
             //实际上初始化完成后，回调已经开始执行
             _timer = new Timer(new TimerCallback(TimerCallback), null, 1000, 9000);
         }
 
         /// <summary>
-        /// 开始运行
+        /// 构造函数
         /// </summary>
-        public void Start()
+        /// <param name="actionCallback"></param>
+        public TimerEx(Action<Object> actionCallback)
         {
-            IsStarted = true;
+            this.actionCallback = actionCallback;
+            //实际上初始化完成后，回调已经开始执行
+            _timer = new Timer(new TimerCallback(TimerCallback), null, 1000, 9000);
         }
-
-        /// <summary>
-        /// 结束运行
-        /// </summary>
-        public void Stop()
-        {
-            IsStarted = false;
-        }
-
+        
         /// <summary>
         /// 定时器回调函数
         /// </summary>
         /// <param name="state"></param>
         private void TimerCallback(object state)
         {
-            //如果未启动，直接退出
-            if (!IsStarted)
-            {
-                return;
-            }
-
             lock (_locker)
             {
                 if (IsRunning)
@@ -124,7 +91,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
 
             try
             {
-                CallBack(state);
+                actionCallback(state);
             }
             catch (Exception ex)
             {
@@ -140,7 +107,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// 实际的回调函数
         /// </summary>
         /// <param name="state"></param>
-        private void CallBack(object state)
+        private static void CallBack(object state)
         {
 
         }
@@ -150,7 +117,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// </summary>
         public void Close()
         {
-            IsStarted = false;
             if (_timer != null)
             {
                 _timer.Dispose();
@@ -162,7 +128,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// </summary>
         public void Dispose()
         {
-            IsStarted = false;
             if (_timer != null)
             {
                 _timer.Dispose();

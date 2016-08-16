@@ -231,11 +231,11 @@ namespace OpenCVConsole.Utils
             }
             else
             {
-                if (maxItem.Width > width*0.7 && maxItem.Height> height*0.4)
-                {
-                    //最大的物体很大
-                    return true;
-                }
+                //if (maxItem.Width > width*0.7 && maxItem.Height> height*0.4)
+                //{
+                //    //最大的物体很大
+                //    return true;
+                //}
 
                 //之前图片有物体
                 List<ConnectedComponents.Blob> newMiddleBlobs = FindMiddleObjects(width, blobList, 0.81);
