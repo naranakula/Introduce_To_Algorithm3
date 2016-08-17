@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Design;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenCvSharp;
@@ -14,6 +16,71 @@ namespace OpenCVConsole
     {
         static void Main(string[] args)
         {
+            VideoCapture videoCapture = new VideoCapture(CaptureDevice.Any);
+            int frameWidth = ConfigUtils.GetInteger("FrameWidth", 0);
+            int frameHeight = ConfigUtils.GetInteger("FrameHeight", 0);
+
+            NLogHelper.Trace(String.Format("设置图像的大小 width={0}  height={1}.",frameWidth,frameHeight));
+            //videoCapture.Set(CaptureProperty.FrameWidth, 1280);
+            //videoCapture.Set(CaptureProperty.FrameHeight, 720);
+            //videoCapture.Open(CaptureDevice.Any);
+            if (frameWidth > 0 && frameHeight > 0)
+            {
+                videoCapture.FrameWidth = frameWidth;
+                videoCapture.FrameHeight = frameHeight;
+            }
+
+
+            Console.WriteLine(videoCapture.Fps + "" + videoCapture.IsOpened()+videoCapture.CaptureType+" width="+videoCapture.FrameWidth + " height="+videoCapture.FrameHeight);
+            
+            double fps = videoCapture.Fps;
+            fps = fps > 1 ? fps : 25;
+            int sleepTime = (int)Math.Round(1000 / fps);
+            const string saveDir = "Pics";
+            using (Window window = new Window("capture"))
+            {
+                using (Mat image = new Mat())
+                {
+                    while (true)
+                    {
+                        videoCapture.Read(image);
+                        if (image.Empty())
+                        {
+                            Thread.Sleep(100);
+                            continue;
+                        }
+
+                        window.ShowImage(image);
+                        bool isNeedToSave = BlobUtils.IsNeedToSave(image);
+                        if (isNeedToSave)
+                        {
+                            if (!Directory.Exists(saveDir))
+                            {
+                                Directory.CreateDirectory(saveDir);
+                            }
+                            string dir = Path.Combine(saveDir, DateTime.Now.ToString("yyyyMMdd"));
+                            if (!Directory.Exists(dir))
+                            {
+                                Directory.CreateDirectory(dir);
+                            }
+
+                            string fileName = Path.Combine(dir, DateTime.Now.ToString("HHmmss")+"_"+Guid.NewGuid().ToString() + ".jpg");
+                            image.SaveImage(fileName);
+                        }
+                        Cv2.WaitKey(sleepTime);
+                    }
+                }
+            }
+        }
+
+
+        public static void VedioTest()
+        {
+            
+        }
+
+        public static void TestMain()
+        {
 
             while (true)
             {
@@ -22,27 +89,27 @@ namespace OpenCVConsole
                 fileName += Console.ReadLine();
                 Console.WriteLine(DateTime.Now.ToString("HH:mm:ss fff"));
                 bool isNeedToSave = BlobUtils.IsNeedToSave(fileName);
-                Console.WriteLine("IsNeedToSave = "+isNeedToSave);
+                Console.WriteLine("IsNeedToSave = " + isNeedToSave);
                 Console.WriteLine(DateTime.Now.ToString("HH:mm:ss fff"));
             }
 
-            
+
             //图片名称
             string imgFile = @"./Images/check1.jpg";
             //光线模式文件
             string lightPatternFile = @"./Images/blank.jpg";
             //移除背景光线的方法  0 different差  1 div 除 (根据测试除的效果略好于差，均大幅好于不用)
             int lightMethod = 0;
-            Console.WriteLine("lightmethod = "+lightMethod);
+            Console.WriteLine("lightmethod = " + lightMethod);
             // 分割的方法  1 connected component    2 connected components with statistic(统计)  3 find contour(轮廓线)
             int segmentMethod = 1;
 
             //转换为单通道灰度图
-            Mat img = Cv2.ImRead(imgFile,ImreadModes.GrayScale);
+            Mat img = Cv2.ImRead(imgFile, ImreadModes.GrayScale);
             Mat cloneImg = img.Clone();
             //noise removal 噪音去除
             img = img.MedianBlur(3);
-            
+
             //使用光照模型去除背景， 拍摄同样一张图片但是不带物体
             Mat light = Cv2.ImRead(lightPatternFile, ImreadModes.GrayScale);
             light = light.MedianBlur(3);
@@ -54,8 +121,8 @@ namespace OpenCVConsole
             {
                 img.ConvertTo(img, MatType.CV_32F);
                 light.ConvertTo(light, MatType.CV_32F);
-                img = (1 - (light/img))*255;
-                img.ConvertTo(img,MatType.CV_8U);
+                img = (1 - (light / img)) * 255;
+                img.ConvertTo(img, MatType.CV_8U);
             }
 
             //二值化图像
@@ -68,15 +135,15 @@ namespace OpenCVConsole
                 img = img.Threshold(140, 255, ThresholdTypes.BinaryInv);
             }
 
-            
+
             if (segmentMethod == 1)
             {
                 // 1 connected component    2 connected components with statistic(统计)  3 find contour(轮廓线)
                 //int nLabels = Cv2.ConnectedComponents(img, label, PixelConnectivity.Connectivity8, MatType.CV_32S);
-                
+
                 ConnectedComponents components = img.ConnectedComponentsEx();
                 int nLabels = components.LabelCount;
-                Point[][] points =img.FindContoursAsArray(RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+                Point[][] points = img.FindContoursAsArray(RetrievalModes.External, ContourApproximationModes.ApproxSimple);
                 int findCount = 0;
                 for (int i = 0; i < points.Length; i++)
                 {
@@ -86,8 +153,8 @@ namespace OpenCVConsole
                     }
                 }
                 findCount--;
-                Console.WriteLine(points.Length+"=find"+findCount);
-                Console.WriteLine("number of objects = "+components.LabelCount);
+                Console.WriteLine(points.Length + "=find" + findCount);
+                Console.WriteLine("number of objects = " + components.LabelCount);
                 int count = 0;
                 List<ConnectedComponents.Blob> list = new List<ConnectedComponents.Blob>();
 
@@ -99,7 +166,7 @@ namespace OpenCVConsole
                     }
                     ConnectedComponents.Blob blob = components.Blobs[i];
                     //实际区域大小
-                    if (blob.Area > 2200 && blob.Width>50 && blob.Height>50)
+                    if (blob.Area > 2200 && blob.Width > 50 && blob.Height > 50)
                     {
                         //一瓶矿泉水  width = 227 height=171 area=15907
                         count++;
@@ -110,28 +177,28 @@ namespace OpenCVConsole
 
                 list = list.OrderBy(r => r.Centroid.X).ToList();
                 Console.WriteLine("实际个数是：" + count);
-                Console.WriteLine("width="+img.Width+",height="+img.Height);
+                Console.WriteLine("width=" + img.Width + ",height=" + img.Height);
                 foreach (var blob in list)
                 {
-                    Console.WriteLine("area="+blob.Area+", ("+blob.Centroid.X+","+ blob.Centroid.Y+")  width="+blob.Width+",height="+blob.Height+"left="+blob.Left);
+                    Console.WriteLine("area=" + blob.Area + ", (" + blob.Centroid.X + "," + blob.Centroid.Y + ")  width=" + blob.Width + ",height=" + blob.Height + "left=" + blob.Left);
                 }
 
                 Mat output = Mat.Zeros(img.Rows, img.Cols, MatType.CV_8UC3);
-       
+
                 for (int m = 1; m < nLabels; m++)
                 {
                     //Mat mask = label.Equals(m);
                     //output.SetTo(Scalar.RandomColor(),mask);
-                    
+
                     Scalar scalar = Scalar.RandomColor();
                     Vec3b vec3B = scalar.ToVec3b();
                     for (int i = 0; i < img.Rows; i++)
                     {
                         for (int j = 0; j < img.Cols; j++)
                         {
-                            int num = components.Labels[i,j];
-                            
-                            if (num==m)
+                            int num = components.Labels[i, j];
+
+                            if (num == m)
                             {
                                 output.Set<Vec3b>(i, j, vec3B);
                             }
@@ -247,6 +314,5 @@ namespace OpenCVConsole
             //    }
             //}
         }
-
     }
 }

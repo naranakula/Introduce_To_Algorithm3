@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -24,8 +25,8 @@ namespace OpenCVConsole.Utils
         /// </summary>
         private static Mat backgroundMat = null;
 
-        //移除背景光线的方法  0 different差  1 div 除 (根据测试除的效果略好于差，均大幅好于不用)
-        private static int lightMethod = 0;
+        //移除背景光线的方法  0 different差  1 div 除 (根据测试除的效果略好于差，均大幅好于不用) 其它表示不用
+        private static int lightMethod = ConfigUtils.GetInteger("LightMethod", 2);
 
         /// <summary>
         /// 认为是一个物体的最小area 像素单位
@@ -66,9 +67,10 @@ namespace OpenCVConsole.Utils
 
             #region 预判断
 
-            if ((DateTime.Now - lastCallTime).TotalMilliseconds < 500)
+            if ((DateTime.Now - lastCallTime).TotalMilliseconds < 600)
             {
-                //调用间隔至少为500ms
+                //调用间隔至少为600ms
+                NLogHelper.Trace("调用频繁，不需要截图");
                 return false;
             }
 
@@ -81,7 +83,7 @@ namespace OpenCVConsole.Utils
             {
                 if (!File.Exists(backgroundFile))
                 {
-                    Console.WriteLine("未找到背景图片：" + backgroundFile);
+                    NLogHelper.Trace("未找到背景图片：" + backgroundFile);
                     backgroundMat = null;
                 }
                 else
@@ -94,7 +96,7 @@ namespace OpenCVConsole.Utils
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("加载背景图片失败:"+ex);
+                        NLogHelper.Trace("加载背景图片失败:"+ex);
                         if (backgroundMat != null && backgroundMat.IsEnabledDispose)
                         {
                             backgroundMat.Dispose();
@@ -106,6 +108,14 @@ namespace OpenCVConsole.Utils
             #endregion
 
             #region 图片处理
+
+            ////进行图像灰度化
+            if (mat.Channels() > 1)
+            {
+                Mat outMat = new Mat();
+                Cv2.CvtColor(mat,outMat,ColorConversionCodes.BGRA2GRAY);
+                mat = outMat;
+            }
             //图片去噪
             mat = mat.MedianBlur(3);
             int width = mat.Width;
@@ -116,7 +126,7 @@ namespace OpenCVConsole.Utils
             {
                 if (backgroundMat.Width != width || backgroundMat.Height != height)
                 {
-                    Console.WriteLine("背景图片与原图大小不一样");
+                    NLogHelper.Trace("背景图片与原图大小不一样,进行缩放");
                     usedBackgroundMat = backgroundMat.Resize(new Size(width, height));
                 }
                 else
@@ -134,7 +144,7 @@ namespace OpenCVConsole.Utils
                     mat = usedBackgroundMat - mat;
                     usedLightMethod = true;
                 }
-                else
+                else if(lightMethod == 1)
                 {
                     mat.ConvertTo(mat, MatType.CV_32F);
                     usedBackgroundMat.ConvertTo(usedBackgroundMat, MatType.CV_32F);
@@ -153,12 +163,11 @@ namespace OpenCVConsole.Utils
             {
                 mat = mat.Threshold(140, 255, ThresholdTypes.Binary);
             }
-
-
+            
             #endregion
 
             #region 联通组件
-
+            
             ConnectedComponents components = mat.ConnectedComponentsEx();
 
             List<ConnectedComponents.Blob> blobList = new List<ConnectedComponents.Blob>();
@@ -178,7 +187,7 @@ namespace OpenCVConsole.Utils
                     if (blob.Width > width*0.9 && blob.Height > 0.9)
                     {
                         //发现超大物体，此物体有可能是背景或者其它干扰
-                        Console.WriteLine("超大物体忽略");
+                        NLogHelper.Trace("超大物体忽略");
                     }
                     else
                     {
@@ -188,6 +197,7 @@ namespace OpenCVConsole.Utils
                 }
             }
             
+            NLogHelper.Trace(string.Format("原图共有{0}个物体",blobList.Count));
             #endregion
 
             #region 判断是否需要截图
@@ -199,6 +209,7 @@ namespace OpenCVConsole.Utils
             if (blobList.Count == 0)
             {
                 //没有图片，不需要保存
+                NLogHelper.Trace("没有图片，不需要保存");
                 return false;
             }
 
@@ -211,6 +222,7 @@ namespace OpenCVConsole.Utils
                 if (maxItem.Width > width*0.7 && maxItem.Height>height*0.4)
                 {
                     //最大的物体很大
+                    NLogHelper.Trace("之前没有图像，最大的物体很大，进行保存");
                     return true;
                 }
                 else
@@ -220,11 +232,13 @@ namespace OpenCVConsole.Utils
                     if (middleBlobs.Count > 0)
                     {
                         //中间有物体
+                        NLogHelper.Trace("之前没有图像，中间有物体，进行保存");
                         return true;
                     }
                     else
                     {
                         //中间没有物体或者物体没有完全到中间
+                        NLogHelper.Trace("之前没有图像，中间没有物体或者物体没有完全到中间，进行保存");
                         return false;
                     }
                 }
@@ -245,6 +259,7 @@ namespace OpenCVConsole.Utils
                 if (newMiddleBlobs.Count == 0)
                 {
                     //中间没有，认为不需要截图
+                    NLogHelper.Trace("之前有图像，新图中间没有，认为不需要截图");
                     return false;
                 }
 
@@ -252,6 +267,7 @@ namespace OpenCVConsole.Utils
                 if (oldMiddleBlobs.Count == 0)
                 {
                     //之前有图片，但图片不在中间,新的又有了
+                    NLogHelper.Trace("之前有图片，但图片不在中间,新的又有了，需要截图");
                     return true;
                 }
                 else
@@ -261,6 +277,7 @@ namespace OpenCVConsole.Utils
                     if ((newMiddleBlobs.Count - oldMiddleBlobs.Count) > minDiff)
                     {
                         //现在跟置前有两个以上的不同图片
+                        NLogHelper.Trace("现在跟之前有两个以上的不同图片，需要截图");
                         return true;
                     }
                     else
@@ -278,26 +295,31 @@ namespace OpenCVConsole.Utils
                         if (commonBlobs.Count == 0)
                         {
                             //现在和以前没有公共部分，截图
+                            NLogHelper.Trace("现在和以前没有公共部分，需要截图");
                             return true;
                         }
                         else if (onlyNewBlobs.Count == 0 && onlyOldBlobs.Count == 0)
                         {
                             //全部是公共部分
+                            NLogHelper.Trace("现在和以前全部是公共部分，不需要截图");
                             return false;
                         }
                         else if(onlyOldBlobs.Count == 0)
                         {
                             //新的部分多了，除此之外都是公共的
+                            NLogHelper.Trace("新的部分多了，除此之外都是公共的，需要截图");
                             return true;
                         }
                         else if (onlyNewBlobs.Count == 0)
                         {
                             //旧的部分多了，除此之外全是公共的
+                            NLogHelper.Trace("旧的部分多了，除此之外全是公共的，不需要截图");
                             return false;
                         }
                         else
                         {
                             //旧的部分，新的部分，公共的部分都有
+                            NLogHelper.Trace("旧的部分，新的部分，公共的部分都有，需要截图");
                             return true;
                         }
 
@@ -325,7 +347,7 @@ namespace OpenCVConsole.Utils
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                NLogHelper.Trace("判断图片是否需要保存错误："+ ex.ToString());
                 return false;
             }
         }
@@ -359,22 +381,22 @@ namespace OpenCVConsole.Utils
         private static bool IsSame(ConnectedComponents.Blob blob1, ConnectedComponents.Blob blob2)
         {
             //如果两个物体 ，宽度 高度，中心点 area 接近则认为它们是相同的
-            if (Math.Abs(blob1.Width - blob2.Width) >= 32)
+            if (Math.Abs(blob1.Width - blob2.Width) >= 40)
             {
                 return false;
             }
 
-            if (Math.Abs(blob1.Height - blob2.Height) >= 32)
+            if (Math.Abs(blob1.Height - blob2.Height) >= 35)
             {
                 return false;
             }
 
-            if (Math.Abs(blob1.Centroid.Y - blob2.Centroid.Y) >= 22)
+            if (Math.Abs(blob1.Centroid.Y - blob2.Centroid.Y) >= 30)
             {
                 return false;
             }
 
-            if (Math.Abs(blob1.Area - blob2.Area) >= 3500)
+            if (Math.Abs(blob1.Area - blob2.Area) >= 7000)
             {
                 return false;
             }
