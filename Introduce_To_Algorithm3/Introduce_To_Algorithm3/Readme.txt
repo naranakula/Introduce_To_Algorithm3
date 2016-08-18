@@ -21,6 +21,8 @@ CefSharp  （wpf和winform的chromium嵌入）
 Topshelf (构建windows service)
 EntityFramework.Extended (Entity framework的拓展，谨慎使用)
 MailKit
+RX.NET
+NET Transactional File Manager
 
 //webservice
 Nancy > SeviceStack
@@ -54,8 +56,13 @@ OpenCv
 
 //UI
 FineUI
+Ext.Net
 WinForm
 Wpf
+Visifire：一套效果非常好的WPF图表控件，支持3D绘制、曲线、折线、扇形、环形和梯形。
+SparrowToolkit：一套WPF图表控件集，支持绘制动态曲线，可绘制示波器、CPU使用率和波形。
+DynamicDataDisplay：微软开源的WPF动态曲线图，线图、气泡图和热力图。
+WPFNotification
 
 Jquery+Bootstrap
 
@@ -81,3 +88,6 @@ http://www.easyicon.net/
 
 //负载均衡
 （HAProxy>Ngnix）+ keepalived
+
+//AOP
+PostSharp(收费)>Aspect Injector 
