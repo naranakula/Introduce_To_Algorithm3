@@ -90,11 +90,12 @@ pythonnet
 http://www.easyicon.net/
 
 //负载均衡
-（HAProxy>Ngnix）+ keepalived
+（HAProxy(无windows版本)>Ngnix）+ keepalived
 
 //AOP
 PostSharp(收费)>Aspect Injector 
 
 /////////////////////////////////////////////////////////////////////////
 //最近学习目标
+Ngnix
 ZooKeeper
