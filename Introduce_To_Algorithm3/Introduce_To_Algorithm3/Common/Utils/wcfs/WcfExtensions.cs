@@ -16,7 +16,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.wcfs
         /// <typeparam name="T"></typeparam>
         /// <param name="client"></param>
         /// <param name="action"></param>
-        public static void Using<T>(this T client, Action<T> action) where T : ICommunicationObject
+        /// <param name="exceptionHandler">异常处理</param>
+        public static void Using<T>(this T client, Action<T> action,Action<Exception> exceptionHandler = null) where T : ICommunicationObject
         {
             if (client == null)
             {
@@ -29,23 +30,35 @@ namespace Introduce_To_Algorithm3.Common.Utils.wcfs
             }
             catch (TimeoutException te)
             {
-                Log4netHelper.Error(te.ToString());
                 client.Abort();
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(te);
+                }
             }
             catch (FaultException fe)
             {
-                Log4netHelper.Error(fe);
                 client.Abort();
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(fe);
+                }
             }
             catch (CommunicationException ce)
             {
-                Log4netHelper.Error(ce);
                 client.Abort();
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ce);
+                }
             }
             catch (Exception e)
             {
-                Log4netHelper.Error(e);
                 client.Abort();
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(e);
+                }
             }
         }
 

@@ -8,24 +8,26 @@ namespace Introduce_To_Algorithm3.Common.Utils
 {
     /// <summary>
     /// 同一时刻只能运行一个方法
+    /// 
+    /// 锁应用于类实例级别
     /// </summary>
-    public static class OneRunAtSameTime
+    public class OneRunAtSameTime
     {
         /// <summary>
         /// 是否正在运行
         /// </summary>
-        private static bool isRunning = false;
+        private bool isRunning = false;
 
         /// <summary>
         /// 锁
         /// </summary>
-        private static readonly object locker = new object();
+        private readonly object locker = new object();
 
         /// <summary>
         /// 同一时刻只能运行一个方法
         /// </summary>
         /// <param name="action"></param>
-        public static void Run(Action action)
+        public void Run(Action action)
         {
             lock (locker)
             {
@@ -54,7 +56,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="action"></param>
         /// <param name="obj"></param>
-        public static void Run<T>(Action<T> action,T obj)
+        public void Run<T>(Action<T> action,T obj)
         {
             lock (locker)
             {
@@ -79,7 +81,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 同一时刻只能运行一个方法
         /// </summary>
         /// <param name="action"></param>
-        public static void RunNoException(Action action)
+        /// <param name="exceptionHandler">异常处理</param>
+        public void RunSafe(Action action,Action<Exception> exceptionHandler = null)
         {
             lock (locker)
             {
@@ -94,9 +97,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 action();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
             }
             finally
             {
@@ -109,7 +115,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="action"></param>
         /// <param name="obj"></param>
-        public static void RunNoException<T>(Action<T> action, T obj)
+        /// <param name="exceptionHandler">异常处理</param>
+        public void RunSafe<T>(Action<T> action, T obj,Action<Exception> exceptionHandler)
         {
             lock (locker)
             {
@@ -124,9 +131,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 action(obj);
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-                
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
             }
             finally
             {

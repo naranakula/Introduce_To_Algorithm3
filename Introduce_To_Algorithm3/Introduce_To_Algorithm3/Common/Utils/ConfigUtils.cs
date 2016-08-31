@@ -25,7 +25,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             //使用如下属性名的方式更常见，使用索引只是为了演示
             //Properties.Settings.Default.myColor;
-            return Introduce_To_Algorithm3.Properties.Settings.Default[name] as string;
+            return Properties.Settings.Default[name] as string;
         }
 
         /// <summary>
@@ -37,10 +37,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
             //使用如下属性名的方式更常见，使用索引只是为了演示
             //只能用于User类型
             //Properties.Settings.Default.myColor = Color.AliceBlue;
-            Introduce_To_Algorithm3.Properties.Settings.Default[name] = ConsoleColor.Black;
+            Properties.Settings.Default[name] = ConsoleColor.Black;
 
             //一定记住保存
-            Introduce_To_Algorithm3.Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
         }
 
         #endregion

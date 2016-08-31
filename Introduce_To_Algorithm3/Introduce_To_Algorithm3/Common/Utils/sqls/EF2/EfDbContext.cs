@@ -211,6 +211,55 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             }
         }
 
+
+        /// <summary>
+        /// 安全的使用EfDbContext执行通用任务
+        /// </summary>
+        /// <param name="action">数据库操作</param>
+        /// <param name="exceptionHanlder">异常处理</param>
+        public static void ActionSafe(Action<EfDbContext> action, Action<Exception> exceptionHanlder = null)
+        {
+            try
+            {
+                using (EfDbContext context = new EfDbContext())
+                {
+                    action(context);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHanlder != null)
+                {
+                    exceptionHanlder(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 安全的使用EfDbContext执行通用任务,并返回一个值
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="exceptionHanlder">异常处理</param>
+        public static T FuncSafe<T>(Func<EfDbContext, T> func, Action<Exception> exceptionHanlder = null)
+        {
+            try
+            {
+                using (EfDbContext context = new EfDbContext())
+                {
+                    return func(context);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHanlder != null)
+                {
+                    exceptionHanlder(ex);
+                }
+
+                return default(T);
+            }
+        }
+
         /// <summary>
         /// 使用EfDbContext执行通用任务
         /// 带有事务
@@ -981,6 +1030,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             #region 设置表名和主键
             //设置表名和主键
             // ToTable("Person").HasKey(p=>p.PersonId);//设置表名和主键
+            //主键数据库自动生成， 即自增主键
             // Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             #endregion
 
