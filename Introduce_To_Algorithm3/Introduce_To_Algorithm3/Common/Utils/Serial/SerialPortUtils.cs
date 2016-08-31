@@ -4,6 +4,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.Serial
 {
@@ -38,11 +39,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.Serial
         /// </summary>
         private SerialPortUtils(string comName)
         {
-            _serialPort = new SerialPort(comName,9600,Parity.None,8,StopBits.One);
-            _serialPort.Encoding = Encoding.UTF8;
-            _serialPort.DataReceived += SerialPortOnDataReceived;
-            _serialPort.ErrorReceived += SerialPortOnErrorReceived;
-            _serialPort.Open();
         }
 
         private void SerialPortOnErrorReceived(object sender, SerialErrorReceivedEventArgs serialErrorReceivedEventArgs)
@@ -89,6 +85,35 @@ namespace Introduce_To_Algorithm3.Common.Utils.Serial
         }
 
         /// <summary>
+        /// 启动
+        /// </summary>
+        /// <returns></returns>
+        public bool Start()
+        {
+            if (_serialPort != null)
+            {
+                Stop();
+            }
+
+            try
+            {
+                _serialPort = new SerialPort("COM3", 9600, Parity.None, 8, StopBits.One);
+                _serialPort.Encoding = Encoding.UTF8;
+
+                _serialPort.DataReceived += SerialPortOnDataReceived;
+                _serialPort.ErrorReceived += SerialPortOnErrorReceived;
+                _serialPort.Open();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.Error("打开串口失败：" + ex);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// 关闭
         /// </summary>
         public void Close()
@@ -100,6 +125,28 @@ namespace Introduce_To_Algorithm3.Common.Utils.Serial
         {
             _serialPort.WriteLine(s);
         }
+
+        /// <summary>
+        /// 关闭串口
+        /// </summary>
+        public void Stop()
+        {
+            if (_serialPort != null)
+            {
+                try
+                {
+                    _serialPort.Close();
+                }
+                catch
+                {
+
+                }
+            }
+
+            _serialPort = null;
+        }
+
+
 
         #endregion
     }

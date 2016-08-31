@@ -16,15 +16,20 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 安全调用
         /// </summary>
         /// <param name="action"></param>
-        public static void Safe(this Action action)
+        /// <param name="exceptionHandler"></param>
+        public static void Safe(this Action action,Action<Exception> exceptionHandler = null)
         {
             try
             {
                 action();
             }
-            catch
+            catch(Exception ex)
             {
                 // ignored
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
             }
         }
 
@@ -33,15 +38,20 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="action"></param>
         /// <param name="obj"></param>
-        public static void Safe<T>(this Action<T> action,T obj)
+        /// <param name="exceptionHandler"></param>
+        public static void Safe<T>(this Action<T> action,T obj, Action<Exception> exceptionHandler = null)
         {
             try
             {
                 action(obj);
             }
-            catch
+            catch (Exception ex)
             {
                 // ignored
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
             }
         }
 
@@ -49,14 +59,19 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 安全调用 调用失败，返回default(TR)
         /// </summary>
         /// <param name="func"></param>
-        public static TR Safe<TR>(this Func<TR> func)
+        /// <param name="exceptionHandler"></param>
+        public static TR Safe<TR>(this Func<TR> func, Action<Exception> exceptionHandler = null)
         {
             try
             {
                 return func();
             }
-            catch 
+            catch (Exception ex)
             {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
                 return default(TR);
             }
         }
@@ -66,14 +81,19 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="func"></param>
         /// <param name="obj"></param>
-        public static TR Safe<TR,TP>(this Func<TP,TR> func,TP obj)
+        /// <param name="exceptionHandler"></param>
+        public static TR Safe<TR,TP>(this Func<TP,TR> func,TP obj, Action<Exception> exceptionHandler = null)
         {
             try
             {
                 return func(obj);
             }
-            catch 
+            catch (Exception ex)
             {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
                 return default(TR);
             }
         }

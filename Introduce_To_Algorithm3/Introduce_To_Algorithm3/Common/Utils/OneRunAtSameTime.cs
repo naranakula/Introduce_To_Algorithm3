@@ -73,7 +73,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             finally
             {
-                isRunning = false;
+                lock (locker)
+                {
+                    isRunning = false;
+                }
             }
         }
 
@@ -106,7 +109,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             finally
             {
-                isRunning = false;
+                lock (locker)
+                {
+                    isRunning = false;
+                }
             }
         }
 
@@ -140,7 +146,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             finally
             {
-                isRunning = false;
+                lock (locker)
+                {
+                    isRunning = false;
+                }
             }
         }
     }
