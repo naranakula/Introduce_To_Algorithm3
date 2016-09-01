@@ -109,6 +109,10 @@
       <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="edtFTPnet, Version=2.2.3.0, Culture=neutral, PublicKeyToken=4b0c991f43097782, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Reference\edtFTPnet.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -308,6 +312,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -553,9 +558,10 @@
     <Compile Include="OpenSourceLib\AutoMapper\AutoMapperUtils.cs" />
     <Compile Include="OpenSourceLib\Dapper\DapperHelper.cs" />
     <Compile Include="OpenSourceLib\Excel\AsposeHelper.cs" />
+    <Compile Include="OpenSourceLib\FTP\EdtFtpHelper.cs" />
     <Compile Include="OpenSourceLib\Json\JsonHelper.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\RedisClientHelper.cs" />
-    <Compile Include="OpenSourceLib\FTPUtils\SystemNetFtpClientImpl.cs" />
+    <Compile Include="OpenSourceLib\FTP\SystemNetFtpClientImpl.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\Sdk.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpAgent.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpClient.cs" />
@@ -611,6 +617,7 @@
     <Content Include="Reference\activeMq\Apache.NMS.pdb" />
     <Content Include="Reference\Common.Logging.Core.dll" />
     <Content Include="Reference\Common.Logging.dll" />
+    <Content Include="Reference\edtFTPnet.dll" />
     <Content Include="Reference\HPSocket4CS\x64\HPSocket4C_U.dll" />
     <Content Include="Reference\HPSocket4CS\x64\HPSocketCS.dll" />
     <Content Include="Reference\HPSocket4CS\x86\HPSocket4C_U.dll" />

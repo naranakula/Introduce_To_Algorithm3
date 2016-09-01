@@ -31,11 +31,12 @@ namespace OpenCVConsole
             }
 
 
-            Console.WriteLine(videoCapture.Fps + "" + videoCapture.IsOpened()+videoCapture.CaptureType+" width="+videoCapture.FrameWidth + " height="+videoCapture.FrameHeight);
+            NLogHelper.Trace(videoCapture.Fps + "" + videoCapture.IsOpened()+videoCapture.CaptureType+" width="+videoCapture.FrameWidth + " height="+videoCapture.FrameHeight);
             
             double fps = videoCapture.Fps;
             fps = fps > 1 ? fps : 25;
             int sleepTime = (int)Math.Round(1000 / fps);
+            sleepTime = 1500;
             const string saveDir = "Pics";
             using (Window window = new Window("capture"))
             {
@@ -52,6 +53,7 @@ namespace OpenCVConsole
 
                         window.ShowImage(image);
                         bool isNeedToSave = BlobUtils.IsNeedToSave(image);
+                        
                         if (isNeedToSave)
                         {
                             if (!Directory.Exists(saveDir))
@@ -67,7 +69,9 @@ namespace OpenCVConsole
                             string fileName = Path.Combine(dir, DateTime.Now.ToString("HHmmss")+"_"+Guid.NewGuid().ToString() + ".jpg");
                             image.SaveImage(fileName);
                         }
+
                         Cv2.WaitKey(sleepTime);
+                        //Console.ReadLine();
                     }
                 }
             }

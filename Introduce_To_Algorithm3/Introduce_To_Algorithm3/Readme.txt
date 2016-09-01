@@ -16,7 +16,7 @@ RestSharp (Simple REST and HTTP API Client for .NET)
 Ninject>Autofac
 aspose.cells NPOI  两者均不需要安装office
 SharpZipLib   压缩包库
-FTP.dll (收费，nuget是评估版) >(优于) > edtFTPnet/Free(使用) > System.Net.FtpClient
+FTP.dll (收费，nuget是评估版) >(优于) > edtFTPnet/Free(使用, Nuget版本比较旧，从官网下载) > System.Net.FtpClient
 CefSharp  （wpf和winform的chromium嵌入）
 Topshelf (构建windows service)
 EntityFramework.Extended (Entity framework的拓展，谨慎使用)
