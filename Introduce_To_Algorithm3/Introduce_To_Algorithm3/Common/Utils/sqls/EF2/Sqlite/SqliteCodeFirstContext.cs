@@ -10,12 +10,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
 {
     /// <summary>
     /// 通过第三方支持codefirst  Nuget组件：SQLite.CodeFirst
-    /// 
+    /// 该组件也依赖于System.Data.SQLite，但是Nuget中没有体现。经测试可以使用。
     /// 有下列初始化方式：
     /// SqliteCreateDatabaseIfNotExists
     /// SqliteDropCreateDatabaseAlways
     /// SqliteDropCreateDatabaseWhenModelChanges
-    /// 
+    /// // ToTable("Person").HasKey(p=>p.PersonId);//设置表名和主键
+    /// 主键数据库自动生成， 即自增主键
+    /// //Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
     /// sqlite建议使用long做主键
     /// 已经做过测试，可用
     /// </summary>
@@ -130,4 +132,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
 
 
     }
+
+
 }

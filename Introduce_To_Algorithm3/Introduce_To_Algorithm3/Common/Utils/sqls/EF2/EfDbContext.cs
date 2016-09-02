@@ -20,6 +20,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
     /// <summary>
     /// DbContext类型
+    /// 数据库迁移只影响必须影响的部分，无关的表不影响，也就是说不会把没有映射的原来存在的表删掉
     /// </summary>
     public class EfDbContext : DbContext
     {
@@ -168,6 +169,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #region 定义DbSet<T>  Properties，每个DbSet<T>代表一个表
 
+        //该定义不是必须的
         //public DbSet<Person> Persons{get; set;}
 
         /// <summary>
@@ -197,6 +199,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             {
                 action(context);
             }
+            
         }
 
         /// <summary>
