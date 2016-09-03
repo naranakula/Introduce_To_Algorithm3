@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.Common.Utils;
 using Quartz;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
@@ -22,11 +23,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         {
             lock (locker)
             {
-                if (isRunning)
+                if (_isRunning)
                 {
                     return;
                 }
-                isRunning = true;
+                _isRunning = true;
             }
 
             try
@@ -43,7 +44,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 foreach (DriveInfo item in DriveInfo.GetDrives())
                 {
-                    if (dirInfo.Root.Name == item.Name)
+                    if (StringUtils.EqualsEx(dirInfo.Root.Name ,item.Name))
                     {
                         driveInfo = item;
                         break;
@@ -67,7 +68,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     if (fileInfo.CreationTime < expireTime)
                     {
                         fileInfo.Delete();
-                        Log4netHelper.Info("删除日志文件："+fileInfo.FullName);
+                        Log4netHelper.Debug("删除日志文件："+fileInfo.FullName);
                     }
                 }
 
@@ -77,7 +78,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     if (!currentDir.GetFileSystemInfos().Any())
                     {
                         currentDir.Delete();
-                        Log4netHelper.Info("删除日志目录："+currentDir.FullName);
+                        Log4netHelper.Debug("删除日志目录："+currentDir.FullName);
                     }
                 }
 
@@ -90,7 +91,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             {
                 lock (locker)
                 {
-                    isRunning = false;
+                    _isRunning = false;
                 }
             }
         }
@@ -132,7 +133,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 回调函数是否正在执行
         /// </summary>
-        private static bool isRunning = false;
+        private static bool _isRunning = false;
 
         #endregion
     }
