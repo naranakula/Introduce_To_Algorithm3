@@ -204,7 +204,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// </summary>
         /// <param name="triggerName">触发器的名字，必须唯一</param>
         /// <param name="offsetSeconds">多长时间后触发器执行，单位为秒</param>
-        /// <param name="periodSeconds">触发器的执行周期，单位为秒</param>
+        /// <param name="periodSeconds">触发器的执行周期，单位为秒,范围可以超过59</param>
         /// <returns></returns>
         public ITrigger CreateSimpleTrigger(string triggerName,int offsetSeconds,int periodSeconds)
         {

@@ -62,7 +62,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 }
 
                 //删除过期日志
-                foreach (FileInfo fileInfo in dirInfo.GetFiles("*.log", SearchOption.AllDirectories))
+                foreach (FileInfo fileInfo in dirInfo.GetFiles(FilePattern, SearchOption.AllDirectories))
                 {
                     if (fileInfo.CreationTime < expireTime)
                     {
@@ -106,18 +106,23 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 保存多少天日志，与创建时间比较
         /// </summary>
-        private const int KeepDays = 300;
+        private const int KeepDays = 180;
+
+        /// <summary>
+        /// 过滤什么样的文件
+        /// </summary>
+        private const string FilePattern = "*.log";
 
         /// <summary>
         /// 硬盘空间极限可用值。
         /// 当硬盘可用空间小于当前值时，清理日志,只保存KeepDaysWhenAvailableLimit天，否则保存KeepDays天
         /// </summary>
-        private const double DriveAvailableLimit = 0.09;
+        private const double DriveAvailableLimit = 0.2;
 
         /// <summary>
         /// 当到达硬盘利用极限时，保存的天数
         /// </summary>
-        private const int KeepDaysWhenAvailableLimit = 90;
+        private const int KeepDaysWhenAvailableLimit = 50;
 
         /// <summary>
         /// 锁
