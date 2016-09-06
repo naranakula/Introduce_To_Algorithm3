@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeroMQ;
 
 namespace ZeroMqConsole
 {
@@ -9,6 +10,7 @@ namespace ZeroMqConsole
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
