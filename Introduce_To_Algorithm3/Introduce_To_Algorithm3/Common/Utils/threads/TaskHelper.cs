@@ -12,6 +12,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
         #region Task
         /**
          * 开始异步的任务
+         * 
+         * async await 是基于编译器的功能，编译时转换为了状态机，await将代码分为了块，之前的块执行完了，转到调用方，同时开启线程执行await部分，执行完了，转回到调用方执行
+         * async修饰void Task Task<T>
          */
         public static Task Start(Action action)
         {
