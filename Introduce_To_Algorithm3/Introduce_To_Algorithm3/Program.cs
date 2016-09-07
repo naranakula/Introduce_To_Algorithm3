@@ -43,7 +43,7 @@ namespace Introduce_To_Algorithm3
             string s = LCS.LcsConsecutive("hello", "woselrld");
 
             NLogHelper.Info(s);
-
+            
             NLogHelper.Info(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName));
             NLogHelper.Info(Assembly.GetExecutingAssembly().Location);
             NLogHelper.Info(AppDomain.CurrentDomain.BaseDirectory);
