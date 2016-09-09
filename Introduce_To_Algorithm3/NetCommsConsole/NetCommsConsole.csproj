@@ -41,8 +41,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NetComms\ConnectionState.cs" />
+    <Compile Include="NetComms\DPSBase\DataSerializerProcessorAttribute.cs" />
+    <Compile Include="NetComms\DPSBase\IExplicitlySerialize.cs" />
+    <Compile Include="NetComms\DPSBase\SecurityCriticalDataProcessorAttribute.cs" />
+    <Compile Include="NetComms\Models\PacketHeader.cs" />
+    <Compile Include="NetComms\Models\PacketHeaderLongItems.cs" />
+    <Compile Include="NetComms\Models\PacketHeaderStringItems.cs" />
+    <Compile Include="NetComms\ReservedPacketType.cs" />
+    <Compile Include="NetComms\RuntimeEnvironment.cs" />
+    <Compile Include="NetComms\SendReceiveOptions.cs" />
+    <Compile Include="NetComms\Tools\QueueItemPriority.cs" />
+    <Compile Include="NetComms\Tools\ThreadSafeStream.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Docs\" />
+    <Folder Include="NetComms\Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

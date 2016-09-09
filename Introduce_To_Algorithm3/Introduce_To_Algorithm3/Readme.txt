@@ -54,6 +54,9 @@ mathnet-numerics
 AForge.NET
 OpenCv
 
+//图像处理
+ImageProcessor
+
 //UI
 FineUI
 Ext.Net
