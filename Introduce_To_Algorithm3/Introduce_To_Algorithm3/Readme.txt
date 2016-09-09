@@ -85,6 +85,15 @@ Live-Charts
 //python
 pythonnet
 
+//游戏服务器引擎
+Scut
+
+//A wrapper executable that can be used to host any executable as an Windows service
+winsw
+
+//A high performance websocket server library powering Stack Overflow.
+NetGain
+
 
 //图片
 http://www.easyicon.net/
@@ -94,6 +103,11 @@ http://www.easyicon.net/
 
 //AOP
 PostSharp(收费)>Aspect Injector 
+
+//自动更新
+NetSparkle
+AutoUpdater
+
 
 /////////////////////////////////////////////////////////////////////////
 //最近学习目标
