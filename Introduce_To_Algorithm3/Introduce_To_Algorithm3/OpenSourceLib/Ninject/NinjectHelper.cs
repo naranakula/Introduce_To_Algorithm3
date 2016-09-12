@@ -21,15 +21,24 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Ninject
     ///         b)均没有[Inject]属性， Ninject will select the one with the most parameters that Ninject understands how to resolve.
     ///         c)If no constructors are defined, Ninject will select the default parameterless constructor (assuming there is one).
     /// 2、Method injection
-    /// 3、Property injection  没有 Feild injection
+    /// 3、Property injection  没有 Feild injection 这个属性的作用域必须是 public 的
     ///         后两种注入要求标记[inject],在构造函数调用之后注入，注入的顺序是不确定的
     /// 
     /// 注：GC回收之前会自动调用Dispose
     /// Ninject有四种Object scope：
     ///     Transient:(短暂)  调用.InTransientScope(),默认，implicit ToSelf()来声明   实例每次请求创建一个实例，这是默认的scope，      Kernel不管理这种对象的生命周期，不调用Dispose函数
-    ///     Singleton:   调用.InSingletonScope() or .ToConstant()来声明   只有一个实例，每次请求返回相同实例  Disposed when the Kernel is Disposed(这意味着Dispose在会多次调用（GC时也会调用）)
+    ///     Singleton:   调用.InSingletonScope() or .ToConstant()来声明 单例模式  只有一个实例，每次请求返回相同实例  Disposed when the Kernel is Disposed
     ///     Thread:   .InThreadScope()  每个线程一个实例   当线程GC时Ninject调用Dispose
     ///     Request	.InRequestScope()	One instance of the type will be created for each Web Request. .	Disposable instances are Disposed at end of request processing
+    /// 
+    /// 
+    /// 对象创建过程：
+    /// 1、查找要返回的类型。
+    /// 2、如果要已经存在的对象，返回已经存在的，否则根据构造函数，进一步依赖，并调用构造函数。
+    /// 3、all properties注入
+    /// 4、all methods注入
+    /// 5、If the type implements the IInitializable interface, its Initialize() method is called.
+    /// 6、If the type implements the IStartable interface, its Start() method is called.
     /// 
     /// </summary>
     public static class NinjectHelper
@@ -50,53 +59,72 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Ninject
             //ninjectKernel.Bind<IValueCalculater>().To<LinqValueCalculator>().InThreadScope();
             //当代码请求一个接口时，须返回接口实现类的实例
             //ninjectKernel.Bind<接口>().To<接口实现类>();
-            //Person类型自绑定到了单例模式
+            //Person类型自绑定到了单例模式 自绑定是默认会添加的，不需要添加代码，除非你想改变object scope
             //ninjectKernel.Bind<Person>().ToSelf().InSingletonScope();
             //.ToMethod(Func<IContext, T> method)
             //实质上binding是从接口类型到provider上，默认是StandardProvider，可以通过ToMethod定制对象初始化
             //ninjectKernel.Bind<IWeapon>().ToMethod(context => new Sword()).InTransientScope();
-        }
 
 
+            //指定绑定的条件 1   Named
+            //        Bind<IWeapon>().To<Shuriken>().Named("Strong");
+            //        Bind<IWeapon>().To<Dagger>().Named("Weak");
+            //        readonly IWeapon _weapon;
+            //public WeakAttack([Named("Weak")] IWeapon weakWeapon)
+            //    {
+            //        _weapon = weakWeapon;
+            //    }
 
-        ///// <summary>
-        ///// 获取类实例
-        ///// </summary>
-        ///// <returns></returns>
-        //public static 接口 Get()
-        //{
-        //    return ninjectKernel.Get<接口>();
-        //}
-
-        ///// <summary>
-        ///// 方法注入
-        ///// </summary>
-        ///// <param name="weapon"></param>
-        //[Inject]
-        //public void Arm(IWeapon weapon)
-        //{
-        //    this.weapon = weapon;
-        //}
-
-        ///// <summary>
-        ///// 属性注入
-        ///// </summary>
-        //[Inject]
-        //public IWeapon Weapon { private get; set; }
-
-        //组织Bind到不同的Module中去
-        //public class WarriorModule : NinjectModule
-        //{
-        //    public override void Load()
-        //    {
-        //        Bind<IWeapon>().To<Sword>();
-        //        Bind<Samurai>().ToSelf().InSingletonScope();
-        //    }
-        //}
+            //2 属性限制
+        //class SwimmerNeeded : Attribute { }
+        //class ClimberNeeded : Attribute { }
+        //Bind<IWarrior>().To<Samurai>().WhenClassHas<ClimberNeeded>();
+        //Bind<IWarrior>().To<Samurai>().WhenTargetHas<ClimberNeeded>();
+        //Bind<IWarrior>().To<SpecialNinja>().WhenMemberHas<SwimmerNeeded>();
 
 
-        //IKernel kernel = new StandardKernel(new Module1(), new Module2(), ...);
-        //IKernel kernel = new StandardKernel(new WarriorModule());
-        //Samurai warrior = kernel.Get<Samurai>();
     }
+
+
+
+    ///// <summary>
+    ///// 获取类实例
+    ///// </summary>
+    ///// <returns></returns>
+    //public static 接口 Get()
+    //{
+    //    return ninjectKernel.Get<接口>();
+    //}
+
+    ///// <summary>
+    ///// 方法注入
+    ///// </summary>
+    ///// <param name="weapon"></param>
+    //[Inject]
+    //public void Arm(IWeapon weapon)
+    //{
+    //    this.weapon = weapon;
+    //}
+
+    ///// <summary>
+    ///// 属性注入
+    ///// </summary>
+    //[Inject]
+    //public IWeapon Weapon { private get; set; }
+
+    //组织Bind到不同的Module中去
+    //public class WarriorModule : NinjectModule
+    //{
+    //    public override void Load()
+    //    {
+    //        Bind<IWeapon>().To<Sword>();
+    //        Bind<Samurai>().ToSelf().InSingletonScope();
+    //    }
+    //}
+
+
+    //IKernel kernel = new StandardKernel(new Module1(), new Module2(), ...);
+    //IKernel kernel = new StandardKernel(new WarriorModule());
+    //Samurai warrior = kernel.Get<Samurai>();
+}
 }
