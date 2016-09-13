@@ -74,6 +74,19 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 //初始化代码放在CreateDatabaseIfNotExists中
                 //initializer = new CreateDatabaseIfNotExists<EfDbContext>();
                 initializer = new EfCreateDatabaseIfNotExists();
+                // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
+                //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
+                Database.SetInitializer(initializer);
+
+                //将初始化和创建数据库提前
+                ActionSafe(dbContext =>
+                {
+                    //dbContext.Database.CreateIfNotExists();//这一句不能加，否则不会进行初始化
+                    dbContext.Database.Initialize(false);//单独这一句可以创建数据库和进行初始化
+                }, ex =>
+                {
+                    //记录日志
+                });
             }
             else
             {
@@ -82,11 +95,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
                 ////相当于null，不进行初始化
                 initializer = new NullDatabaseInitializer<EfDbContext>();
+                // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
+                //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
+                Database.SetInitializer(initializer);
             }
 
-            // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
-            //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
-            Database.SetInitializer(initializer);
+            
 
         }
 
@@ -105,6 +119,19 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 //初始化代码放在CreateDatabaseIfNotExists中
                 //initializer = new CreateDatabaseIfNotExists<EfDbContext>();
                 initializer = new EfCreateDatabaseIfNotExists();
+                // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
+                //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
+                Database.SetInitializer(initializer);
+
+                //将初始化和创建数据库提前
+                ActionSafe(dbContext =>
+                {
+                    //dbContext.Database.CreateIfNotExists();//这一句不能加，否则不会进行初始化
+                    dbContext.Database.Initialize(false);//单独这一句可以创建数据库和进行初始化
+                }, ex =>
+                {
+                    //记录日志
+                });
             }
             else
             {
@@ -113,11 +140,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
                 ////相当于null，不进行初始化
                 initializer = new NullDatabaseInitializer<EfDbContext>();
+                // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
+                //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
+                Database.SetInitializer(initializer);
             }
-
-            // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
-            //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
-            Database.SetInitializer(initializer);
         }
 
 
@@ -789,6 +815,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// if a database with the same name does not already exist on the server, Create it.
         /// True if the database did not exist and was created; false otherwise.
         /// //注：该函数创建数据库，同时创建其中的表
+        /// 不会进行数据库初始化
         /// //注：或者不需要显式调用，数据库在第一次查询、修改或者插入时，自动创建
         /// </summary>
         public static bool CreateIfNotExists()
@@ -800,7 +827,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         }
 
         /// <summary>
-        /// 强制检查初始化
+        /// 强制检查初始化 单独这一句可以创建数据库和进行初始化
         /// 在程序启动时，第一次查询时，会自动初始化。所以可以不显式调用
         /// By default, Code First runs the database initialization logic once per AppDomain when the context is used for the first time. 
         /// </summary>
