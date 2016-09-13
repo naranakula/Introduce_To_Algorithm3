@@ -81,7 +81,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 //将初始化和创建数据库提前
                 ActionSafe(dbContext =>
                 {
-                    //dbContext.Database.CreateIfNotExists();//这一句不能加，否则不会进行初始化
+                    //dbContext.Database.CreateIfNotExists();//这一句不能加，否则不会进行初始化，这是微软的一个bug
                     dbContext.Database.Initialize(false);//单独这一句可以创建数据库和进行初始化
                 }, ex =>
                 {
