@@ -11,7 +11,7 @@ NLog（建议使用 NLog>Log4net）
 Log4net
 Newtonsoft.Json (Json)
 Polly(重试执行框架)
-Quartz.net
+Quartz.net  http://cronexpressiondescriptor.azurewebsites.net/
 RestSharp (Simple REST and HTTP API Client for .NET)
 Ninject>Autofac
 aspose.cells NPOI  两者均不需要安装office
@@ -23,10 +23,10 @@ EntityFramework.Extended (Entity framework的拓展，谨慎使用)
 MailKit
 RX.NET
 NET Transactional File Manager
-
+BinaryRage//本地key value存储
 //webservice
 Nancy > SeviceStack
-
+dotnet-state-machine/stateless   //状态机
 //中间件
 ActiveMq
 RocketMq (阿里的MQ)
@@ -53,15 +53,30 @@ accord-net
 mathnet-numerics 
 AForge.NET
 OpenCv
+numl
+
+//音频库
+cscore
+
+//证书
+Portable.Licensing
 
 //图像处理
 ImageProcessor
 
-//UI
+//远程管理
+Ulterius/server
+
+//UI  http://www.cnblogs.com/jyz/p/3658444.html
 FineUI
 Ext.Net
 WinForm
 Wpf
+Mahapps.metro
+ReactiveUI
+Avalonia 
+
+ModernUI
 LiveCharts
 Extended WPF Toolkit™ Community Edition
 Xceed Toolkit Plus for WPF
@@ -115,6 +130,9 @@ AutoUpdater
 //测试工具
 Fiddler//Http 测试工具
 
+
+//二维码
+QRCoder
 
 /////////////////////////////////////////////////////////////////////////
 //最近学习目标
