@@ -21,6 +21,8 @@ CefSharp  （wpf和winform的chromium嵌入）
 Topshelf (构建windows service)
 EntityFramework.Extended (Entity framework的拓展，谨慎使用)
 MailKit
+CsvHelper
+FileHelpers
 RX.NET
 NET Transactional File Manager
 BinaryRage//本地key value存储
@@ -35,6 +37,7 @@ RabbitMq>ActiveMq  (可以肯定的是rabbitmq好于activemq)
 Redis>memcached
 Sqlite LiteDB
 FileZilla  (FTP)
+hMailServer
 Wcf
 Web api
 Wpf
@@ -63,6 +66,7 @@ Portable.Licensing
 
 //图像处理
 ImageProcessor
+DotImage(收费)
 
 //远程管理
 Ulterius/server
@@ -75,15 +79,17 @@ Wpf
 Mahapps.metro
 ReactiveUI
 Avalonia 
-
 ModernUI
 LiveCharts
 Extended WPF Toolkit™ Community Edition
+WPFNotification
+WPF NotifyIcon
+//下面的谨慎使用，上面的按顺序使用
 Xceed Toolkit Plus for WPF
 Visifire：一套效果非常好的WPF图表控件，支持3D绘制、曲线、折线、扇形、环形和梯形。
 SparrowToolkit：一套WPF图表控件集，支持绘制动态曲线，可绘制示波器、CPU使用率和波形。
 DynamicDataDisplay：微软开源的WPF动态曲线图，线图、气泡图和热力图。
-WPFNotification
+
 
 Jquery+Bootstrap
 
@@ -133,6 +139,7 @@ Fiddler//Http 测试工具
 
 //二维码
 QRCoder
+ZXing.Net
 
 /////////////////////////////////////////////////////////////////////////
 //最近学习目标
