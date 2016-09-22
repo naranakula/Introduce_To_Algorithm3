@@ -8,6 +8,7 @@ Entity framework
 Dapper (轻量级 半自动的sqlhelper替代品)
 AutoMapper
 NLog（建议使用 NLog>Log4net）
+Serilog
 Log4net
 Newtonsoft.Json (Json)
 Polly(重试执行框架)
@@ -24,11 +25,14 @@ MailKit
 CsvHelper
 FileHelpers
 RX.NET
+protobuf-net
 NET Transactional File Manager
 BinaryRage//本地key value存储
 //webservice
 Nancy > SeviceStack
 dotnet-state-machine/stateless   //状态机
+
+Exceptionless - Exceptionless .NET Client
 //中间件
 ActiveMq
 RocketMq (阿里的MQ)
@@ -67,6 +71,12 @@ Portable.Licensing
 //图像处理
 ImageProcessor
 DotImage(收费)
+ImageProcessor - Open-source .NET library to manipulate images on-the-fly.
+DynamicImage - High-performance open-source image manipulation library for ASP.NET.
+MetadataExtractor - Extracts Exif, IPTC, XMP, ICC and other metadata from image files.
+Emgu CV - Cross-platform .NET wrapper for the OpenCV library.
+DotImaging - Minimalistic .NET imaging portable platform
+Magick.NET - .NET wrapper for the ImageMagick library.
 
 //远程管理
 Ulterius/server
@@ -82,6 +92,8 @@ Avalonia
 ModernUI
 LiveCharts
 Extended WPF Toolkit™ Community Edition
+DockPanelSuite
+Dragablz
 WPFNotification
 WPF NotifyIcon
 Mantin.Controls.Wpf.Notification 
@@ -90,6 +102,27 @@ Xceed Toolkit Plus for WPF
 Visifire：一套效果非常好的WPF图表控件，支持3D绘制、曲线、折线、扇形、环形和梯形。
 SparrowToolkit：一套WPF图表控件集，支持绘制动态曲线，可绘制示波器、CPU使用率和波形。
 DynamicDataDisplay：微软开源的WPF动态曲线图，线图、气泡图和热力图。
+
+GUI
+
+MahApps.Metro - Toolkit for creating Metro styled WPF apps
+Callisto - A control toolkit for Windows 8 XAML applications. Contains some UI controls to make it easier to create Windows UI style apps for the Windows Store in accordance with Windows UI guidelines.
+ObjectListView - ObjectListView is a C# wrapper around a .NET ListView. It makes the ListView much easier to use and teaches it some new tricks
+DockPanelSuite - The Visual Studio inspired docking library for .NET WinForms
+AvalonEdit - The WPF-based text editor component used in SharpDevelop
+XWT - A cross-platform UI toolkit for creating desktop applications with .NET and Mono
+Gtk# - Gtk# is a Mono/.NET binding to the cross platform Gtk+ GUI toolkit and the foundation of most GUI apps built with Mono
+MaterialDesignInXamlToolkit - Toolkit for creating Material styled WPF apps
+Eto.Forms - Cross platform GUI framework for desktop and mobile applications in .NET and Mono
+Dragablz - Dragable, tearable WPF tab control (similar to Chrome) which supports layouts and is full themeable, including themese compatible with MahApps and Material Design.
+Fluent.Ribbon - Fluent Ribbon Control Suite is a library that implements an Office- and Windows 8-like Ribbon for WPF.
+Office Ribbon - A library that implements MS Office Ribbon for WinForms.
+Perspex - A multi-platform .NET UI framework.
+MaterialSkin - Theming .NET WinForms, C# or VB.Net, to Google's Material Design Principles.
+Xamarin.Forms - Build native UIs for iOS, Android and Windows from a single, shared C# codebase.
+SciterSharp - Create .NET cross-platform desktop apps using not just HTML, but all features of Sciter engine: CSS3, SVG, scripting, AJAX, <video>... Sciter is free for commercial use
+Empty Keys UI - Multi-platform and multi-engine XAML based user interface library [Free][Proprietary]
+UWP Community Toolkit - The UWP Community Toolkit is a collection of helper functions, custom controls, and app services. It simplifies and demonstrates common developer tasks building UWP apps for Windows 10.
 
 
 Jquery+Bootstrap
@@ -127,9 +160,13 @@ http://www.easyicon.net/
 （HAProxy(无windows版本)>Ngnix）+ keepalived
 
 //AOP
-PostSharp(收费)>Aspect Injector 
+PostSharp(收费)>KingAOP>Aspect Injector 
 
+
+Stateless//状态机
 //自动更新
+Squirrel.Windows//An installation and update framework for Windows desktop apps
+WIX TOOLSET//THE MOST POWERFUL SET OF TOOLS AVAILABLE TO CREATE YOUR WINDOWS INSTALLATION 
 NetSparkle
 AutoUpdater
 
