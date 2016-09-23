@@ -45,8 +45,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
             base.OnModelCreating(modelBuilder);
 
             //设置初始化器，不像EfDbContext，这个不需要单独的Init函数
-            //var sqliteInitializer = new SqliteCreateDatabaseIfNotExists<SqliteCodeFirstContext>(modelBuilder);
-            var sqliteInitializer = new SqliteDropCreateDatabaseWhenModelChanges<SqliteCodeFirstContext>(modelBuilder);
+            var sqliteInitializer = new SqliteCreateDatabaseIfNotExists<SqliteCodeFirstContext>(modelBuilder);
+            //var sqliteInitializer = new SqliteDropCreateDatabaseWhenModelChanges<SqliteCodeFirstContext>(modelBuilder);
             Database.SetInitializer(sqliteInitializer);
 
             //设置所有的表定义映射
