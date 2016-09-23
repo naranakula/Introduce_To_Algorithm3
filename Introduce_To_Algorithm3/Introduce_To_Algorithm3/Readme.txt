@@ -98,6 +98,7 @@ Dragablz
 WPFNotification
 WPF NotifyIcon
 Mantin.Controls.Wpf.Notification 
+Wpf.BusyIndicatorEasy
 //下面的谨慎使用，上面的按顺序使用
 Xceed Toolkit Plus for WPF
 Visifire：一套效果非常好的WPF图表控件，支持3D绘制、曲线、折线、扇形、环形和梯形。
