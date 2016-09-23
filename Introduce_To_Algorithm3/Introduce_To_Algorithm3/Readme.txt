@@ -33,6 +33,7 @@ Nancy > SeviceStack
 dotnet-state-machine/stateless   //状态机
 
 Exceptionless - Exceptionless .NET Client
+i18n //smart internationalization for asp.net
 //中间件
 ActiveMq
 RocketMq (阿里的MQ)
