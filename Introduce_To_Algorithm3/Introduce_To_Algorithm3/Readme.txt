@@ -89,6 +89,7 @@ WinForm
 Wpf
 Mahapps.metro
 ReactiveUI
+MvvmCross
 Avalonia 
 ModernUI
 LiveCharts
