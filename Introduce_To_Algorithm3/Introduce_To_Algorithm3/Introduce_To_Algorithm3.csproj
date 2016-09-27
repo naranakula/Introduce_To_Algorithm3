@@ -201,6 +201,10 @@
       <HintPath>..\packages\Polly.4.2.3\lib\net45\Polly.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Portable.Licensing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.Licensing.1.1.0\lib\portable-net40+sl4+wp7+win8\Portable.Licensing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\protobuf-net.dll</HintPath>
@@ -574,6 +578,7 @@
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
     <Compile Include="OpenSourceLib\RestSharp\RestSharpHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\DotNetZipUtils.cs" />
+    <Compile Include="OpenSourceLib\Utils\LicenseHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\BeITMemcachedHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netQueueHelper.cs" />
