@@ -3,6 +3,8 @@
         2、修改app.maifest为 requestedExecutionLevel level="requireAdministrator" uiAccess="false" 
         3、禁用 安全性 ClickOnce安全设置
 
+https://github.com/quozd/awesome-dotnet#awesome-dotnet
+
 //组件
 Entity framework
 Dapper (轻量级 半自动的sqlhelper替代品)
@@ -11,6 +13,7 @@ NLog（建议使用 NLog>Log4net）
 Serilog
 Log4net
 Newtonsoft.Json (Json)
+EPPlus //excel 读写
 Polly(重试执行框架)
 Quartz.net  http://cronexpressiondescriptor.azurewebsites.net/
 RestSharp (Simple REST and HTTP API Client for .NET)
@@ -82,6 +85,8 @@ Magick.NET - .NET wrapper for the ImageMagick library.
 
 //远程管理
 Ulterius/server
+
+Umbraco CMS > Orchard
 
 //UI  http://www.cnblogs.com/jyz/p/3658444.html
 FineUI
