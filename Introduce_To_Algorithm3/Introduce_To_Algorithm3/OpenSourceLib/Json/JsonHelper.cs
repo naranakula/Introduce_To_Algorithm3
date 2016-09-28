@@ -38,7 +38,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
             };
 
             //定义在序列化反序列化时DateTime类型使用的格式,去掉这句试用默认的事件处理方式
+            //Json.Net中自带的两个处理日期的类,默认是IsoDateTimeConverter ,它的默认格式是"yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK".另一个是JavaScriptTimeConverter,它的格式是 "new Date(ticks)",其实返回的是一个JavaScript的Date对象.
             //_jsonSerializerSettings.Converters.Add(new IsoDateTimeConverter(){DateTimeFormat = "yyyy-MM-dd HH:mm:ss"});
+            //_jsonSerializerSettings.Converters.Add(new JavaScriptDateTimeConverter());
         }
 
         #endregion
