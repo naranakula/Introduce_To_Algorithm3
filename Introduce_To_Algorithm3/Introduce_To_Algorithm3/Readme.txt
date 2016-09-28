@@ -64,6 +64,7 @@ OpenCv
 numl
 
 //音频库
+Naudio //Audio and MIDI library for .NET
 cscore
 
 //证书

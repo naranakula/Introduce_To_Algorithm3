@@ -37,35 +37,33 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
                 DefaultValueHandling = DefaultValueHandling.Include,//这是默认的处理方式，Json.NET will write a field/property value to JSON when serializing if the value is the same as the field/property's default value. The Json.NET deserializer will continue setting a field/property if the JSON value is the same as the default value.
             };
 
-            //定义在序列化反序列化时DateTime类型使用的格式
-            _jsonSerializerSettings.Converters.Add(new IsoDateTimeConverter(){DateTimeFormat = "yyyy-MM-dd HH:mm:ss"});
+            //定义在序列化反序列化时DateTime类型使用的格式,去掉这句试用默认的事件处理方式
+            //_jsonSerializerSettings.Converters.Add(new IsoDateTimeConverter(){DateTimeFormat = "yyyy-MM-dd HH:mm:ss"});
         }
 
-        #endregion 
+        #endregion
 
         /// <summary>
         /// Serializes the specified object to a JSON string.
         /// </summary>
         /// <param name="obj">如果obj为null,则返回字符串null</param>
-        /// <returns>如果操作success,则Result包含结果</returns>
-        public static OperationResult<string> ToJson(Object obj)
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static string ToJson(Object obj,Action<Exception>  exceptionHandler=null)
         {
+
             try
             {
-                return new OperationResult<string>()
-                {
-                    ResultType = OperationResultType.Success,
-                    Result = JsonConvert.SerializeObject(obj, Formatting.None, _jsonSerializerSettings)
-                };
+                return JsonConvert.SerializeObject(obj, Formatting.None, _jsonSerializerSettings);
             }
             catch (Exception ex)
             {
-                return new OperationResult<string>()
+                if (exceptionHandler != null)
                 {
-                    ResultType = OperationResultType.Error,
-                    Result = null,
-                    ResultException = ex
-                };
+                    exceptionHandler(ex);
+                }
+
+                return null;
             }
         }
 
@@ -74,25 +72,24 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="jsonStr"></param>
+        /// <param name="exceptionHandler"></param>
         /// <returns></returns>
-        public static OperationResult<T> FromJson<T>(string jsonStr)
+        public static T FromJson<T>(string jsonStr, Action<Exception> exceptionHandler = null)
         {
             try
             {
-                return new OperationResult<T>()
-                {
-                    ResultType = OperationResultType.Success,
-                    Result = JsonConvert.DeserializeObject<T>(jsonStr, _jsonSerializerSettings)
-                };
+
+                return JsonConvert.DeserializeObject<T>(jsonStr, _jsonSerializerSettings);
+                
             }
             catch (Exception ex)
             {
-                return new OperationResult<T>()
+                if (exceptionHandler != null)
                 {
-                    ResultType = OperationResultType.Error,
-                    Result = default(T),
-                    ResultException = ex
-                };
+                    exceptionHandler(ex);
+                }
+
+                return default(T);
             }
             
         }
