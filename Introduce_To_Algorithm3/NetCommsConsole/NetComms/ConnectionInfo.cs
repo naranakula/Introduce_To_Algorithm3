@@ -125,8 +125,14 @@ namespace NetCommsConsole.NetComms
         /// </summary>
         private int localEndPointPort;
         
+        /// <summary>
+        /// 是否缓存了hashCache
+        /// </summary>
         private bool hashCodeCacheSet = false;
 
+        /// <summary>
+        /// 缓存的hashCache
+        /// </summary>
         private int hashCodeCache;
 
         /// <summary>
@@ -499,22 +505,279 @@ namespace NetCommsConsole.NetComms
             }
         }
 
+        /// <summary>
+        /// Set this connectionInfo as established
+        /// </summary>
+        internal void NoteCompleteConnectionEstablish()
+        {
+            lock (internalLocker)
+            {
+                if (ConnectionState == ConnectionState.Shutdown) throw new ConnectionSetupException("Unable to mark as established as connection has already shutdown.");
+
+                if (ConnectionState != ConnectionState.Establishing) throw new ConnectionSetupException("Connection should be marked as establishing before calling CompleteConnectionEstablish");
+
+                if (ConnectionState == ConnectionState.Established) throw new ConnectionSetupException("Connection already marked as established.");
+
+                ConnectionState = ConnectionState.Established;
+                ConnectionEstablishedTime = DateTime.Now;
+
+                //The below only really applied to TCP connections
+                //We only expect a remote network identifier for managed connections
+                //if (ApplicationLayerProtocol == ApplicationLayerProtocolStatus.Enabled && NetworkIdentifier == ShortGuid.Empty)
+                //    throw new ConnectionSetupException("Remote network identifier should have been set by this point.");
+            }
+        }
+
+        /// <summary>
+        /// Note this connection as shutdown
+        /// </summary>
+        internal void NoteConnectionShutdown()
+        {
+            lock (internalLocker)
+                ConnectionState = ConnectionState.Shutdown;
+        }
+
+        /// <summary>
+        /// Update the localEndPoint information for this connection
+        /// </summary>
+        /// <param name="localEndPoint"></param>
+        internal void UpdateLocalEndPointInfo(EndPoint localEndPoint)
+        {
+            if (localEndPoint == null)
+                throw new ArgumentNullException("localEndPoint", "localEndPoint may not be null.");
+
+            lock (internalLocker)
+            {
+                hashCodeCacheSet = false;
+                this.LocalEndPoint = localEndPoint;
+            }
+        }
+
+        /// <summary>
+        /// During a connection handshake we might be provided with more update information regarding endpoints, connectability and identifiers
+        /// </summary>
+        /// <param name="handShakeInfo"><see cref="ConnectionInfo"/> provided by remoteEndPoint during connection handshake.</param>
+        /// <param name="remoteEndPoint">The correct remoteEndPoint of this connection.</param>
+        internal void UpdateInfoAfterRemoteHandshake(ConnectionInfo handshakeInfo, EndPoint remoteEndPoint)
+        {
+            lock (internalLocker)
+            {
+                NetworkIdentifierStr = handshakeInfo.NetworkIdentifier.ToString();
+                RemoteEndPoint = remoteEndPoint;
+
+                IsConnectable = handshakeInfo.IsConnectable;
+            }
+        }
+
+        /// <summary>
+        /// Updates the last traffic time for this connection
+        /// </summary>
+        internal void UpdateLastTrafficTime()
+        {
+            lock (internalLocker)
+                lastTrafficTime = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Replaces the current networkIdentifier with that provided
+        /// </summary>
+        /// <param name="networkIdentifier">The new networkIdentifier for this connectionInfo</param>
+        public void ResetNetworkIdentifer(ShortGuid networkIdentifier)
+        {
+            NetworkIdentifierStr = networkIdentifier.ToString();
+        }
+
+
+        /// <summary>
+        /// A connectionInfo object may be used across multiple connection sessions, i.e. due to a possible timeout. 
+        /// This method resets the state of the connectionInfo object so that it may be reused.
+        /// </summary>
+        internal void ResetConnectionInfo()
+        {
+            lock (internalLocker)
+            {
+                ConnectionState = ConnectionState.Undefined;
+            }
+        }
+
+
         #endregion
 
         #region IEquatable
+        /// <summary>
+        /// Compares this <see cref="ConnectionInfo"/> object with obj and returns true if obj is ConnectionInfo and both 
+        /// the <see cref="NetworkIdentifier"/> and <see cref="RemoteEndPoint"/> match.
+        /// </summary>
+        /// <param name="obj">The object to test of equality</param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            lock (internalLocker)
+            {
+                var other = obj as ConnectionInfo;
+                if (((object)other) == null)
+                    return false;
+                else
+                    return this == other;
+            }
+        }
+
+        /// <summary>
+        /// Compares this <see cref="ConnectionInfo"/> object with other and returns true if both the <see cref="NetworkIdentifier"/> 
+        /// and <see cref="RemoteEndPoint"/> match.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(ConnectionInfo other)
         {
-            throw new NotImplementedException();
+            lock (internalLocker)
+                return this == other;
         }
+
+        /// <summary>
+        /// Returns left.Equals(right)
+        /// </summary>
+        /// <param name="left">Left connectionInfo</param>
+        /// <param name="right">Right connectionInfo</param>
+        /// <returns>True if both are equal, otherwise false</returns>
+        public static bool operator ==(ConnectionInfo left, ConnectionInfo right)
+        {
+            if (((object)left) == ((object)right)) return true;
+            else if (((object)left) == null || ((object)right) == null) return false;
+            else
+            {
+                if (left.RemoteEndPoint != null && right.RemoteEndPoint != null && left.LocalEndPoint != null && right.LocalEndPoint != null)
+                    return (left.NetworkIdentifier.ToString() == right.NetworkIdentifier.ToString() && left.RemoteEndPoint.Equals(right.RemoteEndPoint) && left.LocalEndPoint.Equals(right.LocalEndPoint) && left.ApplicationLayerProtocol == right.ApplicationLayerProtocol);
+                if (left.RemoteEndPoint != null && right.RemoteEndPoint != null)
+                    return (left.NetworkIdentifier.ToString() == right.NetworkIdentifier.ToString() && left.RemoteEndPoint.Equals(right.RemoteEndPoint) && left.ApplicationLayerProtocol == right.ApplicationLayerProtocol);
+                else if (left.LocalEndPoint != null && right.LocalEndPoint != null)
+                    return (left.NetworkIdentifier.ToString() == right.NetworkIdentifier.ToString() && left.LocalEndPoint.Equals(right.LocalEndPoint) && left.ApplicationLayerProtocol == right.ApplicationLayerProtocol);
+                else
+                    return (left.NetworkIdentifier.ToString() == right.NetworkIdentifier.ToString() && left.ApplicationLayerProtocol == right.ApplicationLayerProtocol);
+            }
+        }
+
+        /// <summary>
+        /// Returns !left.Equals(right)
+        /// </summary>
+        /// <param name="left">Left connectionInfo</param>
+        /// <param name="right">Right connectionInfo</param>
+        /// <returns>True if both are different, otherwise false</returns>
+        public static bool operator !=(ConnectionInfo left, ConnectionInfo right)
+        {
+            return !(left == right);
+        }
+
+        /// <summary>
+        /// Returns NetworkIdentifier.GetHashCode() ^ RemoteEndPoint.GetHashCode();
+        /// </summary>
+        /// <returns>The hashcode for this connection info</returns>
+        public override int GetHashCode()
+        {
+            lock (internalLocker)
+            {
+                if (!hashCodeCacheSet)
+                {
+                    if (RemoteEndPoint != null & LocalEndPoint != null)
+                        hashCodeCache = NetworkIdentifier.GetHashCode() ^ LocalEndPoint.GetHashCode() ^ RemoteEndPoint.GetHashCode() ^ (ApplicationLayerProtocol == ApplicationLayerProtocolStatus.Enabled ? 1 << 31 : 0);
+                    if (RemoteEndPoint != null)
+                        hashCodeCache = NetworkIdentifier.GetHashCode() ^ RemoteEndPoint.GetHashCode() ^ (ApplicationLayerProtocol == ApplicationLayerProtocolStatus.Enabled ? 1 << 31 : 0);
+                    else if (LocalEndPoint != null)
+                        hashCodeCache = NetworkIdentifier.GetHashCode() ^ LocalEndPoint.GetHashCode() ^ (ApplicationLayerProtocol == ApplicationLayerProtocolStatus.Enabled ? 1 << 31 : 0);
+                    else
+                        hashCodeCache = NetworkIdentifier.GetHashCode() ^ (ApplicationLayerProtocol == ApplicationLayerProtocolStatus.Enabled ? 1 << 31 : 0);
+
+                    hashCodeCacheSet = true;
+                }
+
+                return hashCodeCache;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns a string containing suitable information about this connection
+        /// </summary>
+        /// <returns>A string containing suitable information about this connection</returns>
+        public override string ToString()
+        {
+            //Add a useful connection state identifier
+            string connectionStateIdentifier;
+            switch (ConnectionState)
+            {
+                case ConnectionState.Undefined:
+                    connectionStateIdentifier = "U";
+                    break;
+                case ConnectionState.Establishing:
+                    connectionStateIdentifier = "I";
+                    break;
+                case ConnectionState.Established:
+                    connectionStateIdentifier = "E";
+                    break;
+                case ConnectionState.Shutdown:
+                    connectionStateIdentifier = "S";
+                    break;
+                default:
+                    throw new Exception("Unexpected connection state.");
+            }
+
+            string returnString = "[" + ConnectionType.ToString() + "-" + (ApplicationLayerProtocol == ApplicationLayerProtocolStatus.Enabled ? "E" : "D") + "-" + connectionStateIdentifier + "] ";
+
+            if (RemoteEndPoint != null && LocalEndPoint != null)
+                returnString += LocalEndPoint.ToString() + " -> " + RemoteEndPoint.ToString();
+            else if (RemoteEndPoint != null)
+                returnString += "Local -> " + RemoteEndPoint.ToString();
+            else if (LocalEndPoint != null)
+                returnString += LocalEndPoint.ToString() + " " + (IsConnectable ? "Connectable" : "NotConnectable");
+
+            if (NetworkIdentifier != ShortGuid.Empty)
+                returnString += " (" + NetworkIdentifier + ")";
+
+            return returnString.Trim();
+        }
+
+
         #endregion
 
         #region IExplicitlySerialize接口
 
+        /// <summary>
+        /// 序列化
+        /// </summary>
+        /// <param name="outputStream"></param>
         public void Serialize(Stream outputStream)
         {
-            throw new NotImplementedException();
+            List<byte[]> data = new List<byte[]>();
+
+            lock (internalLocker)
+            {
+                if (LocalEndPoint as IPEndPoint != null)
+                {
+                    localEndPointAddressStr = LocalIPEndPoint.Address.ToString();
+                    localEndPointPort = LocalIPEndPoint.Port;
+                }
+
+                if (LocalEndPoint as InTheHand.Net.BluetoothEndPoint != null)
+                {
+                    localEndPointAddressStr = LocalBTEndPoint.Address.ToString();
+                    localEndPointPort = LocalBTEndPoint.Port;
+                }
+
+                //大端 还是 小端 有机器决定 
+                byte[] conTypeData = BitConverter.GetBytes((int) ConnectionType);
+                data.Add(conTypeData);
+
+                byte[] netIDData = Encoding.UTF8.GetBytes(NetworkIdentifierStr);
+                byte[] netIdLengthData = BitConverter.GetBytes(netIDData.Length);
+
+
+            }
         }
 
+        /// <summary>
+        /// 反序列化
+        /// </summary>
+        /// <param name="inputStream"></param>
         public void Deserialize(Stream inputStream)
         {
             throw new NotImplementedException();
