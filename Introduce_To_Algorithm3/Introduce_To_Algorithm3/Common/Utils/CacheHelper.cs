@@ -112,6 +112,27 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
+        /// 获取所有key的快照副本
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> Keys()
+        {
+            return cache.Select(r => r.Key).ToList();
+        }
+
+        /// <summary>
+        /// 清空cache
+        /// </summary>
+        public static void Clear()
+        {
+            var keys = cache.Select(r => r.Key).ToList();
+            foreach (var key in keys)
+            {
+                cache.Remove(key);
+            }
+        }
+
+        /// <summary>
         /// 从缓存中移除指定比例的缓存项
         /// </summary>
         /// <param name="percent">要移除的缓存项的总数的百分比 0-100</param>
