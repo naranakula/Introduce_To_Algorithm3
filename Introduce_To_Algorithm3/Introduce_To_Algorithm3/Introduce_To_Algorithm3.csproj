@@ -589,6 +589,7 @@
     <Compile Include="OpenSourceLib\Utils\OracleHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\PollyHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\ProtobufUtils.cs" />
+    <Compile Include="OpenSourceLib\Utils\quartzs\BackDbJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\CleanLogJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />

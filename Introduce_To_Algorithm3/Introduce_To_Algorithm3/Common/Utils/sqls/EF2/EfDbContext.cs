@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,6 +16,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using System.Web.Hosting;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
+using NLog.Internal;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 {
@@ -35,6 +38,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         private static string _nameOrConnectionString = "name=SqlSeverConnString";
 
         /// <summary>
+        /// 实际的连接字符串
+        /// </summary>
+        private static string _trueConStr = string.Empty;
+
+        /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString格式
         /// </summary>
@@ -43,6 +51,26 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             get { return _nameOrConnectionString; }
             set { _nameOrConnectionString = value; }
         }
+
+        /// <summary>
+        /// 连接字符串
+        /// </summary>
+        public static string TrueConnectionString
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_trueConStr))
+                {
+                    return _trueConStr;
+                }
+
+                string conStrKey =_nameOrConnectionString.Split('=')[1];
+                _trueConStr = System.Configuration.ConfigurationManager.ConnectionStrings[conStrKey].ConnectionString;
+                return _trueConStr;
+            }
+        }
+
+
         #endregion
 
         #region 构造函数
@@ -394,6 +422,35 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             return dbContext.Database.ExecuteSqlCommand(sql, parameters);
         }
 
+        /// <summary>
+        /// A SQL query returning instances of any type, including primitive types,
+        /// 该方法用于查询。直到迭代返回结果时，sql才执行。
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static DbRawSqlQuery<T> SqlQuery<T>(string sql, params object[] parameters) where T : class
+        {
+            using (EfDbContext dbContext = new EfDbContext())
+            {
+                return dbContext.Database.SqlQuery<T>(sql, parameters);
+            }
+        }
+
+        /// <summary>
+        /// ExecuteSqlCommnad method is useful in sending non-query commands to the database, such as the Insert, Update or Delete command. 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns>影响的行数</returns>
+        public static int ExecuteSqlCommand(string sql, params object[] parameters)
+        {
+            using (EfDbContext dbContext = new EfDbContext())
+            {
+                return dbContext.Database.ExecuteSqlCommand(sql, parameters);
+            }
+        }
+
         #endregion
 
         #endregion
@@ -574,6 +631,200 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         }
 
         #endregion
+
+        #endregion
+
+        #region 无事务的原生调用
+
+        /// <summary>
+        /// 测试数据库连接是否畅通。
+        /// </summary>
+        /// <returns>
+        /// 如果返回值为true,表示数据库连接畅通。
+        /// 如果返回值为false，表示数据库连接不畅通。通常修改连接字符串可解决该问题。
+        /// </returns>
+        public bool IsConnectionActive()
+        {
+            bool result = true;
+            SqlConnection conn = null;
+            try
+            {
+                conn = new SqlConnection(TrueConnectionString);
+                conn.Open();
+            }
+            catch (Exception ex)
+            {
+                Log4netHelper.Error(ex.ToString());
+                result = false;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// ExecuteNonQuery操作，对数据库进行 增、删、改 操作（1）
+        /// </summary>
+        /// <param name="sql">要执行的SQL语句 </param>
+        /// <returns>受影响的行数</returns>
+        public static int ExecuteRawNonQuery(string sql)
+        {
+            return ExecuteRawNonQuery(sql, CommandType.Text, null);
+        }
+
+        /// <summary>
+        /// ExecuteNonQuery操作，对数据库进行 增、删、改 操作（2）
+        /// </summary>
+        /// <param name="sql">要执行的SQL语句 </param>
+        /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
+        /// <returns>受影响的行数</returns>
+        public static int ExecuteRawNonQuery(string sql, CommandType commandType)
+        {
+            return ExecuteRawNonQuery(sql, commandType, null);
+        }
+
+        /// <summary>
+        /// ExecuteNonQuery操作，对数据库进行 增、删、改 操作（3）
+        /// </summary>
+        /// <param name="sql">要执行的SQL语句 </param>
+        /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
+        /// <param name="parameters">参数数组 参数使用@名称表示 前面加@表示参数 </param>
+        /// <returns> </returns>
+        public static int ExecuteRawNonQuery(string sql, CommandType commandType, SqlParameter[] parameters)
+        {
+            int count = 0;
+            using (SqlConnection connection = new SqlConnection(TrueConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.CommandType = commandType;
+                    if (parameters != null)
+                    {
+                        foreach (SqlParameter parameter in parameters)
+                        {
+                            if (parameter != null)
+                            {
+                                command.Parameters.Add(parameter);
+                            }
+                        }
+                    }
+                    connection.Open();
+                    count = command.ExecuteNonQuery();
+                }
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// SqlDataAdapter的Fill方法执行一个查询，并返回一个DataSet类型结果（1）
+        /// </summary>
+        /// <param name="sql">要执行的SQL语句 </param>
+        /// <returns>DataSet代表了select语句的结果。</returns>
+        public static DataSet ExecuteRawDataSet(string sql)
+        {
+            return ExecuteRawDataSet(sql, CommandType.Text, null);
+        }
+
+        /// <summary>
+        /// SqlDataAdapter的Fill方法执行一个查询，并返回一个DataSet类型结果（2）
+        /// </summary>
+        /// <param name="sql">要执行的SQL语句 </param>
+        /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
+        /// <returns>DataSet代表了select语句的结果。</returns>
+        public static DataSet ExecuteRawDataSet(string sql, CommandType commandType)
+        {
+            return ExecuteRawDataSet(sql, commandType, null);
+        }
+
+        /// <summary>
+        /// SqlDataAdapter的Fill方法执行一个查询，并返回一个DataSet类型结果（3）
+        /// </summary>
+        /// <param name="sql">要执行的SQL语句 </param>
+        /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
+        /// <param name="parameters">参数数组  前面加@表示参数</param>
+        /// <returns>DataSet代表了select语句的结果。</returns>
+        public static DataSet ExecuteRawDataSet(string sql, CommandType commandType, SqlParameter[] parameters)
+        {
+            DataSet ds = new DataSet();
+            using (SqlConnection connection = new SqlConnection(TrueConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.CommandType = commandType;
+                    if (parameters != null)
+                    {
+                        foreach (SqlParameter parameter in parameters)
+                        {
+                            if (parameter != null)
+                            {
+                                command.Parameters.Add(parameter);
+                            }
+                        }
+                    }
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    adapter.Fill(ds);
+                }
+            }
+            return ds;
+        }
+
+        /// <summary>
+        /// SqlDataAdapter的Fill方法执行一个查询，并返回一个DataTable类型结果（1）
+        /// </summary>
+        /// <param name="sql">要执行的SQL语句 </param>
+        /// <returns> </returns>
+        public static DataTable ExecuteRawDataTable(string sql)
+        {
+            return ExecuteRawDataTable(sql, CommandType.Text, null);
+        }
+
+        /// <summary>
+        /// SqlDataAdapter的Fill方法执行一个查询，并返回一个DataTable类型结果（2）
+        /// </summary>
+        /// <param name="sql">要执行的SQL语句 </param>
+        /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
+        /// <returns> </returns>
+        public static DataTable ExecuteRawDataTable(string sql, CommandType commandType)
+        {
+            return ExecuteRawDataTable(sql, commandType, null);
+        }
+
+        /// <summary>
+        /// SqlDataAdapter的Fill方法执行一个查询，并返回一个DataTable类型结果（3）
+        /// </summary>
+        /// <param name="sql">要执行的SQL语句 </param>
+        /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
+        /// <param name="parameters">参数数组  前面加@表示参数</param>
+        /// <returns> </returns>
+        public static DataTable ExecuteRawDataTable(string sql, CommandType commandType, SqlParameter[] parameters)
+        {
+            DataTable data = new DataTable();
+            using (SqlConnection connection = new SqlConnection(TrueConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.CommandType = commandType;
+                    if (parameters != null)
+                    {
+                        foreach (SqlParameter parameter in parameters)
+                        {
+                            if (parameter != null)
+                            {
+                                command.Parameters.Add(parameter);
+                            }
+                        }
+                    }
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    adapter.Fill(data);
+                }
+            }
+            return data;
+        }
 
         #endregion
 
