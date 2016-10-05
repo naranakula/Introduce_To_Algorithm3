@@ -770,8 +770,31 @@ namespace NetCommsConsole.NetComms
                 byte[] netIDData = Encoding.UTF8.GetBytes(NetworkIdentifierStr);
                 byte[] netIdLengthData = BitConverter.GetBytes(netIDData.Length);
 
+                data.Add(netIdLengthData);
+                data.Add(netIDData);
 
+                byte[] localEPAddressData = Encoding.UTF8.GetBytes(localEndPointAddressStr);
+                byte[] localEPAddreessLengthData = BitConverter.GetBytes(localEPAddressData.Length);
+
+                data.Add(localEPAddreessLengthData);
+                data.Add(localEPAddressData);
+
+                byte[] localPortData = BitConverter.GetBytes(localEndPointPort);
+
+                data.Add(localPortData);
+
+                byte[] isConnectableData = BitConverter.GetBytes(IsConnectable);
+
+                data.Add(isConnectableData);
+
+                byte[] AppLayerEnabledData = BitConverter.GetBytes((int)ApplicationLayerProtocol);
+
+                data.Add(AppLayerEnabledData);
             }
+
+            //这里可以一步完成，有修改空间
+            foreach (byte[] datum in data)
+                outputStream.Write(datum, 0, datum.Length);
         }
 
         /// <summary>
@@ -780,8 +803,61 @@ namespace NetCommsConsole.NetComms
         /// <param name="inputStream"></param>
         public void Deserialize(Stream inputStream)
         {
-            throw new NotImplementedException();
+            byte[] conTypeData = new byte[sizeof(int)];
+            inputStream.Read(conTypeData, 0, conTypeData.Length);
+            ConnectionType = (ConnectionType)BitConverter.ToInt32(conTypeData, 0);
+
+
+            byte[] netIDLengthData = new byte[sizeof(int)]; inputStream.Read(netIDLengthData, 0, netIDLengthData.Length);
+            byte[] netIDData = new byte[BitConverter.ToInt32(netIDLengthData, 0)]; inputStream.Read(netIDData, 0, netIDData.Length);
+
+            NetworkIdentifierStr = new String(Encoding.UTF8.GetChars(netIDData));
+
+            byte[] localEPAddreessLengthData = new byte[sizeof(int)]; inputStream.Read(localEPAddreessLengthData, 0, sizeof(int));
+            byte[] localEPAddreessData = new byte[BitConverter.ToInt32(localEPAddreessLengthData, 0)]; inputStream.Read(localEPAddreessData, 0, localEPAddreessData.Length);
+
+            localEndPointAddressStr = new String(Encoding.UTF8.GetChars(localEPAddreessData));
+
+            byte[] localPortData = new byte[sizeof(int)]; inputStream.Read(localPortData, 0, sizeof(int));
+
+            localEndPointPort = BitConverter.ToInt32(localPortData, 0);
+
+            byte[] isConnectableData = new byte[sizeof(int)]; inputStream.Read(isConnectableData, 0, sizeof(bool));
+
+            IsConnectable = BitConverter.ToBoolean(isConnectableData, 0);
+
+            byte[] AppLayerEnabledData = new byte[sizeof(int)]; inputStream.Read(AppLayerEnabledData, 0, sizeof(int));
+
+            ApplicationLayerProtocol = (ApplicationLayerProtocolStatus)BitConverter.ToInt32(AppLayerEnabledData, 0);
+
+            if (ConnectionType == ConnectionType.Bluetooth)
+            {
+                BluetoothAddress btAddress;
+                if (!BluetoothAddress.TryParse(localEndPointAddressStr, out btAddress))
+                    throw new ArgumentException("Failed to parse BluetoothAddress from localEndPointAddressStr", "localEndPointAddressStr");
+
+                LocalEndPoint = new BluetoothEndPoint(btAddress, BluetoothService.SerialPort, localEndPointPort);
+                return;
+            }
+
+            IPAddress ipAddress;
+            if (!IPAddress.TryParse(localEndPointAddressStr, out ipAddress))
+                throw new ArgumentException("Failed to parse IPAddress from localEndPointAddressStr", "localEndPointAddressStr");
+
+            LocalEndPoint = new IPEndPoint(ipAddress, localEndPointPort);
         }
+
+        /// <summary>
+        /// Deserializes from a memory stream to a <see cref="ConnectionInfo"/> object
+        /// </summary>
+        /// <param name="ms">The memory stream containing the serialized <see cref="ConnectionInfo"/></param>
+        /// <param name="result">The deserialized <see cref="ConnectionInfo"/></param>
+        public static void Deserialize(MemoryStream ms, out ConnectionInfo result)
+        {
+            result = new ConnectionInfo();
+            result.Deserialize(ms);
+        }
+
 
         #endregion
 
