@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Web.Hosting;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 {
@@ -21,6 +22,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// <summary>
     /// DbContext类型
     /// 数据库迁移只影响必须影响的部分，无关的表不影响，也就是说不会把没有映射的原来存在的表删掉
+    /// 应该尽量使用Guid作为主键，因为guid可以更好的保证插入的并行性，并且合并数据库时有决定性优势
     /// </summary>
     public class EfDbContext : DbContext
     {
@@ -30,7 +32,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString格式
         /// </summary>
-        private static string _nameOrConnectionString = "name=MySqlConStr";
+        private static string _nameOrConnectionString = "name=SqlSeverConnString";
 
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
@@ -65,43 +67,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         static EfDbContext()
         {
-            //Database.SetInitializer<EfDbContext>(null);
-
-            IDatabaseInitializer<EfDbContext> initializer;
-
-            if (!Database.Exists(_nameOrConnectionString))
-            {
-                //初始化代码放在CreateDatabaseIfNotExists中
-                //initializer = new CreateDatabaseIfNotExists<EfDbContext>();
-                initializer = new EfCreateDatabaseIfNotExists();
-                // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
-                //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
-                Database.SetInitializer(initializer);
-
-                //将初始化和创建数据库提前
-                ActionSafe(dbContext =>
-                {
-                    //dbContext.Database.CreateIfNotExists();//这一句不能加，否则不会进行初始化，这是微软的一个bug
-                    dbContext.Database.Initialize(false);//单独这一句可以创建数据库和进行初始化
-                }, ex =>
-                {
-                    //记录日志
-                });
-            }
-            else
-            {
-                //初始化代码不要放在MigrateDatabaseToLatestVersion中
-                //initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
-
-                ////相当于null，不进行初始化
-                initializer = new NullDatabaseInitializer<EfDbContext>();
-                // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
-                //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
-                Database.SetInitializer(initializer);
-            }
-
-            
-
+            Init();
         }
 
         /// <summary>
@@ -127,19 +93,21 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 ActionSafe(dbContext =>
                 {
                     //dbContext.Database.CreateIfNotExists();//这一句不能加，否则不会进行初始化
+                    //false，保证如果之前运行了，初始化不再运行
                     dbContext.Database.Initialize(false);//单独这一句可以创建数据库和进行初始化
                 }, ex =>
                 {
                     //记录日志
+                    NLogHelper.Error("初始化数据库失败："+ex);
                 });
             }
             else
             {
                 //初始化代码不要放在MigrateDatabaseToLatestVersion中
-                //initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
+                initializer = new MigrateDatabaseToLatestVersion<EfDbContext, MigrationConfiguration>();
 
                 ////相当于null，不进行初始化
-                initializer = new NullDatabaseInitializer<EfDbContext>();
+                //initializer = new NullDatabaseInitializer<EfDbContext>();
                 // The database initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.
                 //因为第一次访问数据库时调用Seed来初始化，所以目前检查数据库是否存在并没有调用Seed
                 Database.SetInitializer(initializer);
@@ -165,16 +133,18 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             #endregion
 
             #region 设置Map
+
+            //建议使用显式的定义，而不是通过反射
             //设置所有的表定义映射
-            //modelBuilder.Configurations.Add(new ProvinceMap());
+            modelBuilder.Configurations.Add(new PersonMap());
 
             //以下代码自动注册所有的Map，自动获取当前代码中的Map,并注册
-            var typesToRegister = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.BaseType != null && !type.IsGenericType && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>)).ToList();
-            foreach (var type in typesToRegister)
-            {
-                dynamic configurationInstance = Activator.CreateInstance(type);
-                modelBuilder.Configurations.Add(configurationInstance);
-            }
+            //var typesToRegister = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.BaseType != null && !type.IsGenericType && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>)).ToList();
+            //foreach (var type in typesToRegister)
+            //{
+            //    dynamic configurationInstance = Activator.CreateInstance(type);
+            //    modelBuilder.Configurations.Add(configurationInstance);
+            //}
 
             #endregion
 
@@ -1016,6 +986,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 主键
         /// DatabaseGeneratedOption.Identity is used to create an auto-increment column in the table by a unique value.int类型需要，Guid类型不需要
         /// 除Sql Server外，MySql Sqlite尽量使用long或者int类型作为主键
+        /// 实际上应该尽量使用Guid作为主键，因为guid可以更好的保证插入的并行性，并且合并数据库时有决定性优势
         /// </summary>
         public Guid Id { get; set; }
 
@@ -1062,6 +1033,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             // ToTable("Person").HasKey(p=>p.PersonId);//设置表名和主键
             //主键数据库自动生成， 即自增主键
             // Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            
             #endregion
 
             #region 设置属性列字段
@@ -1081,6 +1053,22 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
             //用于非sqlserver数据库的并行检查
             //Property(p => p.ModifyTime).IsConcurrencyToken();
+
+            #endregion
+
+
+            #region 设置索引
+
+            //索引分为聚集索引和非聚集索引，聚集索引是数据存储的物理顺序
+            //聚集索引一个表只能有一个,而非聚集索引一个表可以存在多个
+            //聚集索引存储记录是物理上连续存在，而非聚集索引是逻辑上的连续，物理存储并不连续
+            //主键自动为聚集索引
+            //设置索引和设置属性，应该连在一起
+            //without the given name and has no column order, clustering, or
+            //     uniqueness specified. //索引默认是不唯一非聚集的， 使用默认的命名为IX_列名
+            //Property(t => t.Name).HasColumnName("Name").IsOptional().HasMaxLength(512)
+            //    .HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute("IndexName")));
+            //Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime").HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute()));
 
             #endregion
 

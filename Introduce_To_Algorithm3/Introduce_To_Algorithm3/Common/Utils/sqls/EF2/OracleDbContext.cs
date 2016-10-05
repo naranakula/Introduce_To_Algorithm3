@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure.Annotations;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
@@ -71,8 +73,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public PersonMap()
         {
             ToTable("Person").HasKey(t => t.Id);
-            Property(t => t.Name).HasColumnName("Name").IsOptional().HasMaxLength(512);
-            Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime");
+
+            //without the given name and has no column order, clustering, or
+            //     uniqueness specified. //索引默认是不唯一非聚集的， 使用默认的命名为IX_列名
+            Property(t => t.Name).HasColumnName("Name").IsOptional().HasMaxLength(512)
+                .HasColumnAnnotation(IndexAnnotation.AnnotationName,new IndexAnnotation(new IndexAttribute()));
+            Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime").HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute()));
         }
     }
 
