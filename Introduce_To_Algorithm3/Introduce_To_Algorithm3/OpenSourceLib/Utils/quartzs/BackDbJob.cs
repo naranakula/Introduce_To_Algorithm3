@@ -48,6 +48,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 string backupSql = string.Format(BackUpSql, DbName, dbFullPath);
 
+                //不能在事务调用
                 EfDbContext.ExecuteRawNonQuery(backupSql);
 
             }
