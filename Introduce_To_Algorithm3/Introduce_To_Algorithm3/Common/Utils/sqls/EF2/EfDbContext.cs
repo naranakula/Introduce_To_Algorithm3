@@ -40,7 +40,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 实际的连接字符串
         /// </summary>
-        private static string _trueConStr = string.Empty;
+        private static string _trueConStrCache = string.Empty;
+
+        /// <summary>
+        /// 数据库的名字
+        /// </summary>
+        private static string _dbNameCache = string.Empty;
 
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
@@ -59,14 +64,46 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(_trueConStr))
+                if (!string.IsNullOrWhiteSpace(_trueConStrCache))
                 {
-                    return _trueConStr;
+                    return _trueConStrCache;
                 }
 
                 string conStrKey =_nameOrConnectionString.Split('=')[1];
-                _trueConStr = System.Configuration.ConfigurationManager.ConnectionStrings[conStrKey].ConnectionString;
-                return _trueConStr;
+                _trueConStrCache = System.Configuration.ConfigurationManager.ConnectionStrings[conStrKey].ConnectionString.Trim();
+                return _trueConStrCache;
+            }
+        }
+
+        /// <summary>
+        /// 从连接字符串中获取数据库的名字
+        /// </summary>
+        public static string DbName
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_dbNameCache))
+                {
+                    return _dbNameCache;
+                }
+
+                string conStr = TrueConnectionString;
+                string[] items = conStr.Split(new char[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var item in items)
+                {
+                    string[] keyValuePairs = item.Split(new char[] {'='}, StringSplitOptions.RemoveEmptyEntries);
+                    if (keyValuePairs.Length >= 2)
+                    {
+                        string value = keyValuePairs[0];
+                        if (StringUtils.EqualsEx(value, "database") || StringUtils.EqualsEx(value, "Initial Catalog"))
+                        {
+                            _dbNameCache = keyValuePairs[1].Trim();
+                            break;
+                        }
+                    }
+                }
+
+                return _dbNameCache;
             }
         }
 
@@ -90,13 +127,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #region 设置上下文
 
-        /// <summary>
-        /// 静态构造函数，设置 database initializer to use for the given context type. The database initializer is called when a the given System.Data.Entity.DbContext type  is used to access a database for the first time.The default strategy for Code First contexts is an instance of System.Data.Entity.CreateDatabaseIfNotExists&lt;TContext>.
-        /// </summary>
-        static EfDbContext()
-        {
-            Init();
-        }
+        ///// <summary>
+        ///// 静态构造函数，设置 database initializer to use for the given context type. The database initializer is called when a the given System.Data.Entity.DbContext type  is used to access a database for the first time.The default strategy for Code First contexts is an instance of System.Data.Entity.CreateDatabaseIfNotExists&lt;TContext>.
+        ///// </summary>
+        //static EfDbContext()
+        //{
+        //    Init();
+        //}
 
         /// <summary>
         /// 不再使用静态构造函数，设置 database initializer to use for the given context type. The database initializer is called when a the given System.Data.Entity.DbContext type  is used to access a database for the first time.The default strategy for Code First contexts is an instance of System.Data.Entity.CreateDatabaseIfNotExists&lt;TContext>.
@@ -141,7 +178,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 Database.SetInitializer(initializer);
             }
         }
-
 
         #endregion
 

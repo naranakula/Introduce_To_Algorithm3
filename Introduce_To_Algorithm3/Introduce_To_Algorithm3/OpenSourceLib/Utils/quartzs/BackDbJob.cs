@@ -35,8 +35,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     Directory.CreateDirectory(BackUpDir);
                 }
 
+                //数据库名
+                string dbName = EfDbContext.DbName;
+
                 //要备份的数据库名
-                string dbBackName = DbName + "_" + DateTime.Now.ToString("yyyy-MM-dd")+".bak";
+                string dbBackName = dbName + "_" + DateTime.Now.ToString("yyyy-MM-dd")+".bak";
                 //数据库全路径
                 string dbFullPath = Path.Combine(BackUpDir, dbBackName);
 
@@ -46,9 +49,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     return;
                 }
 
-                string backupSql = string.Format(BackUpSql, DbName, dbFullPath);
+                string backupSql = string.Format(BackUpSql, dbName, dbFullPath);
 
                 //不能在事务调用
+                //路径中的目录必须存在，否则抛异常
                 EfDbContext.ExecuteRawNonQuery(backupSql);
 
             }
@@ -76,14 +80,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         public const string BackUpSql = @"backup database {0} to disk='{1}'";
 
         /// <summary>
-        /// 数据库名
-        /// </summary>
-        public const string DbName = "TestDb";
-
-        /// <summary>
         /// 备份的目录
+        /// 如果数据库和程序运行在一台机器，没有问题，
+        /// 否则，此目录应该为数据库机器上的共享目录
         /// </summary>
-        public const string BackUpDir = @"D:\DbBackup";
+        public const string BackUpDir = @"C:\DbBackup";
 
         /// <summary>
         /// 锁

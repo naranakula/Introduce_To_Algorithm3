@@ -4,6 +4,7 @@
         3、禁用 安全性 ClickOnce安全设置
 
 https://github.com/quozd/awesome-dotnet#awesome-dotnet
+https://github.com/Microsoft/dotnet/blob/master/dotnet-developer-projects.md
 
 //组件
 Entity framework
@@ -31,9 +32,11 @@ RX.NET
 protobuf-net
 NET Transactional File Manager
 BinaryRage//本地key value存储
+AsyncCollections
 //webservice
 Nancy > SeviceStack
 dotnet-state-machine/stateless   //状态机
+
 
 Exceptionless - Exceptionless .NET Client
 i18n //smart internationalization for asp.net
@@ -134,7 +137,7 @@ Xamarin.Forms - Build native UIs for iOS, Android and Windows from a single, sha
 SciterSharp - Create .NET cross-platform desktop apps using not just HTML, but all features of Sciter engine: CSS3, SVG, scripting, AJAX, <video>... Sciter is free for commercial use
 Empty Keys UI - Multi-platform and multi-engine XAML based user interface library [Free][Proprietary]
 UWP Community Toolkit - The UWP Community Toolkit is a collection of helper functions, custom controls, and app services. It simplifies and demonstrates common developer tasks building UWP apps for Windows 10.
-
+Caliburn.Micro//MVVM框架 这个好
 
 Jquery+Bootstrap
 
