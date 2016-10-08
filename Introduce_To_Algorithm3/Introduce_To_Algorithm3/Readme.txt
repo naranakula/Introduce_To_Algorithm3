@@ -74,6 +74,7 @@ cscore
 Portable.Licensing
 
 //图像处理
+ ImageMagick //这个好
 ImageProcessor
 DotImage(收费)
 ImageProcessor - Open-source .NET library to manipulate images on-the-fly.
