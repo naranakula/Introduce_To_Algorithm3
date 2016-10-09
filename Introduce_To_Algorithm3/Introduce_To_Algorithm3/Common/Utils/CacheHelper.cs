@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Caching;
+using System.Runtime.Caching.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,8 +19,28 @@ namespace Introduce_To_Algorithm3.Common.Utils
     {
         /// <summary>
         /// get a reference to default memorycache instance
+        /// 默认的限制缓存800M，扫描间隔2分钟
         /// </summary>
         private static readonly MemoryCache cache = MemoryCache.Default;
+
+        /// <summary>
+        /// 静态构造函数
+        /// </summary>
+        static CacheHelper()
+        {
+            if (cache == null)
+            {
+                NameValueCollection config = new NameValueCollection(3);
+                //缓存可使用的物理内存的百分比（0到100的整数）。默认值为零，指示 MemoryCache 实例会基于计算机上安装的内存量来管理自己的内存。
+                config.Add("physicalMemoryLimitPercentage", "50");
+                //获取或设置 MemoryCache 对象的实例可增长到的最大内存大小（以兆字节为单位）。默认值为零，指示 MemoryCache 实例会基于计算机上安装的内存量来管理自己的内存。
+                config.Add("cacheMemoryLimitMegabytes", "1024");
+                //缓存实现将当前内存负载与为缓存实例设置的绝对内存和内存百分比限制进行比较所采用的时间间隔。
+                config.Add("pollingInterval", "00:02:00");
+
+                cache = new MemoryCache("cmlu.common.cache",config);
+            }
+        }
 
         /// <summary>
         /// 如果key不存在，新增；否则，覆盖现有值
