@@ -36,7 +36,7 @@ AsyncCollections
 //webservice
 Nancy > SeviceStack
 dotnet-state-machine/stateless   //状态机
-
+libsodium-net//加解密
 
 Exceptionless - Exceptionless .NET Client
 i18n //smart internationalization for asp.net

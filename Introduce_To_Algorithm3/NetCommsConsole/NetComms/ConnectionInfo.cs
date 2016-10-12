@@ -45,6 +45,7 @@ namespace NetCommsConsole.NetComms
 
         /// <summary>
         /// If the connection is  <see cref="ServerSide"/> references the listener that was used.
+        /// 当是服务器端时，表示Listener
         /// </summary>
         public ConnectionListenerBase ConnectionListener { get; internal set; }
 
@@ -186,6 +187,7 @@ namespace NetCommsConsole.NetComms
 
         /// <summary>
         /// The localEndPoint cast as <see cref="IPEndPoint"/>
+        /// 蓝牙的本地端点
         /// </summary>
         internal BluetoothEndPoint LocalBTEndPoint
         {
@@ -204,6 +206,7 @@ namespace NetCommsConsole.NetComms
 
         /// <summary>
         /// The remoteEndPoint cast as <see cref="IPEndPoint"/>.
+        /// 蓝牙的远程端点
         /// </summary>
         internal BluetoothEndPoint RemoteBTEndPoint
         {
@@ -243,10 +246,10 @@ namespace NetCommsConsole.NetComms
 
             switch (remoteEndPoint.AddressFamily)
             {
-                case AddressFamily.InterNetwork:
+                case AddressFamily.InterNetwork://IPV4
                     this.LocalEndPoint = new IPEndPoint(IPAddress.Any, 0);
                     break;
-                case AddressFamily.InterNetworkV6:
+                case AddressFamily.InterNetworkV6://IPV6
                     this.LocalEndPoint = new IPEndPoint(IPAddress.IPv6Any, 0);
                     break;
 
@@ -521,10 +524,6 @@ namespace NetCommsConsole.NetComms
                 ConnectionState = ConnectionState.Established;
                 ConnectionEstablishedTime = DateTime.Now;
 
-                //The below only really applied to TCP connections
-                //We only expect a remote network identifier for managed connections
-                //if (ApplicationLayerProtocol == ApplicationLayerProtocolStatus.Enabled && NetworkIdentifier == ShortGuid.Empty)
-                //    throw new ConnectionSetupException("Remote network identifier should have been set by this point.");
             }
         }
 

@@ -57,7 +57,10 @@
     <Compile Include="NetComms\ConnectionType.cs" />
     <Compile Include="NetComms\Connection\Connection.cs" />
     <Compile Include="NetComms\Connection\ConnectionListenerBase.cs" />
+    <Compile Include="NetComms\DPSBase\DataProcessor.cs" />
+    <Compile Include="NetComms\DPSBase\DataSerializer.cs" />
     <Compile Include="NetComms\DPSBase\DataSerializerProcessorAttribute.cs" />
+    <Compile Include="NetComms\DPSBase\DPSManager.cs" />
     <Compile Include="NetComms\DPSBase\IExplicitlySerialize.cs" />
     <Compile Include="NetComms\DPSBase\SecurityCriticalDataProcessorAttribute.cs" />
     <Compile Include="NetComms\Models\CheckSumException.cs" />

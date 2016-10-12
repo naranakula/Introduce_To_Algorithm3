@@ -21,9 +21,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AforgeNetConsole", "AforgeNetConsole\AforgeNetConsole.csproj", "{708E25B0-B379-499D-947E-35CA95E3B68A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Network", "Network", "{6B206F79-2BE4-4B0F-8875-F28E395AF82B}"
-	ProjectSection(SolutionItems) = preProject
-		ReadMe.txt = ReadMe.txt
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkConsole", "NetworkConsole\NetworkConsole.csproj", "{9FA9AE37-D579-4178-9A99-782889F3E46B}"
 EndProject

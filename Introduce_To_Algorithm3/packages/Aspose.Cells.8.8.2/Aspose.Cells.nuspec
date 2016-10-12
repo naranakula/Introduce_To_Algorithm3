@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Aspose.Cells</id>
+    <version>8.8.2</version>
+    <title>Aspose.Cells for .NET</title>
+    <authors>Aspose</authors>
+    <owners>Aspose</owners>
+    <licenseUrl>http://www.aspose.com/corporate/purchase/end-user-license-agreement.aspx</licenseUrl>
+    <projectUrl>http://www.aspose.com/categories/.net-components/aspose.cells-for-.net/default.aspx</projectUrl>
+    <iconUrl>http://www.aspose.com/images/products/dotnet/Aspose.Cells_128x128.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Aspose.Cells for .NET is a spreadsheet programming component that allows software developers to manipulate and convert spreadsheet files from within their own applications. A combination of APIs and GUI controls, Aspose.Cells for .NET speeds up Microsoft Excel programming and conversion.</description>
+    <summary>Aspose.Cells for .Net is a class library for Excel document processing</summary>
+    <releaseNotes>New Features
+(CELLSNET-44314)- How to render Unicode Supplementary characters 
+Enhancements
+(CELLSNET-41817)- Setting text effect to Offset in Rectangle Shape 
+(CELLSNET-41454)- Aspose.Cells incorrectly determines some file formats 
+Bugs
+(CELLSNET-44476)- Text Direction is ignored when saving as HTML 
+(CELLSNET-44457)- The bottom borders in the table are lost when converting to html file 
+(CELLSNET-44446)- All CSS styles are not prefixed when saving as HTML 
+(CELLSNET-44444)- Opening and saving file containing Pivot Table result in corrupt spreadsheet 
+(CELLSNET-44443)- Pivot Chart to PDF - Secondary y-axis messed up 
+(CELLSNET-44441)- When row is selected in newer version, it also selects the first cell of next row 
+(CELLSNET-44450)- Picture rotation is not correct in resultant PDF 
+(CELLSNET-44303)- SheetRender.ToImage not rendering graph's data label correctly 
+(CELLSNET-44478)- Zoom level changes after opening and rewriting Excel file 
+(CELLSNET-44477)- List Object names conflict on worksheet copy 
+(CELLSNET-44472)- CustomXmlParts do not work properly for XLS file 
+(CELLSNET-44466)- Cannot show the images correctly after export html to excel. 
+(CELLSNET-44465)- Charts are removed when deleting blank rows / columns 
+(CELLSNET-44464)- Corrupt file through a web service user 
+(CELLSNET-44463)- Black text in TextBox renders white in PDF 
+(CELLSNET-44456)- Bold style in destination file got lost after Range.CopyData() call 
+(CELLSNET-44453)- ExternalLink.IsReferred Property is not working as expected 
+(CELLSNET-44445)- CopyStyle (Smart Markers) not working on all merged cells 
+(CELLSNET-44263)- Formatting is lost while importing HTML as XLSX 
+Exceptions
+(CELLSNET-44439)- NullReferenceException at PivotField.IsAscendSort 
+(CELLSNET-44430)- Error occurs while performing complex calculations</releaseNotes>
+    <copyright>© Aspose 2002-2015. All Rights Reserved.</copyright>
+    <tags>Excel Spreadsheet Aspose.Cells XLS XLSX TXT ODS</tags>
+  </metadata>
+</package>

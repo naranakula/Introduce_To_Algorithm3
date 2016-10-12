@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.IO.RecyclableMemoryStream</id>
+    <version>1.0.0.0</version>
+    <title>Microsoft.IO.RecyclableMemoryStream</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>https://github.com/Microsoft/Microsoft.IO.RecyclableMemoryStream/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Microsoft/Microsoft.IO.RecyclableMemoryStream</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Pooled memory allocator.</description>
+    <releaseNotes>Initial public release.</releaseNotes>
+    <copyright>Copyright 2015 Microsoft</copyright>
+    <tags>MemoryStream Memory</tags>
+    <dependencies />
+  </metadata>
+</package>
