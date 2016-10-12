@@ -11,6 +11,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 {
     /// <summary>
     /// 清理日志的job
+    /// 建议的执行时间
+    /// 0 17 4 ? * 1,2,4,6     每个星期天星期一星期三星期五4点17分执行
+    /// 0 17 4 * * ?     每天4点17分执行
     /// </summary>
     public class CleanLogJob:IJob
     {

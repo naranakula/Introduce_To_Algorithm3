@@ -12,6 +12,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 {
     /// <summary>
     /// 备份数据库的job
+    /// 建议的执行时间
+    /// 0 37 4 ? * 1,4,6     每个星期天星期三星期五4点37分执行
+    /// 0 37 4 * * ?     每天4点37分执行
     /// </summary>
     public class BackDbJob:IJob
     {

@@ -8,6 +8,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 {
     /// <summary>
     /// Quartz任务调度类
+    /// Cron表达式含义查询网站：
+    /// http://cronexpressiondescriptor.azurewebsites.net
     /// </summary>
     public class QuartzHelper
     {
