@@ -15,11 +15,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// </summary>
     public static class LicenseHelper
     {
+
         /// <summary>
         /// 用于加解密privatekey的
         /// 用来加密私钥的，产生的私钥是加密后的
         /// </summary>
-        private const string PassPhrase = "luchunminglu@gmail.com";
+        private const string PassPhrase = @"dae944211b1f4371bfd35550d7e4a9bf";
 
         /// <summary>
         /// 私有/共有 密钥对
@@ -60,11 +61,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                //保存一些额外信息
                 .WithProductFeatures(new Dictionary<string, string>
                 {
+                    {"授权给","青岛机场"},//通过一些额外信息限制使用方
                     {"Sales Module", "yes"},
                     {"Purchase Module", "yes"},
                     {"Maximum Transactions", "10000"}
                 })
-                .LicensedTo("John Doe", "john.doe@yourmail.here")
+                //.LicensedTo("John Doe", "john.doe@yourmail.here")
                 .CreateAndSignWithPrivateKey(privateKey, PassPhrase);
 
             string result = license.ToString();

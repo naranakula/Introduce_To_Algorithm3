@@ -620,6 +620,7 @@
     <Compile Include="Reference\memcached\SocketPool.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="license.txt" />
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="Readme.txt" />
     <Content Include="Reference\activeMq\Apache.NMS.ActiveMQ.dll" />
