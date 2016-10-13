@@ -13,6 +13,9 @@ namespace NetCommsConsole.NetComms.Tools
     {
         #region 私有变量
 
+        /// <summary>
+        /// 内部的stream
+        /// </summary>
         private Stream _innerStream;
 
         /// <summary>
@@ -55,6 +58,23 @@ namespace NetCommsConsole.NetComms.Tools
 
 
         #region Public方法
+
+        /// <summary>
+        /// return data from entire stream
+        /// </summary>
+        /// <param name="numberZeroBytesPrefex">if non zero will apeend 0 value bytes to the start of the returned array</param>
+        /// <returns></returns>
+        public byte[] ToArray(int numberZeroBytesPrefex = 0)
+        {
+            lock (streamLocker)
+            {
+                _innerStream.Seek(0, SeekOrigin.Begin);
+                byte[] returnData = new byte[_innerStream.Length+numberZeroBytesPrefex];
+                _innerStream.Read(returnData, numberZeroBytesPrefex, returnData.Length - numberZeroBytesPrefex);
+                return returnData;
+            }
+        }
+
 
         #endregion
 

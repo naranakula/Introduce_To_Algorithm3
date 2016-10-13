@@ -139,7 +139,8 @@ namespace NetCommsConsole.NetComms.DPSBase
             {
                 //Make the serializer
                 var serializer = CreateObjectWithParameterlessCtor(typeof (T).AssemblyQualifiedName) as DataSerializer;
-
+                //get the attribute value
+                
                 
             }
 
@@ -170,5 +171,10 @@ namespace NetCommsConsole.NetComms.DPSBase
 
 #endregion
 
+
+        public static void AddDataSerializer(DataSerializer dataSerializer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
