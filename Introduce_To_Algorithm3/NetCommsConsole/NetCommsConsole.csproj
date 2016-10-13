@@ -87,6 +87,7 @@
     <Compile Include="NetComms\Tools\PacketTypeUnwrapper.cs" />
     <Compile Include="NetComms\Tools\QueueItemPriority.cs" />
     <Compile Include="NetComms\Tools\ShortGuid.cs" />
+    <Compile Include="NetComms\Tools\SteamTools.cs" />
     <Compile Include="NetComms\Tools\ThreadSafeStream.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

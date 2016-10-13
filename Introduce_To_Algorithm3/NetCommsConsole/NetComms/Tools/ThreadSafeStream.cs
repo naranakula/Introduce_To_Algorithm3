@@ -76,6 +76,24 @@ namespace NetCommsConsole.NetComms.Tools
         }
 
 
+        public byte[] ToArray(long start, long length, int numberZeroBytesPrefix = 0, int numberZeroByteAppend = 0)
+        {
+            lock (streamLocker)
+            {
+                if (start + length > _innerStream.Length)
+                {
+                    throw new ArgumentOutOfRangeException("length","Provided start and length parameters reference past the end of the available stream.");
+                }
+
+                _innerStream.Seek(start,SeekOrigin.Begin);
+                byte[] returnData = new byte[length+numberZeroBytesPrefix+numberZeroByteAppend];
+                _innerStream.Read(returnData, numberZeroBytesPrefix, (int) length);
+                return returnData;
+            }
+        }
+
+
+
         #endregion
 
 
