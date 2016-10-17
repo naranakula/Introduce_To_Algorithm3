@@ -441,6 +441,7 @@
     <Compile Include="Common\Search\BinarySearch.cs" />
     <Compile Include="Common\Search\LinearSearch.cs" />
     <Compile Include="Common\Search\OrderStatics.cs" />
+    <Compile Include="Common\Utils\AsyncAwaitHelper.cs" />
     <Compile Include="Common\Utils\CacheHelper.cs" />
     <Compile Include="Common\Utils\DeviceId.cs" />
     <Compile Include="Common\Utils\PInvokeHelper.cs" />
