@@ -512,6 +512,8 @@
     <Compile Include="Common\Utils\OneRunAtSameTime.cs" />
     <Compile Include="Common\Utils\SafeInvoke.cs" />
     <Compile Include="Common\Utils\Serial\SerialPortUtils.cs" />
+    <Compile Include="Common\Utils\sockets\SocketClients\SendMessage.cs" />
+    <Compile Include="Common\Utils\sockets\SocketClients\SocketMonitorTimer.cs" />
     <Compile Include="Common\Utils\sockets\SocketEx.cs" />
     <Compile Include="Common\Utils\sockets\SocketClients\SocketClientProxy.cs" />
     <Compile Include="Common\Utils\sockets\StandardSocket.cs" />
