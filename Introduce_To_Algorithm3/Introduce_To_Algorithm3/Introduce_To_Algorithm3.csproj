@@ -513,6 +513,7 @@
     <Compile Include="Common\Utils\SafeInvoke.cs" />
     <Compile Include="Common\Utils\Serial\SerialPortUtils.cs" />
     <Compile Include="Common\Utils\sockets\SocketEx.cs" />
+    <Compile Include="Common\Utils\sockets\SocketClients\SocketClientProxy.cs" />
     <Compile Include="Common\Utils\sockets\StandardSocket.cs" />
     <Compile Include="Common\Utils\sockets\UdpClientHelper.cs" />
     <Compile Include="Common\Utils\sockets\UdpServerHelper.cs" />
@@ -562,6 +563,7 @@
     <Compile Include="Models\CleanJob.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\MQConsumer.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\MQMonitorTimer.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\MQProducer.cs" />
     <Compile Include="OpenSourceLib\Autofac\AutofacHelper.cs" />
     <Compile Include="OpenSourceLib\AutoMapper\AutoMapperUtils.cs" />

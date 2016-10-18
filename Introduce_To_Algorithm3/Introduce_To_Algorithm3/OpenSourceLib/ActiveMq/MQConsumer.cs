@@ -23,6 +23,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// MQ地址  如：failover:(tcp://192.168.163.213:61616)
         /// </summary>
         private const string MQUri = "MQUri";
+
+        /// <summary>
+        /// 使用TopicOrQueue ,1是使用Topic，0使用Queue接收消息
+        /// </summary>
+        private const string IsTopicStr = "IsTopic";
+
+        /// <summary>
+        /// TopicOrQueue的名称
+        /// </summary>
+        private const string TopicOrQueueNameStr = "TopicOrQueueName";
+
         /// <summary>
         /// 创建连接工厂
         /// </summary>
@@ -52,7 +63,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// 锁
         /// </summary>
         private static object locker = new object();
-        
+
         /// <summary>
         /// 初始化消费者
         /// </summary>
@@ -66,7 +77,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                     CloseConsumer();
                 }
 
-                Log4netHelper.Info("开始初始化MQConsumer");
+                NLogHelper.Info("开始初始化MQConsumer");
                 //通过工厂构建连接
                 connection = factory.CreateConnection();
                 connection.ExceptionListener += connection_ExceptionListener;
@@ -76,10 +87,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 //创建回话
                 session = connection.CreateSession();
                 session.RequestTimeout = new TimeSpan(0, 0, 20);
-                bool isTopic = StringUtils.EqualsEx("1", ConfigUtils.GetString("TopicOrQueue", "1"));
-                Log4netHelper.Info("建立名为{0}的{1}连接".FormatWith(ConfigUtils.GetString("NaomsConsumerTopic"), isTopic ? "Topic" : "Queue"));
+                bool isTopic = StringUtils.EqualsEx("1", ConfigUtils.GetString(IsTopicStr, "1"));
+                NLogHelper.Info("建立名为{0}的{1}连接".FormatWith(ConfigUtils.GetString(TopicOrQueueNameStr), isTopic ? "Topic" : "Queue"));
                 //创建消费者
-                consumer = session.CreateConsumer(session.GetDestination(ConfigUtils.GetString("NaomsConsumerTopic"),isTopic?DestinationType.Topic:DestinationType.Queue));
+                consumer = session.CreateConsumer(session.GetDestination(ConfigUtils.GetString(TopicOrQueueNameStr),isTopic?DestinationType.Topic:DestinationType.Queue));
                 //注册监听事件
                 consumer.Listener += consumer_Listener;
                 if (!connection.IsStarted)
@@ -87,14 +98,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                     //启动连接
                     connection.Start();
                 }
-                Log4netHelper.Info("MQ初始化成功");
+                NLogHelper.Info("MQ初始化成功");
                 isAlive = true;
                 return true;
             }
             catch (Exception ex)
             {
                 isAlive = false;
-                Log4netHelper.Error("MQ初始化失败：" + ex);
+                NLogHelper.Error("MQ初始化失败：" + ex);
                 return false;
             }
         }
@@ -114,18 +125,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
               
                 if (txtMsg == null || string.IsNullOrWhiteSpace(txtMsg.Text))
                 {
-                    Log4netHelper.Warn("接收到空消息");
+                    NLogHelper.Warn("接收到空消息");
                     return;
                 }
                 #endregion
 
                 string msg = txtMsg.Text.Trim();
-                Log4netHelper.Info("接收到消息：" + msg);
+                NLogHelper.Info("接收到消息：" + msg);
                
             }
             catch (Exception ex)
             {
-                Log4netHelper.Error("解析处理MQ消息失败：" + ex);
+                NLogHelper.Error("解析处理MQ消息失败：" + ex);
             }
         }
 
@@ -135,7 +146,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private static void connection_ConnectionInterruptedListener()
         {
             isAlive = false;
-            Log4netHelper.Error("ConnectionInterruptedListener连接发生异常连接断开");
+            NLogHelper.Error("ConnectionInterruptedListener连接发生异常连接断开");
         }
 
         /// <summary>
@@ -145,7 +156,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private static void connection_ExceptionListener(Exception exception)
         {
             isAlive = false;
-            Log4netHelper.Error("connection_ExceptionListener连接发生异常：" + exception);
+            NLogHelper.Error("connection_ExceptionListener连接发生异常：" + exception);
         }
 
 
@@ -157,7 +168,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             try
             {
 
-                Log4netHelper.Info("开始关闭MQ:" + ConfigUtils.GetString(MQUri));
+                NLogHelper.Info("开始关闭MQ:" + ConfigUtils.GetString(MQUri));
 
                 if (consumer != null)
                 {
@@ -175,7 +186,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             }
             catch (Exception ex)
             {
-                Log4netHelper.Error("关闭MQ Session失败：" + ex);
+                NLogHelper.Error("关闭MQ Session失败：" + ex);
             }
 
             try
@@ -190,7 +201,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             }
             catch (Exception ex)
             {
-                Log4netHelper.Error("关闭MQ连接失败：" + ex);
+                NLogHelper.Error("关闭MQ连接失败：" + ex);
             }
 
             isAlive = false;
@@ -202,7 +213,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <returns></returns>
         public static Boolean IsAlive()
         {
-            return isAlive;
+            lock (locker)
+            {
+                return isAlive;
+            }
         }
 
     }
