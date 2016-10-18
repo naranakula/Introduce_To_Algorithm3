@@ -248,6 +248,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                 {
                     if (!IsConnected)
                     {
+
+                        if (RecvByteList.Count > 0)
+                        {
+                            //避免受到上一次连接的不完整消息
+                            RecvByteList.Clear();
+                        }
                         Thread.Sleep(1500);
                         NLogHelper.Info("检测到socket没有连接");
                         continue;
