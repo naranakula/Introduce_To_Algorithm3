@@ -3,6 +3,7 @@ Akka.net
 DotNetty>Helios
 NetWorkComms
 ZeroMq
-LibuvSharp 
+LibuvSharp
+SuperSocket
 
 grpc thrift

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata minClientVersion="2.12">
+    <id>System.Reactive.Windows.Threading</id>
+    <version>3.0.0</version>
+    <title>Reactive Extensions - XAML Support Library</title>
+    <authors>.NET Foundation and Contributors</authors>
+    <owners>Microsoft,RxTeam</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
+    <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
+    <description>XAML support library for Rx. Contains scheduler functionality for the UI dispatcher.</description>
+    <copyright>Copyright (c) .NET Foundation and Contributors.</copyright>
+    <language>en-US</language>
+    <tags>Rx Reactive Extensions Observable LINQ Events</tags>
+    <dependencies>
+      <group>
+        <dependency id="System.Reactive.Core" version="3.0.0" />
+      </group>
+      <group targetFramework="UAP10.0">
+        <dependency id="System.Reactive.Core" version="3.0.0" />
+        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.1" />
+        <dependency id="System.Globalization" version="4.0.11" />
+        <dependency id="System.Reflection" version="4.1.0" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
+        <dependency id="System.Runtime" version="4.1.0" />
+        <dependency id="System.Runtime.InteropServices.WindowsRuntime" version="4.0.1" />
+        <dependency id="System.Threading" version="4.0.11" />
+      </group>
+      <group targetFramework=".NETCore4.5.1">
+        <dependency id="System.Reactive.Core" version="3.0.0" />
+      </group>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="System.Reactive.Core" version="3.0.0" />
+      </group>
+      <group targetFramework="WindowsPhoneApp8.1">
+        <dependency id="System.Reactive.Core" version="3.0.0" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="WindowsBase" targetFramework=".NETFramework4.5" />
+    </frameworkAssemblies>
+  </metadata>
+</package>
