@@ -533,6 +533,17 @@
     <Compile Include="Common\Utils\OneRunAtSameTime.cs" />
     <Compile Include="Common\Utils\SafeInvoke.cs" />
     <Compile Include="Common\Utils\Serial\SerialPortUtils.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\ConnectStatus.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\INetworkServer.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\INetworkSocket.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\INetworkSocketCallback.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\IPEndPointType.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\IPInfo.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\Packet.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\SendStatus.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\Servers\IocpTcpSocket.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\StartStatus.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\ThreadEx.cs" />
     <Compile Include="Common\Utils\sockets\SocketClients\SendMessage.cs" />
     <Compile Include="Common\Utils\sockets\SocketClients\SocketMonitorTimer.cs" />
     <Compile Include="Common\Utils\sockets\SocketEx.cs" />
