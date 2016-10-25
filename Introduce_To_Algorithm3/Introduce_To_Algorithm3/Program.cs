@@ -1,10 +1,5 @@
 ﻿
-
 using System;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace Introduce_To_Algorithm3
 {
@@ -12,7 +7,13 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-            
+            byte[] buffer = new byte[8192*16*1024*2];
+            Console.ReadLine();
+            Console.WriteLine(buffer.Length);
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                byte b = buffer[i];
+            }
         }
     }
 }

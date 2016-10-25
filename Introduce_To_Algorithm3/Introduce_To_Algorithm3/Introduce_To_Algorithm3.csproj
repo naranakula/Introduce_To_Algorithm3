@@ -533,6 +533,10 @@
     <Compile Include="Common\Utils\OneRunAtSameTime.cs" />
     <Compile Include="Common\Utils\SafeInvoke.cs" />
     <Compile Include="Common\Utils\Serial\SerialPortUtils.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\AsyncUserToken.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\BufferManager.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\Server.cs" />
+    <Compile Include="Common\Utils\sockets\Iocps\SocketAsyncEventArgsPool.cs" />
     <Compile Include="Common\Utils\sockets\SocketClients\SendMessage.cs" />
     <Compile Include="Common\Utils\sockets\SocketClients\SocketMonitorTimer.cs" />
     <Compile Include="Common\Utils\sockets\SocketEx.cs" />
@@ -688,7 +692,6 @@
     <Folder Include="Common\Compiler\" />
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
-    <Folder Include="Common\Utils\sockets\Iocps\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
     <Folder Include="OpenSourceLib\SharpZipLib\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
