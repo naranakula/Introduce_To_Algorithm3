@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Introduce_To_Algorithm3.Common.Utils.sockets.Iocps.Servers
+namespace DotNettyConsole
 {
-    class IocpTcpSocket
+    class Program
     {
+        static void Main(string[] args)
+        {
+        }
     }
 }

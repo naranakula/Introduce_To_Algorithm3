@@ -19,6 +19,7 @@ Polly(重试执行框架)
 Quartz.net  http://cronexpressiondescriptor.azurewebsites.net/
 RestSharp (Simple REST and HTTP API Client for .NET)
 Ninject>Autofac
+Hangfire
 aspose.cells NPOI  两者均不需要安装office
 SharpZipLib   压缩包库
 FTP.dll (收费，nuget是评估版) >(优于) > edtFTPnet/Free(使用, Nuget版本比较旧，从官网下载) > System.Net.FtpClient

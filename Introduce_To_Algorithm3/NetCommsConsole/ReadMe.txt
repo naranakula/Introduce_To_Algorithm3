@@ -5,5 +5,6 @@ NetWorkComms
 ZeroMq
 LibuvSharp
 SuperSocket
+kayak
 
 grpc thrift

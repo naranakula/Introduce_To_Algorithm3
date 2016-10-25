@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orleans", "Orleans", "{34FA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansServer", "OrleansServer\OrleansServer.csproj", "{ED805D4D-089B-4997-A324-68C17802D470}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNettyConsole", "DotNettyConsole\DotNettyConsole.csproj", "{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -164,6 +166,18 @@ Global
 		{ED805D4D-089B-4997-A324-68C17802D470}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{ED805D4D-089B-4997-A324-68C17802D470}.Release|x64.ActiveCfg = Release|Any CPU
 		{ED805D4D-089B-4997-A324-68C17802D470}.Release|x86.ActiveCfg = Release|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Release|x64.ActiveCfg = Release|Any CPU
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,5 +190,6 @@ Global
 		{A76B5747-B4FD-4E4F-88A8-48E5A0354C69} = {6B206F79-2BE4-4B0F-8875-F28E395AF82B}
 		{34FA6E2E-083A-47CD-A2AD-80D14E96F1FB} = {6B206F79-2BE4-4B0F-8875-F28E395AF82B}
 		{ED805D4D-089B-4997-A324-68C17802D470} = {34FA6E2E-083A-47CD-A2AD-80D14E96F1FB}
+		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161} = {6B206F79-2BE4-4B0F-8875-F28E395AF82B}
 	EndGlobalSection
 EndGlobal

@@ -19,7 +19,7 @@
     <NuGetPackageImportStamp>bc80730f</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -27,7 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -45,10 +45,10 @@
     <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -533,17 +533,6 @@
     <Compile Include="Common\Utils\OneRunAtSameTime.cs" />
     <Compile Include="Common\Utils\SafeInvoke.cs" />
     <Compile Include="Common\Utils\Serial\SerialPortUtils.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\ConnectStatus.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\INetworkServer.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\INetworkSocket.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\INetworkSocketCallback.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\IPEndPointType.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\IPInfo.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\Packet.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\SendStatus.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\Servers\IocpTcpSocket.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\StartStatus.cs" />
-    <Compile Include="Common\Utils\sockets\Iocps\ThreadEx.cs" />
     <Compile Include="Common\Utils\sockets\SocketClients\SendMessage.cs" />
     <Compile Include="Common\Utils\sockets\SocketClients\SocketMonitorTimer.cs" />
     <Compile Include="Common\Utils\sockets\SocketEx.cs" />
@@ -699,6 +688,7 @@
     <Folder Include="Common\Compiler\" />
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
+    <Folder Include="Common\Utils\sockets\Iocps\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
     <Folder Include="OpenSourceLib\SharpZipLib\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
