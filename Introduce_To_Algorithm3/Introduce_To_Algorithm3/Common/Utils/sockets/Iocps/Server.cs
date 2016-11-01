@@ -11,6 +11,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.Iocps
 {
     /// <summary>
     /// Implements the connection logic for the socket server
+    /// http://blog.csdn.net/sqldebug_fan/article/details/17557341
+    /// http://freshflower.iteye.com/blog/2285286
+    /// http://freshflower.iteye.com/blog/2285272
+    /// //https://msdn.microsoft.com/en-us/library/system.net.sockets.socketasynceventargs(v=vs.110).aspx
+    /// http://www.codeproject.com/Articles/83102/C-SocketAsyncEventArgs-High-Performance-Socket-Cod
+    /// http://www.codeproject.com/Articles/22918/How-To-Use-the-SocketAsyncEventArgs-Class
+    /// http://www.codeproject.com/Articles/22918/How-To-Use-the-SocketAsyncEventArgs-Class
     /// </summary>
     public class Server
     {
@@ -73,7 +80,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.Iocps
             m_receiveBufferSize = receiveBufferSize;
 
             //allocate buffers such that the maximum number of socket can hava one outstanding read and write posted to the socket simultaneously
-            m_bufferManager = new BufferManager(receiveBufferSize * maxNumConnections * opsToPreAlloc, receiveBufferSize);
+            m_bufferManager = new BufferManager(receiveBufferSize*maxNumConnections*opsToPreAlloc, receiveBufferSize);
             m_readWritePool = new SocketAsyncEventArgsPool(maxNumConnections);
             //初始化未命名的信号量,指定初始入口数和最大并发入口数。
             m_maxNumberAcceptedClients = new SemaphoreSlim(maxNumConnections, maxNumConnections);
@@ -157,15 +164,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.Iocps
         /// <param name="acceptEventArgs"></param>
         private void ProcessAccept(SocketAsyncEventArgs acceptEventArgs)
         {
+            //需要判断SocketError
+            //acceptEventArgs.SocketError
+
+            //增加连接
             Interlocked.Increment(ref m_numConnectedSockets);
-
-            //开始接受新的连接
-            StartAccept(acceptEventArgs);
-
 
             //Get the Socket for the accepted client connection and put it into the ReadEventArg Object user token
             SocketAsyncEventArgs readEventArgs = m_readWritePool.Pop();
-            ((AsyncUserToken)readEventArgs.UserToken).Socket = acceptEventArgs.AcceptSocket;
+            ((AsyncUserToken) readEventArgs.UserToken).Socket = acceptEventArgs.AcceptSocket;
 
             //as soon as the client is connected, post a receive to the connection
             bool willRaiseEvent = acceptEventArgs.AcceptSocket.ReceiveAsync(readEventArgs);
@@ -175,15 +182,76 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.Iocps
                 ProcessReceive(readEventArgs);
             }
 
+
+            //开始接受新的连接， 必须处理完EventArgs之后，才能接收新连接
+            StartAccept(acceptEventArgs);
+
         }
 
         /// <summary>
         /// 处理接收
+        /// This method is invoked when an asynchronous receive operation completes.
+        /// If the remote host closed the connection, then the socket is closed.
         /// </summary>
-        /// <param name="readEventArgs"></param>
-        private void ProcessReceive(SocketAsyncEventArgs readEventArgs)
+        /// <param name="recvEventArgs"></param>
+        private void ProcessReceive(SocketAsyncEventArgs recvEventArgs)
         {
-            throw new NotImplementedException();
+            //指的是接收之后的处理，实际的接收已经完成
+            //Check if the remote host closed the connection
+            //如果BytesTransferred==0，如果从读取操作返回零，则说明远程端已关闭了连接。
+            if (recvEventArgs.BytesTransferred > 0 && recvEventArgs.SocketError == SocketError.Success)
+            {
+                AsyncUserToken token = (AsyncUserToken) recvEventArgs.UserToken;
+                //接收到数据
+                for (int i = 0; i < recvEventArgs.BytesTransferred; i++)
+                {
+                    token.RecvBuffer.Add(recvEventArgs.Buffer[recvEventArgs.Offset + i]);
+                }
+
+                //解析数据包
+                token.ParsePacket();
+
+                //重用EventArgs，然后接收数据
+
+                //echo the data received back to the client
+                //e.SetBuffer(e.Offset, e.BytesTransferred);
+                //bool willRaiseEvent = token.Socket.SendAsync(e);
+                //if (!willRaiseEvent)
+                //{
+                //    ProcessSend(e);
+                //}
+            }
+            else
+            {
+                //关闭客户端连接
+                CloseClientSocket(recvEventArgs);
+            }
+        }
+
+        /// <summary>
+        /// 关闭客户端socket
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        private void CloseClientSocket(SocketAsyncEventArgs eventArgs)
+        {
+            AsyncUserToken token = eventArgs.UserToken as AsyncUserToken;
+
+            //Close the socket
+            try
+            {
+                token.Socket.Shutdown(SocketShutdown.Send);
+            }
+            catch (Exception)
+            {
+                
+            }
+
+            token.Socket.Close();
+
+            Interlocked.Decrement(ref m_numConnectedSockets);
+            m_maxNumberAcceptedClients.Release();
+            //Free the SocketAsyncEventArg so they can be reused
+            m_readWritePool.Push(eventArgs);
         }
 
         /// <summary>
@@ -192,7 +260,23 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.Iocps
         /// <param name="socketAsyncEventArgs"></param>
         private void ProcessSend(SocketAsyncEventArgs socketAsyncEventArgs)
         {
-            throw new NotImplementedException();
+            //指的是发送之后的处理，发送已经完成
+            if (socketAsyncEventArgs.SocketError == SocketError.Success)
+            {
+                //发送成功
+                // done echoing data back to the client
+                AsyncUserToken token = (AsyncUserToken)socketAsyncEventArgs.UserToken;
+                // read the next block of data send from the client
+                bool willRaiseEvent = token.Socket.ReceiveAsync(socketAsyncEventArgs);
+                if (!willRaiseEvent)
+                {
+                    ProcessReceive(socketAsyncEventArgs);
+                }
+            }
+            else
+            {
+                CloseClientSocket(socketAsyncEventArgs);
+            }
         }
 
         /// <summary>

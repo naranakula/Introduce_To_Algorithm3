@@ -258,7 +258,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 0/5 * * * * ?   表示每5秒执行一次
         /// 0 0/5 * * * ?   表示每5分钟执行一次
         /// 0 0 4 5 * ?     每月5日 4 点执行
-        /// 0 0 4 ? * 1     每个星期天4点执行
+        /// 0 17 4 ? * 1,3,5     每个星期天 星期二 星期四 4点 17分执行
         /// </summary>
         /// <param name="triggerName">triggerName,必须唯一</param>
         /// <param name="cronExpression"></param>

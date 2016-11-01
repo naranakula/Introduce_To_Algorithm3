@@ -1,5 +1,7 @@
 ﻿
 using System;
+using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.OpenSourceLib.NetMqs.ReqRep;
 
 namespace Introduce_To_Algorithm3
 {
@@ -7,13 +9,6 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-            byte[] buffer = new byte[8192*16*1024*2];
-            Console.ReadLine();
-            Console.WriteLine(buffer.Length);
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                byte b = buffer[i];
-            }
         }
     }
 }

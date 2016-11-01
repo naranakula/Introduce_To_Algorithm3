@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
+using System.Net;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +23,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
         private static volatile string cacheDeviceId = string.Empty;
 
         /// <summary>
+        /// 缓存的ipV4地址
+        /// </summary>
+        private static volatile string cacheIpV4 = string.Empty;
+
+        /// <summary>
         /// 获取设备唯一id  32位 小写英文字母
         /// 此函数第1次调用耗时1-2秒
         /// </summary>
@@ -33,11 +40,73 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
 
             //bios是固化到主板的程序，有了主板id，可以忽略biosid
-            string deviceId = CpuId() + "_"+ BiosId() + "_" + DiskId() + "_" + MotherboardId();
-            NLogHelper.Info("DeviceId="+deviceId);
+            //string deviceId = CpuId() + "_"+ BiosId() + "_" + DiskId() + "_" + MotherboardId();
+            //现实中可能更换机器但不更换ip
+            string deviceId = CpuId() + "_" + BiosId() + "_" + MotherboardId();
+            NLogHelper.Info("DeviceId=" + deviceId);
             cacheDeviceId = GetMD5HashFromString(deviceId);
             return cacheDeviceId;
         }
+
+        /// <summary>
+        /// 获取使用的IpV4地址
+        /// 现实中可能更换机器但不更换ip
+        /// </summary>
+        /// <returns></returns>
+        public static string GetUniqueIp()
+        {
+            if (!string.IsNullOrWhiteSpace(cacheIpV4))
+            {
+                return cacheIpV4;
+            }
+
+
+            
+            List<string> ipv4StrAddressList = new List<string>();
+            try
+            {
+                List<IPAddress> ipv4AddressList = new List<IPAddress>();
+                IPAddress[] addressList = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+
+                if (addressList != null)
+                {
+                    foreach (var ipAddress in addressList)
+                    {
+                        if (ipAddress.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            //过滤ipv4地址
+                            ipv4AddressList.Add(ipAddress);
+                            try
+                            {
+                                string strIp = ipAddress.ToString().Trim();
+                                if (!string.IsNullOrWhiteSpace(strIp))
+                                {
+                                    ipv4StrAddressList.Add(strIp);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("不能获取到Ip地址："+ex);
+                            }
+                        }
+                    }
+                }
+
+                ipv4StrAddressList.Sort();
+                if (ipv4StrAddressList.Count > 0)
+                {
+                    cacheIpV4 = ipv4StrAddressList.First();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("获取ip地址出错："+ex);
+            }
+
+
+            return cacheIpV4;
+        }
+
 
         /// <summary>
         /// MD5hash 转换为32位小写hash  由[0-f]组成

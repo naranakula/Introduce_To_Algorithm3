@@ -111,7 +111,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 保存多少天日志，与创建时间比较
         /// </summary>
-        private const int KeepDays = 180;
+        private const int KeepDays = 80;
 
         /// <summary>
         /// 过滤什么样的文件
@@ -127,7 +127,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 当到达硬盘利用极限时，保存的天数
         /// </summary>
-        private const int KeepDaysWhenAvailableLimit = 50;
+        private const int KeepDaysWhenAvailableLimit = 30;
 
         /// <summary>
         /// 锁

@@ -24,6 +24,31 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             JobDataMap dataMap = context.JobDetail.JobDataMap;//获取job的数据
             
             Console.WriteLine(Thread.CurrentThread.ManagedThreadId+"   "+DateTime.Now.ToString());
+
+            lock (locker)
+            {
+                if (_isRunning)
+                {
+                    return;
+                }
+                _isRunning = true;
+            }
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Log4netHelper.Error("清理日志失败：" + ex);
+            }
+            finally
+            {
+                lock (locker)
+                {
+                    _isRunning = false;
+                }
+            }
         }
 
         /// <summary>
@@ -33,6 +58,24 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         {
             Console.WriteLine("创建一个job实例");
         }
+
+
+        #region 辅助属性
+
+       
+
+        /// <summary>
+        /// 锁
+        /// </summary>
+        private static Object locker = new Object();
+
+        /// <summary>
+        /// 回调函数是否正在执行
+        /// </summary>
+        private static bool _isRunning = false;
+
+        #endregion
+
         #endregion
     }
 }

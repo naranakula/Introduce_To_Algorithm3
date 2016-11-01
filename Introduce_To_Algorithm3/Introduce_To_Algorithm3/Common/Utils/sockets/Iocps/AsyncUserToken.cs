@@ -40,14 +40,22 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.Iocps
 
 
         /// <summary>  
-        /// 数据缓存区  
+        /// 数据缓存区  数据接收缓冲区
         /// </summary>  
-        public List<byte> Buffer { get; set; }
+        public List<byte> RecvBuffer { get; set; }
 
 
         public AsyncUserToken()
         {
-            this.Buffer = new List<byte>();
-        }  
+            this.RecvBuffer = new List<byte>();
+        }
+
+        /// <summary>
+        /// 解析数据包
+        /// </summary>
+        public void ParsePacket()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
