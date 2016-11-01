@@ -3,6 +3,8 @@
         2、修改app.maifest为 requestedExecutionLevel level="requireAdministrator" uiAccess="false" 
         3、禁用 安全性 ClickOnce安全设置
 
+//可以将wpf，winform程序编译为console程序
+
 https://github.com/quozd/awesome-dotnet#awesome-dotnet
 https://github.com/Microsoft/dotnet/blob/master/dotnet-developer-projects.md
 

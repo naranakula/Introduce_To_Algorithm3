@@ -648,6 +648,9 @@
     <Compile Include="OpenSourceLib\HP-Socket\TcpServer.cs" />
     <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetClient.cs" />
     <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetServer.cs" />
+    <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsClient.cs" />
+    <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsHelper.cs" />
+    <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsServer.cs" />
     <Compile Include="OpenSourceLib\Ninject\NinjectHelper.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
@@ -691,25 +694,25 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.txt" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\DistributedFileSystem.dll" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\DistributedFileSystem.pdb" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\DistributedFileSystem.xml" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\ICSharpCode.SharpZipLib.dll" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\JSONSerializer.dll" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\JSONSerializer.pdb" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\JSONSerializer.xml" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\NetworkCommsDotNet.dll" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\NetworkCommsDotNet.pdb" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\NetworkCommsDotNet.xml" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\ProtobufSerializer.dll" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\ProtobufSerializer.pdb" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\ProtobufSerializer.xml" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\RemoteProcedureCalls.dll" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\RemoteProcedureCalls.pdb" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\RemoteProcedureCalls.xml" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\SharpZipLibCompressor.dll" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\SharpZipLibCompressor.pdb" />
-    <Content Include="OpenSourceLib\NetWorkComms.Net\References\SharpZipLibCompressor.xml" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.dll" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.pdb" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.xml" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\JSONSerializer.dll" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\JSONSerializer.pdb" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\JSONSerializer.xml" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\NetworkCommsDotNet.dll" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\NetworkCommsDotNet.pdb" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\NetworkCommsDotNet.xml" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\ProtobufSerializer.dll" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\ProtobufSerializer.pdb" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\ProtobufSerializer.xml" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\RemoteProcedureCalls.dll" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\RemoteProcedureCalls.pdb" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\RemoteProcedureCalls.xml" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.dll" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.pdb" />
+    <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.xml" />
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="Readme.txt" />
     <Content Include="Reference\activeMq\Apache.NMS.ActiveMQ.dll" />
@@ -750,7 +753,6 @@
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
-    <Folder Include="OpenSourceLib\NetWorkComms.Net\Sources\" />
     <Folder Include="OpenSourceLib\SharpZipLib\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
   </ItemGroup>
@@ -781,8 +783,8 @@
     <None Include="OpenSourceLib\AutoMapper\AutoMapper.docx" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket.docx" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket_Development_Guide_%28v3.3-20150101%29.pdf" />
-    <None Include="OpenSourceLib\NetWorkComms.Net\Docs\NetWorkComms.Net文档.docx" />
-    <None Include="OpenSourceLib\NetWorkComms.Net\Packages\NetworkCommsDotNet_v3.0.3_ALv2.zip" />
+    <None Include="OpenSourceLib\NetWorkCommsDotNets\Docs\NetWorkComms.Net文档.docx" />
+    <None Include="OpenSourceLib\NetWorkCommsDotNets\Packages\NetworkCommsDotNet_v3.0.3_ALv2.zip" />
     <None Include="OpenSourceLib\RabbitMq\Rabbitmq.docx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
