@@ -112,6 +112,10 @@
       <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DistributedFileSystem, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f58108eb6480f6ec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>OpenSourceLib\NetWorkComms.Net\References\DistributedFileSystem.dll</HintPath>
+    </Reference>
     <Reference Include="edtFTPnet, Version=2.2.3.0, Culture=neutral, PublicKeyToken=4b0c991f43097782, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\edtFTPnet.dll</HintPath>
@@ -135,6 +139,10 @@
     <Reference Include="Ionic.Zip, Version=1.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="JSONSerializer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f58108eb6480f6ec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>OpenSourceLib\NetWorkComms.Net\References\JSONSerializer.dll</HintPath>
     </Reference>
     <Reference Include="LiteDB, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
       <HintPath>..\packages\LiteDB.2.0.0\lib\net35\LiteDB.dll</HintPath>
@@ -171,6 +179,10 @@
     <Reference Include="NetMQ, Version=3.3.3.4, Culture=neutral, PublicKeyToken=a6decef4ddc58b3a, processorArchitecture=MSIL">
       <HintPath>..\packages\NetMQ.3.3.3.4\lib\net40\NetMQ.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="NetworkCommsDotNet, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f58108eb6480f6ec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>OpenSourceLib\NetWorkComms.Net\References\NetworkCommsDotNet.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -220,6 +232,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\protobuf-net.dll</HintPath>
     </Reference>
+    <Reference Include="ProtobufSerializer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f58108eb6480f6ec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>OpenSourceLib\NetWorkComms.Net\References\ProtobufSerializer.dll</HintPath>
+    </Reference>
     <Reference Include="Quartz, Version=2.3.0.18, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Quartz.dll</HintPath>
@@ -228,6 +244,10 @@
       <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RemoteProcedureCalls, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f58108eb6480f6ec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>OpenSourceLib\NetWorkComms.Net\References\RemoteProcedureCalls.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
       <Private>True</Private>
@@ -235,6 +255,10 @@
     <Reference Include="RijndaelEncryptDecrypt, Version=1.0.0.24384, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RijndaelEncryptDecrypt.1.0.0.24384\lib\net40\RijndaelEncryptDecrypt.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpZipLibCompressor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f58108eb6480f6ec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>OpenSourceLib\NetWorkComms.Net\References\SharpZipLibCompressor.dll</HintPath>
     </Reference>
     <Reference Include="Sodium, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\libsodium-net.0.9.0\lib\Net40\Sodium.dll</HintPath>
@@ -667,6 +691,25 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.txt" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\DistributedFileSystem.dll" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\DistributedFileSystem.pdb" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\DistributedFileSystem.xml" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\JSONSerializer.dll" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\JSONSerializer.pdb" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\JSONSerializer.xml" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\NetworkCommsDotNet.dll" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\NetworkCommsDotNet.pdb" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\NetworkCommsDotNet.xml" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\ProtobufSerializer.dll" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\ProtobufSerializer.pdb" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\ProtobufSerializer.xml" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\RemoteProcedureCalls.dll" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\RemoteProcedureCalls.pdb" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\RemoteProcedureCalls.xml" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\SharpZipLibCompressor.dll" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\SharpZipLibCompressor.pdb" />
+    <Content Include="OpenSourceLib\NetWorkComms.Net\References\SharpZipLibCompressor.xml" />
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="Readme.txt" />
     <Content Include="Reference\activeMq\Apache.NMS.ActiveMQ.dll" />
