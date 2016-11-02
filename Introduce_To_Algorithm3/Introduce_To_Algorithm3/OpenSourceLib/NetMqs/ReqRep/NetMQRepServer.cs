@@ -8,7 +8,7 @@ using NetMQ.Sockets;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.NetMqs.ReqRep
 {
-    public class NetServer
+    public class NetMQRepServer
     {
         /// <summary>
         /// 请求响应模式
@@ -24,6 +24,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetMqs.ReqRep
                     var message = server.ReceiveFrameString();
                     Console.WriteLine("接收到："+message);
                     //经过测试，发送到了特定的客户端中，而不是群发
+                    //Response socket always reply to the last client that sends a message.
                     server.SendFrame(DateTime.Now.ToString());
                 }
             }

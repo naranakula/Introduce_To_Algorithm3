@@ -22,7 +22,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
         /// <summary>
         /// 服务器Ip
         /// </summary>
-        private static readonly string serverIp = "192.168.163.57";//初始化从配置文件中读取
+        private static readonly string serverIp = "192.168.163.87";//初始化从配置文件中读取
 
         /// <summary>
         /// 服务器端口
@@ -139,8 +139,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
         }
 
         /// <summary>
-        /// 发送消息, 如果连接存在，则重用现有连接，如果不存在，创建连接，如果连接已经关闭，重新创建连接
-        /// 总之客户端确保采用一切措施使得发送能够成功
+        /// 发送消息, 如果连接存在，则重用现有连接，如果不存在，创建连接，如果连接已经关闭，重新创建连接。
+        /// 总之客户端确保采用一切措施使得发送能够成功，即使客户端先开启或者服务器中途重启
         /// </summary>
         /// <param name="messageToSend">消息不能为空</param>
         public static void Send(string messageToSend)

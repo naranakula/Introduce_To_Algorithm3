@@ -646,8 +646,10 @@
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullClient.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpPullServer.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\TcpServer.cs" />
-    <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetClient.cs" />
-    <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetServer.cs" />
+    <Compile Include="OpenSourceLib\NetMqs\PubSub\NetMQPubServer.cs" />
+    <Compile Include="OpenSourceLib\NetMqs\PubSub\NetMQSubClient.cs" />
+    <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetMQReqClient.cs" />
+    <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetMQRepServer.cs" />
     <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsClient.cs" />
     <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsHelper.cs" />
     <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsServer.cs" />

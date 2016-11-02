@@ -15,7 +15,7 @@ AutoMapper
 NLog（建议使用 NLog>Log4net）
 Serilog
 Log4net
-Newtonsoft.Json (Json)
+Newtonsoft.Json (Json)  Msgpack protocol buffer 消息格式
 EPPlus //excel 读写
 Polly(重试执行框架)
 Quartz.net  http://cronexpressiondescriptor.azurewebsites.net/

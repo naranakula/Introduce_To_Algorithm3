@@ -42,6 +42,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
 
             //在serverPort上开始监听消息,并返回监听的列表
             List<ConnectionListenerBase> listenerList = Connection.StartListening(ConnectionType.TCP, new IPEndPoint(IPAddress.Any, serverPort));
+            Console.WriteLine("服务器监听下列地址：");
+            foreach (var listenerItem in listenerList)
+            {
+                Console.WriteLine(listenerItem.LocalListenEndPoint);
+            }
 
         }
 

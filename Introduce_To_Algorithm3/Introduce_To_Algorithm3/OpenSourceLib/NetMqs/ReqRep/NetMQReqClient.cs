@@ -8,7 +8,7 @@ using NetMQ.Sockets;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.NetMqs.ReqRep
 {
-    public class NetClient
+    public class NetMQReqClient
     {
         public static void Start()
         {
