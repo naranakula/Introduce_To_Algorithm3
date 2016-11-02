@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Threading;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 using NetworkCommsDotNet.Connections.TCP;
@@ -50,13 +51,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
             //Add an incoming packet handler using default SendReceiveOptions.
             // Multiple  handlers for the same packet type will be executed in the order they are added.
             //注册接收到消息的处理器   //PacketType用于标志哪种类型的消息，客户端和服务器端协议商定，标志消息类型，可以自定义
+            //事件是在多线程中回调的，不能实现确定回调的线程
             NetworkComms.AppendGlobalIncomingPacketHandler<string>(PacketType, PacketHandlerAction);
 
             //客户端建立连接事件
+            //事件是在多线程中回调的，不能实现确定回调的线程
             NetworkComms.AppendGlobalConnectionEstablishHandler(ConnectionEstablishDelegate);
             //关闭连接事件
+            //事件是在多线程中回调的，不能实现确定回调的线程
             NetworkComms.AppendGlobalConnectionCloseHandler(ConnectionShutdownDelegate);
             //未处理的信息包处理
+            //事件是在多线程中回调的，不能实现确定回调的线程
             NetworkComms.AppendGlobalIncomingUnmanagedPacketHandler(UnmanagedPacketHandlerDelgatePointer);
 
 
@@ -65,13 +70,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
 
         /// <summary>
         /// 未处理的信息包
+        /// 事件是在多线程中回调的，不能实现确定回调的线程
         /// </summary>
         /// <param name="packetHeader"></param>
         /// <param name="connection"></param>
         /// <param name="incomingObject"></param>
         private static void UnmanagedPacketHandlerDelgatePointer(PacketHeader packetHeader, Connection connection, byte[] incomingObject)
         {
-            Console.WriteLine("接收到未处理的信息包");
+            Console.WriteLine("接收到未处理的信息包,thread id ="+Thread.CurrentThread.ManagedThreadId);
             #region 接收到未处理的信息包
 
 
@@ -81,11 +87,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
 
         /// <summary>
         /// 连接关闭事件
+        /// 事件是在多线程中回调的，不能实现确定回调的线程
         /// </summary>
         /// <param name="connection"></param>
         private static void ConnectionShutdownDelegate(Connection connection)
         {
-            Console.WriteLine("连接关闭：" + connection.ConnectionInfo.LocalEndPoint);
+            Console.WriteLine("连接关闭：" + connection.ConnectionInfo.LocalEndPoint+",thread id ="+Thread.CurrentThread.ManagedThreadId);
             #region 连接关闭事件
 
 
@@ -97,11 +104,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
 
         /// <summary>
         /// 连接建立事件
+        /// 事件是在多线程中回调的，不能实现确定回调的线程
         /// </summary>
         /// <param name="connection"></param>
         private static void ConnectionEstablishDelegate(Connection connection)
         {
-            Console.WriteLine("连接建立：" + connection.ConnectionInfo.LocalEndPoint);
+            Console.WriteLine("连接建立：" + connection.ConnectionInfo.LocalEndPoint+",thread id ="+Thread.CurrentThread.ManagedThreadId);
             #region 连接建立事件
 
 
@@ -112,7 +120,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
 
         /// <summary>
         /// Delegate for handling incoming packets. 
-        /// 处理接收到的数据包
+        /// 处理接收到的数据包  
+        /// 事件是在多线程中回调的，不能实现确定回调的线程
         /// </summary>
         /// <param name="packetHeader">消息包头部</param>
         /// <param name="connection">底层的连接</param>
@@ -120,7 +129,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
         private static void PacketHandlerAction(PacketHeader packetHeader, Connection connection, string incomingObject)
         {
             //解析数据包处理，并发送
-            Console.WriteLine("客户端接收："+incomingObject);
+            Console.WriteLine("客户端接收：" + incomingObject + ",thread id =" + Thread.CurrentThread.ManagedThreadId);
 
             #region 消息处理事件
             
