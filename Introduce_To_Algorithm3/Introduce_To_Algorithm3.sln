@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansServer", "OrleansSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNettyConsole", "DotNettyConsole\DotNettyConsole.csproj", "{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "常用类", "常用类", "{1B3C508F-30EA-4895-909B-7CFBF2136DAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "常用类项目", "常用类项目\常用类项目.csproj", "{DB839FD4-C297-4609-A486-2789F2981D4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -178,6 +182,18 @@ Global
 		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Release|x64.ActiveCfg = Release|Any CPU
 		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Release|x64.ActiveCfg = Release|Any CPU
+		{DB839FD4-C297-4609-A486-2789F2981D4C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,5 +207,6 @@ Global
 		{34FA6E2E-083A-47CD-A2AD-80D14E96F1FB} = {6B206F79-2BE4-4B0F-8875-F28E395AF82B}
 		{ED805D4D-089B-4997-A324-68C17802D470} = {34FA6E2E-083A-47CD-A2AD-80D14E96F1FB}
 		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161} = {6B206F79-2BE4-4B0F-8875-F28E395AF82B}
+		{DB839FD4-C297-4609-A486-2789F2981D4C} = {1B3C508F-30EA-4895-909B-7CFBF2136DAA}
 	EndGlobalSection
 EndGlobal

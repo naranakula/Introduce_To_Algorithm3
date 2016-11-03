@@ -389,7 +389,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="format"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static string FormatWith(this string format, params object[] args)
+        public static string FormatWith(string format, params object[] args)
         {
             return string.Format(format, args);
         }

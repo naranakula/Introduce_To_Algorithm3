@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace Introduce_To_Algorithm3.Common.Utils
+namespace Common.Utils
 {
     /// <summary>
     /// a model to do retry job
@@ -21,7 +22,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             get { return _defaultTryCount; }
         }
 
-        
+
         private static readonly TimeSpan _defaultInterval = new TimeSpan(0, 0, 5);
 
         /// <summary>
@@ -45,7 +46,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// construct with 3 trycount and 5 seconds interval
         /// </summary>
-        public Retry():this(_defaultTryCount,_defaultInterval)
+        public Retry()
+            : this(_defaultTryCount, _defaultInterval)
         {
         }
 
@@ -79,7 +81,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
             int tryCount = 0;
             NotifyEventArgs eventArgs = null;
-            while(true)
+            while (true)
             {
                 try
                 {
@@ -98,7 +100,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     }
                     eventArgs.Enqueue(ex);
 
-                    if (errorNotify != null && tryCount>=TryCount)
+                    if (errorNotify != null && tryCount >= TryCount)
                     {
                         try { errorNotify(eventArgs); }
                         catch { }
@@ -113,7 +115,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     Thread.Sleep(TryInterval);
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -124,7 +126,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="action"></param>
         /// <param name="obj"></param>
         /// <param name="errorNotify"></param>
-        public void Invoke<T>(Action<T> action,T obj, Action<NotifyEventArgs> errorNotify=null)
+        public void Invoke<T>(Action<T> action, T obj, Action<NotifyEventArgs> errorNotify = null)
         {
             if (action == null)
             {
@@ -176,7 +178,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="func"></param>
         /// <param name="errorNotify"></param>
         /// <returns></returns>
-        public TResult Invoke<TResult>(Func<TResult> func, Action<NotifyEventArgs> errorNotify=null)
+        public TResult Invoke<TResult>(Func<TResult> func, Action<NotifyEventArgs> errorNotify = null)
         {
             if (func == null)
             {
@@ -229,7 +231,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="obj"></param>
         /// <param name="errorNotify"></param>
         /// <returns></returns>
-        public TResult Invoke<T,TResult>(Func<T,TResult> func, T obj,Action<NotifyEventArgs> errorNotify=null)
+        public TResult Invoke<T, TResult>(Func<T, TResult> func, T obj, Action<NotifyEventArgs> errorNotify = null)
         {
             if (func == null)
             {
@@ -292,7 +294,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         public NotifyEventArgs()
         {
-            ExceptionQueue =new List<Exception>();
+            ExceptionQueue = new List<Exception>();
         }
 
         /// <summary>
@@ -328,4 +330,5 @@ namespace Introduce_To_Algorithm3.Common.Utils
             return sb.ToString();
         }
     }
+
 }
