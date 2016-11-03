@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace 常用类项目.Utils
+namespace Common.Utils
 {
     /// <summary>
     /// 更加安全合理的方式是使用 Mutex

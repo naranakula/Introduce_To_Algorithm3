@@ -134,7 +134,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="jobName">job名字，必须唯一</param>
         /// <param name="job"></param>
         /// <param name="data"></param>
-        public IJobDetail CreateJob(String jobName, IJob job, JobDataMap data = null)
+        public static  IJobDetail CreateJob(String jobName, IJob job, JobDataMap data = null)
         {
             IJobDetail jobDetail = new JobDetailImpl(jobName,null,job.GetType(),true,false);
             
@@ -156,7 +156,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="jobName">job名字，必须唯一</param>
         /// <param name="jobtype"></param>
         /// <param name="data"></param>
-        public IJobDetail CreateJob(String jobName, Type jobtype,JobDataMap data = null)
+        public static IJobDetail CreateJob(String jobName, Type jobtype,JobDataMap data = null)
         {
             IJobDetail jobDetail = new JobDetailImpl(jobName, null, jobtype, true, false);
             if (data != null)
@@ -208,7 +208,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="offsetSeconds">多长时间后触发器执行，单位为秒</param>
         /// <param name="periodSeconds">触发器的执行周期，单位为秒,范围可以超过59</param>
         /// <returns></returns>
-        public ITrigger CreateSimpleTrigger(string triggerName,int offsetSeconds,int periodSeconds)
+        public static ITrigger CreateSimpleTrigger(string triggerName,int offsetSeconds,int periodSeconds)
         {
             ITrigger trigger = new SimpleTriggerImpl(triggerName,DateTimeOffset.UtcNow.AddSeconds(offsetSeconds),null,SimpleTriggerImpl.RepeatIndefinitely,new TimeSpan(0,0,0,periodSeconds));
             return trigger;
@@ -223,7 +223,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="offsetSeconds">多长时间后触发器执行，单位为秒</param>
         /// <param name="periodSpan">触发器的执行周期</param>
         /// <returns></returns>
-        public ITrigger CreateSimpleTrigger(string triggerName, int offsetSeconds, TimeSpan periodSpan)
+        public static ITrigger CreateSimpleTrigger(string triggerName, int offsetSeconds, TimeSpan periodSpan)
         {
             ITrigger trigger = new SimpleTriggerImpl(triggerName, DateTimeOffset.UtcNow.AddSeconds(offsetSeconds), null, SimpleTriggerImpl.RepeatIndefinitely, periodSpan);
             return trigger;
@@ -263,7 +263,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="triggerName">triggerName,必须唯一</param>
         /// <param name="cronExpression"></param>
         /// <returns></returns>
-        public ITrigger CreateCronTrigger(String triggerName,String cronExpression)
+        public static ITrigger CreateCronTrigger(String triggerName,String cronExpression)
         {
             ITrigger trigger = new CronTriggerImpl(triggerName,null,cronExpression);
             return trigger;
@@ -304,7 +304,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="startTime">trigger起始执行的时间</param>
         /// <param name="cronExpression"></param>
         /// <returns></returns>
-        public ITrigger CreateCronTrigger(String triggerName,DateTimeOffset startTime, String cronExpression)
+        public static ITrigger CreateCronTrigger(String triggerName,DateTimeOffset startTime, String cronExpression)
         {
             ITrigger trigger =
                 TriggerBuilder.Create()
@@ -349,7 +349,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="offsetSeconds">trigger起始执行的时间,以秒为单位</param>
         /// <param name="cronExpression"></param>
         /// <returns></returns>
-        public ITrigger CreateCronTrigger(String triggerName, int offsetSeconds, String cronExpression)
+        public static ITrigger CreateCronTrigger(String triggerName, int offsetSeconds, String cronExpression)
         {
             ITrigger trigger =
                 TriggerBuilder.Create()

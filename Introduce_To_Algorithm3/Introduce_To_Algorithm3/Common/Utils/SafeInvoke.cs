@@ -25,7 +25,6 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             catch(Exception ex)
             {
-                // ignored
                 if (exceptionHandler != null)
                 {
                     exceptionHandler(ex);
@@ -47,7 +46,6 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             catch (Exception ex)
             {
-                // ignored
                 if (exceptionHandler != null)
                 {
                     exceptionHandler(ex);

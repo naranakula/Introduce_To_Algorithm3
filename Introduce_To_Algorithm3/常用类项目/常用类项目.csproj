@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,7 +44,12 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\ConfigUtils.cs" />
     <Compile Include="Utils\DirectoryHold.cs" />
+    <Compile Include="Utils\OneRunAtSameTime.cs" />
+    <Compile Include="Utils\OneRunner.cs" />
+    <Compile Include="Utils\Retry.cs" />
+    <Compile Include="Utils\SafeInvoke.cs" />
     <Compile Include="Utils\StringUtils.cs" />
   </ItemGroup>
   <ItemGroup>
