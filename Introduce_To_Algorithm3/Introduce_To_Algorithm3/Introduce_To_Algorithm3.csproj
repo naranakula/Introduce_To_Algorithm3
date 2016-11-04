@@ -651,7 +651,6 @@
     <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetMQReqClient.cs" />
     <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetMQRepServer.cs" />
     <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsClient.cs" />
-    <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsHelper.cs" />
     <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsServer.cs" />
     <Compile Include="OpenSourceLib\Ninject\NinjectHelper.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
@@ -670,6 +669,7 @@
     <Compile Include="OpenSourceLib\Utils\ProtobufUtils.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\BackDbJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\CleanLogJob.cs" />
+    <Compile Include="OpenSourceLib\Utils\quartzs\CpuJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />

@@ -35,57 +35,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
             try
             {
-                NLogHelper.Info("开始清理日志");
-                DirectoryInfo dirInfo = new DirectoryInfo(LogDir);
-                if (!dirInfo.Exists)
-                {
-                    NLogHelper.Info("未找到{0}日志目录，无法清理".FormatWith(LogDir));
-                    return;
-                }
-
-                DriveInfo driveInfo = null;
-
-                foreach (DriveInfo item in DriveInfo.GetDrives())
-                {
-                    if (StringUtils.EqualsEx(dirInfo.Root.Name ,item.Name))
-                    {
-                        driveInfo = item;
-                        break;
-                    }
-                }
-
-                DateTime expireTime;//过期时间
-                if (driveInfo != null && driveInfo.AvailableFreeSpace < driveInfo.TotalSize*DriveAvailableLimit)
-                {
-                    //当到达硬盘利用极限时，保存的天数
-                    expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDaysWhenAvailableLimit, 0, 0, 0));
-                }
-                else
-                {
-                    expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0));
-                }
-
-                //删除过期日志
-                foreach (FileInfo fileInfo in dirInfo.GetFiles(FilePattern, SearchOption.AllDirectories))
-                {
-                    //日志过期
-                    if (fileInfo.CreationTime < expireTime && fileInfo.Exists)
-                    {
-                        fileInfo.Delete();
-                        NLogHelper.Debug("删除日志文件："+fileInfo.FullName);
-                    }
-                }
-
-                //删除空目录
-                foreach (var currentDir in dirInfo.GetDirectories("*", SearchOption.AllDirectories))
-                {
-                    //文件夹为空
-                    if (!currentDir.GetFileSystemInfos().Any() && currentDir.Exists)
-                    {
-                        currentDir.Delete();
-                        NLogHelper.Debug("删除日志目录："+currentDir.FullName);
-                    }
-                }
+                CleanLog();
             }
             catch (Exception ex)
             {
@@ -99,6 +49,67 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 }
             }
         }
+
+        /// <summary>
+        /// 清理日志
+        /// </summary>
+        public void CleanLog()
+        {
+            NLogHelper.Info("开始清理日志");
+            DirectoryInfo dirInfo = new DirectoryInfo(LogDir);
+            if (!dirInfo.Exists)
+            {
+                NLogHelper.Info("未找到{0}日志目录，无法清理".FormatWith(LogDir));
+                return;
+            }
+
+            DriveInfo driveInfo = null;
+
+            foreach (DriveInfo item in DriveInfo.GetDrives())
+            {
+                if (StringUtils.EqualsEx(dirInfo.Root.Name, item.Name))
+                {
+                    driveInfo = item;
+                    break;
+                }
+            }
+
+            DateTime expireTime;//过期时间
+            if (driveInfo != null && driveInfo.AvailableFreeSpace < driveInfo.TotalSize * DriveAvailableLimit)
+            {
+                //当到达硬盘利用极限时，保存的天数
+                expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDaysWhenAvailableLimit, 0, 0, 0));
+            }
+            else
+            {
+                expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0));
+            }
+
+            //删除过期日志
+            foreach (FileInfo fileInfo in dirInfo.GetFiles(FilePattern, SearchOption.AllDirectories))
+            {
+                //日志过期
+                if (fileInfo.CreationTime < expireTime && fileInfo.Exists)
+                {
+                    fileInfo.Delete();
+                    NLogHelper.Debug("删除日志文件：" + fileInfo.FullName);
+                }
+            }
+
+            //删除空目录
+            foreach (var currentDir in dirInfo.GetDirectories("*", SearchOption.AllDirectories))
+            {
+                //文件夹为空
+                if (!currentDir.GetFileSystemInfos().Any() && currentDir.Exists)
+                {
+                    currentDir.Delete();
+                    NLogHelper.Debug("删除日志目录：" + currentDir.FullName);
+                }
+            }
+        }
+
+
+
         #endregion
 
         #region 辅助属性
@@ -141,4 +152,5 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
         #endregion
     }
+
 }
