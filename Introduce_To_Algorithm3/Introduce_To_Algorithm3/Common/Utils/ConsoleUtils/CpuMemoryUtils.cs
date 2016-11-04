@@ -48,6 +48,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         public static double GetNextCpuUsedPercent()
         {
             //这里获取的是当前值，应该取最近几次监控的平均值
+            //0 - 100之间的数据
             return cpuLoad.NextValue();
         }
 
