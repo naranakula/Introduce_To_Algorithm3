@@ -73,7 +73,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// Halts the Quartz.IScheduler's firing of Quartz.ITriggers, and cleans up all resources associated with the Scheduler.
         /// </summary>
         /// <param name="waitForJobsToComplete">if true the scheduler will not allow this method to return until all currently executing jobs have completed.</param>
-        public void Shutdown(bool waitForJobsToComplete = true)
+        public void Shutdown(bool waitForJobsToComplete = false)
         {
             _scheduler.Shutdown(waitForJobsToComplete);
         }

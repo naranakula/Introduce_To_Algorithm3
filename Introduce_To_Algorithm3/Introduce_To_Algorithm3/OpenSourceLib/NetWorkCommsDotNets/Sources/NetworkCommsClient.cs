@@ -29,10 +29,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
         /// </summary>
         private static readonly int serverPort = 8193;//初始化从配置文件中读取
 
-        /// <summary>
-        /// 连接信息
-        /// </summary>
-        private static volatile ConnectionInfo connectionInfo = null;
+        ///// <summary>
+        ///// 连接信息
+        ///// </summary>
+        //private static volatile ConnectionInfo connectionInfo = null;
 
         /// <summary>
         /// 是否进行了初始化
@@ -141,6 +141,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
         /// <summary>
         /// 发送消息, 如果连接存在，则重用现有连接，如果不存在，创建连接，如果连接已经关闭，重新创建连接。
         /// 总之客户端确保采用一切措施使得发送能够成功，即使客户端先开启或者服务器中途重启
+        /// 
+        /// 
+        /// 如果由于网络或者服务器关闭等原因发送不成功，则抛出异常
         /// </summary>
         /// <param name="messageToSend">消息不能为空</param>
         public static void Send(string messageToSend)
