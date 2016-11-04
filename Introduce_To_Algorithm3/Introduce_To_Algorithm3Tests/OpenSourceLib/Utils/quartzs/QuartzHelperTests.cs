@@ -15,11 +15,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.Tests
         [TestMethod()]
         public void StartTest()
         {
-            QuartzHelper quartzHelper = QuartzHelper.GetInstance();
-            quartzHelper.Start();
-            quartzHelper.ScheduleJob(quartzHelper.CreateJob("firstjob", typeof(JobImpl)), quartzHelper.CreateCronTrigger("firstTrigger", 5, "0/5 * * * * ?"));
-            Console.ReadLine();
-            quartzHelper.Shutdown();
         }
 
     }

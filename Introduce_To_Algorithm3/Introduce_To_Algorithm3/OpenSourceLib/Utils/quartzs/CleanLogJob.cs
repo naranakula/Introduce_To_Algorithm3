@@ -35,11 +35,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
             try
             {
-                Log4netHelper.Info("开始清理日志");
+                NLogHelper.Info("开始清理日志");
                 DirectoryInfo dirInfo = new DirectoryInfo(LogDir);
                 if (!dirInfo.Exists)
                 {
-                    Log4netHelper.Info("未找到{0}日志目录，无法清理".FormatWith(LogDir));
+                    NLogHelper.Info("未找到{0}日志目录，无法清理".FormatWith(LogDir));
                     return;
                 }
 
@@ -72,7 +72,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     if (fileInfo.CreationTime < expireTime && fileInfo.Exists)
                     {
                         fileInfo.Delete();
-                        Log4netHelper.Debug("删除日志文件："+fileInfo.FullName);
+                        NLogHelper.Debug("删除日志文件："+fileInfo.FullName);
                     }
                 }
 
@@ -83,13 +83,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     if (!currentDir.GetFileSystemInfos().Any() && currentDir.Exists)
                     {
                         currentDir.Delete();
-                        Log4netHelper.Debug("删除日志目录："+currentDir.FullName);
+                        NLogHelper.Debug("删除日志目录："+currentDir.FullName);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log4netHelper.Error("清理日志失败："+ex);
+                NLogHelper.Error("清理日志失败："+ex);
             }
             finally
             {
@@ -111,7 +111,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 保存多少天日志，与创建时间比较
         /// </summary>
-        private const int KeepDays = 80;
+        private const int KeepDays = 120;
 
         /// <summary>
         /// 过滤什么样的文件

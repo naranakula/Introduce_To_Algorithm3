@@ -40,8 +40,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
             //未处理的信息包处理 事件是在多线程中回调的，不能实现确定回调的线程
             NetworkComms.AppendGlobalIncomingUnmanagedPacketHandler(UnmanagedPacketHandlerDelgatePointer);
 
+            
+            //检查连接的保活的定时器时间间隔  单位秒 默认是30s
+            //Connection.ConnectionKeepAlivePollIntervalSecs = 180;
             //在serverPort上开始监听消息,并返回监听的列表
             List<ConnectionListenerBase> listenerList = Connection.StartListening(ConnectionType.TCP, new IPEndPoint(IPAddress.Any, serverPort));
+            
             Console.WriteLine("服务器监听下列地址：");
             foreach (var listenerItem in listenerList)
             {
