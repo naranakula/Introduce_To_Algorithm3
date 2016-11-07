@@ -14,8 +14,8 @@ namespace Introduce_To_Algorithm3
         {
             for (int i = 0; i < 10000; i++)
             {
-                double d = CpuMemoryUtils.GetNextCpuUsedPercent();
-                Console.WriteLine(d);
+                var d = CpuMemoryUtils.GetCurrentMemoryInfo();
+                Console.WriteLine(d.dwMemoryLoad);
                 Thread.Sleep(100);
             }
         }

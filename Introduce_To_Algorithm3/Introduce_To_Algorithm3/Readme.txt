@@ -110,7 +110,7 @@ Extended WPF Toolkit™ Community Edition
 DockPanelSuite
 Dragablz
 WPFNotification
-WPF NotifyIcon
+WPF NotifyIcon //测试过  文档：http://www.codeproject.com/Articles/36468/WPF-NotifyIcon
 Mantin.Controls.Wpf.Notification 
 Wpf.BusyIndicatorEasy
 //下面的谨慎使用，上面的按顺序使用

@@ -42,7 +42,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         private static PerformanceCounter cpuLoad = new PerformanceCounter("Processor", "% Processor Time", "_Total");
 
         /// <summary>
-        /// 计算当前cpu值
+        /// 计算当前cpu使用的百分比
+        /// 0-100的浮点数
         /// </summary>
         /// <returns></returns>
         public static double GetNextCpuUsedPercent()
@@ -67,6 +68,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         public uint dwLength;
         /// <summary>
         /// percent of memory in use
+        /// 0-100的整数
+        /// 使用的内存百分比
         /// </summary>
         public uint dwMemoryLoad;
         /// <summary>
