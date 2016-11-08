@@ -205,8 +205,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 意味着如果下一个周期到来，而上一次周期执行未完成，job仍然在一个新线程中执行
         /// </summary>
         /// <param name="triggerName">触发器的名字，必须唯一</param>
-        /// <param name="offsetSeconds">多长时间后触发器执行，单位为秒</param>
-        /// <param name="periodSeconds">触发器的执行周期，单位为秒,范围可以超过59</param>
+        /// <param name="offsetSeconds">多长时间后触发器执行 即第一次job执行  经过测试，单位为秒,</param>
+        /// <param name="periodSeconds">第一次之后每次触发器的执行周期，单位为秒,范围可以超过59</param>
         /// <returns></returns>
         public static ITrigger CreateSimpleTrigger(string triggerName,int offsetSeconds,int periodSeconds)
         {
@@ -220,8 +220,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 意味着如果下一个周期到来，而上一次周期执行未完成，job仍然在一个新线程中执行
         /// </summary>
         /// <param name="triggerName">触发器的名字，必须唯一</param>
-        /// <param name="offsetSeconds">多长时间后触发器执行，单位为秒</param>
-        /// <param name="periodSpan">触发器的执行周期</param>
+        /// <param name="offsetSeconds">多长时间后触发器执行 即第一次job执行  经过测试，单位为秒</param>
+        /// <param name="periodSpan">第一次之后每次触发器的执行周期</param>
         /// <returns></returns>
         public static ITrigger CreateSimpleTrigger(string triggerName, int offsetSeconds, TimeSpan periodSpan)
         {
@@ -229,6 +229,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             return trigger;
         }
 
+        /// <summary>
+        /// 创建一个无限执行的触发器, 放入默认的组
+        /// trigger将定期按时执行，
+        /// 意味着如果下一个周期到来，而上一次周期执行未完成，job仍然在一个新线程中执行
+        /// </summary>
+        /// <param name="triggerName">触发器的名字，必须唯一</param>
+        /// <param name="offsetSpan">多长时间后触发器执行 即第一次job执行 经过测试</param>
+        /// <param name="periodSpan">第一次之后每次 触发器的执行周期</param>
+        /// <returns></returns>
+        public static ITrigger CreateSimpleTrigger(string triggerName, TimeSpan offsetSpan, TimeSpan periodSpan)
+        {
+            ITrigger trigger = new SimpleTriggerImpl(triggerName, DateTimeOffset.UtcNow.Add(offsetSpan), null, SimpleTriggerImpl.RepeatIndefinitely, periodSpan);
+            return trigger;
+        }
 
         /// <summary>
         /// 创建CronTrigger，立刻执行

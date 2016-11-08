@@ -29,10 +29,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
         /// </summary>
         private static readonly int serverPort = 8193;//初始化从配置文件中读取
 
-        ///// <summary>
-        ///// 连接信息
-        ///// </summary>
-        //private static volatile ConnectionInfo connectionInfo = null;
+        /// <summary>
+        /// 连接信息
+        /// </summary>
+        private static volatile ConnectionInfo connectionInfo = null;
 
         /// <summary>
         /// 是否进行了初始化
@@ -153,15 +153,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
                 return;
             }
 
+#region 注释掉的部分与NetworkComms.SendObject由相同的效果，也可以实现自动重连
             //if (connectionInfo == null)
             //{
             //    connectionInfo = new ConnectionInfo(serverIp,serverPort);
             //}
 
-            ////如果连接存在，重用已经存在的连接，否则创建一个新连接
+            ////如果连接存在，重用已经存在的连接，否则创建一个新连接，如果连接关闭创建一个新连接
             //Connection tcpConnection = TCPConnection.GetConnection(connectionInfo);
 
             //tcpConnection.SendObject(MessageType,  messageToSend);
+#endregion
+
 
             //PacketType用于标志哪种类型的消息，客户端和服务器端协议商定，标志消息类型，可以自定义
             //如果连接未建立，建立连接，如果连接已经建立，重用现有连接，如果连接关闭，则新建连接

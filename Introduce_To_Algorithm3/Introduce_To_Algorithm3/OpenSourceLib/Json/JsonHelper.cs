@@ -18,6 +18,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
     {
         /// <summary>
         /// json序列化的设置
+        /// 
+        /// [JsonConverter(typeof(StringEnumConverter))]
+        /// 对于枚举属性，可以使用上面的注解为字符串，默认枚举转换为了相应的整数
         /// </summary>
         private static readonly JsonSerializerSettings _jsonSerializerSettings;
 
@@ -37,7 +40,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
                 DefaultValueHandling = DefaultValueHandling.Include,//这是默认的处理方式，Json.NET will write a field/property value to JSON when serializing if the value is the same as the field/property's default value. The Json.NET deserializer will continue setting a field/property if the JSON value is the same as the default value.
             };
 
-            //定义在序列化反序列化时DateTime类型使用的格式,去掉这句试用默认的事件处理方式
+            //定义在序列化反序列化时DateTime类型使用的格式,去掉这句试用默认的时间处理方式
             //Json.Net中自带的两个处理日期的类,默认是IsoDateTimeConverter ,它的默认格式是"yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK".另一个是JavaScriptTimeConverter,它的格式是 "new Date(ticks)",其实返回的是一个JavaScript的Date对象.
             //_jsonSerializerSettings.Converters.Add(new IsoDateTimeConverter(){DateTimeFormat = "yyyy-MM-dd HH:mm:ss"});
             //_jsonSerializerSettings.Converters.Add(new JavaScriptDateTimeConverter());
@@ -49,14 +52,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
         /// Serializes the specified object to a JSON string.
         /// </summary>
         /// <param name="obj">如果obj为null,则返回字符串null</param>
+        /// <param name="format">None表示不缩进，更紧凑，Indented表示缩进，更好看</param>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
-        public static string ToJson(Object obj,Action<Exception>  exceptionHandler=null)
+        public static string ToJson(Object obj,Action<Exception>  exceptionHandler=null,Formatting format = Formatting.None )
         {
 
             try
             {
-                return JsonConvert.SerializeObject(obj, Formatting.None, _jsonSerializerSettings);
+                return JsonConvert.SerializeObject(obj, format, _jsonSerializerSettings);
             }
             catch (Exception ex)
             {

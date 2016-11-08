@@ -40,7 +40,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             }
             catch (Exception ex)
             {
-                Log4netHelper.Error("清理日志失败：" + ex);
+                Log4netHelper.Error("执行任务：" + ex);
             }
             finally
             {
