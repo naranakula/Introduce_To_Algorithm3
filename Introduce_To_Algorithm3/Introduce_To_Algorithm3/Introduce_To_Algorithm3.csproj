@@ -375,6 +375,7 @@
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Speech" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
@@ -581,6 +582,7 @@
     <Compile Include="Common\Utils\sockets\StandardSocket.cs" />
     <Compile Include="Common\Utils\sockets\UdpClientHelper.cs" />
     <Compile Include="Common\Utils\sockets\UdpServerHelper.cs" />
+    <Compile Include="Common\Utils\SpeechHelper.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
     <Compile Include="Common\Utils\sqls\EF2\EfDbContext.cs" />
     <Compile Include="Common\Utils\sqls\EF2\MySqlDbContext.cs" />
