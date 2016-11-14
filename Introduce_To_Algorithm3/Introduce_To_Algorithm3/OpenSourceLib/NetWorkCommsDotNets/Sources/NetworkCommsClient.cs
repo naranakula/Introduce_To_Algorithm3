@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Net;
 using System.Threading;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
@@ -169,8 +170,32 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NetWorkCommsDotNets.Sources
             //PacketType用于标志哪种类型的消息，客户端和服务器端协议商定，标志消息类型，可以自定义
             //如果连接未建立，建立连接，如果连接已经建立，重用现有连接，如果连接关闭，则新建连接
             NetworkComms.SendObject(PacketType,serverIp,serverPort,messageToSend);
-            
+
         }
+
+        /// <summary>
+        /// 如果连接存在，重用已经存在的连接，否则创建一个新连接，如果连接关闭创建一个新连接
+        /// 获取到服务器的一个连接
+        /// </summary>
+        /// <returns></returns>
+        public static Connection GetConnection()
+        {
+            ConnectionInfo connInfo = new ConnectionInfo(serverIp,serverPort);
+            return TCPConnection.GetConnection(connInfo);
+        }
+
+        /// <summary>
+        /// 判断是否存在到服务器的连接
+        /// </summary>
+        /// <returns></returns>
+        public static bool ExistConnection()
+        {
+            //Use IPAddress.Any to match all IPAddresses. Use port number 0 to match all port numbers.
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, 0);
+
+            return NetworkComms.ConnectionExists(new IPEndPoint(IPAddress.Parse(serverIp), serverPort), localEndPoint, ConnectionType.TCP);
+        }
+
 
         /// <summary>
         /// 关闭程序时，调用释放所有的资源
