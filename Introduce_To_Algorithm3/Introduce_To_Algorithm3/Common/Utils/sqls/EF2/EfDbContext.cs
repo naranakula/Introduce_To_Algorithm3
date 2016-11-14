@@ -120,7 +120,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         public EfDbContext() : base(_nameOrConnectionString)
         {
-            
+            //改为false，之后延迟加载及时为true也不起作用，除非显示的Include
+            //Include是显式加载，即使ProxyCreationEnabled = false和LazyLoadingEnabled = false，仍然会起作用
+            this.Configuration.ProxyCreationEnabled = false;//默认是true的
+            //延迟加载导航属性
+            this.Configuration.LazyLoadingEnabled = false;//默认是true的
         }
 
         #endregion
@@ -201,6 +205,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //建议使用显式的定义，而不是通过反射
             //设置所有的表定义映射
             modelBuilder.Configurations.Add(new PersonMap());
+            modelBuilder.Configurations.Add(new PhoneMap());
+            modelBuilder.Entity<Phone>().HasRequired(s => s.Person).WithMany(s => s.Phones).HasForeignKey(s => s.PersonId).WillCascadeOnDelete(true);
 
             //以下代码自动注册所有的Map，自动获取当前代码中的Map,并注册
             //var typesToRegister = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.BaseType != null && !type.IsGenericType && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>)).ToList();

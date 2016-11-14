@@ -63,9 +63,36 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
     public class Person
     {
+        public Person()
+        {
+            this.Phones = new List<Phone>();
+        }
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime CreateTime { get; set; }
+
+        public virtual ICollection<Phone> Phones { get; set; } 
+
+    }
+    /// <summary>
+    /// 电话
+    /// </summary>
+    public class Phone
+    {
+        public int Id { get; set; }
+        public int PersonId { get; set; }
+        public string PhoneNumber { get; set; }
+        public virtual  Person Person { get; set; }
+    }
+
+    public class PhoneMap : EntityTypeConfiguration<Phone>
+    {
+        public PhoneMap()
+        {
+            ToTable("Phone").HasKey(t => t.Id);
+            Property(t => t.PhoneNumber).HasColumnName("PhoneNumber").IsOptional().HasMaxLength(512);
+            Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+        }
     }
 
     public class PersonMap : EntityTypeConfiguration<Person>
@@ -73,6 +100,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public PersonMap()
         {
             ToTable("Person").HasKey(t => t.Id);
+            Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             //without the given name and has no column order, clustering, or
             //     uniqueness specified. //索引默认是不唯一非聚集的， 使用默认的命名为IX_列名
