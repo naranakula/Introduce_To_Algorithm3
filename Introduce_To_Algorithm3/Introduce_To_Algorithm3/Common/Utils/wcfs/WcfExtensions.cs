@@ -8,6 +8,9 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.wcfs
 {
+    /// <summary>
+    /// Wcf客户端调用拓展
+    /// </summary>
     public  static class WcfExtensions
     {
         /// <summary>
@@ -25,7 +28,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.wcfs
             }
             try
             {
-                action(client);
+                if (action != null)
+                {
+                    action(client);
+                }
                 client.Close();
             }
             catch (TimeoutException te)
