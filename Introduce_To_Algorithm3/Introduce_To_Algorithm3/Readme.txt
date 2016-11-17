@@ -184,8 +184,10 @@ Stateless//状态机
 //自动更新
 Squirrel.Windows//An installation and update framework for Windows desktop apps
 WIX TOOLSET//THE MOST POWERFUL SET OF TOOLS AVAILABLE TO CREATE YOUR WINDOWS INSTALLATION 
+nUpdate
 NetSparkle
 AutoUpdater
+AutoUpdater.net
 
 
 //测试工具

@@ -78,7 +78,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
 
             try
             {
-                string dirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string dirPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
                 if (!string.IsNullOrEmpty(dirPath))
                 {
                     Directory.SetCurrentDirectory(dirPath);
@@ -101,6 +101,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
         /// <returns></returns>
         public static string ResolveFile(string shortFileName)
         {
+            if (string.IsNullOrWhiteSpace(shortFileName))
+            {
+                return string.Empty;
+            }
+
             string fullFileName = string.Empty;
             try
             {
@@ -159,7 +164,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
 
             try
             {
-                string parent = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string parent = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
                 FileInfo fileInfo = new FileInfo(Path.Combine(parent, shortFileName));
                 if (fileInfo.Exists)
                 {
@@ -179,7 +184,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
            
 
             return String.Empty;
-            
         }
 
         #endregion
