@@ -77,14 +77,14 @@ namespace Com.Utility.Commons
             {
                 using (StreamReader reader = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(str)), Encoding.UTF8))
                 {
-                    return (T)serializer.Deserialize(reader);
+                    return serializer.Deserialize(reader) as T;
                 }
             }
             else
             {
                 using (StreamReader reader = new StreamReader(str, Encoding.UTF8))
                 {
-                    return (T)serializer.Deserialize(reader);
+                    return serializer.Deserialize(reader) as T;
                 }
             }
         }
@@ -92,7 +92,7 @@ namespace Com.Utility.Commons
         /// 把对象序列化到xml文件中
         /// </summary>
         /// <param name="instance">要序列化的对象</param>
-        /// <param name="xmlFile">xml文件</param>
+        /// <param name="xmlFile">xml文件,文件存在覆盖</param>
         public static void SerializeXml<T>(object instance,string xmlFile)
         {
             if(instance == null || !(instance is T))

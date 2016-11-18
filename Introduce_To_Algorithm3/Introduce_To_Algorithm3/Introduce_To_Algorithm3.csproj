@@ -660,6 +660,7 @@
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
     <Compile Include="OpenSourceLib\RestSharp\RestSharpHelper.cs" />
     <Compile Include="OpenSourceLib\Rxs\RxHelper.cs" />
+    <Compile Include="OpenSourceLib\SharpZipLib\SharpZipHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\DotNetZipUtils.cs" />
     <Compile Include="OpenSourceLib\Utils\LicenseHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\Log4netHelper.cs" />
@@ -759,7 +760,6 @@
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
     <Folder Include="OpenSourceLib\NetMqs\Docs\" />
-    <Folder Include="OpenSourceLib\SharpZipLib\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
   </ItemGroup>
   <ItemGroup>

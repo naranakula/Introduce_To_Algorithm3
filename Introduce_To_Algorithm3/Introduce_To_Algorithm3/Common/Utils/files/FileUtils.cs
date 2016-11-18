@@ -339,6 +339,53 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
 
+        /// <summary>
+        /// 同步文件
+        /// </summary>
+        /// <param name="srcDir"></param>
+        /// <param name="tgtDir"></param>
+        public static void SyncDir(DirectoryInfo srcDir, DirectoryInfo tgtDir)
+        {
+            if (!srcDir.Exists)
+            {
+                return;
+            }
+
+            //同一个目录
+            if (srcDir.FullName.Equals(tgtDir.FullName, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return;
+            }
+
+
+            if (!tgtDir.Exists)
+            {
+                tgtDir.Create();
+            }
+
+            FileInfo[] fileInfos = srcDir.GetFiles();
+            //文件
+            foreach (var srcInfo in fileInfos)
+            {
+                FileInfo tgtInfo = new FileInfo(Path.Combine(tgtDir.FullName,srcInfo.Name));
+                if (srcInfo.FullName.Equals(tgtInfo.FullName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    //同一个文件
+                    continue;
+                }
+
+                srcInfo.CopyTo(tgtInfo.FullName, true);
+            }
+
+            DirectoryInfo[] dirInfos = srcDir.GetDirectories();
+            foreach (var dirItem in dirInfos)
+            {
+                DirectoryInfo newTgtDir = new DirectoryInfo(Path.Combine(tgtDir.FullName,dirItem.Name));
+                SyncDir(dirItem,newTgtDir);
+            }
+
+        }
+
 
         /// <summary>
         /// compress a source file to target

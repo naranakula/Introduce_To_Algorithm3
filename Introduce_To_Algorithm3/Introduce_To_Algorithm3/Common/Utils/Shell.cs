@@ -90,5 +90,35 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 return p.ExitCode;
             }
         }
+
+        /// <summary>
+        /// 杀死自己的进程和同名的进程
+        /// </summary>
+        public static void KillMySelf()
+        {
+            var currentProcess = Process.GetCurrentProcess();
+            
+            foreach (var process in Process.GetProcessesByName(currentProcess.ProcessName))
+            {
+                if (process.Id != currentProcess.Id)
+                {
+                    process.Kill();
+                }
+            }
+
+            Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// 杀死进程
+        /// </summary>
+        public static void KillAll(string processName)
+        {
+            foreach (var process in Process.GetProcessesByName(processName))
+            {
+                process.Kill();
+            }
+        }
+
     }
 }
