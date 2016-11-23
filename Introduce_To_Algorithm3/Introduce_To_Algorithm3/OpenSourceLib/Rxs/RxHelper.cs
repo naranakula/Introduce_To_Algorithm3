@@ -10,6 +10,8 @@ using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Threading;
+using NPOI.SS.Formula.Functions;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Rxs
 {
@@ -287,6 +289,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Rxs
             ThreadPoolScheduler threadPoolScheduler = ThreadPoolScheduler.Instance;
             //默认的调度器  其原则是使用最小的并行性，for operators returning an observable with a finite and small number of messages, Rx calls Immediate.  For operators returning a potentially large or infinite number of messages, CurrentThread is called. For operators which use timers, ThreadPool is used.
             DefaultScheduler defaultScheduler = Scheduler.Default;
+        }
+
+
+        public static void ScheduleOn(IObservable<T> observable,IScheduler scheduler)
+        {
+            //在指定的scheduler调度
+            IObservable<T> observable1 = observable.ObserveOn(scheduler);
+
+            //在当前线程dispatcher执行
+            IObservable<T> observable2 = observable.ObserveOnDispatcher(DispatcherPriority.Normal);
         }
 
 
