@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,7 +14,7 @@ using System.Windows.Forms;
 namespace Introduce_To_Algorithm3.OpenSourceLib.Rxs
 {
     /// <summary>
-    /// RX 用于UI的响应式编程
+    /// RX 用于UI的响应式编程  Rx = Observables + LINQ + Schedulers
     /// 1、不需要自己实现IObservable<T>和IObserver<T>接口
     /// 2、RX中订阅subscriptions设计为了Fire and forget,当OnCompleted或者OnError时，Observable自动取消了它的所有订阅
     /// 3、Cold observable:订阅时才产生数据，每次订阅接收到相同的从头开始的数据，Hot observable一直产生数据，订阅时推送，接收到最新的数据
@@ -211,12 +213,85 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Rxs
 
         /*
          * 订阅
-         * 
+         * Subject<T>同时实现了IObservable<T>和IObserver<T>接口，
+         * 它可以作为IObservable和IObserver之间的代理
          */
+
+        public static void SubjectEx()
+        {
+            Subject<int> subject = new Subject<int>();
+
+            var subscription = subject.Subscribe(x => Console.WriteLine("OnNext:{0}", x),
+                () => Console.WriteLine("OnCompleted"));
+
+            subject.OnNext(1);
+            subject.OnNext(2);
+
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
+            subject.OnCompleted();
+            subscription.Dispose();
+
+        }
+
+
+        public static void SubjectEx2()
+        {
+            var source = Observable.Interval(TimeSpan.FromSeconds(1));
+            Subject<long> subject = new Subject<long>();
+
+            var subSource = source.Subscribe(subject);
+
+            var subSubject1 = subject.Subscribe(
+                         x => Console.WriteLine("Value published to observer #1: {0}", x),
+                         () => Console.WriteLine("Sequence Completed."));
+            var subSubject2 = subject.Subscribe(
+                                     x => Console.WriteLine("Value published to observer #2: {0}", x),
+                                     () => Console.WriteLine("Sequence Completed."));
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
+            subject.OnCompleted();
+            subSubject1.Dispose();
+            subSubject2.Dispose();
+        }
+
+
 
         #endregion
 
+        #region Schedulers
 
+        /**
+         * Scheduler控制订阅和通知的发送。 
+         * Scheduler包含三个组件：1）一个优先队列存放任务，2）Execution context，用来决定任务在哪执行（线程池，当前线程）3)scheduler的时钟，Task是根据这个时钟调度的，不是系统时钟。
+         * 
+         * rx中所有的Scheduler实现IScheduler接口。
+         * 
+         */
+
+        public static void GetSchedulers()
+        {
+            //立刻在当前线程上执行
+            ImmediateScheduler immediate = Scheduler.Immediate;
+            //在当前线程上尽可能快的执行(先放到队列中，尽快执行)
+            CurrentThreadScheduler currentThreadScheduler = Scheduler.CurrentThread;
+            //每次创建一个线程执行
+            NewThreadScheduler newThreadScheduler = NewThreadScheduler.Default;
+            //在Task Factory上执行
+            TaskPoolScheduler taskPoolScheduler = TaskPoolScheduler.Default;
+
+            //在当前Dispatcher上执行任务
+            DispatcherScheduler dispatcherScheduler = DispatcherScheduler.Current;
+
+            //在ThreadPool上执行
+            ThreadPoolScheduler threadPoolScheduler = ThreadPoolScheduler.Instance;
+            //默认的调度器  其原则是使用最小的并行性，for operators returning an observable with a finite and small number of messages, Rx calls Immediate.  For operators returning a potentially large or infinite number of messages, CurrentThread is called. For operators which use timers, ThreadPool is used.
+            DefaultScheduler defaultScheduler = Scheduler.Default;
+        }
+
+
+        
+        #endregion
 
 
     }
