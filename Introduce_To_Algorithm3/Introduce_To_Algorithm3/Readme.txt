@@ -81,7 +81,7 @@ Portable.Licensing
 
 //图像处理
  ImageMagick //这个好
-ImageProcessor
+ImageProcessor//目前的最佳选择
 DotImage(收费)
 ImageProcessor - Open-source .NET library to manipulate images on-the-fly.
 DynamicImage - High-performance open-source image manipulation library for ASP.NET.
@@ -204,6 +204,10 @@ Ngnix
 ZooKeeper
 
 
+Abot//web爬虫
+Scut//开源稳定的游戏服务器
+
+
 //常用类库
 StringUtils.cs
 ConfigUtils.cs
@@ -215,3 +219,5 @@ OneRunAtSameTime.cs
 OneRuner.cs
 SafeInvoke.cs
 Retry.cs
+
+
