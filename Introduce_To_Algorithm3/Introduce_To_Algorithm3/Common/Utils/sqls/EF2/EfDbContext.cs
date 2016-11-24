@@ -122,7 +122,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         {
             //改为false，之后延迟加载及时为true也不起作用，除非显示的Include
             //Include是显式加载，即使ProxyCreationEnabled = false和LazyLoadingEnabled = false，仍然会起作用
-            this.Configuration.ProxyCreationEnabled = false;//默认是true的
+            //this.Configuration.ProxyCreationEnabled = false;//默认是true的
             //延迟加载导航属性
             this.Configuration.LazyLoadingEnabled = false;//默认是true的
         }
