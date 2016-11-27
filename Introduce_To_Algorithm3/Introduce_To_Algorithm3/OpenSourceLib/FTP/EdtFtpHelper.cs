@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.FtpClient;
 using System.Text;
@@ -11,6 +12,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
     /// <summary>
     /// 使用edtFTPnet/Free进行ftp操作
     /// Nuget的版本很旧，从官网下载
+    /// 
+    /// http://enterprisedt.com/products/edtftpnet/
+    /// https://www.limilabs.com
     /// </summary>
     public class EdtFtpHelper
     {
@@ -84,6 +88,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
         {
             SafeAction(connection =>
             {
+                string dirName = Path.GetDirectoryName(remoteFileName);
+
+                if (!string.IsNullOrWhiteSpace(dirName))
+                {
+                    if (!connection.DirectoryExists(dirName))
+                    {
+                        connection.CreateDirectory(dirName);
+                    }
+                }
+
                 connection.UploadFile(localFileName, remoteFileName);
             }, exceptionHandler);
         }
@@ -98,6 +112,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
         {
             SafeAction(connection =>
             {
+                string dirName = Path.GetDirectoryName(localFileName);
+                if (!string.IsNullOrWhiteSpace(dirName))
+                {
+                    if (!Directory.Exists(dirName))
+                    {
+                        //创建目录及子目录
+                        Directory.CreateDirectory(dirName);
+                    }
+                }
                 connection.DownloadFile(localFileName, remoteFileName);
             }, exceptionHandler);
         }
