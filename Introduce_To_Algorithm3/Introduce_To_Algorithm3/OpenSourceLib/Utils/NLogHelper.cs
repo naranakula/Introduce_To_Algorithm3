@@ -7,6 +7,8 @@ using NLog;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
+
+
     /// <summary>
     /// 根据github，nlog比log4net更好
     /// nlog自动查找程序目录的NLog.config来配置程序
@@ -167,4 +169,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
 
     }
+
+
 }
