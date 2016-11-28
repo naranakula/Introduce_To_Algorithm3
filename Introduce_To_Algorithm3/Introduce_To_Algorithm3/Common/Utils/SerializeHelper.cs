@@ -11,6 +11,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 {
     /// <summary>
     /// xml序列化帮助类 xml序列化不需要Serializable
+    /// 使用这个
     /// </summary>
     public static class SerializeHelper
     {
