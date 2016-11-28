@@ -33,6 +33,36 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
             return string.Format(s, args);
         }
+        
+        /// <summary>
+        /// 忽略字符串前后空白，比较字符串是否相同
+        /// </summary>
+        /// <param name="s1"></param>
+        /// <param name="s2"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        public static bool EqualsEx(string s1, string s2, bool ignoreCase = true)
+        {
+            if (string.IsNullOrWhiteSpace(s1) && string.IsNullOrWhiteSpace(s2))
+            {
+                return true;
+            }
+
+            if (s1 == null || s2 == null)
+            {
+                //此时s1 , s2不可能同时为null
+                return false;
+            }
+
+            if (ignoreCase)
+            {
+                return String.Equals(s1.Trim(), s2.Trim(), StringComparison.CurrentCultureIgnoreCase);
+            }
+            else
+            {
+                return s1.Trim() == s2.Trim();
+            }
+        }
 
         /// <summary>
         /// 截短字符串
@@ -75,35 +105,6 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
-        /// <summary>
-        /// 忽略字符串前后空白，比较字符串是否相同
-        /// </summary>
-        /// <param name="s1"></param>
-        /// <param name="s2"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        public static bool EqualsEx(string s1, string s2, bool ignoreCase = true)
-        {
-            if (string.IsNullOrWhiteSpace(s1) && string.IsNullOrWhiteSpace(s2))
-            {
-                return true;
-            }
-
-            if (s1 == null || s2 == null)
-            {
-                //此时s1 , s2不可能同时为null
-                return false;
-            }
-
-            if (ignoreCase)
-            {
-                return String.Equals(s1.Trim(), s2.Trim(), StringComparison.CurrentCultureIgnoreCase);
-            }
-            else
-            {
-                return s1.Trim() == s2.Trim();
-            }
-        }
 
         /// <summary>
         /// 组合字符串，并且如果数据项为null，则用String.Empty连接
