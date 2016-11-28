@@ -5,6 +5,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 {
     /// <summary>
     /// 获取应用程序配置的工具类
+    /// 添加引用：System.Configuration.dll
     /// </summary>
     public static class ConfigUtils
     {
@@ -98,7 +99,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="key">配置文件的键</param>
         /// <param name="defaultValue">获取不到对应的键值时的默认返回值</param>
         /// <returns></returns>
-        public static int GetInteger(string key, int defaultValue)
+        public static int GetInteger(string key, int defaultValue=0)
         {
             if (string.IsNullOrEmpty(key))
             {
