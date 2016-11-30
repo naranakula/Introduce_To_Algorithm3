@@ -34,63 +34,77 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
         /// <summary>
         /// 重置工作目录到应用程序所在的路径
         /// </summary>
-        public static void ResetAppDir()
+        /// <returns>返回是否是否设置成功</returns>
+        public static bool ResetAppDir(Action<Exception> exceptionHandler = null)
         {
             bool isReset = false;
             
             try
             {
                 string dirPath = AppDomain.CurrentDomain.BaseDirectory;
-                if (!string.IsNullOrEmpty(dirPath))
+                if (!string.IsNullOrWhiteSpace(dirPath))
                 {
                     Directory.SetCurrentDirectory(dirPath);
                     isReset = true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 isReset = false;
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
             }
 
             if (isReset)
             {
-                return;
+                return true;
             }
 
             try
             {
                 string dirPath = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-                if (!string.IsNullOrEmpty(dirPath))
+                if (!string.IsNullOrWhiteSpace(dirPath))
                 {
                     Directory.SetCurrentDirectory(dirPath);
                     isReset = true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 isReset = false;
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
             }
 
             if (isReset)
             {
-                return;
+                return true;
             }
 
             try
             {
                 string dirPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                if (!string.IsNullOrEmpty(dirPath))
+                if (!string.IsNullOrWhiteSpace(dirPath))
                 {
                     Directory.SetCurrentDirectory(dirPath);
                     isReset = true;
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 isReset = false;
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
             }
-            
+
+            return isReset;
         }
 
         /// <summary>
