@@ -21,7 +21,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="container">XDocment和XElement的基类</param>
         /// <param name="name"></param>
-        /// <param name="ignoreCaseAndWhiteSpace"></param>
+        /// <param name="ignoreCaseAndWhiteSpace">是否忽略大小写和空白</param>
         /// <returns></returns>
         public static XElement GetFirstMatchElement(this XContainer container, string name, bool ignoreCaseAndWhiteSpace = false)
         {
@@ -32,6 +32,28 @@ namespace Introduce_To_Algorithm3.Common.Utils
             else
             {
                 return container.Elements().FirstOrDefault(r => r.Name.LocalName == name);
+            }
+        }
+
+        /// <summary>
+        /// 根据节点名获取匹配的一级子元素集合，不考虑命名空间
+        /// XElement.Element("name")会进行命名空间的匹配
+        /// 
+        /// 注：有可以忽略的效率问题
+        /// </summary>
+        /// <param name="container">XDocment和XElement的基类</param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCaseAndWhiteSpace">是否忽略大小写和空白</param>
+        /// <returns></returns>
+        public static List<XElement> GetElements(this XContainer container, string name, bool ignoreCaseAndWhiteSpace = false)
+        {
+            if (ignoreCaseAndWhiteSpace)
+            {
+                return container.Elements().Where(r => StringUtils.EqualsEx(r.Name.LocalName, name)).ToList();
+            }
+            else
+            {
+                return container.Elements().Where(r => r.Name.LocalName == name).ToList();
             }
         }
 
