@@ -220,4 +220,5 @@ OneRuner.cs
 SafeInvoke.cs
 Retry.cs
 SerializeHelper.cs
+XmlUtils.cs
 

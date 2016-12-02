@@ -625,6 +625,7 @@
     <Compile Include="Common\Utils\files\XMLHelper.cs" />
     <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
     <Compile Include="Common\Utils\Web\CacheUtils.cs" />
+    <Compile Include="Common\Utils\XmlUtils.cs" />
     <Compile Include="HPSocket\HPClient.cs" />
     <Compile Include="HPSocket\HPServerSocket.cs" />
     <Compile Include="HPSocket\HPServer.cs" />
