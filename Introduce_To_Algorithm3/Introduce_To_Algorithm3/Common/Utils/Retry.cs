@@ -11,6 +11,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// </summary>
     public class Retry
     {
+        /// <summary>
+        /// 默认的重试次数3
+        /// </summary>
         private const int _defaultTryCount = 3;
 
         /// <summary>
@@ -21,7 +24,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
             get { return _defaultTryCount; }
         }
 
-        
+        /// <summary>
+        /// 默认的重试时间5s
+        /// </summary>
         private static readonly TimeSpan _defaultInterval = new TimeSpan(0, 0, 5);
 
         /// <summary>
@@ -39,8 +44,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         /// <summary>
         /// get the actual try interval
+        /// 如果为null，表示重试时没有时间间隔
         /// </summary>
-        public TimeSpan TryInterval { get; private set; }
+        public TimeSpan? TryInterval { get; private set; }
 
         /// <summary>
         /// construct with 3 trycount and 5 seconds interval
@@ -52,9 +58,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// construct retry
         /// </summary>
-        /// <param name="tryCount">run at most reyCount times, include the first run</param>
-        /// <param name="tryInterval"></param>
-        public Retry(int tryCount, TimeSpan tryInterval)
+        /// <param name="tryCount">
+        /// run at most reyCount times, include the first run
+        /// >=1, 函数至多运行tryCount次数（如tryCount=1，表示运行1次）
+        /// </param>
+        /// <param name="tryInterval">如果为null，表示重试时没有时间间隔</param>
+        public Retry(int tryCount, TimeSpan? tryInterval = null)
         {
             if (tryCount <= 0)
             {
@@ -69,8 +78,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// invoke action, when fails call errorNotify to notify users if it is not null
         /// </summary>
         /// <param name="action"></param>
-        /// <param name="errorNotify"></param>
-        public void Invoke(Action action, Action<NotifyEventArgs> errorNotify = null)
+        /// <param name="exceptionHandler">错误处理，最终出现错误时会通知</param>
+        public void Invoke(Action action, Action<RetryException> exceptionHandler = null)
         {
             if (action == null)
             {
@@ -78,7 +87,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
 
             int tryCount = 0;
-            NotifyEventArgs eventArgs = null;
+            RetryException retryException = null;
             while(true)
             {
                 try
@@ -90,27 +99,36 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 {
                     tryCount++;
 
-                    #region error notify
+                    #region 异常处理
 
-                    if (eventArgs == null)
+                    if (retryException == null)
                     {
-                        eventArgs = new NotifyEventArgs();
+                        retryException = new RetryException();
                     }
-                    eventArgs.Enqueue(ex);
+                    retryException.Enqueue(ex);
 
-                    if (errorNotify != null && tryCount>=TryCount)
+                    if (exceptionHandler != null && tryCount>=TryCount)
                     {
-                        try { errorNotify(eventArgs); }
-                        catch { }
+                        exceptionHandler(retryException);
                     }
                     #endregion
 
                     if (tryCount >= TryCount)
                     {
-                        throw new RetryTimeOutException(eventArgs);
+                        return;
                     }
 
-                    Thread.Sleep(TryInterval);
+                    if (TryInterval != null)
+                    {
+                        try
+                        {
+                            Thread.Sleep(TryInterval.Value);
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+                    }
                 }
             }
             
@@ -123,8 +141,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <typeparam name="T"></typeparam>
         /// <param name="action"></param>
         /// <param name="obj"></param>
-        /// <param name="errorNotify"></param>
-        public void Invoke<T>(Action<T> action,T obj, Action<NotifyEventArgs> errorNotify=null)
+        /// <param name="exceptionHandler">错误处理，最终出现错误时会通知</param>
+        public void Invoke<T>(Action<T> action,T obj, Action<RetryException> exceptionHandler = null)
         {
             if (action == null)
             {
@@ -132,7 +150,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
 
             int tryCount = 0;
-            NotifyEventArgs eventArgs = null;
+            RetryException retryException = null;
             while (true)
             {
                 try
@@ -144,27 +162,36 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 {
                     tryCount++;
 
-                    #region error notify
+                    #region 异常处理
 
-                    if (eventArgs == null)
+                    if (retryException == null)
                     {
-                        eventArgs = new NotifyEventArgs();
+                        retryException = new RetryException();
                     }
-                    eventArgs.Enqueue(ex);
+                    retryException.Enqueue(ex);
 
-                    if (errorNotify != null && tryCount >= TryCount)
+                    if (exceptionHandler != null && tryCount >= TryCount)
                     {
-                        try { errorNotify(eventArgs); }
-                        catch { }
+                        exceptionHandler(retryException);
                     }
                     #endregion
 
                     if (tryCount >= TryCount)
                     {
-                        throw new RetryTimeOutException(eventArgs);
+                        return;
                     }
 
-                    Thread.Sleep(TryInterval);
+                    if (TryInterval != null)
+                    {
+                        try
+                        {
+                            Thread.Sleep(TryInterval.Value);
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+                    }
                 }
             }
         }
@@ -174,9 +201,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>
-        /// <param name="errorNotify"></param>
+        /// <param name="exceptionHandler">错误处理，最终出现错误时会通知</param>
         /// <returns></returns>
-        public TResult Invoke<TResult>(Func<TResult> func, Action<NotifyEventArgs> errorNotify=null)
+        public TResult Invoke<TResult>(Func<TResult> func, Action<RetryException> exceptionHandler = null)
         {
             if (func == null)
             {
@@ -184,7 +211,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
 
             int tryCount = 0;
-            NotifyEventArgs eventArgs = null;
+            RetryException retryException = null;
             while (true)
             {
                 try
@@ -195,27 +222,36 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 {
                     tryCount++;
 
-                    #region error notify
+                    #region 异常处理
 
-                    if (eventArgs == null)
+                    if (retryException == null)
                     {
-                        eventArgs = new NotifyEventArgs();
+                        retryException = new RetryException();
                     }
-                    eventArgs.Enqueue(ex);
+                    retryException.Enqueue(ex);
 
-                    if (errorNotify != null && tryCount >= TryCount)
+                    if (exceptionHandler != null && tryCount >= TryCount)
                     {
-                        try { errorNotify(eventArgs); }
-                        catch { }
+                        exceptionHandler(retryException);
                     }
                     #endregion
 
                     if (tryCount >= TryCount)
                     {
-                        throw new RetryTimeOutException(eventArgs);
+                        return default(TResult);
                     }
 
-                    Thread.Sleep(TryInterval);
+                    if (TryInterval != null)
+                    {
+                        try
+                        {
+                            Thread.Sleep(TryInterval.Value);
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+                    }
                 }
             }
         }
@@ -227,9 +263,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>
         /// <param name="obj"></param>
-        /// <param name="errorNotify"></param>
+        /// <param name="exceptionHandler">错误处理，最终出现错误时会通知</param>
         /// <returns></returns>
-        public TResult Invoke<T,TResult>(Func<T,TResult> func, T obj,Action<NotifyEventArgs> errorNotify=null)
+        public TResult Invoke<T,TResult>(Func<T,TResult> func, T obj, Action<RetryException> exceptionHandler = null)
         {
             if (func == null)
             {
@@ -237,7 +273,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
 
             int tryCount = 0;
-            NotifyEventArgs eventArgs = null;
+            RetryException retryException = null;
             while (true)
             {
                 try
@@ -248,51 +284,63 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 {
                     tryCount++;
 
-                    #region error notify
+                    #region 异常处理
 
-                    if (eventArgs == null)
+                    if (retryException == null)
                     {
-                        eventArgs = new NotifyEventArgs();
+                        retryException = new RetryException();
                     }
-                    eventArgs.Enqueue(ex);
+                    retryException.Enqueue(ex);
 
-                    if (errorNotify != null && tryCount >= TryCount)
+                    if (exceptionHandler != null && tryCount >= TryCount)
                     {
-                        try { errorNotify(eventArgs); }
-                        catch { }
+                        exceptionHandler(retryException);
                     }
                     #endregion
 
                     if (tryCount >= TryCount)
                     {
-                        throw new RetryTimeOutException(eventArgs);
+                        return default(TResult);
                     }
 
-                    Thread.Sleep(TryInterval);
+                    if (TryInterval != null)
+                    {
+                        try
+                        {
+                            Thread.Sleep(TryInterval.Value);
+                        }
+                        catch (Exception)
+                        {
+                            //ignore
+                        }
+                    }
                 }
             }
         }
     }
 
 
-    public sealed class NotifyEventArgs : EventArgs
+    /// <summary>
+    /// 重试异常
+    /// </summary>
+    public sealed class RetryException : Exception
     {
         /// <summary>
         /// gets the number of attempts so far
         /// </summary>
-        public int AttemptCount { get { return ExceptionQueue.Count; } }
+        public int RetryCount { get { return exceptionList.Count; } }
 
         /// <summary>
         /// get exception that caused the notification, if any
         /// </summary>
-        public List<Exception> ExceptionQueue { get; private set; }
+        private List<Exception> exceptionList { get; set; }
 
         /// <summary>
         /// constructor
         /// </summary>
-        public NotifyEventArgs()
+        public RetryException()
         {
-            ExceptionQueue =new List<Exception>();
+            exceptionList = new List<Exception>();
         }
 
         /// <summary>
@@ -301,31 +349,23 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="ex"></param>
         public void Enqueue(Exception ex)
         {
-            ExceptionQueue.Add(ex);
-        }
-    }
-
-    public class RetryTimeOutException : TimeoutException
-    {
-        public NotifyEventArgs NotifyEventArgs { get; private set; }
-
-        public RetryTimeOutException(NotifyEventArgs args)
-        {
-            NotifyEventArgs = args;
+            exceptionList.Add(ex);
         }
 
+        /// <summary>
+        /// 覆盖ToString实现
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            if (NotifyEventArgs == null || NotifyEventArgs.ExceptionQueue == null || NotifyEventArgs.ExceptionQueue.Count == 0)
-            {
-                return string.Empty;
-            }
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < NotifyEventArgs.ExceptionQueue.Count; i++)
+            for (int i = 0; i < exceptionList.Count; i++)
             {
-                sb.AppendLine("第" + (i + 1) + "次异常：" + NotifyEventArgs.ExceptionQueue[i].ToString());
+                sb.AppendLine("第" + (i + 1) + "次retry异常：" + exceptionList[i]);
             }
             return sb.ToString();
         }
     }
+
+
 }

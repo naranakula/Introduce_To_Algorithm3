@@ -11,7 +11,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         #region Constructor
 
         private Retry _retry;
-        private Action<NotifyEventArgs> _notify;
+        private Action<RetryException> _notify;
 
         /// <summary>
         /// constructor a default retry directory
@@ -28,7 +28,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="tryCount"></param>
         /// <param name="tryInterval"></param>
         /// <param name="notify"></param>
-        public RetryDirectory(int tryCount, TimeSpan tryInterval, Action<NotifyEventArgs> notify)
+        public RetryDirectory(int tryCount, TimeSpan tryInterval, Action<RetryException> notify)
         {
             _retry = new Retry(tryCount, tryInterval);
             _notify = notify;

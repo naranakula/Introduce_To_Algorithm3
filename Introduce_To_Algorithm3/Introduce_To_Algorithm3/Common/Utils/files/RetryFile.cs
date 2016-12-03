@@ -10,7 +10,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
     {
         #region Constructor
         private Retry _retry;
-        private Action<NotifyEventArgs> _notify;
+        private Action<RetryException> _notify;
         /// <summary>
         /// construct a default Retry File
         /// </summary>
@@ -25,7 +25,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="tryCount"></param>
         /// <param name="tryInterval"></param>
-        public RetryFile(int tryCount,TimeSpan tryInterval,Action<NotifyEventArgs> notify)
+        public RetryFile(int tryCount,TimeSpan tryInterval,Action<RetryException> notify)
         {
             _retry = new Retry(tryCount, tryInterval);
             _notify = notify;
