@@ -789,6 +789,7 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="NLog2.config" />
     <None Include="OpenSourceLib\ActiveMq\ActiveMQ的安装.docx" />
     <None Include="OpenSourceLib\AutoMapper\AutoMapper.docx" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket.docx" />

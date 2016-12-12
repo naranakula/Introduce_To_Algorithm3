@@ -89,7 +89,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             foreach (FileInfo fileInfo in dirInfo.GetFiles(FilePattern, SearchOption.AllDirectories))
             {
                 //日志过期
-                if (fileInfo.CreationTime < expireTime && fileInfo.Exists)
+                if (fileInfo.Exists && fileInfo.CreationTime < expireTime)
                 {
                     fileInfo.Delete();
                     NLogHelper.Debug("删除日志文件：" + fileInfo.FullName);
@@ -100,7 +100,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             foreach (var currentDir in dirInfo.GetDirectories("*", SearchOption.AllDirectories))
             {
                 //文件夹为空
-                if (!currentDir.GetFileSystemInfos().Any() && currentDir.Exists)
+                if (currentDir.Exists && !currentDir.GetFileSystemInfos().Any())
                 {
                     currentDir.Delete();
                     NLogHelper.Debug("删除日志目录：" + currentDir.FullName);
