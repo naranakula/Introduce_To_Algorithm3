@@ -8,6 +8,11 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.threads
 {
+    /// <summary>
+    /// 定时器拓展
+    /// 初始化完成后，回调已经开始执行
+    /// 同时只能有一个回调执行
+    /// </summary>
     public class TimerEx : IDisposable
     {
         /// <summary>
