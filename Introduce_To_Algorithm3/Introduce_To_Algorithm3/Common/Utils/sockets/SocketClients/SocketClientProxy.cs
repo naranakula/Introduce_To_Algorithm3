@@ -17,31 +17,31 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
     {
         #region 属性
 
-        /// <summary>
-        /// 是否断线重连
-        /// </summary>
-        private static volatile bool isFailOver = true;
+        ///// <summary>
+        ///// 是否断线重连
+        ///// </summary>
+        //private static volatile bool isFailOver = true;
 
-        /// <summary>
-        /// 是否断线重连
-        /// </summary>
-        public static bool IsFailOver
-        {
-            get
-            {
-                lock (locker)
-                {
-                    return isFailOver;
-                }
-            }
-            set
-            {
-                lock (locker)
-                {
-                    isFailOver = value;
-                }
-            }
-        }
+        ///// <summary>
+        ///// 是否断线重连
+        ///// </summary>
+        //public static bool IsFailOver
+        //{
+        //    get
+        //    {
+        //        lock (locker)
+        //        {
+        //            return isFailOver;
+        //        }
+        //    }
+        //    set
+        //    {
+        //        lock (locker)
+        //        {
+        //            isFailOver = value;
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// 是否已经连接
@@ -53,6 +53,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                 lock (locker)
                 {
                     if (socket == null)
+                    {
+                        return false;
+                    }
+
+                    if (_isDisconnect)
                     {
                         return false;
                     }
@@ -77,6 +82,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
             }
            
         }
+
+        /// <summary>
+        /// 是否已经断开了连接
+        /// </summary>
+        private static volatile bool _isDisconnect = true;
 
         /// <summary>
         /// 服务器ip
@@ -258,10 +268,28 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                         NLogHelper.Info("检测到socket没有连接");
                         continue;
                     }
-                    //如果远程主机处于关机状态或关闭了连接，则 Available 会引发 SocketException。
-                    if (socket.Available > 0)
+
+                    /*
+true 如果 Listen 已调用和一个连接处于挂起状态。
+- 或 -
+true 如果数据是可供读取;
+- 或 -
+true 如果连接已关闭、 重置，或者终止，则返回，
+否则，返回 false。
+                     */
+                    //300毫秒
+                    if (socket.Poll(300000,SelectMode.SelectRead))
                     {
                         int count = socket.Receive(buffer, 0, buffer.Length, SocketFlags.None);
+
+                        if (count == 0)
+                        {
+                            //连接断开
+                            _isDisconnect = true;
+                            continue;
+                        }
+                        lastUpdateTime = DateTime.Now;
+                        _isDisconnect = false;
                         for (int i = 0; i < count; i++)
                         {
                             RecvByteList.Add(buffer[i]);
@@ -310,7 +338,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                             }
                         }
 
-                        int maxByteInList = 8*1024*1024;//8M
+                        int maxByteInList = 8*1024*1024;//8M 声明为全局常量
                         if (RecvByteList.Count > maxByteInList)
                         {
                             RecvByteList.Clear();
@@ -318,11 +346,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
 
                         #endregion
                     }
-                    else
-                    {
-                        //没有数据
-                        Thread.Sleep(500);
-                    }
+                    
                 }
                 catch (Exception ex)
                 {
@@ -356,6 +380,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                         byte[] buffer = Encoding.GetEncoding(EncodingStr).GetBytes(item.Message);
                         socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         lastUpdateTime = DateTime.Now;
+                        _isDisconnect = false;
                     }
                     catch (Exception ex)
                     {
@@ -426,6 +451,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
 
                 socket.Connect(IPAddress.Parse(serverIp),serverPort);
                 lastUpdateTime = DateTime.Now;
+                _isDisconnect = false;
                 //初始化接收\发送多线程
                 InitThread();
             }

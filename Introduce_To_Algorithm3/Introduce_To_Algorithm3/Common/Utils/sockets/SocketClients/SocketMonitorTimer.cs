@@ -36,6 +36,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
         {
             if (socketTimer == null)
             {
+                //每16秒判断一次是否需要重连
                 socketTimer = new Timer(new TimerCallback(SocketTimerCallBack), null, 800, 16000);
             }
         }

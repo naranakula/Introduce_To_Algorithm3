@@ -223,3 +223,4 @@ Retry.cs
 SerializeHelper.cs
 XmlUtils.cs
 TimerEx.cs
+SocketClientProxy.cs
