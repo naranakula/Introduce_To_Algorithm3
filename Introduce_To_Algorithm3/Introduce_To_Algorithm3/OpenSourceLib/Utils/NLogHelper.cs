@@ -22,6 +22,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// </summary>
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
+        ///// <summary>
+        ///// 静态构造函数
+        ///// </summary>
+        //static NLogHelper()
+        //{
+        //    //对_logger做定制的初始化
+        //}
         //private static Logger _logger = LogManager.GetLogger("fileandconsole");
 
         ///// <summary>
@@ -155,6 +162,118 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
             }
         }
+
+        #region 各级别日志是否可用
+
+        /// <summary>
+        /// Trace级别日志是否开启
+        /// </summary>
+        public static bool IsTraceEnabled
+        {
+            get
+            {
+                try
+                {
+                    return _logger.IsTraceEnabled;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Debug级别日志是否开启
+        /// </summary>
+        public static bool IsDebugEnabled
+        {
+            get
+            {
+                try
+                {
+                    return _logger.IsDebugEnabled;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Info级别日志是否开启
+        /// </summary>
+        public static bool IsInfoEnabled
+        {
+            get
+            {
+                try
+                {
+                    return _logger.IsInfoEnabled;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Warn级别日志是否开启
+        /// </summary>
+        public static bool IsWarnEnabled
+        {
+            get
+            {
+                try
+                {
+                    return _logger.IsWarnEnabled;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Error级别日志是否开启
+        /// </summary>
+        public static bool IsErrorEnabled
+        {
+            get
+            {
+                try
+                {
+                    return _logger.IsErrorEnabled;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Fatal级别日志是否开启
+        /// </summary>
+        public static bool IsFatalEnabled
+        {
+            get
+            {
+                try
+                {
+                    return _logger.IsFatalEnabled;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        #endregion
 
         ///// <summary>
         ///// 格式化数据
