@@ -85,14 +85,13 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 throw new ArgumentNullException("action is null");
             }
-
             int tryCount = 0;
             RetryException retryException = null;
             while(true)
             {
                 try
                 {
-                    action();
+                    action?.Invoke();
                     return;
                 }
                 catch (Exception ex)
@@ -107,16 +106,17 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     }
                     retryException.Enqueue(ex);
 
-                    if (exceptionHandler != null && tryCount>=TryCount)
-                    {
-                        exceptionHandler(retryException);
-                    }
-                    #endregion
-
                     if (tryCount >= TryCount)
                     {
+                        if (exceptionHandler != null)
+                        {
+                            exceptionHandler(retryException);
+                        }
+
                         return;
                     }
+                    #endregion
+                    
 
                     if (TryInterval != null)
                     {
@@ -170,16 +170,17 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     }
                     retryException.Enqueue(ex);
 
-                    if (exceptionHandler != null && tryCount >= TryCount)
+                    if (tryCount >= TryCount)
                     {
-                        exceptionHandler(retryException);
+                        if (exceptionHandler != null)
+                        {
+                            exceptionHandler(retryException);
+                        }
+
+                        return;
                     }
                     #endregion
 
-                    if (tryCount >= TryCount)
-                    {
-                        return;
-                    }
 
                     if (TryInterval != null)
                     {
