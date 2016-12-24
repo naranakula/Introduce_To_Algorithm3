@@ -224,3 +224,4 @@ SerializeHelper.cs
 XmlUtils.cs
 TimerEx.cs
 SocketClientProxy.cs
+TaskHelper.cs
