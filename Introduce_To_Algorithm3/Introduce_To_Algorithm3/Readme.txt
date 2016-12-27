@@ -225,3 +225,4 @@ XmlUtils.cs
 TimerEx.cs
 SocketClientProxy.cs
 TaskHelper.cs
+Contants.cs//定义常量和配置项

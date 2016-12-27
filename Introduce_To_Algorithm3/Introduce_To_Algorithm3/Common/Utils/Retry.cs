@@ -92,6 +92,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 try
                 {
                     action?.Invoke();
+                    //一定要return,否则死循环
                     return;
                 }
                 catch (Exception ex)
@@ -156,6 +157,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 try
                 {
                     action(obj);
+                    //一定要return,否则死循环
                     return;
                 }
                 catch (Exception ex)
