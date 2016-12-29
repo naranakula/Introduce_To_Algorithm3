@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,8 +35,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
         /// </summary>
         public SqliteCodeFirstContext() : base(ConnectionStr)
         {
-            
+
         }
+
+        /// <summary>
+        /// get;set;
+        /// </summary>
+        public DbSet<LocalImage> LocalImages { get; set; }
 
         /// <summary>
         /// This method is called when the model for a derived(派生) context has been initialized, but before the model has been locked down and used to initialize the context.
@@ -50,7 +57,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
             Database.SetInitializer(sqliteInitializer);
 
             //设置所有的表定义映射
-            //modelBuilder.Configurations.Add(new ProvinceMap());
+            modelBuilder.Configurations.Add(new LocalImageMap());
         }
 
 
@@ -133,5 +140,51 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
 
     }
 
+
+    /// <summary>
+    /// 本地图片
+    /// sqlite数据库表示例
+    /// </summary>
+    public class LocalImage
+    {
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public long Id { get; set; }
+
+        /// <summary>
+        /// 存放sqlserver数据库的Id
+        /// 用于外键， 至少32位
+        /// SQLite变长记录，字段不需要指定长度。
+        /// </summary>
+        public string GuidId { get; set; }
+
+        /// <summary>
+        /// 本地保存路径
+        /// SQLite变长记录，字段不需要指定长度。
+        /// </summary>
+        public string LocalPath { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+    /// <summary>
+    /// 数据库表映射
+    /// </summary>
+    public class LocalImageMap : EntityTypeConfiguration<LocalImage>
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public LocalImageMap()
+        {
+            ToTable("LocalImage").HasKey(p => p.Id);
+            //自增主键
+            Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+        }
+    }
 
 }

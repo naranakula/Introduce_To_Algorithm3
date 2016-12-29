@@ -17,18 +17,23 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="action"></param>
         /// <param name="exceptionHandler"></param>
-        public static void Safe(this Action action,Action<Exception> exceptionHandler = null)
+        /// <param name="finallyHandler">最终处理</param>
+        public static void Safe(this Action action,Action<Exception> exceptionHandler = null,Action finallyHandler = null)
         {
             try
             {
                 action();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (exceptionHandler != null)
                 {
                     exceptionHandler(ex);
                 }
+            }
+            finally
+            {
+                finallyHandler?.Invoke();
             }
         }
 
@@ -58,7 +63,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="func"></param>
         /// <param name="exceptionHandler"></param>
-        public static TR Safe<TR>(this Func<TR> func, Action<Exception> exceptionHandler = null)
+        /// <param name="finallyHandler"></param>
+        public static TR Safe<TR>(this Func<TR> func, Action<Exception> exceptionHandler = null,Action finallyHandler = null)
         {
             try
             {
@@ -71,6 +77,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     exceptionHandler(ex);
                 }
                 return default(TR);
+            }
+            finally
+            {
+                finallyHandler?.Invoke();
             }
         }
 

@@ -226,3 +226,11 @@ TimerEx.cs
 SocketClientProxy.cs
 TaskHelper.cs
 Contants.cs//定义常量和配置项
+
+
+文件夹结构
+Models
+	Jobs
+	Dbs
+Utils
+	
