@@ -84,31 +84,55 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             {
                 expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0));
             }
+            
 
-            //删除过期日志
-            foreach (FileInfo fileInfo in dirInfo.GetFiles(FilePattern, SearchOption.AllDirectories))
+            CleanFiles(LogDir,FilePattern,expireTime);
+        }
+
+        /// <summary>
+        /// 清理文件及空目录
+        /// </summary>
+        /// <param name="topDir">清理的顶层目录，该目录不会被删除</param>
+        /// <param name="fileSearchPattern">
+        /// 文件搜索模式 *所有文件 *.*有拓展名的文件
+        /// *：表示0个或多个字符
+        /// ?：表示0个或1个字符
+        /// </param>
+        /// <param name="expireTime">文件过期时间</param>
+        private void CleanFiles(string topDir, string fileSearchPattern, DateTime expireTime)
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(topDir);
+            if (!dirInfo.Exists)
             {
-                //日志过期
+                NLogHelper.Info("未找到{0}目录，无法清理".FormatWith(topDir));
+                return;
+            }
+
+            FileInfo[] fileInfos = dirInfo.GetFiles(fileSearchPattern, SearchOption.AllDirectories);
+            //删除过期文件
+            foreach (FileInfo fileInfo in fileInfos)
+            {
+                //文件过期
                 if (fileInfo.Exists && fileInfo.CreationTime < expireTime)
                 {
                     fileInfo.Delete();
-                    NLogHelper.Debug("删除日志文件：" + fileInfo.FullName);
+                    NLogHelper.Debug("删除文件:" + fileInfo.FullName);
                 }
             }
 
+
+            DirectoryInfo[] subDirs = dirInfo.GetDirectories("*", SearchOption.AllDirectories);
             //删除空目录
-            foreach (var currentDir in dirInfo.GetDirectories("*", SearchOption.AllDirectories))
+            foreach (var currentDir in subDirs)
             {
                 //文件夹为空
-                if (currentDir.Exists && !currentDir.GetFileSystemInfos().Any())
+                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0)
                 {
                     currentDir.Delete();
-                    NLogHelper.Debug("删除日志目录：" + currentDir.FullName);
+                    NLogHelper.Debug("删除目录：" + currentDir.FullName);
                 }
             }
         }
-
-
 
         #endregion
 
