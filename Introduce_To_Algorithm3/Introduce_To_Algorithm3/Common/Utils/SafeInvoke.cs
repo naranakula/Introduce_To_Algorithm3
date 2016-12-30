@@ -22,7 +22,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             try
             {
-                action();
+                if (action != null)
+                {
+                    action();
+                }
             }
             catch (Exception ex)
             {
@@ -33,7 +36,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             finally
             {
-                finallyHandler?.Invoke();
+                if (finallyHandler != null)
+                {
+                    finallyHandler();
+                }
             }
         }
 
