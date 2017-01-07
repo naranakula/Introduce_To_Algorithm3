@@ -47,7 +47,7 @@ i18n //smart internationalization for asp.net
 ActiveMq
 RocketMq (阿里的MQ)
 Kafka
-RabbitMq>ActiveMq  (可以肯定的是rabbitmq好于activemq)
+RabbitMq>ActiveMq  (可以肯定的是rabbitmq好于activemq) EasyNetQ
 Redis>memcached
 Sqlite LiteDB
 FileZilla  (FTP)
