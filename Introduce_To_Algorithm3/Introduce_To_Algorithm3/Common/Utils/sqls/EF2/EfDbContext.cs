@@ -1325,8 +1325,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //设置表名和主键
             // ToTable("Person").HasKey(p=>p.PersonId);//设置表名和主键
             //主键数据库自动生成， 即自增主键
+            //DatabaseGeneratedOption的三个属性：None:不是服务器生成，默认值；Identity：插入时，由数据库生成值，更新时保持不变（int或long型自增主键），自己设置无效；Computed:在插入或更新行时，数据库生成值，自己设置无效
             // Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            
+
             #endregion
 
             #region 设置属性列字段

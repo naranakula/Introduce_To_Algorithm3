@@ -48,8 +48,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="action"></param>
         /// <param name="obj"></param>
-        /// <param name="exceptionHandler"></param>
-        public static void Safe<T>(this Action<T> action,T obj, Action<Exception> exceptionHandler = null)
+        /// <param name="exceptionHandler">catch处理</param>
+        /// <param name="finallyHandler">finally处理</param>
+        public static void Safe<T>(this Action<T> action,T obj, Action<Exception> exceptionHandler = null, Action finallyHandler = null)
         {
             try
             {
@@ -60,6 +61,13 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 if (exceptionHandler != null)
                 {
                     exceptionHandler(ex);
+                }
+            }
+            finally
+            {
+                if (finallyHandler != null)
+                {
+                    finallyHandler();
                 }
             }
         }
