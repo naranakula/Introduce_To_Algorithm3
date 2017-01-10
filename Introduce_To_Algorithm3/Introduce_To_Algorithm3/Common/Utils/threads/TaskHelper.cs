@@ -9,6 +9,53 @@ namespace Introduce_To_Algorithm3.Common.Utils
 {
     public static class TaskHelper
     {
+        /*
+         * 在async/await代码中，同步catch会捕获task抛出的异步异常，其本质是，Task有Exception属性，是AggregateException，如果Task正常执行，Exception属性为null。可以通过Status属性获取Task的状态。Exception.InnerExceptions包含了Task抛出的所有异常（包括子Task的），await会挑选一个抛到await的同步catch中
+         */
+
+
+        #region 处理未捕获的异常
+
+        /// <summary>
+        /// 处理未处理的异常
+        /// </summary>
+        /// <param name="handler"></param>
+        public static void UnobservedException(EventHandler<UnobservedTaskExceptionEventArgs> handler)
+        {
+            //捕获所有未处理的异步异常
+            TaskScheduler.UnobservedTaskException += handler;
+        }
+
+        /// <summary>
+        /// 处理未处理的异常
+        /// </summary>
+        /// <param name="handler"></param>
+        public static void UnobservedException()
+        {
+            TaskScheduler.UnobservedTaskException += (sender, args) =>
+            {
+                //set exception handled
+                args.SetObserved();
+            };
+        }
+
+
+        public static void TaskExceptionTest()
+        {
+            /*
+             * 在4.0和4.5下，测试通过，task中抛出异常，并不会终止程序，以下代码是合法的，
+             */
+            Task task = Task.Factory.StartNew(() =>
+            {
+                throw new ArgumentException("ddd");
+            });
+            Thread.Sleep(1000);
+            //下面这一行能够输出。Task有Exception属性，是AggregateException，如果Task正常执行，Exception属性为null。可以通过Status属性获取Task的状态。
+            Console.WriteLine($"{task.Status}输出Faulted,ex={task.Exception} ");
+        }
+
+        #endregion
+
         #region Task
         /**
          * 开始异步的任务
@@ -212,30 +259,5 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         #endregion
 
-        #region 处理未捕获的异常
-
-        /// <summary>
-        /// 处理未处理的异常
-        /// </summary>
-        /// <param name="handler"></param>
-        public static void UnobservedException(EventHandler<UnobservedTaskExceptionEventArgs> handler)
-        {
-            TaskScheduler.UnobservedTaskException += handler;
-        }
-
-        /// <summary>
-        /// 处理未处理的异常
-        /// </summary>
-        /// <param name="handler"></param>
-        public static void UnobservedException()
-        {
-            TaskScheduler.UnobservedTaskException += (sender, args) =>
-                                                         {
-                                                             //set exception handled
-                                                             args.SetObserved();
-                                                         };
-        }
-
-        #endregion
     }
 }
