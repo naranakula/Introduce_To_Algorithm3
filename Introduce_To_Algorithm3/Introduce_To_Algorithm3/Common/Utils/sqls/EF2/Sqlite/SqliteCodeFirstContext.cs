@@ -20,7 +20,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
     /// // ToTable("Person").HasKey(p=>p.PersonId);//设置表名和主键
     /// 主键数据库自动生成， 即自增主键
     /// //Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-    /// sqlite建议使用long做主键
+    /// sqlite建议使用long做主键  实际上更应该使用字符串 guid做主键
     /// 已经做过测试，可用
     /// </summary>
     public class SqliteCodeFirstContext:DbContext
