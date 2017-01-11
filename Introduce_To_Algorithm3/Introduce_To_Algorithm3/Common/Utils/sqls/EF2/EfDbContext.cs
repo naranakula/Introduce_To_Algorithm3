@@ -383,6 +383,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /*
          * EF支持的String操作：First FirstOrDefault Single SinglrOrDefault Any All StartsWith EndsWith Count Sum Min Max Average ToUpper ToLower Contains Skip Take Distinct Union Intersect Except  
+         * 经测试，EF字符串不支持String.IsNullOrWhiteSpace 但支持IsNullOrEmpty
          * 注：string的contains类似于sql的like  IEnumerable<string>(集合中可以有null)的contains类似于 sql的 IN
          * 尽量使用DbFunctions来执行操作
          */
@@ -944,7 +945,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             /// </summary>
             public Guid Id { get; set; }
             /// <summary>
-            /// 
+            /// ICollection在EF中默认反射成HashSet
             /// </summary>
             public virtual ICollection<OneToManyRight> Rights { get; set; }
         }
@@ -1006,6 +1007,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             public Guid Id { get; set; }
             /// <summary>
             /// 外键是通过关联表来实现的，类中不需要外键
+            /// ICollection在EF中默认反射成HashSet
             /// </summary>
             public virtual ICollection<ManyToManyRight> Rights { get; set; }
         }
@@ -1026,6 +1028,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             public Guid Id { get; set; }
             /// <summary>
             /// 外键是通过关联表来实现的，类中不需要外键
+            /// ICollection在EF中默认反射成HashSet
             /// </summary>
             public virtual ICollection<ManyToManyLeft> Lefts { get; set; }
         }
