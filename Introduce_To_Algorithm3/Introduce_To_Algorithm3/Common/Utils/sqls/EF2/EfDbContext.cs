@@ -593,6 +593,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public static void StateUpdate<T>(DbContext dbContext, T entity) where T : class
         {
             dbContext.Entry(entity).State = EntityState.Modified;
+            //加载外键关联对象
+            //dbContext.Entry(entity).Reference(c => c.Provinces).Load();
         }
 
         /// <summary>
