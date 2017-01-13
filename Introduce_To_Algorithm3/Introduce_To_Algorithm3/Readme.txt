@@ -46,6 +46,8 @@ i18n //smart internationalization for asp.net
 //中间件
 ActiveMq
 RocketMq (阿里的MQ)
+Ngnix
+Grpc
 Kafka
 RabbitMq>ActiveMq  (可以肯定的是rabbitmq好于activemq) EasyNetQ
 Redis>memcached
