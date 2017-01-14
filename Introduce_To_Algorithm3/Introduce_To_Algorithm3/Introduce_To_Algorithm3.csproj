@@ -596,7 +596,7 @@
     <Compile Include="Common\Utils\sqls\EF\DALHelper.cs" />
     <Compile Include="Common\Utils\StartupUtils.cs" />
     <Compile Include="Common\Utils\threads\ApplicationUtils.cs" />
-    <Compile Include="Common\Utils\threads\TimerEx.cs" />
+    <Compile Include="Common\Utils\threads\OneRunTimerEx.cs" />
     <Compile Include="Common\Utils\Time\DateTimeUtils.cs" />
     <Compile Include="Common\Utils\DESHelper.cs" />
     <Compile Include="Common\Utils\EnumHelper.cs" />
