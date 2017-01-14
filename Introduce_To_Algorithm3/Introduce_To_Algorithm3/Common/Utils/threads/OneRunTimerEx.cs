@@ -42,7 +42,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// <param name="actionCallback">定时器回调</param>
         /// <param name="dueTime">指定第一次开始指定的时间，单位毫秒，0表示立刻开始执行</param>
         /// <param name="period">指定执行的时间周期，单位毫秒</param>
-        public TimerEx(Action actionCallback, int period = 1000, int dueTime=0)
+        public OneRunTimerEx(Action actionCallback, int period = 1000, int dueTime=0)
         {
             this.actionCallback = actionCallback;
             //实际上初始化完成后，回调已经开始执行
