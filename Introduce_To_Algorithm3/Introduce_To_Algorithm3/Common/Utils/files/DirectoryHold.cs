@@ -200,6 +200,25 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
             return String.Empty;
         }
 
+        /// <summary>
+        /// 获取当前路径
+        /// </summary>
+        public static string CurrentDirectory
+        {
+            get
+            {
+                try
+                {
+                    return Environment.CurrentDirectory;
+                }
+                catch (Exception)
+                {
+                    //ignored
+                    return string.Empty;
+                }
+            }
+        }
+
         #endregion
     }
 }

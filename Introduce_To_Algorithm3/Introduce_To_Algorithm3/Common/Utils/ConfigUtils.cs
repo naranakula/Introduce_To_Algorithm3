@@ -153,7 +153,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="key">配置文件的键</param>
         /// <param name="defaultValue">获取不到对应的键值时的默认返回值</param>
         /// <returns></returns>
-        public static double GetDouble(string key, double defaultValue)
+        public static double GetDouble(string key, double defaultValue=0)
         {
             if (string.IsNullOrEmpty(key))
             {
