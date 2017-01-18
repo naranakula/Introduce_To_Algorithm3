@@ -388,6 +388,16 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
          * 尽量使用DbFunctions来执行操作
          */
 
+        /*
+         //查询多级深度子项，使用select包含多级子项
+         //如Passenger有关联Baggage,Baggage关联Unpackrecord,Unpackrecord关联Good
+        var passengerItems = context.Passengers.Where(r => r.CreatedTime < expireTime)
+                .Include(r => r.Baggages.Select(b => b.Unpackrecords.Select(u => u.Goods)))
+                .Include(r => r.Boardings)
+                .Include(r => r.Checkinrecords);
+
+        */
+
         /// <summary>
         /// Uses the primary key value to attempt to find an entity tracked by the context. If the entity is not in the context then a query will be executed and evaluated against the data in the data source, and null is returned if the entity is not found in the context or in the data source. Note that the Find also returns entities that have been added to the context but have not yet been saved to the database.
         /// 查询使用 Linq Method 或者 Linq Query
@@ -541,6 +551,22 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <returns></returns>
         public static T Remove<T>(DbSet<T> dbSet, T entity) where T : class
         {
+
+            /*
+             * 删除关联子项
+             */
+            /*
+            if (parent.Children != null)
+            {
+                //加上ToList,否则有可能 generates "Collection was modified; enumeration operation may not execute error"
+                foreach (var child in parent.Children.ToList())
+                {
+                    context.Children.Remove(child);
+                }
+            }
+            context.Parents.Remove(parent);
+            */
+
             return dbSet.Remove(entity);
         }
 
@@ -555,6 +581,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         {
             return dbSet.RemoveRange(entityList);
         }
+
+
 
         #endregion
 
