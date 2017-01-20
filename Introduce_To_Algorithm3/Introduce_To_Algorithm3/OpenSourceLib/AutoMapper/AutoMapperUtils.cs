@@ -10,18 +10,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
 {
     /// <summary>
     /// Map工具
-    /// 将同名属性映射
+    /// 将同名属性映射，创建目标对象，如果Src中存在同名的，将Src的同名属性值赋给dest,不存在Src同名属性，则不作处理
     /// </summary>
     public class AutoMapperUtils
     {
         /// <summary>
         /// 静态构造函数
         /// </summary>
-        static AutoMapperUtils() 
+        static AutoMapperUtils()
         {
             //初始化Map
             //Mapper.CreateMap<CalendarEvent, CalendarEventForm>().ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.Date.Date)).ForMember(dest => dest.EventHour, opt => opt.MapFrom(src => src.Date.Hour)).ForMember(dest => dest.EventMinute, opt => opt.MapFrom(src => src.Date.Minute));
             
+            //忽略某些字段
+            //.ForMember(r => r.Passenger, opt => opt.Ignore());
             //createmap的顺序是不重要的
         }
 
