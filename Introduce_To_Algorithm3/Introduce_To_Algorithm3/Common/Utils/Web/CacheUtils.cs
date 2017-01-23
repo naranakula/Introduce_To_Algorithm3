@@ -18,10 +18,21 @@ namespace Introduce_To_Algorithm3.Common.Utils.Web
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        /// <param name="expireTime"></param>
+        /// <param name="expireTime">过期时间 ，绝对时间 建议使用DateTime. UtcNow作为基准时间</param>
         public static void Insert(string key, object value, DateTime expireTime)
         {
             HttpRuntime.Cache.Insert(key, value, null, expireTime, Cache.NoSlidingExpiration);
+        }
+
+        /// <summary>
+        /// 添加一个缓存项，如果已经存在相同的key,此方法将会覆盖现有值。
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="slidingExpiration">最近一次访问对象之后多长时间过期</param>
+        public static void Insert(string key, object value, TimeSpan slidingExpiration)
+        {
+            HttpRuntime.Cache.Insert(key, value, null, Cache.NoAbsoluteExpiration, slidingExpiration);
         }
 
         /// <summary>
