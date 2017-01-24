@@ -23,7 +23,16 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// you should return a Task wherever possible, because a void-returning async method can't be awaited. Any caller of such a method must be able to continue to completion without waiting for the called async method to finish, and the caller must be independent of any values or exceptions that the async method generates.
     ///  If an exception occurs in an async method that returns a Task or Task<TResult>, the exception is stored in the returned task, and rethrown when the task is awaited. Therefore, make sure that any async method that can produce an exception has a return type of Task or Task<TResult> and that calls to the method are awaited.
     /// </summary>
-    public static class AsyncAwaitHelper
+    public class AsyncAwaitHelper
     {
+        public async Task ExampleAsync()
+        {
+            /*
+             * async 标记  
+             * Async函数结尾(不是必须的)
+             * 
+             */
+            return;
+        }
     }
 }
