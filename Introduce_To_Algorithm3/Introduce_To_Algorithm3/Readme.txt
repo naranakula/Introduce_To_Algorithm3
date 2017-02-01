@@ -195,7 +195,7 @@ AutoUpdater.net
 
 //测试工具
 Fiddler//Http 测试工具
-
+PostMan //Http测试工具 这个好
 
 //二维码
 QRCoder

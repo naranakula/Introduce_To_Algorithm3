@@ -32,6 +32,13 @@ namespace Introduce_To_Algorithm3.Common.Utils
              * Async函数结尾(不是必须的)
              * 
              */
+
+            await Task.Factory.StartNew(() =>
+            {
+                //创建任务并且开始任务
+                //如果只创建任务不开始是不行的
+            });
+
             return;
         }
     }
