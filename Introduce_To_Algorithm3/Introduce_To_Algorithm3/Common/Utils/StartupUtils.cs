@@ -17,6 +17,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// 注册表的路径是SOFTWARE\Microsoft\Windows\CurrentVersion\Run 
     /// 
     /// 命令可以有启动参数如："C:\Program Files\Microsoft Security Client\msseces.exe" -hide -runkey
+    /// 设置开机启动需要管理员权限  win7上需要，server上不需要
     /// </summary>
     public static class StartupUtils
     {
