@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,8 +28,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="keyName">要设置的注册表键</param>
         /// <param name="appToRun">开机运行的命令，可以带启动参数</param>
         /// <param name="isAutoStartup">true,设置自动启动，false,取消设置自动启动</param>
-        /// <param name="setCurrentDir">是否重置当前工作路径到当前工作目录</param>
-        public static void SetStartup(string keyName, string appToRun, bool isAutoStartup=true,bool setCurrentDir=true)
+        public static void SetStartup(string keyName, string appToRun, bool isAutoStartup=true)
         {
             RegistryKey registry = null;
 
@@ -55,11 +55,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     registry.DeleteValue(keyName,false);
                     //registry.SetValue(keyName, false);
                 }
-
-                if (setCurrentDir)
-                {
-                    DirectoryHold.ResetAppDir();
-                }
+                
             }
             catch(Exception ex)
             {
@@ -77,11 +73,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 设置当前应用程序自动开机运行
         /// </summary>
-        /// <param name="keyName">要设置的注册表键</param>
+        /// <param name="keyName">要设置的注册表键, 可以为程序建一个guid</param>
         /// <param name="isAutoStartup">true,设置自动启动，false,取消设置自动启动</param>
         public static void SetStartup(string keyName,  bool isAutoStartup=true)
         {
-            string appToRun = FileUtils.GetAppFullName();
+            string appToRun = Process.GetCurrentProcess().MainModule.FileName;
             SetStartup(keyName,appToRun,isAutoStartup);
         }
 
@@ -92,8 +88,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="isAutoStartup">true,设置自动启动，false,取消设置自动启动</param>
         public static void SetStartup( bool isAutoStartup = true)
         {
-            string keyName = FileUtils.GetAppName(false);
-            string appToRun = FileUtils.GetAppFullName();
+            string appToRun = Process.GetCurrentProcess().MainModule.FileName;
+            string keyName = Path.GetFileNameWithoutExtension(appToRun);
             SetStartup(keyName, appToRun, isAutoStartup);
         }
         #endregion
