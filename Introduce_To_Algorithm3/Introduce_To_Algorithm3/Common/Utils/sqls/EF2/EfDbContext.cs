@@ -1194,6 +1194,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// </summary>
     public class EfCreateDatabaseIfNotExists : CreateDatabaseIfNotExists<EfDbContext>
     {
+        //public override void InitializeDatabase(EfDbContext context)
+        //{
+        //    base.InitializeDatabase(context);
+        //}
+
         /// <summary>
         /// Seed方法在每次新建数据库后调用，如果已经存在则不调用
         /// </summary>
@@ -1201,10 +1206,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         protected override void Seed(EfDbContext context)
         {
             base.Seed(context);
-
+            
             //在数据库中加入初始化数据
             //为了安全起见，尽量使用AddOrUpdate 实际上没有必要，只有在数据迁移时，使用AddOrUpdate
+            //尽量使用AddOrUpdate
             //context.Persons.AddOrUpdate();
+
+            //框架会调用savechanges，但为了确保，最后最好加savechanges
         }
     }
 
@@ -1251,16 +1259,34 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
     /// <summary>
     /// 配置数据迁移
+    /// 
+    /// 如果只有一个MigrationConfiguration类，则CreateDatabaseIfNotExists DropCreateDatabaseAlways DropCreateDatabaseIfModelChanges也自动使用该配置，否则（有多个），不使用
     /// </summary>
     public class MigrationConfiguration : DbMigrationsConfiguration<EfDbContext>
     {
         public MigrationConfiguration()
         {
-            //必须支持允许自动迁移，这样当数据库结构改变后就可以自动迁移了
-            AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;//允许数据损失
-            //Gets or sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database.
-            ContextKey = "CmluMigrationConfiguration";
+            if (!Database.Exists(EfDbContext.NameOrConnectionString))
+            {
+                //如果只有一个MigrationConfiguration类，则CreateDatabaseIfNotExists DropCreateDatabaseAlways DropCreateDatabaseIfModelChanges也自动使用该配置，否则（有多个），不使用
+                //如果数据库没有创建，则允许迁移,第一次创建数据库时允许自动迁移
+
+                //必须支持允许自动迁移，这样当数据库结构改变后就可以自动迁移了
+                AutomaticMigrationsEnabled = true;
+                AutomaticMigrationDataLossAllowed = true; //允许数据损失
+                //Gets or sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database.
+                ContextKey = "CmluMigrationConfiguration";
+            }
+            else
+            {
+                //数据库已经存在，进行相关配置
+
+                //必须支持允许自动迁移，这样当数据库结构改变后就可以自动迁移了
+                AutomaticMigrationsEnabled = false;
+                AutomaticMigrationDataLossAllowed = false; //允许数据损失
+                //Gets or sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database.
+                ContextKey = "CmluMigrationConfiguration";
+            }
         }
 
         /// <summary>
@@ -1286,6 +1312,46 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //
         }
     }
+
+
+    ///// <summary>
+    ///// 配置数据迁移
+    ///// </summary>
+    //public class MigrationConfiguration2 : DbMigrationsConfiguration<EfDbContext>
+    //{
+    //    public MigrationConfiguration2()
+    //    {
+    //        //必须支持允许自动迁移，这样当数据库结构改变后就可以自动迁移了
+    //        AutomaticMigrationsEnabled = true;
+    //        AutomaticMigrationDataLossAllowed = true;//允许数据损失
+    //        //Gets or sets the string used to distinguish migrations belonging to this configuration from migrations belonging to other configurations using the same database.
+    //        ContextKey = "CmluMigrationConfiguration";
+    //    }
+
+    //    /// <summary>
+    //    /// If the System.Data.Entity.MigrateDatabaseToLatestVersion<TContext,TMigrationsConfiguration>database initializer is being used, then this method will be called each time that the initializer runs.
+    //    /// 意味着每次程序启动，都会执行Seed,而不是仅仅迁移后执行
+    //    /// Runs after upgrading to the latest migration to allow seed data to be updated.
+    //    /// 
+    //    /// if AutomaticMigrationsEnabled=true,the DbMigrationsConfiguration Seed method will run after each migration is applied or every time that the initializer runs.initializer is called when a the given System.Data.Entity.DbContext type is used to access a database for the first time.意味着每次迁移后或者第一次DbContext访问数据库时会调用seed，但不是每次DbContext创建时调用。 
+    //    /// </summary>
+    //    /// <param name="context"></param>
+    //    protected override void Seed(EfDbContext context)
+    //    {
+    //        //  每次程序启动，都会执行Seed,而不是仅仅迁移后执行
+
+    //        //  You can use the DbSet<T>.AddOrUpdate() helper extension method to avoid creating duplicate seed data. E.g.
+    //        //
+    //        //    context.People.AddOrUpdate(
+    //        //      p => p.FullName,
+    //        //      new Person { FullName = "Andrew Peters" },
+    //        //      new Person { FullName = "Brice Lambson" },
+    //        //      new Person { FullName = "Rowan Miller" }
+    //        //    );
+    //        //
+    //    }
+    //}
+
 
     /// <summary>
     /// 当AutomaticMigrationsEnabled = true时，该初始化器自动初始化到最新的Model版本
