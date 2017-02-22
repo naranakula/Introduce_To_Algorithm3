@@ -386,6 +386,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
          * 经测试，EF字符串不支持String.IsNullOrWhiteSpace 但支持IsNullOrEmpty
          * 注：string的contains类似于sql的like  IEnumerable<string>(集合中可以有null)的contains类似于 sql的 IN
          * 尽量使用DbFunctions来执行操作
+         * 
+         * 查询的Union相当于sql的union，是去重的，不去重使用concat连接
+         * DateTime可以使用.year .day .month
          */
 
         /*
@@ -1268,6 +1271,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         {
             if (!Database.Exists(EfDbContext.NameOrConnectionString))
             {
+                //第一次创建数据库时数据库不存在
                 //如果只有一个MigrationConfiguration类，则CreateDatabaseIfNotExists DropCreateDatabaseAlways DropCreateDatabaseIfModelChanges也自动使用该配置，否则（有多个），不使用
                 //如果数据库没有创建，则允许迁移,第一次创建数据库时允许自动迁移
 
@@ -1280,7 +1284,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             else
             {
                 //数据库已经存在，进行相关配置
-                //实际上可以自动迁移
+                //实际上可以自动迁移，禁用自动迁移是在开发模式下
 
                 //必须支持允许自动迁移，这样当数据库结构改变后就可以自动迁移了
                 AutomaticMigrationsEnabled = true;
