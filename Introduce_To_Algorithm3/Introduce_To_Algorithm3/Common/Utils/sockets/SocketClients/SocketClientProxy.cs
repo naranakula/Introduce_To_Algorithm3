@@ -59,19 +59,23 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
 
                     if (_isDisconnect)
                     {
+                        //确信断开了连接
                         return false;
                     }
 
                     try
                     {
+                        //根据上一次Send或者Receive操作判断是否是否连接
+                        // Connected 属性反映截止到最近的操作的连接的状态
                         bool isConnected = socket.Connected;
                         if (!isConnected)
                         {
                             return false;
                         }
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        NLogHelper.Error("根据Socket.Connected判断是否连接异常："+ex);
                         return false;
                     }
 
@@ -84,7 +88,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
         }
 
         /// <summary>
-        /// 是否已经断开了连接
+        /// 是否已经断开了连接，用于确信断开了连接
         /// </summary>
         private static volatile bool _isDisconnect = true;
 
@@ -96,7 +100,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
         /// <summary>
         /// 服务器端口
         /// </summary>
-        private static readonly int serverPort = ConfigUtils.GetInteger("ServerPort", 0);
+        private static readonly int serverPort = ConfigUtils.GetInteger("ServerPort");
 
         /// <summary>
         /// 锁
@@ -111,7 +115,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
         /// <summary>
         /// 最近一次通信时间
         /// </summary>
-        private static DateTime? lastUpdateTime = null;
+        private static DateTime? lastSendRecvTime = null;
 
         /// <summary>
         /// 发送queue
@@ -120,6 +124,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
 
         /// <summary>
         /// 接受的byte list
+        /// RecvByteList只在一个线程中使用
         /// </summary>
         private static readonly List<byte> RecvByteList = new List<byte>();
 
@@ -252,6 +257,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
         private static void RecvCallBack(object obj)
         {
             byte[] buffer = new byte[1024*512];
+            //单条消息的最大长度
+            int maxByteInList = 8 * 1024 * 1024;//8M 声明为全局常量
             while (isRunning)
             {
                 try
@@ -264,7 +271,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                             //避免受到上一次连接的不完整消息
                             RecvByteList.Clear();
                         }
-                        Thread.Sleep(1500);
+                        Thread.Sleep(1200);
                         NLogHelper.Info("检测到socket没有连接");
                         continue;
                     }
@@ -288,7 +295,7 @@ true 如果连接已关闭、 重置，或者终止，则返回，
                             _isDisconnect = true;
                             continue;
                         }
-                        lastUpdateTime = DateTime.Now;
+                        lastSendRecvTime = DateTime.Now;
                         _isDisconnect = false;
                         for (int i = 0; i < count; i++)
                         {
@@ -338,7 +345,7 @@ true 如果连接已关闭、 重置，或者终止，则返回，
                             }
                         }
 
-                        int maxByteInList = 8*1024*1024;//8M 声明为全局常量
+                       
                         if (RecvByteList.Count > maxByteInList)
                         {
                             RecvByteList.Clear();
@@ -379,7 +386,7 @@ true 如果连接已关闭、 重置，或者终止，则返回，
                         NLogHelper.Info("开始发送消息"+item.Message);
                         byte[] buffer = Encoding.GetEncoding(EncodingStr).GetBytes(item.Message);
                         socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                        lastUpdateTime = DateTime.Now;
+                        lastSendRecvTime = DateTime.Now;
                         _isDisconnect = false;
                     }
                     catch (Exception ex)
@@ -450,7 +457,7 @@ true 如果连接已关闭、 重置，或者终止，则返回，
                 socket.SendTimeout = socket.ReceiveTimeout = SendRecvTimeout;
 
                 socket.Connect(IPAddress.Parse(serverIp),serverPort);
-                lastUpdateTime = DateTime.Now;
+                lastSendRecvTime = DateTime.Now;
                 _isDisconnect = false;
                 //初始化接收\发送多线程
                 InitThread();
@@ -486,7 +493,8 @@ true 如果连接已关闭、 重置，或者终止，则返回，
                 {
                     NLogHelper.Error("Socket的Close失败："+ex);
                 }
-
+                //连接断开
+                _isDisconnect = true;
                 socket = null;
             }
         }
