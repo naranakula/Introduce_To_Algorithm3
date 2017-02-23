@@ -500,6 +500,7 @@
     <Compile Include="Common\Search\BinarySearch.cs" />
     <Compile Include="Common\Search\LinearSearch.cs" />
     <Compile Include="Common\Search\OrderStatics.cs" />
+    <Compile Include="Common\Utils\AppExitEx.cs" />
     <Compile Include="Common\Utils\AsyncAwaitHelper.cs" />
     <Compile Include="Common\Utils\CacheHelper.cs" />
     <Compile Include="Common\Utils\DeepClone.cs" />
@@ -762,6 +763,7 @@
     <Folder Include="Common\Compiler\" />
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
+    <Folder Include="Common\Utils\Commons\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
     <Folder Include="OpenSourceLib\NetMqs\Docs\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />

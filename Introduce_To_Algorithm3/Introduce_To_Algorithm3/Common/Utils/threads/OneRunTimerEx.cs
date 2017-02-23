@@ -34,19 +34,20 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// 底层的回调
         /// </summary>
         private readonly Action actionCallback=null;
-        
+
         /// <summary>
         /// 构造函数
         /// 初始化完成后，回调已经开始执行
         /// </summary>
         /// <param name="actionCallback">定时器回调</param>
-        /// <param name="dueTime">指定第一次开始指定的时间，单位毫秒，0表示立刻开始执行</param>
+        /// <param name="dueTime">指定第一次开始执行前的等待时间，单位毫秒，0表示立刻开始执行</param>
         /// <param name="period">指定执行的时间周期，单位毫秒</param>
-        public OneRunTimerEx(Action actionCallback, int period = 1000, int dueTime=0)
+        /// <param name="state"> An object containing information to be used by the callback method, or null.</param>
+        public OneRunTimerEx(Action actionCallback,int dueTime = 0, int period = 1000, object state =null)
         {
             this.actionCallback = actionCallback;
             //实际上初始化完成后，回调已经开始执行
-            _timer = new Timer(new TimerCallback(TimerCallback), null, dueTime, period);
+            _timer = new Timer(new TimerCallback(TimerCallback), state, dueTime, period);
         }
         
         /// <summary>
