@@ -79,7 +79,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                         return false;
                     }
 
-                    //注：这种方式是不精确的，需要根据lastUpdateTime进行二次确认
+                    //注：这种方式是相对精确的，需要根据lastUpdateTime进行二次确认
 
                     return true;
                 }
