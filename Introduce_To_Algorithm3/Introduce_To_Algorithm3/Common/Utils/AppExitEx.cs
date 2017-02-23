@@ -14,7 +14,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="normalExitAction">正常退出执行的动作</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static void EnsureExit(Action normalExitAction,Action<Exception> exceptionHandler = null) 
+        public static void EnsureExit(Action normalExitAction = null,Action<Exception> exceptionHandler = null) 
         {
             try
             {
