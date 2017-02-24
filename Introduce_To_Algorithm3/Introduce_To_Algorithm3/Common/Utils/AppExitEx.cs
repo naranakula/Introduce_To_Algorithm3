@@ -35,6 +35,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                         catch (Exception)
                         {
                             //ignore
+                            Thread.Sleep(100);
                         }
                     }
                 });
