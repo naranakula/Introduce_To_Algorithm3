@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="normalExitAction">正常退出执行的动作</param>
         /// <param name="exceptionHandler">异常处理</param>
         /// <param name="maxWaitMilliSecondBeforeExit">退出之前最长的等待时间，单位毫秒,即normalExitAction可能执行的最长时间，超出该时间说明正常退出指令写的有问题，程序强制杀死</param>
-        public static void EnsureExit(Action normalExitAction = null,Action<Exception> exceptionHandler = null,int maxWaitMilliSecondBeforeExit = 3000) 
+        public static void EnsureExit(Action normalExitAction = null,Action<Exception> exceptionHandler = null,int maxWaitMilliSecondBeforeExit = 5000) 
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 //Task创建的是后台线程
                 Task.Factory.StartNew(() =>
                 {
-                    //3s后强制退出
+                    //5s后强制退出
                     Thread.Sleep(maxWaitMilliSecondBeforeExit);
                     for (int i = 0; i < 5; i++)
                     {
