@@ -67,6 +67,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                     {
                         //根据上一次Send或者Receive操作判断是否是否连接
                         // Connected 属性反映截止到最近的操作的连接的状态
+                        //如果服务器意外断电，网线被拔掉，服务器意外杀死，是无法检测到问题的(连接断开) 远程主机 shuts down or close可以检测到
                         bool isConnected = socket.Connected;
                         if (!isConnected)
                         {
@@ -80,7 +81,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                     }
 
                     //注：这种方式是相对精确的，需要根据lastUpdateTime进行二次确认
-
+                    //因为 Poll 如果服务器意外断电，网线被拔掉，服务器意外杀死，Poll Available是无法检测到问题的(连接断开), 远程主机 shuts down or close可以检测到
                     return true;
                 }
             }
@@ -193,10 +194,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
         /// </summary>
         private static void InitThread()
         {
-            IsRunning = true;
-
             if (sendThread == null)
             {
+                IsRunning = true;
                 sendThread = new Thread(SendCallBack);
                 sendThread.Start();
             }
@@ -273,6 +273,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                         }
                         Thread.Sleep(1200);
                         NLogHelper.Info("检测到socket没有连接");
+                        //不能使用break
                         continue;
                     }
 
@@ -284,15 +285,17 @@ true 如果数据是可供读取;
 true 如果连接已关闭、 重置，或者终止，则返回，
 否则，返回 false。
                      */
-                    //300毫秒
-                    if (socket.Poll(300000,SelectMode.SelectRead))
+                    //500毫秒
+                    ////Poll 如果服务器意外断电，网线被拔掉，服务器意外杀死，是无法检测到问题的(连接断开)，指定时间过后返回false
+                    if (socket.Poll(500000, SelectMode.SelectRead))
                     {
                         int count = socket.Receive(buffer, 0, buffer.Length, SocketFlags.None);
 
-                        if (count == 0)
+                        if (count <= 0)
                         {
                             //连接断开
                             _isDisconnect = true;
+                            Thread.Sleep(500);
                             continue;
                         }
                         lastSendRecvTime = DateTime.Now;
@@ -303,13 +306,15 @@ true 如果连接已关闭、 重置，或者终止，则返回，
                         }
 
                         //TODO:开始解析数据
+
                         #region 解析数据
+
                         //消息头部开始位置
                         int headPos = -1;
                         //消息尾部结束位置
                         int tailPos = -1;
                         //[headPos,tailPos)之间,是消息内容
-                        string header = "head";
+                        string header = "head"; //根据实际情况设置消息头尾，消息头尾包含在消息内
                         string tail = "tail";
                         byte[] headerBytes = Encoding.GetEncoding(EncodingStr).GetBytes(header);
                         byte[] tailBytes = Encoding.GetEncoding(EncodingStr).GetBytes(tail);
@@ -325,13 +330,13 @@ true 如果连接已关闭、 重置，或者终止，则返回，
                                 {
 
                                     //找到尾部位置
-                                    tailPos = tailPos + tailBytes.Length;//不含  尾部位置+1
-                                    byte[] itemBuffer = new byte[tailPos-headPos];
-                                    RecvByteList.CopyTo(headPos,itemBuffer,0,itemBuffer.Length);
+                                    tailPos = tailPos + tailBytes.Length; //不含  尾部位置+1
+                                    byte[] itemBuffer = new byte[tailPos - headPos];
+                                    RecvByteList.CopyTo(headPos, itemBuffer, 0, itemBuffer.Length);
                                     //移除list中的数据
-                                    RecvByteList.RemoveRange(0,tailPos);
+                                    RecvByteList.RemoveRange(0, tailPos);
                                     string recvStr = Encoding.GetEncoding(EncodingStr).GetString(itemBuffer);
-                                    RecvBlockingQueue.Add(new MessageItem(){Message = recvStr});
+                                    RecvBlockingQueue.Add(new MessageItem() {Message = recvStr});
                                 }
                                 else
                                 {
@@ -345,13 +350,17 @@ true 如果连接已关闭、 重置，或者终止，则返回，
                             }
                         }
 
-                       
+
                         if (RecvByteList.Count > maxByteInList)
                         {
                             RecvByteList.Clear();
                         }
 
                         #endregion
+                    }
+                    else
+                    {
+                        Thread.Sleep(10);
                     }
                     
                 }
