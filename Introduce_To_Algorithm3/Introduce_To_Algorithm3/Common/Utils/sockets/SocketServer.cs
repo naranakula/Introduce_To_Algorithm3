@@ -155,8 +155,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                         ThreadPoolHelper.ExecThreadPool(action, client);
                     }
 
-                    client.Shutdown(SocketShutdown.Both);
-                    client.Close();
+                    //client.Shutdown(SocketShutdown.Both);
+                    //client.Close();
                     //RequestHandle requestHandle = new RequestHandle(client);
                     //ThreadPoolHelper.ExecThreadPool(ThreadProc, requestHandle);
                     Thread.Sleep(1);

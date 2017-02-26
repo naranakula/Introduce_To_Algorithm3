@@ -65,7 +65,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
 
                     try
                     {
-                        //根据上一次Send或者Receive操作判断是否是否连接
+                        //根据上一次Send或者Receive操作判断是否是否连接,经测试connect调用之后也是true
                         // Connected 属性反映截止到最近的操作的连接的状态
                         //如果服务器意外断电，网线被拔掉，服务器意外杀死，是无法检测到问题的(连接断开) 远程主机 shuts down or close可以检测到
                         bool isConnected = socket.Connected;
