@@ -1,4 +1,5 @@
-﻿using Apache.NMS;
+﻿using System;
+using Apache.NMS;
 using Apache.NMS.ActiveMQ;
 using Com.Utility.Commons;
 using Introduce_To_Algorithm3.Common.Utils;
@@ -35,7 +36,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                                 DestinationType.Queue)))
                     {
                         connection.Start();
-                        producer.Send(session.CreateTextMessage(msg));
+                        ITextMessage message = session.CreateTextMessage(msg);
+                        message.NMSTimeToLive = TimeSpan.FromHours(2);
+                        producer.Send(message);
                     }
                 }
             }
@@ -56,7 +59,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                                 DestinationType.Topic)))
                     {
                         connection.Start();
-                        producer.Send(session.CreateTextMessage(msg));
+                        connection.Start();
+                        ITextMessage message = session.CreateTextMessage(msg);
+                        message.NMSTimeToLive = TimeSpan.FromHours(2);
+                        producer.Send(message);
                     }
                 }
             }
