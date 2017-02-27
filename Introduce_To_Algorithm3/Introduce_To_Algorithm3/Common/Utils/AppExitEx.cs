@@ -30,7 +30,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     {
                         try
                         {
-                            NLogHelper.Warn("程序即将强制退出");
+                            NLogHelper.Warn($"程序第{i+1}次尝试强制退出");
                             Environment.Exit(0);
                             Thread.Sleep(10);
                         }
@@ -47,6 +47,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 {
                     normalExitAction();
                 }
+
             }
             catch (Exception ex)
             {
