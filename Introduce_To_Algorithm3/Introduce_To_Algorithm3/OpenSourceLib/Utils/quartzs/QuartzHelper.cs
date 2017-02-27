@@ -8,18 +8,23 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 {
     /// <summary>
     /// Quartz任务调度类
+    /// 支持Quartz 2.x  不支持3.x
     /// Cron表达式含义查询网站：
     /// http://cronexpressiondescriptor.azurewebsites.net
+    /// 
+    /// ScheduleJob然后在Start
     /// </summary>
     public class QuartzHelper
     {
 
         #region 单例模式
 
-        private static QuartzHelper _instance;
+        private static volatile QuartzHelper _instance;
 
         private QuartzHelper()
         {
+            // 默认使用的是RAMJobStore，即信息保存在内存中
+            //AdoJobStore 信息使用ADO.NET保存在数据库中 
             _schedulerFactory = new StdSchedulerFactory();
             _scheduler = _schedulerFactory.GetScheduler();
         }
@@ -129,14 +134,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
         /// <summary>
         /// 创建一个job
-        /// job将会被认为是长久的，使用了默认的组
+        /// job将会被认为是非持久的，使用了默认的组
         /// </summary>
         /// <param name="jobName">job名字，必须唯一</param>
         /// <param name="job"></param>
         /// <param name="data"></param>
         public static  IJobDetail CreateJob(String jobName, IJob job, JobDataMap data = null)
         {
-            IJobDetail jobDetail = new JobDetailImpl(jobName,null,job.GetType(),true,false);
+            /*
+Durability - if a job is non - durable, it is automatically deleted from the scheduler once there are no longer any active triggers associated with it.In other words, non - durable jobs have a life span bounded by the existence of its triggers.
+RequestsRecovery - if a job “requests recovery”, and it is executing during the time of a ‘hard shutdown’ of the scheduler(i.e.the process it is running within crashes, or the machine is shut off), then it is re - executed when the scheduler is started again.In this case, the JobExecutionContext.Recovering property will return true.*/
+            //Job 不持久 ， 不要求恢复， 使用默认的SchedulerConstants.DefaultGroup
+            //Set the property JobDetail.Durable = true - which instructs Quartz not to delete the Job when it becomes an “orphan” (when the Job not longer has a Trigger referencing it).
+            // if set to true, job will request recovery.  automatically re-executed after a scheduler fails.
+            IJobDetail jobDetail = new JobDetailImpl(jobName,null,job.GetType(),false,false);
             
             if (data != null)
             {
@@ -151,14 +162,21 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
         /// <summary>
         /// 创建一个job
-        /// job将会被认为是长久的，使用了默认的组
+        /// job将会被认为是非长久的，使用了默认的组
         /// </summary>
         /// <param name="jobName">job名字，必须唯一</param>
         /// <param name="jobtype"></param>
         /// <param name="data"></param>
         public static IJobDetail CreateJob(String jobName, Type jobtype,JobDataMap data = null)
         {
-            IJobDetail jobDetail = new JobDetailImpl(jobName, null, jobtype, true, false);
+            /*
+Durability - if a job is non - durable, it is automatically deleted from the scheduler once there are no longer any active triggers associated with it.In other words, non - durable jobs have a life span bounded by the existence of its triggers.
+RequestsRecovery - if a job “requests recovery”, and it is executing during the time of a ‘hard shutdown’ of the scheduler(i.e.the process it is running within crashes, or the machine is shut off), then it is re - executed when the scheduler is started again.In this case, the JobExecutionContext.Recovering property will return true.*/
+
+           //Job 不持久 ， 不要求恢复， 使用默认的SchedulerConstants.DefaultGroup
+           //Set the property JobDetail.Durable = true - which instructs Quartz not to delete the Job when it becomes an “orphan” (when the Job not longer has a Trigger referencing it).
+           // if set to true, job will request recovery.   automatically re-executed after a scheduler fails.
+           IJobDetail jobDetail = new JobDetailImpl(jobName, null, jobtype, false, false);
             if (data != null)
             {
                 foreach (var keyValuePair in data)
@@ -225,7 +243,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <returns></returns>
         public static ITrigger CreateSimpleTrigger(string triggerName, int offsetSeconds, TimeSpan periodSpan)
         {
-            ITrigger trigger = new SimpleTriggerImpl(triggerName, DateTimeOffset.UtcNow.AddSeconds(offsetSeconds), null, SimpleTriggerImpl.RepeatIndefinitely, periodSpan);
+            //ITrigger trigger = new SimpleTriggerImpl(triggerName, DateTimeOffset.UtcNow.AddSeconds(offsetSeconds), null, SimpleTriggerImpl.RepeatIndefinitely, periodSpan);
+
+            ITrigger trigger =
+                TriggerBuilder.Create()
+                    .WithIdentity(triggerName)
+                    .StartAt(DateTimeOffset.UtcNow.AddSeconds(offsetSeconds))
+                    .WithSimpleSchedule(builder => builder.WithInterval(periodSpan).RepeatForever())
+                    .Build();
             return trigger;
         }
 
