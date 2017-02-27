@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
@@ -29,6 +30,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     {
                         try
                         {
+                            NLogHelper.Warn("程序即将强制退出");
                             Environment.Exit(0);
                             Thread.Sleep(10);
                         }
