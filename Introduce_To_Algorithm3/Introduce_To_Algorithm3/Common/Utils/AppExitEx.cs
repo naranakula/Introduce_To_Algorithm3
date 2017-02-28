@@ -55,6 +55,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 {
                     exceptionHandler(ex);
                 }
+                else
+                {
+                    NLogHelper.Error("程序退出时异常："+ex);
+                }
             }
         }
 
