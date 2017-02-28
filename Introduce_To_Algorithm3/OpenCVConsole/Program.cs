@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenCvSharp;
+using OpenCVConsole.OpenCvEx;
 using OpenCVConsole.Utils;
 
 namespace OpenCVConsole
@@ -16,65 +17,70 @@ namespace OpenCVConsole
     {
         static void Main(string[] args)
         {
-            VideoCapture videoCapture = new VideoCapture(CaptureDevice.Any);
-            int frameWidth = ConfigUtils.GetInteger("FrameWidth", 0);
-            int frameHeight = ConfigUtils.GetInteger("FrameHeight", 0);
-
-            NLogHelper.Trace(String.Format("设置图像的大小 width={0}  height={1}.",frameWidth,frameHeight));
-            //videoCapture.Set(CaptureProperty.FrameWidth, 1280);
-            //videoCapture.Set(CaptureProperty.FrameHeight, 720);
-            //videoCapture.Open(CaptureDevice.Any);
-            if (frameWidth > 0 && frameHeight > 0)
-            {
-                videoCapture.FrameWidth = frameWidth;
-                videoCapture.FrameHeight = frameHeight;
-            }
-
-
-            NLogHelper.Trace(videoCapture.Fps + "" + videoCapture.IsOpened()+videoCapture.CaptureType+" width="+videoCapture.FrameWidth + " height="+videoCapture.FrameHeight);
+            DirectoryHold.ResetAppDir();
+            NLogHelper.Info($"应用程序当前目录为：{Directory.GetCurrentDirectory()}");
             
-            double fps = videoCapture.Fps;
-            fps = fps > 1 ? fps : 25;
-            int sleepTime = (int)Math.Round(1000 / fps);
-            sleepTime = 1500;
-            const string saveDir = "Pics";
-            using (Window window = new Window("capture"))
-            {
-                using (Mat image = new Mat())
-                {
-                    while (true)
-                    {
-                        videoCapture.Read(image);
-                        if (image.Empty())
-                        {
-                            Thread.Sleep(100);
-                            continue;
-                        }
 
-                        window.ShowImage(image);
-                        bool isNeedToSave = BlobUtils.IsNeedToSave(image);
-                        
-                        if (isNeedToSave)
-                        {
-                            if (!Directory.Exists(saveDir))
-                            {
-                                Directory.CreateDirectory(saveDir);
-                            }
-                            string dir = Path.Combine(saveDir, DateTime.Now.ToString("yyyyMMdd"));
-                            if (!Directory.Exists(dir))
-                            {
-                                Directory.CreateDirectory(dir);
-                            }
 
-                            string fileName = Path.Combine(dir, DateTime.Now.ToString("HHmmss")+"_"+Guid.NewGuid().ToString() + ".jpg");
-                            image.SaveImage(fileName);
-                        }
+            //VideoCapture videoCapture = new VideoCapture(CaptureDevice.Any);
+            //int frameWidth = ConfigUtils.GetInteger("FrameWidth", 0);
+            //int frameHeight = ConfigUtils.GetInteger("FrameHeight", 0);
 
-                        Cv2.WaitKey(sleepTime);
-                        //Console.ReadLine();
-                    }
-                }
-            }
+            //NLogHelper.Trace(String.Format("设置图像的大小 width={0}  height={1}.",frameWidth,frameHeight));
+            ////videoCapture.Set(CaptureProperty.FrameWidth, 1280);
+            ////videoCapture.Set(CaptureProperty.FrameHeight, 720);
+            ////videoCapture.Open(CaptureDevice.Any);
+            //if (frameWidth > 0 && frameHeight > 0)
+            //{
+            //    videoCapture.FrameWidth = frameWidth;
+            //    videoCapture.FrameHeight = frameHeight;
+            //}
+
+
+            //NLogHelper.Trace(videoCapture.Fps + "" + videoCapture.IsOpened()+videoCapture.CaptureType+" width="+videoCapture.FrameWidth + " height="+videoCapture.FrameHeight);
+
+            //double fps = videoCapture.Fps;
+            //fps = fps > 1 ? fps : 25;
+            //int sleepTime = (int)Math.Round(1000 / fps);
+            //sleepTime = 1500;
+            //const string saveDir = "Pics";
+            //using (Window window = new Window("capture"))
+            //{
+            //    using (Mat image = new Mat())
+            //    {
+            //        while (true)
+            //        {
+            //            videoCapture.Read(image);
+            //            if (image.Empty())
+            //            {
+            //                Thread.Sleep(100);
+            //                continue;
+            //            }
+
+            //            window.ShowImage(image);
+            //            bool isNeedToSave = BlobUtils.IsNeedToSave(image);
+
+            //            if (isNeedToSave)
+            //            {
+            //                if (!Directory.Exists(saveDir))
+            //                {
+            //                    Directory.CreateDirectory(saveDir);
+            //                }
+            //                string dir = Path.Combine(saveDir, DateTime.Now.ToString("yyyyMMdd"));
+            //                if (!Directory.Exists(dir))
+            //                {
+            //                    Directory.CreateDirectory(dir);
+            //                }
+
+            //                string fileName = Path.Combine(dir, DateTime.Now.ToString("HHmmss")+"_"+Guid.NewGuid().ToString() + ".jpg");
+            //                image.SaveImage(fileName);
+            //            }
+
+            //            Cv2.WaitKey(sleepTime);
+            //            //Console.ReadLine();
+            //        }
+            //    }
+            //}
         }
 
 

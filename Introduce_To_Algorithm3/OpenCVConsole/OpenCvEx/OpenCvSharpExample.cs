@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 
@@ -90,12 +91,54 @@ namespace OpenCVConsole.OpenCvEx
             Mat mat = Mat.FromImageData(barray, ImreadModes.Color);
             return mat;
         }
+
+        /// <summary>
+        /// 将mat转换为wpf使用的WriteableBitmap
+        /// </summary>
+        /// <param name="mat"></param>
+        /// <returns></returns>
+        public static WriteableBitmap ConvertToWriteableBitMap(Mat mat)
+        {
+            //wpf使用Image控件，将Image控件的Source设置为WriteableBitmap
+            WriteableBitmap writeableBitmap = mat.ToWriteableBitmap();
+            return writeableBitmap;
+        }
+
         #endregion
 
         #region Capture Vedio
 
+        /// <summary>
+        /// 捕获视频
+        /// </summary>
+        public static void CaptureVedio()
+        {
+            VideoCapture capture = new VideoCapture(CaptureDevice.Any);
+            //获取视频的fps  画面每秒传输帧数
+            double fps = capture.Fps;
+            fps = fps > 10 ? fps : 30;
 
+            int sleepTime = (int) Math.Round(1000/fps);
 
+            using (Window window = new Window("capture"))
+            {
+                using (Mat image = new Mat())
+                {
+                    while (true)
+                    {
+                        capture.Read(image);
+                        if (image.Empty())
+                        {
+                            break;
+                        }
+
+                        window.ShowImage(image);
+                        Cv2.WaitKey(sleepTime);
+                    }
+                }
+            }
+
+        }
 
 
         #endregion
