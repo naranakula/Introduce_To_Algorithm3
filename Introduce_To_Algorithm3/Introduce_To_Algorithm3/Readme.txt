@@ -219,6 +219,7 @@ Scut//开源稳定的游戏服务器
 StringUtils.cs
 ConfigUtils.cs
 DirectoryHold.cs
+AppExitEx.cs //应用程序确保退出安全措施
 NLogHelper.cs
 QuartzHelper.cs
 CleanJob.cs
@@ -232,7 +233,6 @@ OneRunTimerEx.cs
 SocketClientProxy.cs
 SocketMonitorTimer.cs //通过这个启动SocketClientProxy
 TaskHelper.cs
-AppExitEx.cs //应用程序确保退出安全措施
 Contants.cs//定义常量和配置项
 
 
