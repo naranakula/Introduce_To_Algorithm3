@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Design;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Windows.Forms;
 using OpenCvSharp;
 using OpenCVConsole.OpenCvEx;
 using OpenCVConsole.Utils;
+using Point = OpenCvSharp.Point;
 
 namespace OpenCVConsole
 {
@@ -20,6 +22,38 @@ namespace OpenCVConsole
             DirectoryHold.ResetAppDir();
             NLogHelper.Info($"应用程序当前目录为：{Directory.GetCurrentDirectory()}");
             
+
+            Mat src = new Mat("Images/check1.jpg");
+            NLogHelper.Info("图片加载成功");
+            Bitmap bitmap = OpenCvSharpExample.ConvertToBitmap(src);
+
+            Bitmap result1 = OpenCvSharpExample.EliminateYellow(bitmap);
+            Mat tgt1 = OpenCvSharpExample.ConvertToMat(result1);
+
+            Mat tgt2 = OpenCvSharpExample.ConvertToMat(OpenCvSharpExample.EliminateBlue(bitmap));
+
+            Mat tgt3 = OpenCvSharpExample.ConvertToMat(OpenCvSharpExample.ColorHighPenetrate(bitmap, 0.4));
+
+            Mat tgt4 = OpenCvSharpExample.ConvertToMat(OpenCvSharpExample.Gray(bitmap));
+
+
+            using (Window window = new Window("原图", src))
+            {
+                using (Window window2 = new Window("有机物", tgt1))
+                {
+                    using (Window window3 = new Window("无机物", tgt2))
+                    {
+                        using (Window window4 = new Window("高光", tgt3))
+                        {
+                            using (Window window5 = new Window("黑白", tgt4))
+                            {
+                                NLogHelper.Info("图片显示成功");
+                                Cv2.WaitKey();
+                            }
+                        }
+                    }
+                }
+            }
 
 
             //VideoCapture videoCapture = new VideoCapture(CaptureDevice.Any);

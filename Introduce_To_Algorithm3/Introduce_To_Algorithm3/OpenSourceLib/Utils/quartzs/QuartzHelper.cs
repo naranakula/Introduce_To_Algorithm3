@@ -12,7 +12,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
     /// Cron表达式含义查询网站：
     /// http://cronexpressiondescriptor.azurewebsites.net
     /// 
-    /// ScheduleJob然后在Start
+    /// ScheduleJob然后在Start， 最后shutdown ,如果不调用ShutDown,进程不会退出
     /// </summary>
     public class QuartzHelper
     {
@@ -223,13 +223,35 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
         /// 意味着如果下一个周期到来，而上一次周期执行未完成，job仍然在一个新线程中执行
         /// </summary>
         /// <param name="triggerName">触发器的名字，必须唯一</param>
-        /// <param name="offsetSeconds">多长时间后触发器执行 即第一次job执行  经过测试，单位为秒,</param>
+        /// <param name="offsetSeconds">多长时间后触发器执行 即第一次job执行  单位为秒,0表示立刻执行</param>
         /// <param name="periodSeconds">第一次之后每次触发器的执行周期，单位为秒,范围可以超过59</param>
         /// <returns></returns>
         public static ITrigger CreateSimpleTrigger(string triggerName,int offsetSeconds,int periodSeconds)
         {
-            ITrigger trigger = new SimpleTriggerImpl(triggerName,DateTimeOffset.UtcNow.AddSeconds(offsetSeconds),null,SimpleTriggerImpl.RepeatIndefinitely,new TimeSpan(0,0,0,periodSeconds));
-            return trigger;
+            //ITrigger trigger = new SimpleTriggerImpl(triggerName,DateTimeOffset.UtcNow.AddSeconds(offsetSeconds),null,SimpleTriggerImpl.RepeatIndefinitely,new TimeSpan(0,0,0,periodSeconds));
+
+            //return trigger;
+
+            if (offsetSeconds <= 0)
+            {
+                ITrigger trigger =
+                    TriggerBuilder.Create()
+                        .WithIdentity(triggerName)
+                        .StartNow()
+                        .WithSimpleSchedule(builder => builder.WithIntervalInSeconds(periodSeconds).RepeatForever())
+                        .Build();
+                return trigger;
+            }
+            else
+            {
+                ITrigger trigger =
+                TriggerBuilder.Create()
+                    .WithIdentity(triggerName)
+                    .StartAt(DateTimeOffset.UtcNow.AddSeconds(offsetSeconds))
+                    .WithSimpleSchedule(builder => builder.WithIntervalInSeconds(periodSeconds).RepeatForever())
+                    .Build();
+                return trigger;
+            }
         }
 
         /// <summary>
@@ -238,20 +260,33 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
         /// 意味着如果下一个周期到来，而上一次周期执行未完成，job仍然在一个新线程中执行
         /// </summary>
         /// <param name="triggerName">触发器的名字，必须唯一</param>
-        /// <param name="offsetSeconds">多长时间后触发器执行 即第一次job执行  经过测试，单位为秒</param>
+        /// <param name="offsetSeconds">多长时间后触发器执行 即第一次job执行  单位为秒,0表示立刻执行</param>
         /// <param name="periodSpan">第一次之后每次触发器的执行周期</param>
         /// <returns></returns>
         public static ITrigger CreateSimpleTrigger(string triggerName, int offsetSeconds, TimeSpan periodSpan)
         {
             //ITrigger trigger = new SimpleTriggerImpl(triggerName, DateTimeOffset.UtcNow.AddSeconds(offsetSeconds), null, SimpleTriggerImpl.RepeatIndefinitely, periodSpan);
 
-            ITrigger trigger =
+            if (offsetSeconds <= 0)
+            {
+                ITrigger trigger =
+                    TriggerBuilder.Create()
+                        .WithIdentity(triggerName)
+                        .StartNow()
+                        .WithSimpleSchedule(builder => builder.WithInterval(periodSpan).RepeatForever())
+                        .Build();
+                return trigger;
+            }
+            else
+            {
+                ITrigger trigger =
                 TriggerBuilder.Create()
                     .WithIdentity(triggerName)
                     .StartAt(DateTimeOffset.UtcNow.AddSeconds(offsetSeconds))
                     .WithSimpleSchedule(builder => builder.WithInterval(periodSpan).RepeatForever())
                     .Build();
-            return trigger;
+                return trigger;
+            }
         }
 
         /// <summary>

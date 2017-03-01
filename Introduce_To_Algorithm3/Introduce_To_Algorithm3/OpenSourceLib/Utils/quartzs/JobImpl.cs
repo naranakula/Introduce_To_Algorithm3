@@ -39,11 +39,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
             try
             {
-
+                NLogHelper.Info("回调正在执行");
             }
             catch (Exception ex)
             {
-                Log4netHelper.Error("执行任务：" + ex);
+                Log4netHelper.Error("执行任务异常：" + ex);
             }
             finally
             {

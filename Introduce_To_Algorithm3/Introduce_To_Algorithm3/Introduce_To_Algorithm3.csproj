@@ -707,6 +707,7 @@
     <Compile Include="OpenSourceLib\Utils\quartzs\BackDbJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\CleanLogJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\CpuJob.cs" />
+    <Compile Include="OpenSourceLib\Utils\quartzs\DbToHistoryJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\JobImpl.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\QuartzHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\SqliteHelper.cs" />
