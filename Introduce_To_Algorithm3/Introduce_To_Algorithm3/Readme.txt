@@ -227,6 +227,7 @@ OneRunAtSameTime.cs
 OneRuner.cs //单实例运行
 SafeInvoke.cs
 Retry.cs
+PollyHelper.cs
 SerializeHelper.cs
 XmlUtils.cs
 OneRunTimerEx.cs
