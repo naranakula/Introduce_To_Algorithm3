@@ -10,8 +10,12 @@ using Polly.CircuitBreaker;
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
     /// <summary>
+    /// 通过Nuget安装Polly Install-Package Polly
     /// polly allows developers to express transient exception handling policies such as Retry, Retry Forever, Wait and Retry or Circuit Breaker in a fluent manner.
     /// 下面每个函数都有异步的版本
+    /// All Polly policies are fully thread-safe. You can safely re-use policies at multiple call sites, and execute through policies concurrently on different threads.
+    /// Polly policies都是多线程安全的。Policies的Execute不会抛出异常。而是返回PolicyResult。ExceptionType表示策略是否处理该异常 FinalException：最后的异常 OutcomeType：策略是否执行成功
+    /// PolicyResult：
     /// </summary>
     public static class PollyHelper
     {
