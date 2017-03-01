@@ -331,7 +331,11 @@ namespace OpenCVConsole.OpenCvEx
         #endregion
 
         #region 黑白
-
+        /// <summary>
+        /// 灰度
+        /// </summary>
+        /// <param name="bitOrigin"></param>
+        /// <returns></returns>
         public static Bitmap Gray(Bitmap bitOrigin)
         {
             Bitmap bitmap = new Bitmap(bitOrigin.Width, bitOrigin.Height);
