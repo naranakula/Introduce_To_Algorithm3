@@ -814,9 +814,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <None Include="NLog.config">
+    <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -829,6 +829,7 @@
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Docs\NetWorkComms.Net文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Packages\NetworkCommsDotNet_v3.0.3_ALv2.zip" />
     <None Include="OpenSourceLib\RabbitMq\Rabbitmq.docx" />
+    <None Include="OpenSourceLib\Utils\Nlog.docx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

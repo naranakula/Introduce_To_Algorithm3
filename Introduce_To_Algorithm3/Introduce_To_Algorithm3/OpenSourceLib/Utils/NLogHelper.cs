@@ -12,12 +12,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// <summary>
     /// 根据github，nlog比log4net更好
     /// nlog自动查找程序目录的NLog.config来配置程序
+    /// 
+    /// 基本原则：Trace和Debug不包含在上线产品中， Info及以上包含在上线产品中
     /// </summary>
     public static class NLogHelper
     {
         /// <summary>
         /// 私有的logger类
         /// Logger类是多线程安全的
+        /// loggers are thread-safe
         /// 实际使用中在对应的类中创建一个_logger，这样就可以使用${callsite}了
         /// </summary>
         private static Logger _logger = LogManager.GetCurrentClassLogger();
