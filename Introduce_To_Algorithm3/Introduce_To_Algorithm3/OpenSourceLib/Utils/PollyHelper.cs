@@ -5,7 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Polly;
+using Polly.Bulkhead;
 using Polly.CircuitBreaker;
+using Polly.Fallback;
+using Polly.Timeout;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
@@ -20,19 +23,37 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// Polly的Execute是这样处理的：
     /// 抛出未处理异常，不会retry
     /// 抛出可处理异常，根据限定进行retry
+    /// 
+    /// Execute是会抛出异常的  ExecuteAndCapture不抛出异常
     /// Each call to .Execute(…) (or similar) through a retry policy maintains its own private state. A retry policy can therefore be re-used safely in a multi-threaded environment.  The internal operation of the retry policy is thread-safe, but this does not magically make delegates you execute through the policy thread-safe: if the delegates you execute through the policy are not thread-safe, they remain not thread-safe.
     /// </summary>
     public static class PollyHelper
     {
+        #region RetryPolicy可以只创建一个实例
 
-        #region 静态构造函数
+        #endregion
+
+
+        #region NoOp 没有策略 仅仅执行业务逻辑
 
         /// <summary>
-        /// 静态构造函数
+        /// 执行业务逻辑
         /// </summary>
-        static PollyHelper()
+        /// <param name="action">执行的业务逻辑</param>
+        /// <returns></returns>
+        public static PolicyResult RunSafe(Action action)
         {
-            //Policy是多线程安全的，可以只维护一个实例
+            return Policy.NoOp().ExecuteAndCapture(action);
+        }
+
+        /// <summary>
+        /// 执行业务逻辑
+        /// </summary>
+        /// <param name="func">执行的业务逻辑</param>
+        /// <returns></returns>
+        public static PolicyResult<T> RunSafe<T>(Func<T> func)
+        {
+            return Policy.NoOp().ExecuteAndCapture(func);
         }
 
         #endregion
@@ -329,7 +350,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         #region Circuit Breaker 断路器
 
-        /**
+        /*
          * 断路器有三种状态，Close Open HalfOpen
          * 断路器初始状态Closed, 如果连续发生指定次数的错误，断路器进入Open状态，经过指定的durationOfBreak（此段时间是failfast的），进入HalfOpen状态，下一次执行如果成功，进入Closed状态，执行失败，进入Open状态
          * 
@@ -338,66 +359,349 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
          * 断路器在多次Execute执行间维护状态，断路器是多线程安全的，内部使用锁来保证状态，但是action的执行不是在锁中的。锁仅仅是维护内部状态的。
          * 
          */
-        /// <summary>
-        /// 内部维护的断路器
-        /// </summary>
-        private static volatile CircuitBreakerPolicy _circuitBreaker = null;
 
-        //断路器在制定数量的错误以后，断路一段时间后重启
         /// <summary>
-        /// 
+        /// 断路器类
+        /// 多线程支持
+        /// 根据连续异常次数判断是否断路
         /// </summary>
-        /// <returns></returns>
-        public static CircuitBreakerPolicy CircuitBreaker()
+        public class CircuitBreakerEx
         {
-            CircuitBreakerPolicy policy = Policy.Handle<Exception>().CircuitBreaker(10,new TimeSpan(0,0,60),(exception, span) => {
-                //onbreak  断路时执行
-            },() => {
-                //onreset  闭路之后执行
-            },() =>
+            /// <summary>
+            /// 底层的断路器
+            /// </summary>
+            private volatile CircuitBreakerPolicy _circuitBreaker = null;
+
+            /// <summary>
+            /// 构造函数
+            /// </summary>
+            /// <param name="consecutiveExceptionsAllowedBeforeBreaking">在多少连续异常后断路器断开</param>
+            /// <param name="durationOfBreak">断路器断开的时间间隔，之后进入HalfOpen状态 如果为null，断开120秒</param>
+            /// <param name="onBreak"></param>
+            /// <param name="onReset"></param>
+            /// <param name="onHalfOpen"></param>
+            public CircuitBreakerEx(int consecutiveExceptionsAllowedBeforeBreaking =5, TimeSpan? durationOfBreak=null, Action<Exception, TimeSpan> onBreak=null, Action onReset=null, Action onHalfOpen=null)
             {
-                //onhalfopen The action to call when the circuit transitions to Polly.CircuitBreaker.CircuitState.HalfOpen state, ready to try action executions again.
-            });
+                TimeSpan breakDuration = durationOfBreak ?? TimeSpan.FromSeconds(2*60);
+                //初始化断路器
+                _circuitBreaker = Policy.Handle<Exception>()
+                    .CircuitBreaker(consecutiveExceptionsAllowedBeforeBreaking, breakDuration,
+                        (exception, timeSpan) =>
+                        {
+                            //onbreak  断路时执行
+                            onBreak?.Invoke(exception, timeSpan);
+                        }, () =>
+                        {
+                            //  //onreset  闭路之后执行 即正常工作时执行
+                            onReset?.Invoke();
+                        }, () =>
+                        {
+                            //onhalfopen The action to call when the circuit transitions to Polly.CircuitBreaker.CircuitState.HalfOpen state, ready to try action executions again.
+                            onHalfOpen?.Invoke();
+                        });
+            }
 
-            //policy.ExecuteAndCapture();//执行action或func
-            
-            return policy;
+            /// <summary>
+            /// 同步执行并返回结果
+            /// </summary>
+            /// <param name="action">要执行的业务逻辑</param>
+            /// <returns></returns>
+            public PolicyResult ExecuteAndCapture(Action action)
+            {
+                return _circuitBreaker.ExecuteAndCapture(action);
+            }
 
-/*
-CircuitState.Closed - Normal operation. Execution of actions allowed.
-CircuitState.Open - The automated controller has opened the circuit. Execution of actions blocked.
-CircuitState.HalfOpen - Recovering from open state, after the automated break duration has expired. Execution of actions permitted. Success of subsequent action/s controls onward transition to Open or Closed state.
-CircuitState.Isolated - Circuit held manually in an open state. Execution of actions blocked.
-*/
+            /// <summary>
+            /// 同步执行并返回结果
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="func"></param>
+            /// <returns></returns>
+            public PolicyResult<T> ExecuteAndCapture<T>(Func<T> func)
+            {
+                return _circuitBreaker.ExecuteAndCapture(func);
+            }
+
         }
+
+        //     The circuit will break if, within any timeslice of duration samplingDuration,
+        //     the proportion of actions resulting in a handled exception exceeds failureThreshold,
+        //     provided also that the number of actions through the circuit in the timeslice
+        //     is at least minimumThroughput.
+        //     The circuit will stay broken for the durationOfBreak. Any attempt to execute
+        //     this policy while the circuit is broken, will immediately throw a Polly.CircuitBreaker.BrokenCircuitException
+        //     containing the exception that broke the circuit.
+        //     If the first action after the break duration period results in a handled exception,
+        //     the circuit will break again for another durationOfBreak; if no exception is
+        //     thrown, the circuit will reset.
+
 
         /// <summary>
-        /// 断路器
+        /// 先进断路器类
+        /// 多线程支持
+        /// 根据时间切片内调用失败的比例判断是否需要断路
         /// </summary>
+        public class AdvancedCircuitBreakerEx
+        {
+            /// <summary>
+            /// 底层的断路器
+            /// </summary>
+            private CircuitBreakerPolicy _circuitBreaker = null;
+
+            /// <summary>
+            /// 构造函数
+            /// </summary>
+            /// <param name="failureThreshold">调用失败的比例 取值[0，1] 如0.3表示30%的调用失败 </param>
+            /// <param name="samplingDuration">采样时间</param>
+            /// <param name="minimumThroughput"> 统计时间段内需执行最少的action，才会认为该时间段有效</param>
+            /// <param name="durationOfBreak">断路时间，之后的调用如果成功，断路器重置，如果失败，重新进入断路状态</param>
+            /// <param name="onBreak">onbreak  断路时执行</param>
+            /// <param name="onReset">onreset  闭路之后执行</param>
+            /// <param name="onHalfOpen">断路时间过后，进入HalfOpen状态，之后的调用如果成功，断路器重置，如果失败，重新进入断路状态</param>
+            public AdvancedCircuitBreakerEx(double failureThreshold, TimeSpan samplingDuration, int minimumThroughput,
+                TimeSpan durationOfBreak, Action<Exception, TimeSpan> onBreak=null, Action onReset=null, Action onHalfOpen=null)
+            {
+                _circuitBreaker = Policy.Handle<Exception>()
+                    .AdvancedCircuitBreaker(failureThreshold, samplingDuration, minimumThroughput, durationOfBreak,
+                        (exception, timeSpan) =>
+                        {
+                            //onbreak  断路时执行
+                            onBreak?.Invoke(exception, timeSpan);
+                        }, () =>
+                        {
+                            //  //onreset  闭路之后执行 即正常工作时执行
+                            onReset?.Invoke();
+                        }, () =>
+                        {
+                            //onhalfopen The action to call when the circuit transitions to Polly.CircuitBreaker.CircuitState.HalfOpen state, ready to try action executions again.
+                            onHalfOpen?.Invoke();
+                        });
+            }
+
+            /// <summary>
+            /// 同步执行并返回结果
+            /// </summary>
+            /// <param name="action">要执行的业务逻辑</param>
+            /// <returns></returns>
+            public PolicyResult ExecuteAndCapture(Action action)
+            {
+                return _circuitBreaker.ExecuteAndCapture(action);
+            }
+
+            /// <summary>
+            /// 同步执行并返回结果
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="func"></param>
+            /// <returns></returns>
+            public PolicyResult<T> ExecuteAndCapture<T>(Func<T> func)
+            {
+                return _circuitBreaker.ExecuteAndCapture(func);
+            }
+
+        }
+
+
+        #endregion
+
+        #region Timeout policy 确保操作不会超过指定的时间
+
+        // TimeoutPolicy是多线程安全和可重用的
+        //     Builds a Polly.Policy that will wait for a delegate to complete for a specified
+        //     period of time. A Polly.Timeout.TimeoutRejectedException will be thrown if the
+        //     delegate does not complete within the configured timeout.
+        /// <summary>
+        /// 调用action with timeout，不会抛出异常
+        /// </summary>
+        /// <param name="action">调用的业务逻辑，action在task中执行</param>
+        /// <param name="timeoutSeconds">多少秒后过期</param>
+        /// <param name="onTimeout">过期后的回调，过期后Polly不会杀死task，task仍然执行</param>
         /// <returns></returns>
-        public static CircuitBreakerPolicy AdvancedCircuitBreaker()
+        public static PolicyResult RunWithTimeOut(Action action, int timeoutSeconds, Action<Context, TimeSpan, Task> onTimeout = null)
         {
-            CircuitBreakerPolicy policy = Policy.Handle<Exception>().AdvancedCircuitBreaker(
-         0.5, // Break on >=50% actions result in handled exceptions...失败比例达到上限时断路
-        TimeSpan.FromSeconds(10), // ... over any 10 second period 统计失败比例的时间段
-        8, // ... provided at least 8 actions in the 10 second period. 统计时间段内需执行最少的action，才会认为该时间段有效
-         TimeSpan.FromSeconds(30), // Break for 30 seconds. 断路的时间，之后电路重置
-        (exception, span) =>
-        {
-            //onbreak  断路时执行
-        }, () =>
-        {
-            //onreset  闭路之后执行
-        }, () =>
-        {
-            //onhalfopen The action to call when the circuit transitions to Polly.CircuitBreaker.CircuitState.HalfOpen state, ready to try action executions again.
-        }
-                );
+            //TimeoutStrategy.Pessimistic recognises that there are cases where you need to execute delegates which have no in-built timeout, and do not honor cancellation.Policy使用Task执行user delegate
+            //在悲观模式下，Polly不会杀死底层的线程，而是将task传递到onTimeout回调中
+            TimeoutPolicy policy = Policy.Timeout(timeoutSeconds, TimeoutStrategy.Pessimistic,
+                (context, timeSpan, task) =>
+                {
+                    if (onTimeout != null)
+                    {
+                        onTimeout(context, timeSpan, task);
+                    }
+                    else
+                    {
+                        //过期后Polly不会杀死task，task仍然执行，需要在这里进行处理
+                    }
+                });
 
-            //policy.ExecuteAndCapture();//执行action或func
-            return policy;
+            return policy.ExecuteAndCapture(action);
         }
 
+
+        /// <summary>
+        /// 调用func with timeout，不会抛出异常
+        /// </summary>
+        /// <param name="func">调用的业务逻辑，func在task中执行</param>
+        /// <param name="timeoutSeconds">多少秒后过期</param>
+        /// <param name="onTimeout">过期后的回调，过期后Polly不会杀死task，task仍然执行</param>
+        /// <returns></returns>
+        public static PolicyResult<T> RunWithTimeOut<T>(Func<T> func, int timeoutSeconds, Action<Context, TimeSpan, Task> onTimeout = null)
+        {
+            //TimeoutStrategy.Pessimistic recognises that there are cases where you need to execute delegates which have no in-built timeout, and do not honor cancellation.Policy使用Task执行user delegate
+            //在悲观模式下，Polly不会杀死底层的线程，而是将task传递到onTimeout回调中
+            TimeoutPolicy policy = Policy.Timeout(timeoutSeconds, TimeoutStrategy.Pessimistic,
+                (context, timeSpan, task) =>
+                {
+                    if (onTimeout != null)
+                    {
+                        onTimeout(context, timeSpan, task);
+                    }
+                    else
+                    {
+                        //过期后Polly不会杀死task，task仍然执行，需要在这里进行处理
+                    }
+                });
+
+            return policy.ExecuteAndCapture(func);
+        }
+
+
+        #endregion
+
+        #region Bulkhead 隔水舱 不要因为局部错误而导致整艘船沉没 One fault shouldn't bring down the whole ship!
+
+        //Bulkhead通过限制最大允许并行执行的actions,避免消耗过多的资源，
+        //如果并行数超过限制，将action放到queue中，如果超过maxQueuingActions，抛弃action，直接抛出异常
+        //The policy itself does not place calls onto threads; it assumes upstream systems have already placed calls into threads, but limits their parallelization of execution.
+        //Bulkhead本身不会创建多线程，而是假设上游已经在多线程中使用
+        //Bulkhead是多线程安全和可重用的
+        
+        /// <summary>
+        /// 隔水舱
+        /// </summary>
+        public class BulkheadEx
+        {
+            #region 预定义的配置实例
+            /// <summary>
+            /// 默认的配置实例 , 只有一个action能够并发执行
+            /// </summary>
+            public static BulkheadEx Default { get; private set; }
+
+            /// <summary>
+            /// 静态构造函数
+            /// </summary>
+            static BulkheadEx()
+            {
+                Default = new BulkheadEx(1,0);
+            }
+            #endregion
+
+            #region 私有的变量
+
+            /// <summary>
+            /// 底层隔水舱实例
+            /// </summary>
+            private BulkheadPolicy _bulkhead;
+
+            #endregion
+            
+            #region 构造函数
+
+            /// <summary>
+            /// 构造函数
+            /// </summary>
+            /// <param name="maxParallelization">此Policy可以最多并行执行的action 大于0</param>
+            /// <param name="maxQueuingActions">The maxmimum number of actions that may be queuing, waiting for an execution slot. 大于等于0</param>
+            /// <param name="onBulkheadRejected">当过多的action超出限制时执行的回调操作</param>
+            public BulkheadEx(int maxParallelization, int maxQueuingActions, Action<Context> onBulkheadRejected = null)
+            {
+                _bulkhead = Policy.Bulkhead(maxParallelization, maxQueuingActions, context =>
+                {
+                    onBulkheadRejected?.Invoke(context);
+                });
+            }
+
+            #endregion
+
+            #region 公有函数
+
+            /// <summary>
+            /// 使用blukhead执行业务逻辑
+            /// </summary>
+            /// <param name="action"></param>
+            /// <returns></returns>
+            public PolicyResult ExecuteAndCapture(Action action)
+            {
+               return _bulkhead.ExecuteAndCapture(action);
+            }
+
+            /// <summary>
+            /// 使用blukhead执行业务逻辑
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="func"></param>
+            /// <returns></returns>
+            public PolicyResult<T> ExecuteAndCapture<T>(Func<T> func)
+            {
+                return _bulkhead.ExecuteAndCapture(func);
+            }
+
+            #endregion
+
+        }
+
+        #endregion
+
+        #region Fallback 回退策略 如果执行失败，执行替代action或者返回替代结果
+
+        //FallbackPolicy是多线程安全的和可重用的
+
+        /// <summary>
+        /// FallbackPolicy是多线程安全的和可重用的
+        /// </summary>
+        /// <param name="action">要执行的业务逻辑</param>
+        /// <param name="fallbackAction">业务逻辑执行失败后，执行的挽救代码</param>
+        /// <returns></returns>
+        public static PolicyResult Fallback(Action action,Action fallbackAction=null)
+        {
+            FallbackPolicy policy = Policy.Handle<Exception>().Fallback(() =>
+            {
+                fallbackAction?.Invoke();
+            });
+            
+            return policy.ExecuteAndCapture(action);
+        }
+
+
+        /// <summary>
+        /// FallbackPolicy是多线程安全的和可重用的
+        /// </summary>
+        /// <param name="func">要执行的业务逻辑</param>
+        /// <param name="fallbackAction">业务逻辑执行失败后，执行的挽救代码</param>
+        /// <returns></returns>
+        public static PolicyResult<T> Fallback<T>(Func<T> func, Action fallbackAction = null)
+        {
+            FallbackPolicy policy = Policy.Handle<Exception>().Fallback(() =>
+            {
+                fallbackAction?.Invoke();
+            });
+            
+            return policy.ExecuteAndCapture(func);
+        }
+
+        #endregion
+
+        #region Cache Polly V5.1 目前未实现
+
+        #endregion
+
+        #region Policy Wrap
+
+        //fallback.Wrap(breaker).Wrap(retry).Execute(action);//retry最先执行
+        //it is thread-safe
+        //it can be reused across multiple call sites
+
+        //PolicyWrap policyWrap = fallback.Wrap(cache).Wrap(retry).Wrap(breaker).Wrap(timeout).Wrap(bulkhead);
         #endregion
 
     }
