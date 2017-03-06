@@ -51,15 +51,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 {
                     return;
                 }
+                isRunning = true;
             }
             
             try
             {
-                lock (locker)
-                {
-                    isRunning = true;
-                }
-
                 if (!MQConsumer.IsAlive())
                 {
                     NLogHelper.Warn("重启 MQConsumer");

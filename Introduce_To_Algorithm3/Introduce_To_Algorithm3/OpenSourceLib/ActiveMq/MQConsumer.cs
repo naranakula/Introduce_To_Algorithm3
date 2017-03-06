@@ -82,8 +82,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 connection = factory.CreateConnection();
                 connection.ExceptionListener += connection_ExceptionListener;
                 connection.ConnectionInterruptedListener += connection_ConnectionInterruptedListener;
+                connection.ConnectionResumedListener += ConnectionOnConnectionResumedListener;
                 //超时16s
                 connection.RequestTimeout = new TimeSpan(0, 0, 20);
+                if (!connection.IsStarted)
+                {
+                    //启动连接
+                    connection.Start();
+                }
                 //创建回话
                 session = connection.CreateSession();
                 session.RequestTimeout = new TimeSpan(0, 0, 20);
@@ -93,11 +99,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 consumer = session.CreateConsumer(session.GetDestination(ConfigUtils.GetString(TopicOrQueueNameStr),isTopic?DestinationType.Topic:DestinationType.Queue));
                 //注册监听事件
                 consumer.Listener += consumer_Listener;
-                if (!connection.IsStarted)
-                {
-                    //启动连接
-                    connection.Start();
-                }
+                
                 NLogHelper.Info("MQ初始化成功");
                 isAlive = true;
                 return true;
@@ -108,6 +110,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 NLogHelper.Error("MQ初始化失败：" + ex);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// An asynchronous listener that is notified when a Fault tolerant connection has been resumed.
+        /// 链接回复
+        /// </summary>
+        private static void ConnectionOnConnectionResumedListener()
+        {
+            isAlive = true;
+            NLogHelper.Warn("ConnectionOnConnectionResumedListener连接恢复");
         }
 
         /// <summary>
@@ -172,21 +184,29 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 
                 if (consumer != null)
                 {
-                    consumer.Dispose();
                     consumer.Close();
                 }
                 consumer = null;
 
+            }
+            catch (Exception ex)
+            {
+                NLogHelper.Error("关闭MQ Consumer失败：" + ex);
+            }
+
+            try
+            {
+
                 if (session != null)
                 {
-                    session.Dispose();
                     session.Close();
                 }
                 session = null;
             }
             catch (Exception ex)
             {
-                NLogHelper.Error("关闭MQ Session失败：" + ex);
+
+                NLogHelper.Error("关闭MQ session失败：" + ex);
             }
 
             try
@@ -194,14 +214,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 if (connection != null)
                 {
                     connection.Stop();
-                    connection.Dispose();
                     connection.Close();
                 }
                 connection = null;
             }
             catch (Exception ex)
             {
-                NLogHelper.Error("关闭MQ连接失败：" + ex);
+                NLogHelper.Error("关闭MQ连接connection失败：" + ex);
             }
 
             isAlive = false;

@@ -11438,6 +11438,12 @@
             Password for the Client Certificate specified via configuration.
             </summary>
         </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.Tcp.SslTransport.BrokerCertFilename">
+            <summary>
+            Indicates the location of the Broker Certificate to use when the Broker
+            is using a self-signed certificate.
+            </summary>
+        </member>
         <member name="P:Apache.NMS.ActiveMQ.Transport.Tcp.SslTransport.AcceptInvalidBrokerCert">
             <summary>
             Indicates if the SslTransport should ignore any errors in the supplied Broker

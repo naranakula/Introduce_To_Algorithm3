@@ -37,6 +37,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                     {
                         connection.Start();
                         ITextMessage message = session.CreateTextMessage(msg);
+                        //The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
+                        message.NMSTimestamp = DateTime.UtcNow;
+                        //The amount of time for which this message is valid.
                         message.NMSTimeToLive = TimeSpan.FromHours(2);
                         producer.Send(message);
                     }
@@ -61,7 +64,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                         connection.Start();
                         connection.Start();
                         ITextMessage message = session.CreateTextMessage(msg);
-                        message.NMSTimeToLive = TimeSpan.FromHours(2);
+                        //The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
+                        message.NMSTimestamp = DateTime.UtcNow;
+                        //The amount of time for which this message is valid.
+                        message.NMSTimeToLive = TimeSpan.FromHours(1);
                         producer.Send(message);
                     }
                 }
