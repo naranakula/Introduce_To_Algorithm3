@@ -8,6 +8,7 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
+
     /// <summary>
     /// 确保应用程序退出
     /// </summary>
@@ -66,4 +67,5 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
     }
+
 }
