@@ -65,6 +65,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private static object locker = new object();
 
         /// <summary>
+        /// 最近一次通信时间
+        /// </summary>
+        private static DateTime lastUpdateTime = DateTime.Now.AddDays(-1);
+
+        /// <summary>
         /// 初始化消费者
         /// </summary>
         /// <returns></returns>
@@ -100,6 +105,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 //注册监听事件
                 consumer.Listener += consumer_Listener;
                 
+                //最近一次通信时间
+                lastUpdateTime = DateTime.Now;
+
                 NLogHelper.Info("MQ初始化成功");
                 lock (locker)
                 {
@@ -143,6 +151,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             //{
             //    isAlive = true;
             //}
+
+            lastUpdateTime = DateTime.Now;
+
             try
             {
                 #region 获取消息
@@ -265,6 +276,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             {
                 return isAlive;
             }
+
+            //最好的方式，安装通信时间判断
+
+            //if (!isAlive)
+            //{
+            //    return false;
+            //}
+
+            //if ((DateTime.Now - lastUpdateTime).TotalSeconds > 15*60)
+            //{
+            //    return false;
+            //}
+
+            //return true;
         }
 
     }
