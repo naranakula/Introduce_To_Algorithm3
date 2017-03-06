@@ -25,12 +25,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private const string MQUri = "MQUri";
 
         /// <summary>
-        /// 使用TopicOrQueue ,1是使用Topic，0使用Queue接收消息
+        /// 使用Topic还是Queue接收消息,1是使用Topic，0使用Queue接收消息
         /// </summary>
         private const string IsTopicStr = "IsTopic";
 
         /// <summary>
-        /// TopicOrQueue的名称
+        /// 用于接收消息的Topic或者Queue的名称
         /// </summary>
         private const string TopicOrQueueNameStr = "TopicOrQueueName";
 
@@ -50,7 +50,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private static ISession session = null;
 
         /// <summary>
-        /// 是否活动
+        /// 是否连接是活的
         /// </summary>
         private static volatile bool isAlive = false;
 
@@ -84,7 +84,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 connection.ConnectionInterruptedListener += connection_ConnectionInterruptedListener;
                 connection.ConnectionResumedListener += ConnectionOnConnectionResumedListener;
                 //超时16s
-                connection.RequestTimeout = new TimeSpan(0, 0, 20);
+                connection.RequestTimeout = new TimeSpan(0, 0, 30);
                 if (!connection.IsStarted)
                 {
                     //启动连接
@@ -92,7 +92,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 }
                 //创建回话
                 session = connection.CreateSession();
-                session.RequestTimeout = new TimeSpan(0, 0, 20);
+                session.RequestTimeout = new TimeSpan(0, 0, 30);
                 bool isTopic = StringUtils.EqualsEx("1", ConfigUtils.GetString(IsTopicStr, "1"));
                 NLogHelper.Info("建立名为{0}的{1}连接".FormatWith(ConfigUtils.GetString(TopicOrQueueNameStr), isTopic ? "Topic" : "Queue"));
                 //创建消费者
@@ -144,7 +144,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 
                 string msg = txtMsg.Text.Trim();
                 NLogHelper.Info("接收到消息：" + msg);
-               
+
+                #region 开始处理消息
+
+                //注：经测试该函数是在前一个回调完成之后执行的,即回调是单线程执行的,需要自己实现多线程
+
+                #endregion
+
             }
             catch (Exception ex)
             {
