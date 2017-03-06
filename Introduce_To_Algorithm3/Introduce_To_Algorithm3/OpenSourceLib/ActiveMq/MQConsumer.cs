@@ -101,12 +101,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 consumer.Listener += consumer_Listener;
                 
                 NLogHelper.Info("MQ初始化成功");
-                isAlive = true;
+                lock (locker)
+                {
+                    isAlive = true;
+                }
                 return true;
             }
             catch (Exception ex)
             {
-                isAlive = false;
+                lock (locker)
+                {
+                    isAlive = false;
+                }
+                
                 NLogHelper.Error("MQ初始化失败：" + ex);
                 return false;
             }
@@ -118,7 +125,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// </summary>
         private static void ConnectionOnConnectionResumedListener()
         {
-            isAlive = true;
+            lock (locker)
+            {
+                isAlive = true;
+            }
             NLogHelper.Warn("ConnectionOnConnectionResumedListener连接恢复");
         }
 
@@ -129,7 +139,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <param name="message"></param>
         private static void consumer_Listener(IMessage message)
         {
-            isAlive = true;
+            //lock (locker)
+            //{
+            //    isAlive = true;
+            //}
             try
             {
                 #region 获取消息
@@ -163,7 +176,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// </summary>
         private static void connection_ConnectionInterruptedListener()
         {
-            isAlive = false;
+            lock (locker)
+            {
+                isAlive = false;
+            }
+            
             NLogHelper.Error("ConnectionInterruptedListener连接发生异常连接断开");
         }
 
@@ -173,7 +190,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <param name="exception"></param>
         private static void connection_ExceptionListener(Exception exception)
         {
-            isAlive = false;
+            lock (locker)
+            {
+                isAlive = false;
+            }
             NLogHelper.Error("connection_ExceptionListener连接发生异常：" + exception);
         }
 
@@ -229,7 +249,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 NLogHelper.Error("关闭MQ连接connection失败：" + ex);
             }
 
-            isAlive = false;
+            lock (locker)
+            {
+                isAlive = false;
+            }
         }
 
         /// <summary>

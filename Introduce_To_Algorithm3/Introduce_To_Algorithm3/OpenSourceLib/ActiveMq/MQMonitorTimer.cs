@@ -91,4 +91,5 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             MQConsumer.CloseConsumer();
         }
     }
+
 }
