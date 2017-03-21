@@ -85,6 +85,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 NLogHelper.Info("开始初始化MQConsumer");
                 //通过工厂构建连接
                 connection = factory.CreateConnection();
+                //设置唯一的客户端ID
+                connection.ClientId = Guid.NewGuid().ToString("N");
                 connection.ExceptionListener += connection_ExceptionListener;
                 connection.ConnectionInterruptedListener += connection_ConnectionInterruptedListener;
                 connection.ConnectionResumedListener += ConnectionOnConnectionResumedListener;
