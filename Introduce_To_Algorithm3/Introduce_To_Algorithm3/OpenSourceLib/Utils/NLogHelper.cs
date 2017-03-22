@@ -22,6 +22,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// Logger类是多线程安全的
         /// loggers are thread-safe
         /// 实际使用中在对应的类中创建一个_logger，这样就可以使用${callsite}了
+        /// 使用不同name的logger，根据名称记录不同的日志：如邮件，数据库日志
         /// </summary>
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
