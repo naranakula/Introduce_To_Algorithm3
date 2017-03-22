@@ -163,6 +163,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 {
                     //dbContext.Database.CreateIfNotExists();//这一句不能加，否则不会进行初始化
                     //false，保证如果之前运行了，初始化不再运行
+                    //不能使用查询 int count = context.DbSet.Count(),此时正在创建数据库
                     dbContext.Database.Initialize(false);//单独这一句可以创建数据库和进行初始化
                 }, ex =>
                 {
@@ -1305,6 +1306,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         protected override void Seed(EfDbContext context)
         {
             //  每次程序启动，都会执行Seed,而不是仅仅迁移后执行
+            //  会被调用多次，使用AddOrUpdate
+
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method to avoid creating duplicate seed data. E.g.
             //
