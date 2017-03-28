@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Introduce_To_Algorithm3", "Introduce_To_Algorithm3\Introduce_To_Algorithm3.csproj", "{5608DDAE-D5E8-49D4-8D39-8AFAEC2BF6BC}"
 EndProject
@@ -37,6 +37,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "常用类", "常用类", "{1B3C508F-30EA-4895-909B-7CFBF2136DAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "常用类项目", "常用类项目\常用类项目.csproj", "{DB839FD4-C297-4609-A486-2789F2981D4C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HP-Socket", "HP-Socket", "{F2D89081-7CB1-46F8-B49F-3D4C7369DA63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPSocketServerConsole", "HPSocketServerConsole\HPSocketServerConsole.csproj", "{0DF7B719-3E22-4788-B474-D15879573441}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -194,6 +198,22 @@ Global
 		{DB839FD4-C297-4609-A486-2789F2981D4C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DB839FD4-C297-4609-A486-2789F2981D4C}.Release|x64.ActiveCfg = Release|Any CPU
 		{DB839FD4-C297-4609-A486-2789F2981D4C}.Release|x86.ActiveCfg = Release|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Debug|x64.Build.0 = Debug|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Debug|x86.Build.0 = Debug|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Release|x64.ActiveCfg = Release|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Release|x64.Build.0 = Release|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Release|x86.ActiveCfg = Release|Any CPU
+		{0DF7B719-3E22-4788-B474-D15879573441}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -208,5 +228,7 @@ Global
 		{ED805D4D-089B-4997-A324-68C17802D470} = {34FA6E2E-083A-47CD-A2AD-80D14E96F1FB}
 		{DA43234B-4C1A-45D7-B4DD-B0F7BC310161} = {6B206F79-2BE4-4B0F-8875-F28E395AF82B}
 		{DB839FD4-C297-4609-A486-2789F2981D4C} = {1B3C508F-30EA-4895-909B-7CFBF2136DAA}
+		{F2D89081-7CB1-46F8-B49F-3D4C7369DA63} = {6B206F79-2BE4-4B0F-8875-F28E395AF82B}
+		{0DF7B719-3E22-4788-B474-D15879573441} = {F2D89081-7CB1-46F8-B49F-3D4C7369DA63}
 	EndGlobalSection
 EndGlobal
