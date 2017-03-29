@@ -218,7 +218,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //}
 
             #endregion
-            
+
             #region 定义Relation   One-To-Many（OneOrZero-To-Many) Many-To-Many One-to-One(单向双向) (or One-to-Zero-to-One).
 
             //建议在该方法中定义Relation,而不是在Map中定义
@@ -1078,7 +1078,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             {
                 m.MapLeftKey("LeftId");
                 m.MapRightKey("RightId");
-                m.ToTable("LeftRight");
+                m.ToTable("LeftRight");//创建中间表LeftRight
             });
         }
 
