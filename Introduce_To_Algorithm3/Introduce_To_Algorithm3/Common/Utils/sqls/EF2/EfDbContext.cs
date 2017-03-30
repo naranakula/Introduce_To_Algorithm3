@@ -387,6 +387,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
          * 经测试，EF字符串不支持String.IsNullOrWhiteSpace 但支持IsNullOrEmpty
          * 注：string的contains类似于sql的like  IEnumerable<string>(集合中可以有null)的contains类似于 sql的 IN
          * 尽量使用DbFunctions来执行操作
+         * DateTime.Now 会转化为SysDateTime()  但不要使用DateTime的函数操作
          * 
          * 查询的Union相当于sql的union，是去重的，不去重使用concat连接
          * DateTime可以使用.year .day .month
