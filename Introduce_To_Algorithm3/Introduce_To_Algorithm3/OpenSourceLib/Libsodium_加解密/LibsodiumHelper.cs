@@ -14,6 +14,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Libsodium_加解密
     /// https://bitbeans.gitbooks.io/libsodium-net/content/index.html
     /// libsodium requires the Visual C++ Redistributable for Visual Studio 2015.
     /// 所有的字符串认为是UTF-8的
+    /// 另外一个可行的库是SecurityDriven.NET
     /// </summary>
     public static class LibsodiumHelper
     {
