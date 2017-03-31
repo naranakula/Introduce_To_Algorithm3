@@ -971,7 +971,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         {
             public OneToManyLeft()
             {
-                //EF默认反射成HashSet
+                //EF默认反射成HashSet，不用检查null和初始化
                 Rights = new HashSet<OneToManyRight>();
             }
 
