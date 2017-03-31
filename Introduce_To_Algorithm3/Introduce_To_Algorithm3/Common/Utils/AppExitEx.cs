@@ -29,14 +29,17 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 Task.Factory.StartNew(() =>
                 {
                     //5s后强制退出
-                    Thread.Sleep(maxWaitMilliSecondBeforeExit);
+                    if (maxWaitMilliSecondBeforeExit > 0)
+                    {
+                        Thread.Sleep(maxWaitMilliSecondBeforeExit);
+                    }
+
                     for (int i = 0; i < 5; i++)
                     {
                         try
                         {
                             NLogHelper.Warn($"程序第{i+1}次尝试强制退出");
                             Environment.Exit(0);
-                            Thread.Sleep(10);
                         }
                         catch (Exception)
                         {
