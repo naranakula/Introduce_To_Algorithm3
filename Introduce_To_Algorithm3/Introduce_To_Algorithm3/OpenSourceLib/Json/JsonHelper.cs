@@ -17,6 +17,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
     /// JSON帮助类
     /// 详情咨询网站：http://www.newtonsoft.com/json/help/html/Introduction.htm
     /// 支持list\Dictionary\object的序列化和反序列化
+    /// [JsonIgnore]//JsonIgnore标记忽略序列化
     /// </summary>
     public static class JsonHelper
     {
@@ -39,6 +40,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
             {
                 MissingMemberHandling = MissingMemberHandling.Ignore,//当反序列化时，如果json字符串中包含不在对象中的成员，则忽略而不抛异常,这是Json默认的处理方式
                 //经试验证明，当json缺少包含在对象中的成员时，也可以反序列化
+                //尽量避免循环引用[JsonIgnore]//JsonIgnore标记忽略序列化
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,//序列化时忽略循环引用， The first time an object is encountered it will be serialized as usual but if the object is encountered as a child object of itself the serializer will skip serializing it.，默认的方式是Error  Serialize (存在循环引用但不是无限循环)This option forces Json.NET to serialize objects in reference loops.This is useful if objects are nested but not indefinitely.
                 NullValueHandling = NullValueHandling.Include,//Json.NET writes null values to JSON when serializing and sets null values to fields/properties when deserializing.这是json默认的处理方式
                 DefaultValueHandling = DefaultValueHandling.Include,//这是默认的处理方式，Json.NET will write a field/property value to JSON when serializing if the value is the same as the field/property's default value. The Json.NET deserializer will continue setting a field/property if the JSON value is the same as the default value.  Ignore:忽略
