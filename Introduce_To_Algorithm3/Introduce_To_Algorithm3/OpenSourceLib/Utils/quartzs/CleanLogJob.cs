@@ -125,8 +125,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             //删除空目录
             foreach (var currentDir in subDirs)
             {
-                //文件夹为空
-                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0)
+                //文件夹为空, 并且空目录7天前
+                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (DateTime.Now-currentDir.LastWriteTime).TotalDays>7)
                 {
                     currentDir.Delete();
                     NLogHelper.Debug("删除目录：" + currentDir.FullName);
