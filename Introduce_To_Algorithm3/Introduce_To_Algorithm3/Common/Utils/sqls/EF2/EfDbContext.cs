@@ -1388,8 +1388,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// DatabaseGeneratedOption.Identity is used to create an auto-increment column in the table by a unique value.int类型需要，Guid类型不需要
         /// 除Sql Server外，MySql Sqlite尽量使用long或者int类型作为主键
         /// 实际上应该尽量使用Guid作为主键，因为guid可以更好的保证插入的并行性，并且合并数据库时有决定性优势
+        /// 尽量不要使用guid，而使用varchar(32)
         /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// ?表示可选的
+        /// </summary>
+        public DateTime? ModifiedTime { get; set; }
 
         /// <summary>
         /// 创建时间
@@ -1450,6 +1456,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //    .IsVariableLength();
             //Property(p => p.MiddleName).IsOptional().IsFixedLength().IsUnicode(false).HasMaxLength(1);
 
+            //时间  对应默认数据库类型datetime,SqlServer的datetime有效范围是1753年1月1日到9999年12月31日
+            //Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime");
+            //HasColumnType指定类型 datetime2的范围0001-01-01 到 9999-12-31
+            //Property(t => t.ModifiedTime).IsOptional().HasColumnName("ModifiedTime").HasColumnType("datetime2");
+
             //设置Timestamp属性和调用IsRowVersion两选一，目前只在Sql Server中支持，其它数据库的并发自行百度
             //Property(t => t.RowVersion).IsRowVersion();
 
@@ -1477,6 +1488,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             #region 设置关系 One-To-One  One-To-Many  Many-To-Many
 
             //建议在OnModelCreating中设置，不要在Map中设置
+
             #endregion
         }
     }
