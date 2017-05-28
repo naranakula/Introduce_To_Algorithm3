@@ -121,6 +121,8 @@ Visifire：一套效果非常好的WPF图表控件，支持3D绘制、曲线、�
 SparrowToolkit：一套WPF图表控件集，支持绘制动态曲线，可绘制示波器、CPU使用率和波形。
 DynamicDataDisplay：微软开源的WPF动态曲线图，线图、气泡图和热力图。
 
+BarCodeLib:条形码生成库
+
 GUI
 SuperJMN/XAMLPagingControl
 MahApps.Metro - Toolkit for creating Metro styled WPF apps
