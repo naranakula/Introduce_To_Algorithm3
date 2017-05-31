@@ -18,6 +18,7 @@ namespace Common
         /// <summary>
         /// 应用程序的ID
         /// 每个程序使用不同的id
+        /// 建议在配置文件中配置
         /// </summary>
         private const string APP_ID = @"dd771b7a02e746b388ffad5adf202fc5";
 

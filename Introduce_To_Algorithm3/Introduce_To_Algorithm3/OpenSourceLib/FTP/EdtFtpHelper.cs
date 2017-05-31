@@ -9,6 +9,8 @@ using EnterpriseDT.Net.Ftp;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
 {
+
+
     /// <summary>
     /// 使用edtFTPnet/Free进行ftp操作
     /// Nuget的版本很旧，从官网下载
@@ -22,6 +24,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
         /// ftp服务器地址
         /// </summary>
         private readonly string _serverIp;
+
+        /// <summary>
+        /// ftp服务器端口
+        /// </summary>
+        private readonly int _serverPort;
 
         /// <summary>
         /// 服务器用户名
@@ -39,11 +46,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
         /// <param name="ftpIp"></param>
         /// <param name="userName"></param>
         /// <param name="password"></param>
-        public EdtFtpHelper(string ftpIp, string userName, string password)
+        /// <param name="serverPort"></param>
+        public EdtFtpHelper(string ftpIp, string userName, string password,int serverPort)
         {
             _serverIp = ftpIp;
             _userName = userName;
             _password = password;
+            _serverPort = serverPort;
         }
 
         /// <summary>
@@ -60,7 +69,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
                     connection.ServerAddress = _serverIp;
                     connection.UserName = _userName;
                     connection.Password = _password;
+                    connection.ServerPort = _serverPort;
                     connection.Connect();
+
                     if (action != null)
                     {
                         action(connection);
@@ -256,4 +267,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
             connection.DownloadFile(localFileName, remoteFileName);
         }
     }
+
+
 }

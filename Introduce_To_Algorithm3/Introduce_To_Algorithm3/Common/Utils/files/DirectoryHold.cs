@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.files
 {
@@ -35,7 +36,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
         /// 重置工作目录到应用程序所在的路径
         /// </summary>
         /// <returns>返回是否是否设置成功</returns>
-        public static bool ResetAppDir(Action<Exception> exceptionHandler = null)
+        public static bool ResetCurrentDir(Action<Exception> exceptionHandler = null)
         {
             bool isReset = false;
             
@@ -54,6 +55,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
                 if (exceptionHandler != null)
                 {
                     exceptionHandler(ex);
+                }
+                else
+                {
+                    NLogHelper.Error($"重置当前目录失败：{ex}");
                 }
             }
 

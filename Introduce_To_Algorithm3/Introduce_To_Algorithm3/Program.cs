@@ -1,4 +1,5 @@
-﻿using Introduce_To_Algorithm3.OpenSourceLib.Utils;
+﻿using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3
 {
@@ -6,6 +7,7 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
+            NLogHelper.Info(GuidUtils.GetGuid2());
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");

@@ -65,6 +65,34 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
+        /// 分割字符串  取消空白项，去掉结果前后空白
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static List<String> Split(String source, params char[] separator)
+        {
+            List<String> list = new List<string>();
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                return list;
+            }
+
+            //返回结果永不为null
+            String [] arr = source.Split(separator);
+
+            foreach (var item in arr)
+            {
+                if (!String.IsNullOrEmpty(item))
+                {
+                    list.Add(item.Trim());
+                }
+            }
+
+            return list;
+        } 
+
+        /// <summary>
         /// 截短字符串
         /// 如果字符串为null，返回string.Empty
         /// </summary>
