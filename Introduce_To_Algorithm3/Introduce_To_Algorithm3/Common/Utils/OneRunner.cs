@@ -11,7 +11,7 @@ namespace Common
     /// <summary>
     /// 更加安全合理的方式是使用 Mutex
     /// </summary>
-    public class OneRunner
+    public static class OneRunner
     {
         #region Mutex单实例实现
 
@@ -20,12 +20,12 @@ namespace Common
         /// 每个程序使用不同的id
         /// 建议在配置文件中配置
         /// </summary>
-        private const string APP_ID = @"dd771b7a02e746b388ffad5adf202fc5";
+        private const string APP_ID = @"dd771b7a02e746b388ffad5adf202fc5";//ConfigUtils.GetString("AppId");
 
         /// <summary>
         /// 用于测试单实例的Mutex
         /// </summary>
-        private static Mutex OneRunMutex = null;
+        private static volatile Mutex OneRunMutex = null;
 
         /// <summary>
         /// 是否之前已经运行了实例
