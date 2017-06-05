@@ -12,6 +12,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
 {
     /// <summary>
     /// socket客户端代理
+    /// 通过SocketMonitorTimer启动
     /// </summary>
     public static class SocketClientProxy
     {
@@ -394,7 +395,8 @@ true 如果连接已关闭、 重置，或者终止，则返回，
                     {
                         NLogHelper.Info("开始发送消息"+item.Message);
                         byte[] buffer = Encoding.GetEncoding(EncodingStr).GetBytes(item.Message);
-                        socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
+
+                        int sendCount = socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         lastSendRecvTime = DateTime.Now;
                         _isDisconnect = false;
                     }
