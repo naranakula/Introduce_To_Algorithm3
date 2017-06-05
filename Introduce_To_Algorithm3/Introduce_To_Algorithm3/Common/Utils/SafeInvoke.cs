@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Introduce_To_Algorithm3.Models;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
@@ -32,6 +33,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 if (exceptionHandler != null)
                 {
                     exceptionHandler(ex);
+                }
+                else
+                {
+                    NLogHelper.Error($"调用{action}异常：{ex}");
                 }
             }
             finally

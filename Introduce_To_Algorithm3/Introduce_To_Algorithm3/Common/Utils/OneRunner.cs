@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using Introduce_To_Algorithm3.Common.Utils;
 
 namespace Common
 {
@@ -20,7 +21,7 @@ namespace Common
         /// 每个程序使用不同的id
         /// 建议在配置文件中配置
         /// </summary>
-        private const string APP_ID = @"dd771b7a02e746b388ffad5adf202fc5";//ConfigUtils.GetString("AppId");
+        private static readonly string APP_ID = ConfigUtils.GetString("AppId");//@"dd771b7a02e746b388ffad5adf202fc5";//ConfigUtils.GetString("AppId");
 
         /// <summary>
         /// 用于测试单实例的Mutex

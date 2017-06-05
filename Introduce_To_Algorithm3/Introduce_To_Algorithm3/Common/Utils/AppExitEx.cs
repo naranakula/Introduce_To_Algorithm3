@@ -25,13 +25,21 @@ namespace Introduce_To_Algorithm3.Common.Utils
             try
             {
                 #region 强制退出
+
                 //Task创建的是后台线程
                 Task.Factory.StartNew(() =>
                 {
                     //5s后强制退出
                     if (maxWaitMilliSecondBeforeExit > 0)
                     {
-                        Thread.Sleep(maxWaitMilliSecondBeforeExit);
+                        try
+                        {
+                            Thread.Sleep(maxWaitMilliSecondBeforeExit);
+                        }
+                        catch
+                        {
+                            //ignore
+                        }
                     }
 
                     for (int i = 0; i < 8; i++)
@@ -41,13 +49,18 @@ namespace Introduce_To_Algorithm3.Common.Utils
                             NLogHelper.Warn($"程序第{i+1}次尝试强制退出");
                             Environment.Exit(0);
                         }
-                        catch (Exception)
+                        catch
                         {
                             //ignore
-                            Thread.Sleep(100);
+                            try
+                            {
+                                Thread.Sleep(100);
+                            }
+                            catch { }
                         }
                     }
                 });
+
                 #endregion
 
                 if (normalExitAction != null)
