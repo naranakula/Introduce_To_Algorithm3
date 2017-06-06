@@ -16,6 +16,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 {
     /// <summary>
     /// MQ消费者
+    ///     /// 外部调用
+    /// MQMessageHandler.Init();
+    /// MQMonitorTimer.Start();
     /// </summary>
     public static class MQConsumer
     {
@@ -168,13 +171,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 }
                 #endregion
 
-                string msg = txtMsg.Text.Trim();
+                //原样保存消息
+                string msg = txtMsg.Text;//txtMsg.Text.Trim();
                 NLogHelper.Info("接收到消息：" + msg);
 
                 #region 开始处理消息
 
                 //注：经测试该函数是在前一个回调完成之后执行的,即回调是单线程执行的,需要自己实现多线程
-
+                MessageHandler.AddToQueue(msg);
                 #endregion
 
             }

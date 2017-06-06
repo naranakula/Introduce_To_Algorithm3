@@ -10,6 +10,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 {
     /// <summary>
     /// MQ监视的Consumer
+    /// 外部调用
+    /// MQMessageHandler.Init();
+    /// MQMonitorTimer.Start();
     /// </summary>
     public static class MQMonitorTimer
     {
