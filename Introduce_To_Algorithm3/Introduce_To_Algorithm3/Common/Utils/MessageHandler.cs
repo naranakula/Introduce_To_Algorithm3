@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
-namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
+namespace Introduce_To_Algorithm3.Common.Utils
 {
     /// <summary>
     /// MQ的消息处理
@@ -116,6 +112,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private static void HandleMessage(String message)
         {
             #region 实际消息处理
+
+            if (String.IsNullOrWhiteSpace(message))
+            {
+                NLogHelper.Debug("消息为空，不做处理");
+                return;
+            }
+
+            NLogHelper.Debug($"开始处理消息:{message}");
+
+            //TODO: 实际的消息处理代码
+
 
             #endregion
         }
