@@ -83,7 +83,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
             foreach (var item in arr)
             {
-                if (!String.IsNullOrEmpty(item))
+                if (!String.IsNullOrWhiteSpace(item))
                 {
                     list.Add(item.Trim());
                 }
