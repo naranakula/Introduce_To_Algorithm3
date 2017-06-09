@@ -14,6 +14,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Dapper
     /// orm, 轻量级 半自动的orm
     /// Dapper假设所有的连接已经打开
     /// Dapper很好
+    /// Dapper是拓展IDbConnection的Nuget库
     /// </summary>
     public static class DapperHelper
     {
@@ -110,6 +111,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Dapper
             }
         }
 
+
+        #endregion
+
+
+        #region 测试代码
+
+        /// <summary>
+        /// 测试代码
+        /// </summary>
+        /// <param name="args"></param>
+        public static void TestMain(String[] args)
+        {
+            
+        }
 
         #endregion
 

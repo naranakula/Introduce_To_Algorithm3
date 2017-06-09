@@ -8,6 +8,9 @@
 https://github.com/quozd/awesome-dotnet#awesome-dotnet
 https://github.com/Microsoft/dotnet/blob/master/dotnet-developer-projects.md
 
+
+ConsoleControl:在winform或者wpf中嵌入可输入输出的console。
+
 //组件
 Entity framework
 Dapper (轻量级 半自动的sqlhelper替代品)
