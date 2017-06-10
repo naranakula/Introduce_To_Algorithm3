@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using Introduce_To_Algorithm3.Common.Utils.sqls;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Dapper
 {
@@ -123,10 +124,82 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Dapper
         /// <param name="args"></param>
         public static void TestMain(String[] args)
         {
+            SqlHelper sqlHelper = SqlHelper.GetInstance(@"Server=192.168.163.218;Database=SqlDb;User Id=sa;Password=system2000,.;Pooling=True;MultipleActiveResultSets=True");
+
+            bool isConnected = sqlHelper.IsConnectionActive();
+
+            Console.WriteLine(isConnected);
             
+            #region 查询返回强类型列表
+            //DapperHelper类的拓展方法
+            //public static IEnumerable<T> Query<T>(this IDbConnection cnn, string sql, object param = null, SqlTransaction transaction = null, bool buffered = true)
+           
+            #endregion
+
+
+
+
         }
 
         #endregion
 
     }
+
+    #region 辅助类
+    /// <summary>
+    /// 
+    /// </summary>
+    public class Airline
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Airline()
+        {
+
+        }
+
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public String Id { get; set; }
+
+        /// <summary>
+        /// 航空公司二字码
+        /// </summary>
+        public string Iata { get; set; }
+
+        /// <summary>
+        /// 航空公司三字码
+        /// </summary>
+        public string Icao { get; set; }
+
+        /// <summary>
+        /// 航空公司中文名称
+        /// </summary>
+        public String AirlineNameCn { get; set; }
+
+        /// <summary>
+        /// 中文简称
+        /// </summary>
+        public String AirlineNameCnBrief { get; set; }
+
+        /// <summary>
+        /// 航空公司英文名称
+        /// </summary>
+        public String AirlineNameEn { get; set; }
+
+        /// <summary>
+        /// 英文简称
+        /// </summary>
+        public String AirlineNameEnBrief { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreatedTime { get; set; }
+    }
+
+    #endregion
+
 }

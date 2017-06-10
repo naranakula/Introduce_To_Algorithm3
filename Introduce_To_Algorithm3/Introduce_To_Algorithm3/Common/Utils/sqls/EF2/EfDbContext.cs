@@ -1390,7 +1390,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 实际上应该尽量使用Guid作为主键，因为guid可以更好的保证插入的并行性，并且合并数据库时有决定性优势
         /// 尽量不要使用guid，而使用varchar(32)
         /// </summary>
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
+
+        ///建议使用36为变长字符串
+        public String Id { get; set; }
 
         /// <summary>
         /// ?表示可选的
@@ -1442,6 +1445,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //DatabaseGeneratedOption的三个属性：None:不是服务器生成，默认值；Identity：插入时，由数据库生成值，更新时保持不变（int或long型自增主键），自己设置无效；Computed:在插入或更新行时，数据库生成值，自己设置无效
             // Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+
+            // ToTable("TableName").HasKey(p=>p.Id);//设置表名和主键
+            //Property(x => x.Id).HasMaxLength(36)
+            //    .IsUnicode()
+            //    .IsVariableLength();
             #endregion
 
             #region 设置属性列字段

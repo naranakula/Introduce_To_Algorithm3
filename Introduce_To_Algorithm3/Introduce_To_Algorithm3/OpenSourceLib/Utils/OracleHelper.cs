@@ -64,7 +64,36 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         }
 
         #endregion
+        
+        #region 处理连接，不需要外界关心连接的打开和关闭
 
+        /// <summary>
+        /// 处理连接，不需要外界关心连接的打开和关闭
+        /// </summary>
+        /// <param name="action">处理连接的回调</param>
+        /// <param name="exceptionHandler"></param>
+        public void HandleConnection(Action<OracleConnection> action,Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                using (OracleConnection connection = new OracleConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    action?.Invoke(connection);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+            }
+        }
+
+        #endregion
+        
         #region 测试连接是否畅通
 
         /// <summary>

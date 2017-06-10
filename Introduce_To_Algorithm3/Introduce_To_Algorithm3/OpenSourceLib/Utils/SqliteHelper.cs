@@ -27,6 +27,36 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         private const string pwdConnString = "Data Source=dbname;Version=3;Password=mypwd;";
 
 
+        #region 处理连接，不需要外界关心连接的打开和关闭
+
+        /// <summary>
+        /// 处理连接，不需要外界关心连接的打开和关闭
+        /// </summary>
+        /// <param name="action">处理连接的回调</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public void HandleConnection(Action<SQLiteConnection> action,Action<Exception> exceptionHandler=null)
+        {
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(basicConnString))
+                {
+                    connection.Open();
+
+                    action?.Invoke(connection);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+            }
+        }
+
+        #endregion
+
+
         /// <summary>
         /// 创建数据库，如果不是全限定路径，将在当前目录下创建
         /// </summary>

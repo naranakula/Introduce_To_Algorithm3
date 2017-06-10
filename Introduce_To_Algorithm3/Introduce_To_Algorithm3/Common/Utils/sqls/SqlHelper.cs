@@ -109,17 +109,26 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
         /// 处理连接，不需要外界关心连接的打开和关闭
         /// </summary>
         /// <param name="action">处理连接的回调</param>
-        public void HandleConnection(Action<SqlConnection> action)
+        /// <param name="exceptionHandler">异常处理</param>
+        public void HandleConnection(Action<SqlConnection> action,Action<Exception> exceptionHandler=null)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                connection.Open();
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
 
-                action?.Invoke(connection);
+                    action?.Invoke(connection);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
             }
         }
-
-
 
         /// <summary>
         /// ExecuteNonQuery操作，对数据库进行 增、删、改 操作（1）
