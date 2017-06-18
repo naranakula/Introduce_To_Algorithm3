@@ -97,7 +97,7 @@ namespace Common.Utils
 
             if (ignoreCase)
             {
-                return String.Equals(s1.Trim(), s2.Trim(), StringComparison.CurrentCultureIgnoreCase);
+                return String.Equals(s1.Trim(), s2.Trim(), StringComparison.InvariantCultureIgnoreCase);
             }
             else
             {
