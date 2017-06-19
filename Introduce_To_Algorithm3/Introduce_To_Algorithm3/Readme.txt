@@ -8,6 +8,8 @@
 https://github.com/quozd/awesome-dotnet#awesome-dotnet
 https://github.com/Microsoft/dotnet/blob/master/dotnet-developer-projects.md
 
+网络调试工具和串口调试工具 可以发送 ASCII和16进制数据，不能发送汉字
+
 
 ConsoleControl:在winform或者wpf中嵌入可输入输出的console。
 

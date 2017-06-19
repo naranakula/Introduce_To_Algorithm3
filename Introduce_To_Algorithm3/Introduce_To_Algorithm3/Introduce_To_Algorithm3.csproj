@@ -534,6 +534,7 @@
     <Compile Include="Common\Utils\MessageHandler.cs" />
     <Compile Include="Common\Utils\PInvokeHelper.cs" />
     <Compile Include="Common\Utils\SerializeHelper.cs" />
+    <Compile Include="Common\Utils\Serial\SerialPortTimer.cs" />
     <Compile Include="Common\Utils\SettingHelper.cs" />
     <Compile Include="Common\Sort\BubbleSort.cs" />
     <Compile Include="Common\Sort\BucketSort.cs" />
@@ -734,6 +735,8 @@
     <Compile Include="Reference\memcached\SocketPool.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Utils\Serial\UartAssist串口调试工具.exe" />
+    <Content Include="Common\Utils\sockets\NetAssist网络调试工具.exe" />
     <Content Include="license.txt" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.dll" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.pdb" />
