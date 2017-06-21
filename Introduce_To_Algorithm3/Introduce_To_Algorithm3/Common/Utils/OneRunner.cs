@@ -11,6 +11,7 @@ namespace Common
 {
     /// <summary>
     /// 更加安全合理的方式是使用 Mutex
+    /// 只有一个实例运行
     /// </summary>
     public static class OneRunner
     {
