@@ -42,7 +42,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                         }
                     }
 
-                    for (int i = 0; i < 8; i++)
+                    for (int i = 0; i < 10; i++)
                     {
                         try
                         {
@@ -54,7 +54,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                             //ignore
                             try
                             {
-                                Thread.Sleep(100);
+                                Thread.Sleep(10);
                             }
                             catch { }
                         }
