@@ -736,6 +736,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Utils\Serial\UartAssist串口调试工具.exe" />
+    <Content Include="Common\Utils\Serial\串口调试助手2.1.exe" />
     <Content Include="Common\Utils\sockets\NetAssist网络调试工具.exe" />
     <Content Include="license.txt" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.dll" />
@@ -810,6 +811,7 @@
     </None>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
