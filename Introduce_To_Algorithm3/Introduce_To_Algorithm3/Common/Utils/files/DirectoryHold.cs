@@ -39,10 +39,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
         public static bool ResetCurrentDir(Action<Exception> exceptionHandler = null)
         {
             bool isReset = false;
-            
+
             try
             {
-                string dirPath = AppDomain.CurrentDomain.BaseDirectory;
+                string dirPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
                 if (!string.IsNullOrWhiteSpace(dirPath))
                 {
                     Directory.SetCurrentDirectory(dirPath);
@@ -66,7 +66,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
             {
                 return true;
             }
-
+            
             try
             {
                 string dirPath = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
@@ -96,13 +96,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
 
             try
             {
-                string dirPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                string dirPath = AppDomain.CurrentDomain.BaseDirectory;
                 if (!string.IsNullOrWhiteSpace(dirPath))
                 {
                     Directory.SetCurrentDirectory(dirPath);
                     isReset = true;
                 }
-
             }
             catch (Exception ex)
             {
@@ -116,7 +115,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
                     NLogHelper.Error($"重置当前目录失败：{ex}");
                 }
             }
-
+            
             return isReset;
         }
 
