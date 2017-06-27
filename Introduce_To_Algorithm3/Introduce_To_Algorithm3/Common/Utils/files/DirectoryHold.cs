@@ -151,42 +151,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
                 return fullFileName;
             }
 
-            try
-            {
-                FileInfo fileInfo = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, shortFileName));
-                if (fileInfo.Exists)
-                {
-                    fullFileName = fileInfo.FullName;
-                }
-            }
-            catch
-            {
-                // ignored
-            }
-
-            if (!string.IsNullOrWhiteSpace(fullFileName))
-            {
-                return fullFileName;
-            }
-
-            try
-            {
-                string parent = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-                FileInfo fileInfo = new FileInfo(Path.Combine(parent,shortFileName));
-                if (fileInfo.Exists)
-                {
-                    fullFileName = fileInfo.FullName;
-                }
-            }
-            catch
-            {
-                // ignored
-            }
-
-            if (!string.IsNullOrWhiteSpace(fullFileName))
-            {
-                return fullFileName;
-            }
 
             try
             {
@@ -207,8 +171,44 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
                 return fullFileName;
             }
 
-           
+            try
+            {
+                string parent = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+                FileInfo fileInfo = new FileInfo(Path.Combine(parent, shortFileName));
+                if (fileInfo.Exists)
+                {
+                    fullFileName = fileInfo.FullName;
+                }
+            }
+            catch
+            {
+                // ignored
+            }
 
+            if (!string.IsNullOrWhiteSpace(fullFileName))
+            {
+                return fullFileName;
+            }
+
+            try
+            {
+                FileInfo fileInfo = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, shortFileName));
+                if (fileInfo.Exists)
+                {
+                    fullFileName = fileInfo.FullName;
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+
+            if (!string.IsNullOrWhiteSpace(fullFileName))
+            {
+                return fullFileName;
+            }
+
+           
             return String.Empty;
         }
 
