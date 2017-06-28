@@ -17,6 +17,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
         private const string QueueName = "Hello2";
 
         /// <summary>
+        /// HostName指定IP地址,port不设置使用默认的端口
+        /// </summary>
+        private static readonly ConnectionFactory factory = new ConnectionFactory() { HostName = "localhost",AutomaticRecoveryEnabled = true};
+
+        /// <summary>
         /// 发送消息
         /// </summary>
         /// <param name="message"></param>
@@ -25,11 +30,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
             var factory = new ConnectionFactory(){HostName = "localhost"};
             using (var connection = factory.CreateConnection())
             {
+                //Connection抽象socket连接
                 using (var channel = connection.CreateModel())
                 {
-                    //如果队列不存在，创建一个队列
+                    //如果队列不存在，创建一个队列，声明队列是幂等的，如果没有创建，新建，否则什么也不做
+                    //Declaring a queue is idempotent - it will only be created if it doesn't exist already. 
                     channel.QueueDeclare(QueueName,false,false,false,null);
-
+                    //消息是二进制的
                     byte[] body = Encoding.UTF8.GetBytes(message);
                     channel.BasicPublish("",QueueName,null,body);
                 }
