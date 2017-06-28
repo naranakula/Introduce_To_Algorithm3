@@ -25,22 +25,23 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// MQ地址  如：failover:(tcp://192.168.163.213:61616)
         /// </summary>
-        private const string MQUri = "MQUri";
+        private static readonly string MqUri = ConfigUtils.GetString("MQUri");
 
         /// <summary>
         /// 使用Topic还是Queue接收消息,1是使用Topic，0使用Queue接收消息
         /// </summary>
-        private const string IsTopicStr = "IsTopic";
+        private static readonly bool IsTopic = StringUtils.EqualsEx("1", ConfigUtils.GetString("IsTopic"));
+
 
         /// <summary>
         /// 用于接收消息的Topic或者Queue的名称
         /// </summary>
-        private const string TopicOrQueueNameStr = "TopicOrQueueName";
+        private static readonly string TopicOrQueueName = ConfigUtils.GetString("TopicOrQueueName");
 
         /// <summary>
         /// 创建连接工厂
         /// </summary>
-        private static volatile IConnectionFactory factory = new ConnectionFactory(ConfigUtils.GetString(MQUri));
+        private static volatile IConnectionFactory factory = new ConnectionFactory(MqUri);
 
         /// <summary>
         /// 连接
@@ -80,9 +81,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         {
             try
             {
-                if (connection != null)
+                lock (locker)
                 {
-                    CloseConsumer();
+                    if (connection != null)
+                    {
+                        CloseConsumer();
+                    }
                 }
 
                 NLogHelper.Info("开始初始化MQConsumer");
@@ -103,10 +107,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 //创建回话
                 session = connection.CreateSession();
                 session.RequestTimeout = new TimeSpan(0, 0, 30);
-                bool isTopic = StringUtils.EqualsEx("1", ConfigUtils.GetString(IsTopicStr, "1"));
-                NLogHelper.Info("建立名为{0}的{1}连接".FormatWith(ConfigUtils.GetString(TopicOrQueueNameStr), isTopic ? "Topic" : "Queue"));
+                NLogHelper.Info("建立名为{0}的{1}连接".FormatWith(TopicOrQueueName, IsTopic ? "Topic" : "Queue"));
                 //创建消费者
-                consumer = session.CreateConsumer(session.GetDestination(ConfigUtils.GetString(TopicOrQueueNameStr),isTopic?DestinationType.Topic:DestinationType.Queue));
+                consumer = session.CreateConsumer(session.GetDestination(TopicOrQueueName,(IsTopic?DestinationType.Topic:DestinationType.Queue)));
                 //注册监听事件
                 consumer.Listener += consumer_Listener;
                 
@@ -223,13 +226,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             try
             {
 
-                NLogHelper.Info("开始关闭MQ:" + ConfigUtils.GetString(MQUri));
+                NLogHelper.Info("开始关闭MQ Consumer:" + MqUri);
 
                 if (consumer != null)
                 {
                     consumer.Close();
+                    consumer = null;
                 }
-                consumer = null;
 
             }
             catch (Exception ex)
@@ -243,8 +246,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 if (session != null)
                 {
                     session.Close();
+                    session = null;
                 }
-                session = null;
             }
             catch (Exception ex)
             {
@@ -258,8 +261,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 {
                     connection.Stop();
                     connection.Close();
+                    connection = null;
                 }
-                connection = null;
             }
             catch (Exception ex)
             {
