@@ -69,8 +69,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                     try
                     {
                         String message = null;
-                        //等待1111ms获取消息
-                        if (messageQueue.TryTake(out message, 1111))
+                        //等待317ms获取消息
+                        if (messageQueue.TryTake(out message, 317))
                         {
                             #region 处理消息message
 

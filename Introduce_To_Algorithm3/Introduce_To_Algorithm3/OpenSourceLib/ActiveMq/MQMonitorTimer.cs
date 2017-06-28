@@ -11,8 +11,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
     /// <summary>
     /// MQ监视的Consumer
     /// 外部调用
-    /// MQMessageHandler.Init();
-    /// MQMonitorTimer.Start();
+    /// MQMessageHandler.Init();//初始化消息处理
+    /// MQMonitorTimer.Start();//开启接收消息
     /// </summary>
     public static class MQMonitorTimer
     {
@@ -38,7 +38,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         {
             if (mqTimer == null)
             {
-                mqTimer = new Timer(new TimerCallback(MQTimerCallBack),null,800,16000);
+                mqTimer = new Timer(new TimerCallback(MQTimerCallBack),null,700,16130);
             }
         }
 
