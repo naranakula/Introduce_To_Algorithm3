@@ -40,17 +40,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 创建连接工厂
         /// </summary>
-        private static IConnectionFactory factory = new ConnectionFactory(ConfigUtils.GetString(MQUri));
+        private static volatile IConnectionFactory factory = new ConnectionFactory(ConfigUtils.GetString(MQUri));
 
         /// <summary>
         /// 连接
         /// </summary>
-        private static IConnection connection = null;
+        private static volatile IConnection connection = null;
 
         /// <summary>
         /// 会话
         /// </summary>
-        private static ISession session = null;
+        private static volatile ISession session = null;
 
         /// <summary>
         /// 是否连接是活的
@@ -60,7 +60,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 消费者
         /// </summary>
-        private static IMessageConsumer consumer = null;
+        private static volatile IMessageConsumer consumer = null;
 
         /// <summary>
         /// 锁
