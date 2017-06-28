@@ -665,7 +665,7 @@
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQConsumer.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MessageHandler.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQMonitorTimer.cs" />
-    <Compile Include="OpenSourceLib\ActiveMq\Producers\MQProducer.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\Producers\MQShortConnectionProducer.cs" />
     <Compile Include="OpenSourceLib\Autofac\AutofacHelper.cs" />
     <Compile Include="OpenSourceLib\AutoMapper\AutoMapperUtils.cs" />
     <Compile Include="OpenSourceLib\Dapper\DapperHelper.cs" />
@@ -786,7 +786,6 @@
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="Common\Utils\Commons\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
-    <Folder Include="OpenSourceLib\NetMqs\Docs\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
   </ItemGroup>
   <ItemGroup>
@@ -822,6 +821,7 @@
     <None Include="OpenSourceLib\HP-Socket\HP-Socket.docx" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket_Development_Guide_%28v3.3-20150101%29.pdf" />
     <None Include="OpenSourceLib\Json\Json.docx" />
+    <None Include="OpenSourceLib\NetMqs\Docs\NetMq文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Docs\NetWorkComms.Net文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Packages\NetworkCommsDotNet_v3.0.3_ALv2.zip" />
     <None Include="OpenSourceLib\RabbitMq\Rabbitmq.docx" />

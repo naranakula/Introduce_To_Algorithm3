@@ -1,15 +1,15 @@
 ﻿using System;
 using Apache.NMS;
 using Apache.NMS.ActiveMQ;
-using Com.Utility.Commons;
 using Introduce_To_Algorithm3.Common.Utils;
 
-namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
+namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
 {
     /// <summary>
     /// MQ产生者
+    /// 每次发送消息一个连接
     /// </summary>
-    public class MQProducer
+    public class MQShortConnectionProducer
     {
         /// <summary>
         /// MQ地址
