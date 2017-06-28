@@ -662,10 +662,10 @@
     <Compile Include="MachineLearning\ReadMe.cs" />
     <Compile Include="Models\CleanJob.cs" />
     <Compile Include="Models\OperationResult.cs" />
-    <Compile Include="OpenSourceLib\ActiveMq\MQConsumer.cs" />
-    <Compile Include="OpenSourceLib\ActiveMq\MessageHandler.cs" />
-    <Compile Include="OpenSourceLib\ActiveMq\MQMonitorTimer.cs" />
-    <Compile Include="OpenSourceLib\ActiveMq\MQProducer.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQConsumer.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\Consumers\MessageHandler.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQMonitorTimer.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\Producers\MQProducer.cs" />
     <Compile Include="OpenSourceLib\Autofac\AutofacHelper.cs" />
     <Compile Include="OpenSourceLib\AutoMapper\AutoMapperUtils.cs" />
     <Compile Include="OpenSourceLib\Dapper\DapperHelper.cs" />
