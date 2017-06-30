@@ -10,7 +10,7 @@ namespace ZeroMqConsole
     {
         static void Main(string[] args)
         {
-
+            
         }
     }
 }

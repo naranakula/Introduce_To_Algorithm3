@@ -90,9 +90,8 @@
       <HintPath>..\packages\Aspose.Cells.8.8.2\lib\net40\Aspose.Cells.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AsyncIO, Version=0.1.20.0, Culture=neutral, PublicKeyToken=44a94435bd6f33f8, processorArchitecture=MSIL">
-      <HintPath>..\packages\AsyncIO.0.1.20.0\lib\net40\AsyncIO.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="AsyncIO, Version=0.1.25.0, Culture=neutral, PublicKeyToken=44a94435bd6f33f8, processorArchitecture=MSIL">
+      <HintPath>..\packages\AsyncIO.0.1.26.0\lib\net40\AsyncIO.dll</HintPath>
     </Reference>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
@@ -178,9 +177,8 @@
       <HintPath>..\packages\MySql.Data.Entity.6.9.8\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NetMQ, Version=3.3.3.4, Culture=neutral, PublicKeyToken=a6decef4ddc58b3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\NetMQ.3.3.3.4\lib\net40\NetMQ.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="NetMQ, Version=4.0.0.1, Culture=neutral, PublicKeyToken=a6decef4ddc58b3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetMQ.4.0.0.1\lib\net40\NetMQ.dll</HintPath>
     </Reference>
     <Reference Include="NetworkCommsDotNet, Version=3.0.0.0, Culture=neutral, PublicKeyToken=f58108eb6480f6ec, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -409,6 +407,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="ZeroMQ, Version=4.1.0.22, Culture=neutral, PublicKeyToken=4a9630883fd6c563, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZeroMQ.4.1.0.22\lib\net40\ZeroMQ.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AdvancedStructs\BTree.cs" />
@@ -690,6 +691,8 @@
     <Compile Include="OpenSourceLib\NetMqs\PubSub\NetMQSubClient.cs" />
     <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetMQReqClient.cs" />
     <Compile Include="OpenSourceLib\NetMqs\ReqRep\NetMQRepServer.cs" />
+    <Compile Include="OpenSourceLib\NetMqs\NetMqHelper.cs" />
+    <Compile Include="OpenSourceLib\NetMqs\ZeroMqs\ZeroMqHelper.cs" />
     <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsClient.cs" />
     <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsServer.cs" />
     <Compile Include="OpenSourceLib\Ninject\NinjectHelper.cs" />
@@ -742,6 +745,7 @@
     <Content Include="Common\Utils\Serial\串口调试助手2.1.exe" />
     <Content Include="Common\Utils\sockets\NetAssist网络调试工具.exe" />
     <Content Include="license.txt" />
+    <Content Include="OpenSourceLib\NetMqs\ReadMe.txt" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.dll" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.pdb" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.xml" />
@@ -860,11 +864,13 @@
     <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
     <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
     <Error Condition="!Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
+    <Error Condition="!Exists('..\packages\ZeroMQ.4.1.0.22\build\net40\ZeroMQ.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ZeroMQ.4.1.0.22\build\net40\ZeroMQ.targets'))" />
   </Target>
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.102.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net45\System.Data.SQLite.Core.targets')" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
+  <Import Project="..\packages\ZeroMQ.4.1.0.22\build\net40\ZeroMQ.targets" Condition="Exists('..\packages\ZeroMQ.4.1.0.22\build\net40\ZeroMQ.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
