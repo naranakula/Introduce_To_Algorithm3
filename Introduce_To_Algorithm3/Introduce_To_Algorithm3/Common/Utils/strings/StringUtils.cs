@@ -137,27 +137,27 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 组合字符串，并且如果数据项为null，则用String.Empty连接
         /// </summary>
-        /// <param name="arr"></param>
+        /// <param name="enumerable"></param>
         /// <param name="isTrim">是否去掉字符串前后的空格</param>
         /// <param name="separator">分隔符，只保留中间部分分隔符</param>
         /// <returns></returns>
-        public static string CombineEx(string[] arr, string separator = "", bool isTrim = true)
+        public static string CombineEx(IEnumerable<String> enumerable, string separator = "", bool isTrim = true)
         {
-            if (arr == null || arr.Length == 0)
+            if (enumerable == null)
             {
                 return string.Empty;
             }
 
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < arr.Length; i++)
+            var tempList = enumerable.Where(r => !String.IsNullOrWhiteSpace(r)).ToList();
+
+
+            for (int i = 0; i < tempList.Count; i++)
             {
-                var item = arr[i];
-                if (item != null)
-                {
-                    sb.Append(isTrim ? item.Trim() : item);
-                }
-                if (i != arr.Length - 1)
+                var item = tempList[i];
+                sb.Append(isTrim ? item.Trim() : item);
+                if (i != tempList.Count - 1)
                 {
                     //不是最后一个
                     sb.Append(separator);
@@ -174,23 +174,23 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="separator">分隔符，只保留中间部分分隔符</param>
         /// <param name="isTrim">是否去掉字符串前后的空格</param>
         /// <returns></returns>
-        public static string CombineEx(List<string> list, string separator = "", bool isTrim = true)
+        public static string CombineEx(List<string> list, string separator = ",", bool isTrim = true)
         {
             if (list == null || list.Count == 0)
             {
                 return string.Empty;
             }
 
+            //选出不为空白的
+            var tempList = list.Where(r => !String.IsNullOrWhiteSpace(r)).ToList();
+
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < list.Count; i++)
+            for (int i = 0; i < tempList.Count; i++)
             {
-                var item = list[i];
-                if (item != null)
-                {
-                    sb.Append(isTrim ? item.Trim() : item);
-                }
-                if (i != list.Count - 1)
+                var item = tempList[i];
+                sb.Append(isTrim ? item.Trim() : item);
+                if (i != tempList.Count - 1)
                 {
                     //不是最后一个
                     sb.Append(separator);
