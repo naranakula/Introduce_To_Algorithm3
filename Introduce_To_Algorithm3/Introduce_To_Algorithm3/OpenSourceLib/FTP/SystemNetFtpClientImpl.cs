@@ -11,6 +11,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTPUtils
 {
     /// <summary>
     /// 使用System.Net.FtpClient做的ftp代理
+    /// 使用EdtFtpHelper
     /// </summary>
     public class SystemNetFtpClientImpl
     {
