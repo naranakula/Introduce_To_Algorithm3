@@ -17,6 +17,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
     /// 
     /// http://enterprisedt.com/products/edtftpnet/
     /// https://www.limilabs.com
+    /// 
+    /// FTP使用两个端口，一个数据端口(20) 一个命令端口21
+    /// edtFtpNet默认使用被动模式
+    /// 
+    /// 主动模式：客户端连接ftp服务器的21端口，建立命令通道，然后客户端本地在另外一个端口监听等待连接，利用命令通道将端口号告诉服务器，服务器使用20端口主动连接客户端，建立数据通道。
+    /// 被动模式：建立命令通道与主动模式相同。客户端发送PASV指令告诉服务器采用被动模式。服务器选择端口（>1024的无特权端口）进行监听，并告诉客户端该端口，客户端选择一个端口与服务器提供的端口建立数据通道。
+    /// 
+    /// 建立采用被动模式，并且服务器ftp程序开通防火墙例外
+    /// 采用哪个模式是由客户端决定的
     /// </summary>
     public class EdtFtpHelper
     {
@@ -70,6 +79,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
                     connection.UserName = _userName;
                     connection.Password = _password;
                     connection.ServerPort = _serverPort;
+                    //默认使用的就是PASV被动模式
+                    connection.ConnectMode = FTPConnectMode.PASV;
+                    //设置传输类型Binary,默认就是Binary
+                    connection.TransferType = FTPTransferType.BINARY;
+                    //不用设置命令编码，采用默认值，注意传输文件名使用ASCII值
+                    //只使用0-127的文件名不会出错。
+
                     connection.Connect();
 
                     if (action != null)
