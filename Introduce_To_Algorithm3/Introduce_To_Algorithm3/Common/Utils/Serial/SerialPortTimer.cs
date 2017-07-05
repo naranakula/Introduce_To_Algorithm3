@@ -9,7 +9,14 @@ using System.Threading.Tasks;
 
 namespace Introduce_To_Algorithm3.Common.Utils.Serial
 {
-    class SerialPortTimer
+    /// <summary>
+    /// 调用顺序
+    /// SerialPortTimer.InitSerialPort
+    ///  SerialPortTimer.Start
+    /// 
+    /// SerialPortTimer.Stop
+    /// </summary>
+    public static class SerialPortTimer
     {
         /// <summary>
         /// 底层的timer
@@ -56,7 +63,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.Serial
         /// <param name="stopBits">停止位</param>
         /// <param name="readWriteTimeout">读写超时时间毫秒</param>
         /// <param name="receivedBytesThreshold">The number of bytes in the internal input buffer before a DataReceived event is fired. The default is 1.</param>
-        public void InitSerialPort(string portName, int baudRate, int dataBits = 8, bool dtrEnable = true, bool rtsEnable = true, Handshake handshake = Handshake.RequestToSend, String encoding = "utf-8", Parity parity = Parity.None, StopBits stopBits = StopBits.One, int readWriteTimeout = 5000, int receivedBytesThreshold = 1)
+        public static void InitSerialPort(string portName, int baudRate, int dataBits = 8, bool dtrEnable = true, bool rtsEnable = true, Handshake handshake = Handshake.RequestToSend, String encoding = "utf-8", Parity parity = Parity.None, StopBits stopBits = StopBits.One, int readWriteTimeout = 5000, int receivedBytesThreshold = 1)
         {
             portUtils.InitSerialPort(portName, baudRate, dataBits, dtrEnable, rtsEnable, handshake, encoding, parity, stopBits, readWriteTimeout, readWriteTimeout);
         }

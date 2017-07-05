@@ -108,7 +108,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
             try
             {
                 int value;
-                if (int.TryParse(ConfigurationManager.AppSettings[key], out value))
+
+                string settingValue = ConfigurationManager.AppSettings[key];
+                settingValue = settingValue == null ? "" : settingValue.Trim();
+                if (int.TryParse(settingValue, out value))
                 {
                     return value;
                 }
