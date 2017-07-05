@@ -65,7 +65,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.Serial
         /// <param name="receivedBytesThreshold">The number of bytes in the internal input buffer before a DataReceived event is fired. The default is 1.</param>
         public static void InitSerialPort(string portName, int baudRate, int dataBits = 8, bool dtrEnable = true, bool rtsEnable = true, Handshake handshake = Handshake.RequestToSend, String encoding = "utf-8", Parity parity = Parity.None, StopBits stopBits = StopBits.One, int readWriteTimeout = 5000, int receivedBytesThreshold = 1)
         {
-            portUtils.InitSerialPort(portName, baudRate, dataBits, dtrEnable, rtsEnable, handshake, encoding, parity, stopBits, readWriteTimeout, readWriteTimeout);
+            portUtils.InitSerialPort(portName, baudRate, dataBits, dtrEnable, rtsEnable, handshake, encoding, parity, stopBits, readWriteTimeout, receivedBytesThreshold);
         }
 
         /// <summary>
