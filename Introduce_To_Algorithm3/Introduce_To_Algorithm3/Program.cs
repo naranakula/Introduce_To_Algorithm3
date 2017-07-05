@@ -11,9 +11,6 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-
-            ZeroMqHelper.Rep(12631,str=>str);
-            NLogHelper.Info(GuidUtils.GetGuid2());
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");
