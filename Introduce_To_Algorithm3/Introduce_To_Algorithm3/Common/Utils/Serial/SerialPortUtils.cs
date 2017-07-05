@@ -371,6 +371,16 @@ namespace Introduce_To_Algorithm3.Common.Utils.Serial
                 lastCommunicateTime = DateTime.Now;
                 return true;
             }
+            catch (InvalidOperationException invalidEx)
+            {
+                isAlive = false;
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(invalidEx);
+                }
+
+                return false;
+            }
             catch(Exception ex)
             {
                 if(exceptionHandler != null)
