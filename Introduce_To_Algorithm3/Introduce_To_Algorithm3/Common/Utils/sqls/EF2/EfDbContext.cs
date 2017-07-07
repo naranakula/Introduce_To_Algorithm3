@@ -1458,7 +1458,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //字符串
             //Property(p => p.FirstName)
             //    .HasColumnName("FirstName")
-            //    .IsOptional()
+            //    .IsOptional()//.IsRequired()
             //    .HasMaxLength(30)
             //    .IsUnicode()
             //    .IsVariableLength();
@@ -1496,7 +1496,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             #region 设置关系 One-To-One  One-To-Many  Many-To-Many
 
             //建议在OnModelCreating中设置，不要在Map中设置
-
+            // HasRequired(s => s.Flight).WithMany(s => s.FlightVias).HasForeignKey(t => t.FlightId).WillCascadeOnDelete(true);
             #endregion
         }
     }
