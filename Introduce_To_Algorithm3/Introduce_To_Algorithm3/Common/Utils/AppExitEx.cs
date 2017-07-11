@@ -83,6 +83,42 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
+        /// <summary>
+        /// 强制退出
+        /// </summary>
+        /// <param name="maxWaitMilliSecondBeforeExit">退出之前最长的等待时间，单位毫秒, 小于等于0表示不等待</param>
+        public static void SafeForceExit(int maxWaitMilliSecondBeforeExit = 0)
+        {
+            if (maxWaitMilliSecondBeforeExit > 0)
+            {
+                try
+                {
+                    Thread.Sleep(maxWaitMilliSecondBeforeExit);
+                }
+                catch
+                {
+                    //ignore
+                }
+            }
+
+
+            for (int i = 0; i < 11; i++)
+            {
+                try
+                {
+                    Environment.Exit(0);
+                }
+                catch
+                {
+                    //ignore
+                    try
+                    {
+                        Thread.Sleep(10);
+                    }
+                    catch { }
+                }
+            }
+        }
 
     }
 
