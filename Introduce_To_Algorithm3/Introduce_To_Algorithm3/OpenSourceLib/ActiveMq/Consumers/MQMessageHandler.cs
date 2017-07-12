@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
     /// MQMessageHandler.Init();
     /// MQMonitorTimer.Start();
     /// </summary>
-    public class MessageHandler
+    public class MQMessageHandler
     {
         /// <summary>
         /// 线程安全集合提供阻塞和限制功能

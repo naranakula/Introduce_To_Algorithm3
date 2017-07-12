@@ -182,7 +182,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 #region 开始处理消息
 
                 //注：经测试该函数是在前一个回调完成之后执行的,即回调是单线程执行的,需要自己实现多线程
-                MessageHandler.AddToQueue(msg);
+                MQMessageHandler.AddToQueue(msg);
                 #endregion
 
             }
