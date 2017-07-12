@@ -20,7 +20,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         public static XElement ParseString(String xmlString)
         {
-            XDocument document = XDocument.Parse(xmlString);
+            if (string.IsNullOrEmpty(xmlString))
+            {
+                return null;
+            }
+
+            XDocument document = XDocument.Parse(xmlString.Trim());
 
             if(document != null)
             {
