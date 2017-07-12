@@ -14,6 +14,26 @@ namespace Introduce_To_Algorithm3.Common.Utils
     public static class XmlUtils
     {
         /// <summary>
+        /// 解析xml字符串，返回根元素
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <returns></returns>
+        public static XElement ParseString(String xmlString)
+        {
+            XDocument document = XDocument.Parse(xmlString);
+
+            if(document != null)
+            {
+                return document.Root;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+        /// <summary>
         /// 根据节点名获取第一个匹配的一级子元素，不考虑命名空间
         /// XElement.Element("name")会进行命名空间的匹配
         /// 
