@@ -664,7 +664,7 @@
     <Compile Include="Models\CleanJob.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQConsumer.cs" />
-    <Compile Include="OpenSourceLib\ActiveMq\Consumers\MessageHandler.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQMessageHandler.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQMonitorTimer.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Producers\LongConnections\MessageItem.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Producers\LongConnections\MQLongConnectionProducer.cs" />
