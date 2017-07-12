@@ -20,7 +20,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         public static XElement ParseString(String xmlString)
         {
-            if (string.IsNullOrEmpty(xmlString))
+            if (string.IsNullOrWhiteSpace(xmlString))
             {
                 return null;
             }
