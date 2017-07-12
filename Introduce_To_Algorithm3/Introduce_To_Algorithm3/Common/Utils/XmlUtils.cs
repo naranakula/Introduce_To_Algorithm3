@@ -40,7 +40,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
-        /// 
+        ///  解析xml字符串，返回根元素
         /// </summary>
         /// <param name="xmlString"></param>
         /// <returns></returns>
