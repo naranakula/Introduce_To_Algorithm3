@@ -42,7 +42,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         {
             if (mqTimer == null)
             {
-                mqTimer = new Timer(new TimerCallback(MQTimerCallBack),null,700,16130);
+                mqTimer = new Timer(new TimerCallback(MQTimerCallBack),null,500,16130);
             }
         }
 

@@ -159,11 +159,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             //{
             //    isAlive = true;
             //}
-
-            lastUpdateTime = DateTime.Now;
+            
 
             try
             {
+                lastUpdateTime = DateTime.Now;
+
                 #region 获取消息
                 ITextMessage txtMsg = message as ITextMessage;
               
