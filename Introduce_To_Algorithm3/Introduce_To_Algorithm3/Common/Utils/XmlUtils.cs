@@ -39,6 +39,38 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <returns></returns>
+        public static Tuple<bool,XElement,Exception> TryParseString(string xmlString)
+        {
+            try
+            {
+                if (String.IsNullOrWhiteSpace(xmlString))
+                {
+                    return new Tuple<bool, XElement, Exception>(false, null, new Exception("字符串不能为空白"));
+                }
+
+                XDocument document = XDocument.Parse(xmlString.Trim());
+                XElement xelement = document.Root;
+                if(xelement!= null)
+                {
+                    return new Tuple<bool, XElement, Exception>(true, xelement, null);
+                }
+                else
+                {
+                    return new Tuple<bool, XElement, Exception>(false, null, new Exception("为获取到xml根元素"));
+                }
+            }
+            catch(Exception ex)
+            {
+                return new Tuple<bool, XElement, Exception>(false, null, ex);
+            }
+        }
+
+
 
         /// <summary>
         /// 根据节点名获取第一个匹配的一级子元素，不考虑命名空间
