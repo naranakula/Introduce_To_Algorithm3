@@ -61,7 +61,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 }
                 else
                 {
-                    return new Tuple<bool, XElement, Exception>(false, null, new Exception("为获取到xml根元素"));
+                    return new Tuple<bool, XElement, Exception>(false, null, new Exception("未获取到xml根元素"));
                 }
             }
             catch(Exception ex)
