@@ -113,7 +113,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// 实际的消息处理
         /// </summary>
         /// <param name="message"></param>
-        private static void HandleMessage(String message)
+        public static void HandleMessage(String message)
         {
             #region 实际消息处理
 
