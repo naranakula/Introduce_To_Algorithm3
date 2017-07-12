@@ -41,32 +41,33 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         /// <summary>
         ///  解析xml字符串，返回根元素
+        ///  解析成功返回根元素，否则返回null
         /// </summary>
         /// <param name="xmlString"></param>
         /// <returns></returns>
-        public static Tuple<bool,XElement,Exception> TryParseString(string xmlString)
+        public static Tuple<XElement,Exception> TryParseString(string xmlString)
         {
             try
             {
                 if (String.IsNullOrWhiteSpace(xmlString))
                 {
-                    return new Tuple<bool, XElement, Exception>(false, null, new Exception("字符串不能为空白"));
+                    return new Tuple< XElement, Exception>( null, new Exception("字符串不能为空白"));
                 }
 
                 XDocument document = XDocument.Parse(xmlString.Trim());
                 XElement xelement = document.Root;
                 if(xelement!= null)
                 {
-                    return new Tuple<bool, XElement, Exception>(true, xelement, null);
+                    return new Tuple< XElement, Exception>( xelement, null);
                 }
                 else
                 {
-                    return new Tuple<bool, XElement, Exception>(false, null, new Exception("未获取到xml根元素"));
+                    return new Tuple<XElement, Exception>( null, new Exception("未获取到xml根元素"));
                 }
             }
             catch(Exception ex)
             {
-                return new Tuple<bool, XElement, Exception>(false, null, ex);
+                return new Tuple<XElement, Exception>( null, ex);
             }
         }
 
