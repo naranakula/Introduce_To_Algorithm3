@@ -78,13 +78,15 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     return new Tuple<string, bool>(defaultValue, false);
                 }
 
+
+                string theValue = temp.Value;
                 if (isTrim)
                 {
-                    return new Tuple<string, bool>(temp.Value.Trim(), true);
+                    return new Tuple<string, bool>(theValue==null?string.Empty:theValue.Trim(), true);
                 }
                 else
                 {
-                    return new Tuple<string, bool>(temp.Value, true);
+                    return new Tuple<string, bool>(theValue, true);
                 }
             }
             catch (Exception ex)
