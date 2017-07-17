@@ -19,10 +19,34 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 语音合成
         /// </summary>
         /// <param name="text"></param>
-        public static void Speech(string text)
+        public static bool Speech(string text,Action<Exception> exceptionHandler = null)
         {
-            SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
-            speechSynthesizer.Speak(text);
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return true;
+            }
+
+            try
+            {
+                using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer())
+                {
+                    //输出到默认的音频设备
+                    speechSynthesizer.SetOutputToDefaultAudioDevice();
+                    //同步播放
+                    speechSynthesizer.Speak(text);
+                }
+
+                return true;
+            }catch(Exception ex)
+            {
+                if(exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return false;
+            }
+            
         }
     }
 }
