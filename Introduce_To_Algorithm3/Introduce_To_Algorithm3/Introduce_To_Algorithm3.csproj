@@ -529,6 +529,7 @@
     <Compile Include="Common\Utils\AsyncAwaitHelper.cs" />
     <Compile Include="Common\Utils\CacheHelper.cs" />
     <Compile Include="Common\Utils\CacheItem.cs" />
+    <Compile Include="Common\Utils\ConcurrentCollections\BlockingQueueEx.cs" />
     <Compile Include="Common\Utils\DeepClone.cs" />
     <Compile Include="Common\Utils\DeviceId.cs" />
     <Compile Include="Common\Utils\files\AssemblyHelper.cs" />
