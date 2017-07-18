@@ -37,6 +37,32 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
 
         /// <summary>
+        /// 解析字符串到dateTime
+        /// 如果解析失败返回null
+        /// </summary>
+        /// <param name="dateTimeString"></param>
+        /// <param name="format"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static DateTime? ParseSafe(string dateTimeString,string format,Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                return DateTime.ParseExact(dateTimeString, format, CultureInfo.InvariantCulture);
+            }
+            catch(Exception ex)
+            {
+                if(exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+                return null;
+            }
+        }
+
+
+
+        /// <summary>
         /// 尝试解析字符串到datetime
         /// </summary>
         /// <param name="dateTimeString"></param>
@@ -53,6 +79,18 @@ namespace Introduce_To_Algorithm3.Common.Utils
         public static bool TryParse(string dateTimeString,string format,out DateTime result)
         {
             return DateTime.TryParseExact(dateTimeString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
+        }
+
+        /// <summary>
+        /// 尝试解析日期字符串
+        /// </summary>
+        /// <param name="dateTimeString"></param>
+        /// <param name="formats">格式数组，至少有一个格式匹配</param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public static bool TryParse(string dateTimeString,string[] formats,out DateTime result)
+        {
+            return DateTime.TryParseExact(dateTimeString, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
         }
 
 
