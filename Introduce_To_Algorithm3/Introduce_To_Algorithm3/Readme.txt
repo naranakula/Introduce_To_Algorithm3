@@ -250,6 +250,10 @@ ThreadPoolHelper.cs
 CacheHelper.cs
 MailHelper.cs
 CsvUtils.cs
+SqliteCodeFirstContext.cs
+NPOIHelper.cs
+
+
 
 
 

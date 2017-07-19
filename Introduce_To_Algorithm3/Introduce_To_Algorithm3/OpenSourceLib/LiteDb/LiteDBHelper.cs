@@ -9,8 +9,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.LiteDb
 {
     /// <summary>
     /// LiteDB的帮助类
+    /// 
+    /// 种种迹象表明Sqlite远好于litedb
     /// http://www.litedb.org/
     /// LiteDB - A .NET serverless NoSQL Document Store in a single data file
+    /// 
+    /// BSON中时间是按照自1970年1月1日的毫秒数存储的，所以建议存储为UTC时间，并读取时转换
+    /// 
+    /// LiteDb使用_id作为主键，如果用户不指定，默认使用ObjectId类型
+    /// ObjectId是12个字节的BSON类型
+    /// Timestamp: Value representing the seconds since the Unix epoch (4 bytes)
+    ///Machine: Machine identifier(3 bytes)
+    ///Pid: Process id(2 bytes)
+    ///Increment: A counter, starting with a random value(3 bytes)
     /// 
     /// LiteDB stores data as Document in collections. Collections相当于table
     /// LiteDB stores document in the BSON data format.
@@ -29,6 +40,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.LiteDb
     ///Guid	System.Guid
     ///Boolean	System.Boolean
     ///DateTime	System.DateTime 
+    /// 
+    /// 
+    /// In LiteDB, documents are stored in a collection that requires a unique _id field that acts as a primary key. Because ObjectIds are small, most likely unique, and fast to generate, LiteDB uses ObjectIds as the default value for the _id field if the _id field is not specified.
     /// 
     /// The BsonDocument class is LiteDB's implemention of documents. Internally, a BsonDocument stores key-value pairs in a Dictionary<string, BsonValue>.
     /// </summary>
@@ -126,6 +140,83 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.LiteDb
 
         }
 
+
+        #endregion
+
+        #region 辅助方法
+
+        #region objectid
+        /// <summary>
+        /// In LiteDB, documents are stored in a collection that requires a unique _id field that acts as a primary key. Because ObjectIds are small, most likely unique, and fast to generate, LiteDB uses ObjectIds as the default value for the _id field if the _id field is not specified.
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static ObjectId NewObjectId()
+        {
+            //ToString()返回24位长度字符
+            return ObjectId.NewObjectId();
+        }
+
+        /// <summary>
+        /// 转换为objectid
+        /// </summary>
+        /// <param name="hexString"></param>
+        /// <returns></returns>
+        public static ObjectId ObjectIdFromHexString(string hexString)
+        {
+            return new ObjectId(hexString);
+        }
+
+        /// <summary>
+        /// 转换为字符串
+        /// </summary>
+        /// <param name="objectId"></param>
+        /// <returns></returns>
+        public static string ObjectIdToString(ObjectId objectId)
+        {
+            return objectId.ToString();
+        }
+        #endregion
+
+        #region BsonDocument
+
+        //The BsonDocument class is LiteDB's implementation of documents. Internally, a BsonDocument stores key-value pairs in a Dictionary<string, BsonValue>.
+
+        /*
+ Keys must contains only letters, numbers or _ and -
+Keys are case-sensitive
+Duplicate keys are not allowed
+LiteDB keeps the original key order, including mapped classes. The only exception is for _id field that will always be the first field.
+
+
+About document field values:
+Values can be any BSON value data type: Null, Int32, Int64, Double, String, Embedded Document, Array, Binary, ObjectId, Guid, Boolean, DateTime, MinValue, MaxValue
+When a field is indexed, the value must be less then 512 bytes after BSON serialization.
+Non-indexed values themselves have no size limit, but the whole document is limited to 1Mb after BSON serialization. This size includes all extra bytes that are used by BSON.
+_id field cannot be: Null, MinValue or MaxValue
+_id is unique indexed field, so value must be less then 512 bytes
+         * 
+         */
+
+
+        /// <summary>
+        /// 创建一个document，永远使用_id作为主键
+        /// </summary>
+        /// <returns></returns>
+        public static BsonDocument NewBsonDocument()
+        {
+            BsonDocument document = new BsonDocument();
+            document["_id"] = ObjectId.NewObjectId();
+            document["Name"] = "John Doe";
+            document["CreateDate"] = DateTime.Now;
+            document["Phones"] = new BsonArray { "8000-0000", "9000-000" };
+            document["IsActive"] = true;
+            document["IsAdmin"] = new BsonValue(true);
+            return document;
+        }
+
+
+        #endregion
 
         #endregion
 

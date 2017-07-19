@@ -11,8 +11,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
     public static class GuidUtils
     {
         /// <summary>
-        /// the format is: 字母小写 
-        /// 8-4-4-12
+        /// the format is: 字母小写 36位
+        /// 8-4-4-4-12
         /// xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         /// </summary>
         /// <returns></returns>

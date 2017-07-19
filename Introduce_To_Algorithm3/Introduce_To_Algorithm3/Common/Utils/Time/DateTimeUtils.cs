@@ -9,21 +9,66 @@ namespace Introduce_To_Algorithm3.Common.Utils
     public static class DateTimeUtils
     {
         /// <summary>
+        /// 
+        /// UTC时间(0时区的时间)+8小时 = 本地(北京)时间
+        /// Now是本地时间，在不同的地方结果可能不同
+        /// UtcNow是0时区的时间，不同的地方保证结果一样
+        ///  整个地球分为二十四时区，每个时区都有自己的本地时间。在国际无线电通信场合，为了统一起见，使用一个统一的时间，称为通用协调时(UTC, Universal Time Coordinated)。UTC是0时区的时间
+        /// UTC + 时区差 ＝ 本地时间
+        /// 
+        /// 
+        /// 
         /// get a now string represent
         /// f 秒的小数精度为一位。其余数字被截断。 
-///        ff 秒的小数精度为两位。其余数字被截断。 
-///fff 秒的小数精度为三位。其余数字被截断。 
-///ffff 秒的小数精度为四位。其余数字被截断。 
-///fffff 秒的小数精度为五位。其余数字被截断。 
-///ffffff 秒的小数精度为六位。其余数字被截断。 
-///fffffff 秒的小数精度为七位。其余数字被截断。 
-///最多7位
+        ///        ff 秒的小数精度为两位。其余数字被截断。 
+        ///fff 秒的小数精度为三位。其余数字被截断。 
+        ///ffff 秒的小数精度为四位。其余数字被截断。 
+        ///fffff 秒的小数精度为五位。其余数字被截断。 
+        ///ffffff 秒的小数精度为六位。其余数字被截断。 
+        ///fffffff 秒的小数精度为七位。其余数字被截断。 
+        ///最多7位
         /// </summary>
         public static String NowString
         {
             get { return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"); }
         }
 
+        /// <summary>
+        /// 返回本地时间
+        /// </summary>
+        public static DateTime Now
+        {
+            get { return DateTime.Now;}
+        }
+
+        /// <summary>
+        /// 获取UTC时间
+        /// </summary>
+        public static DateTime UtcNow
+        {
+            get { return DateTime.UtcNow;}
+        }
+
+        /// <summary>
+        /// 获取本地时区
+        /// </summary>
+        /// <returns></returns>
+        public static TimeZoneInfo GetLocalTimeZone()
+        {
+            return TimeZoneInfo.Local;
+        }
+
+
+        /// <summary>
+        /// 获取本地时区-UTC时区的时间差
+        /// </summary>
+        /// <returns></returns>
+        public static TimeSpan GetUtcOffset()
+        {
+            //获取表示本地时区的 TimeZoneInfo 对象
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.Local;
+            return timeZoneInfo.BaseUtcOffset;
+        }
 
         /// <summary>
         /// 解析字符串到dateTime
