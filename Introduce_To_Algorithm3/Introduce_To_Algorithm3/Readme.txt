@@ -58,7 +58,7 @@ Grpc
 Kafka
 RabbitMq>ActiveMq  (可以肯定的是rabbitmq好于activemq) EasyNetQ
 Redis>memcached
-Sqlite LiteDB
+Sqlite LiteDB ravendb(不是嵌入式)  Leveldb rocksdb
 FileZilla  (FTP)
 hMailServer
 Wcf

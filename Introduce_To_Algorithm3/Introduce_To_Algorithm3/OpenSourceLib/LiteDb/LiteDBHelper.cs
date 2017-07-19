@@ -9,7 +9,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.LiteDb
 {
     /// <summary>
     /// LiteDB的帮助类
-    /// 
+    /// http://www.litedb.org/
     /// LiteDB - A .NET serverless NoSQL Document Store in a single data file
     /// 
     /// LiteDB stores data as Document in collections. Collections相当于table
@@ -18,18 +18,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.LiteDb
     /// LiteDb的document直接存储类型结构信息和数据信息。
     /// LiteDB支持的数据类型如下：
     /// Null	Any .NET object with null value
-///Int32	System.Int32
-///Int64	System.Int64
-///Double	System.Double
-///String	System.String
-///Document	System.Collection.Generic.Dictionary<string, BsonValue>
-///Array	System.Collection.Generic.List<BsonValue>
-///Binary	System.Byte[]
-///ObjectId	LiteDB.ObjectId
-///Guid	System.Guid
-///Boolean	System.Boolean
-///DateTime	System.DateTime 
-/// 
+    ///Int32	System.Int32
+    ///Int64	System.Int64
+    ///Double	System.Double
+    ///String	System.String
+    ///Document	System.Collection.Generic.Dictionary<string, BsonValue>
+    ///Array	System.Collection.Generic.List<BsonValue>
+    ///Binary	System.Byte[]
+    ///ObjectId	LiteDB.ObjectId
+    ///Guid	System.Guid
+    ///Boolean	System.Boolean
+    ///DateTime	System.DateTime 
+    /// 
     /// The BsonDocument class is LiteDB's implemention of documents. Internally, a BsonDocument stores key-value pairs in a Dictionary<string, BsonValue>.
     /// </summary>
     public static class LiteDBHelper
