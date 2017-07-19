@@ -10,6 +10,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
     {
         /// <summary>
         /// get a now string represent
+        /// f 秒的小数精度为一位。其余数字被截断。 
+///        ff 秒的小数精度为两位。其余数字被截断。 
+///fff 秒的小数精度为三位。其余数字被截断。 
+///ffff 秒的小数精度为四位。其余数字被截断。 
+///fffff 秒的小数精度为五位。其余数字被截断。 
+///ffffff 秒的小数精度为六位。其余数字被截断。 
+///fffffff 秒的小数精度为七位。其余数字被截断。 
+///最多7位
         /// </summary>
         public static String NowString
         {

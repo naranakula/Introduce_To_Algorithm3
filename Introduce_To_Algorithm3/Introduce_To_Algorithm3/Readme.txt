@@ -246,6 +246,10 @@ TaskHelper.cs
 Contants.cs//定义常量和配置项
 DateTimeUtils.cs
 BlockingQueueEx.cs
+ThreadPoolHelper.cs
+CacheHelper.cs
+MailHelper.cs
+CsvUtils.cs
 
 
 
