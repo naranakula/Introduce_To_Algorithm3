@@ -4,6 +4,7 @@ using Introduce_To_Algorithm3.OpenSourceLib.Dapper;
 using Introduce_To_Algorithm3.OpenSourceLib.FTP;
 using Introduce_To_Algorithm3.OpenSourceLib.NetMqs.ZeroMqs;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
+using System;
 using System.Collections.Generic;
 
 namespace Introduce_To_Algorithm3
@@ -12,6 +13,7 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");

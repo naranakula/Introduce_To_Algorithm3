@@ -687,6 +687,7 @@
     <Compile Include="OpenSourceLib\ActiveMq\Producers\MQShortConnectionProducer.cs" />
     <Compile Include="OpenSourceLib\Autofac\AutofacHelper.cs" />
     <Compile Include="OpenSourceLib\AutoMapper\AutoMapperUtils.cs" />
+    <Compile Include="OpenSourceLib\bouncycastles\BouncycastleHelper.cs" />
     <Compile Include="OpenSourceLib\Dapper\DapperHelper.cs" />
     <Compile Include="OpenSourceLib\Excel\AsposeHelper.cs" />
     <Compile Include="OpenSourceLib\FTP\EdtFtpHelper.cs" />
@@ -811,6 +812,7 @@
     <Folder Include="Common\Utils\Commons\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
+    <Folder Include="OpenSourceLib\TopSelfs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

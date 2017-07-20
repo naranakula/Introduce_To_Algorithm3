@@ -33,7 +33,7 @@ aspose.cells NPOI  两者均不需要安装office
 SharpZipLib   压缩包库
 FTP.dll (收费，nuget是评估版 https://www.limilabs.com/) >(优于) > edtFTPnet/Free(http://enterprisedt.com/products/edtftpnet/使用, Nuget版本比较旧，从官网下载) > System.Net.FtpClient
 CefSharp  （wpf和winform的chromium嵌入）
-Topshelf (构建windows service)
+Topshelf (构建windows service) //需要.net 4.5.2
 EntityFramework.Extended (Entity framework的拓展，谨慎使用)
 MailKit
 CsvHelper
@@ -46,7 +46,7 @@ AsyncCollections
 //webservice
 Nancy > SeviceStack
 dotnet-state-machine/stateless   //状态机
-libsodium-net//加解密
+libsodium-net  bouncycastle//加解密
 
 Exceptionless - Exceptionless .NET Client
 i18n //smart internationalization for asp.net
@@ -230,7 +230,7 @@ ConfigUtils.cs
 DirectoryHold.cs
 AppExitEx.cs //应用程序确保退出安全措施
 NLogHelper.cs
-QuartzHelper.cs
+QuartzHelper.cs//任务调度
 CleanJob.cs
 OneRunAtSameTime.cs
 OneRuner.cs //单实例运行
@@ -250,8 +250,10 @@ ThreadPoolHelper.cs
 CacheHelper.cs
 MailHelper.cs
 CsvUtils.cs
-SqliteCodeFirstContext.cs
-NPOIHelper.cs
+SqliteCodeFirstContext.cs//Sqlite数据库
+NPOIHelper.cs//Excel读写
+LicenseHelper.cs//授权文件
+BouncycastleHelper.cs//加解密
 
 
 

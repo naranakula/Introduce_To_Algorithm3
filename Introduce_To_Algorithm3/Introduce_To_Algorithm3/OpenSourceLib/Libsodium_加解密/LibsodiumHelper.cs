@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Libsodium_加解密
     /// libsodium requires the Visual C++ Redistributable for Visual Studio 2015.
     /// 所有的字符串认为是UTF-8的
     /// 另外一个可行的库是SecurityDriven.NET
-    /// 
+    /// https://libsodium.org
     /// 去掉依赖Libsodium，因为会报异常 未能从程序集“C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Build.Tasks.v15.0.dll”加载任务工厂“CodeTaskFactory”。Could not load file or assembly 'file:///C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Build.Tasks.v15.0.dll' or one of its dependencies. 系统找不到指定的文件。
     /// </summary>
     public static class LibsodiumHelper
