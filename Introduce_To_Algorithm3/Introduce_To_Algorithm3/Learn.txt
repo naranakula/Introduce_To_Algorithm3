@@ -1,2 +1,2 @@
-﻿ActiveMQ
-GRPC
+﻿RabbitMQ
+GRPC -- 通用RPC框架
