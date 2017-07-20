@@ -17,6 +17,8 @@ using System.Transactions;
 using System.Web.Hosting;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using NLog.Internal;
+using System.Linq.Expressions;
+using Z.EntityFramework.Plus;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 {
@@ -237,6 +239,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         #region 定义DbSet<T>  Properties，每个DbSet<T>代表一个表
 
         //该定义不是必须的
+        //不需要加virtual
         //public DbSet<Person> Persons{get; set;}
 
         /// <summary>
@@ -1172,6 +1175,41 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         #endregion
 
         #endregion
+
+
+        #region Z.EntityFramework.Plus.EF6  拓展EF的功能，增加批量操作 没什么用不需要，使用原生sql
+
+        #region Batch Delete 批量删除，不必先加载对象
+
+        /// <summary>
+        /// 删除where指定查询条件的数据，不用查询
+        /// Batch Delete Without Loading Them
+        /// </summary>
+        public int BatchDelete<T>(DbSet<T> dbSet, Expression<Func<T, bool>> where) where T:class
+        {
+            return dbSet.Where(where).Delete();
+        }
+
+
+        /// <summary>
+        ///  删除where指定查询条件的数据，不用查询
+        ///  Batch Delete Without Loading Them
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dbSet"></param>
+        /// <param name="where"></param>
+        /// <param name="batchSize">默认值是4000
+        /// BatchSize property sets the amount of rows to delete in a single batch.</param>
+        /// <returns></returns>
+        public int BatchDelete<T>(DbSet<T> dbSet, Expression<Func<T, bool>> where,int batchSize=100) where T : class
+        {
+            return dbSet.Where(where).Delete(x=>x.BatchSize = batchSize);
+        }
+
+        #endregion
+
+        #endregion
+
 
     }
 

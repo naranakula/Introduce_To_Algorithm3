@@ -46,7 +46,7 @@ AsyncCollections
 //webservice
 Nancy > SeviceStack
 dotnet-state-machine/stateless   //状态机
-libsodium-net  bouncycastle//加解密
+libsodium-net < SecurityDriven.Inferno（要求.net4.5.2） < bouncycastle(没有文档啊)//加解密
 
 Exceptionless - Exceptionless .NET Client
 i18n //smart internationalization for asp.net
@@ -166,6 +166,8 @@ HP-Socket(开源  http://www.jessma.org/)
 SuperSocket(bug太多)
 Griffin.Framework(待考察)
 
+Entity framework Extensions是收费版本 ， 免费版本是Entity Framework Plus（100% Free and Open Source）nuget(Z.EntityFramework.Plus.EF6)
+
 //winform wpf
 Live-Charts
 
@@ -253,7 +255,7 @@ CsvUtils.cs
 SqliteCodeFirstContext.cs//Sqlite数据库
 NPOIHelper.cs//Excel读写
 LicenseHelper.cs//授权文件
-BouncycastleHelper.cs//加解密
+LibsodiumHelper.cs//加解密
 
 
 
