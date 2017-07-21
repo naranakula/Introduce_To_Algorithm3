@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Quartz.Impl.Triggers;
 
-namespace Introduce_To_Algorithm3.Common.Utils
+namespace Introduce_To_Algorithm3.Common.Utils.strings
 {
     /// <summary>
     /// a class extend the function of string
@@ -12,6 +13,59 @@ namespace Introduce_To_Algorithm3.Common.Utils
     {
 
         #region 常用
+
+        #region 字节数组和字符串 Base64转换
+
+        /*
+         * byte是表示[0,255]的无符号整数
+         * 将3个byte共24位转换为4个6位的编码
+         * 6位可以表示[0,63]
+         * [0,63]对应的编码ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+         * 在字符串结尾外加0到2个=字符作为辅助，0个=表示byte个数是3的倍数，
+         * 2个=表示剩余1个byte（编译成2个字符），1个=表示剩余2个byte（编译成3个字符）
+         * 最后字符串长度是4的倍数
+         * 保证 arr = FromBase64String(ToBase64String(arr)) if arr != null
+         * 
+         * 
+         */
+
+        /// <summary>
+        /// 将byte数组转为base64字符串
+        /// 2个=表示剩余1个byte（编译成2个字符），1个=表示剩余2个byte（编译成3个字符）
+        /// 最后字符串长度是4的倍数
+        /// 保证 arr = FromBase64String(ToBase64String(arr)) if arr != null
+        /// </summary>
+        /// <param name="arr">如果arr是null或空数组，返回String.Empty</param>
+        /// <returns>如果arr是null或空数组，返回String.Empty</returns>
+        public static string ToBase64String(byte[] arr)
+        {
+            if (arr == null || arr.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            return Convert.ToBase64String(arr);
+        }
+
+        /// <summary>
+        /// 将base64字符串s转换为byte数组
+        /// 忽略\t,\r,\n,空格，但是如果有其它非法字符抛出异常
+        /// 如果s是null或者空白，返回空数组
+        /// </summary>
+        /// <param name="s">如果s是null或者空白，返回空数组</param>
+        /// <returns></returns>
+        public static byte[] FromBase64String(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                return new byte[] {};
+            }
+
+            return Convert.FromBase64String(s);
+        }
+
+        #endregion
+
 
         /// <summary>
         /// format
@@ -150,6 +204,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
             StringBuilder sb = new StringBuilder();
 
+            //取消空白
             var tempList = enumerable.Where(r => !String.IsNullOrWhiteSpace(r)).ToList();
 
 
@@ -240,6 +295,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             return list.Any(item => EqualsEx(item, s));
         }
 
+        
         #endregion
 
         #region UnCommon

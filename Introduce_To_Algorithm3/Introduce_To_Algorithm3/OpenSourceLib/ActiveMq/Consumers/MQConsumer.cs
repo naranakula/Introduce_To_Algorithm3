@@ -9,6 +9,7 @@ using Apache.NMS;
 using Apache.NMS.ActiveMQ;
 using Com.Utility.Commons;
 using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.Common.Utils.strings;
 using Introduce_To_Algorithm3.OpenSourceLib.AutoMapper;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 

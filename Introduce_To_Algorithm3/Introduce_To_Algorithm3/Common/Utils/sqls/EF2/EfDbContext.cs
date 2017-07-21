@@ -20,6 +20,7 @@ using NLog.Internal;
 using System.Linq.Expressions;
 using Z.EntityFramework.Plus;
 using System.ComponentModel.DataAnnotations.Schema;
+using Introduce_To_Algorithm3.Common.Utils.strings;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 {
