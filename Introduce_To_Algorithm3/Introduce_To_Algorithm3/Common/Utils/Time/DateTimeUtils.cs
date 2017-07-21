@@ -147,5 +147,33 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
 
+        #region unix时间戳
+
+        //unix时间戳是自UTC时间 1970年1月1日午夜所经过的秒数
+
+            /// <summary>
+            /// 获取当前的unix时间戳
+            /// </summary>
+            /// <returns></returns>
+        public static long Epoch()
+        {
+            return (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+        }
+
+        /// <summary>
+        /// 将unix时间戳转换为本地时间
+        /// </summary>
+        /// <param name="epoch">unix时间戳是自UTC时间 1970年1月1日午夜所经过的秒数</param>
+        /// <returns></returns>
+        public static DateTime FromEpoch(long epoch)
+        {
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)); // 当地时区
+            return startTime.AddSeconds(epoch);
+        }
+
+
+        #endregion
+
+
     }
 }

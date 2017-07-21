@@ -1,7 +1,91 @@
-﻿syntax = "proto3";
+﻿// syntax = "proto3" 必须是第一个非空、非注释行，  如果不加，认为是proto2
+syntax = "proto3";
 
-message SearchRequest{
-	string query = 1;
-	int32 page_number = 2;
-	int32 result_per_page = 3;
+import "google/protobuf/timestamp.proto";
+
+//  //表示注释
+message SearchRequest {
+//每个字段必须赋值一个唯一的数字，1到15使用一个字节表示数字和类型，16到2047使用两个字节。最小的是1，最大的是 229 – 1=536,870,911。并且不能使用19000到 19999。
+//多个消息类型可以定义在一个.proto文件中。
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+  //枚举第一个字段必须赋值为0
+  //建议枚举字段从0开始每个字段赋值
+  enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+  }
+  Corpus corpus = 4;
+  //时间对应C#的什么类型还没有确定
+  google.protobuf.Timestamp createTime=5; 
 }
+
+
+//import "myproject/other_protos.proto";
+//import public "new.proto";
+//import可以引用别的proto文件 ，import是不传递引用的，import public传递引用
+//可以使用嵌套类型Parent.ChildType,不限制嵌套的层数
+
+
+
+//当更新一个消息类型时需要注意：
+//1、	不要改变现有的字段的数字标签
+//2、	如果新增字段，则原来的格式是完全兼容的，新的协议解析旧的时，新的字段会使用默认值。原来的格式在解析新的时忽略新的字段。未知字段会被忽略
+//3、	删除旧的字段，要保证原来的tag number不再使用。删除的字段会在旧的协议中忽略。
+
+
+//类型定义
+//map不保证顺序  repeated保证顺序
+//map<key_type, value_type> map_field = N;//key_type can be any integral or string type (so, any scalar type except for floating point types and bytes). The value_type can be any type except another map.
+//map<string, Project> projects = 3;
+//proto Type	Notes	Java Type	C# Type
+//double		double	double
+//float		float	float
+//int32	Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead.	int	int
+//int64	Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead.	long	long
+//sint32	Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s.	int	int
+//sint64	Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s.	long	long
+//bool		boolean	bool
+//string	A string must always contain UTF-8 encoded or 7-bit ASCII text.	String	string
+//bytes	May contain any arbitrary sequence of bytes.	ByteString	ByteString
+
+//package foo.bar;
+//package包名用来解决命名冲突
+//In C# the package is used as the namespace after converting to PascalCase, unless you explicitly provide anoption csharp_namespace in your .proto file. 
+
+
+//定义rpc
+//service SearchService {
+//  rpc Search (SearchRequest) returns (SearchResponse);
+//}
+
+
+//编译proto文件
+//Protoc --cpp_out=DST_DIR --java_out=DST_DIR --python_out=DST_DIR --go_out=DST_DIR --ruby_out=DST_DIR --javanano_out=DST_DIR --objc_out=DST_DIR --csharp_out=DST_DIR path/to/file.proto
+//--csharp_out指定C#代码输出的路径
+//最后可以跟多个proto文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -25,7 +25,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 使用不同name的logger，根据名称记录不同的日志：如邮件，数据库日志
         /// </summary>
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-
+        
         ///// <summary>
         ///// 静态构造函数
         ///// </summary>
