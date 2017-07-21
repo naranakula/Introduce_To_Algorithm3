@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SQLite.CodeFirst;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
@@ -22,7 +20,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
     /// //Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
     /// sqlite建议使用long做主键  实际上更应该使用字符串 guid做主键
     /// 已经做过测试，可用
-    /// 
+    /// sqlite是区分大小写的
     /// https://www.sqlite.org/
     /// http://system.data.sqlite.org
     /// </summary>
@@ -59,10 +57,14 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         }
 
+        #region 定义DbSet表
+
         /// <summary>
-        /// get;set;
+        /// 键值对表  不用加virtual
         /// </summary>
-        public DbSet<LocalImage> LocalImages { get; set; }
+        public DbSet<KvPair> KvPairs { get; set; }
+
+        #endregion
 
         /// <summary>
         /// This method is called when the model for a derived(派生) context has been initialized, but before the model has been locked down and used to initialize the context.
@@ -79,7 +81,8 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             Database.SetInitializer(sqliteInitializer);
 
             //设置所有的表定义映射
-            modelBuilder.Configurations.Add(new LocalImageMap());
+            //添加KVPair对表
+            modelBuilder.Configurations.Add(new KvPairMap());
         }
 
 
@@ -159,8 +162,224 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         #endregion
 
+        #region 键值对相关 经过测试
+
+        /// <summary>
+        /// 插入键值对，如果对应的键已经存在则更新，否则新增记录
+        /// 键或者值为null或空白，则什么也不做
+        /// 
+        /// 注：即使在某些多线程同时写的极端情况，有唯一键保证，不会创建多条记录
+        /// 当发生UNIQUE约束冲突，先存在的，导致冲突的行在更改或插入发生冲突的行之前被删除。这样，更改和插入总是被执行。命令照常执行且不返回错误信息。(经过测试)
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        /// <param name="value">值,数据库中按原样保存</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static void Add(string key, string value,Action<Exception> exceptionHandler =  null)
+        {
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            {
+                //键或者值为null或空白，则什么也不做
+                return;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    //即使在某些多线程同时写的极端情况，有唯一键保证，不会创建多条记录
+                    KvPair result = context.KvPairs.FirstOrDefault(r => r.Key == normalizedKey);
+                    if (result == null)
+                    {
+                        KvPair newKvPair = new KvPair();
+                        newKvPair.Key = normalizedKey;
+                        newKvPair.Value = value;
+                        newKvPair.UpdateTime = newKvPair.CreateTime = DateTime.Now;
+                        context.KvPairs.Add(newKvPair);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        //即使键值对没有变化，不更新
+                        if (result.Value != value)
+                        {
+                            result.Value = value;
+                            result.UpdateTime = DateTime.Now;
+                            context.SaveChanges();
+                        }
+                    }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+            }
+            
+        }
+
+        /// <summary>
+        /// 如果键为null或空白，直接返回null
+        /// 如果键对应的数据不存在，返回null
+        /// 返回时，键会被归一化处理
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static KvPair Get(string key, Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    //即使在某些多线程同时写的极端情况，有唯一键保证，不会创建多条记录
+                    KvPair result = context.KvPairs.FirstOrDefault(r => r.Key == normalizedKey);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return null;
+            }
+
+        }
+
+
+        /// <summary>
+        /// 删除键关联的数据项，并返回
+        /// 如果键为null或空白，直接返回null
+        /// 如果键对应的数据不存在，返回null
+        /// 返回时，键会被归一化处理
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static KvPair Delete(string key, Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    //在某些多线程同时写的极端情况，有了唯一键，不会创建多条记录
+                    KvPair result = context.KvPairs.FirstOrDefault(r => r.Key == normalizedKey);
+                    if (result != null )
+                    {
+                        context.KvPairs.Remove(result);
+                        context.SaveChanges();
+                    }
+
+                    return result;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+
+                return null;
+            }
+
+        }
+
+        #endregion
+
 
     }
+
+
+    #region 键值对表，字符串为键，可使用json或者xml为值 经过测试
+
+    /// <summary>
+    /// 键值对表
+    /// </summary>
+    public class KvPair
+    {
+        /// <summary>
+        /// 主键
+        /// 可以使用Long型，
+        /// </summary>
+        public long Id { get; set; }
+
+        /// <summary>
+        /// 键 方法保证不为空或null
+        /// SQLite变长记录，字段不需要指定长度。
+        /// 带有非聚簇索引IX_Key
+        /// </summary>
+        [Index("IX_Key", IsClustered = false)]
+        //当发生UNIQUE约束冲突，先存在的，导致冲突的行在更改或插入发生冲突的行之前被删除。这样，更改和插入总是被执行。命令照常执行且不返回错误信息。
+        [SQLite.CodeFirst.Unique(OnConflictAction.Replace)]//唯一键
+        public string Key { get; set; }
+
+        /// <summary>
+        /// 值 方法保证不为空或null
+        /// SQLite变长记录，字段不需要指定长度
+        /// </summary>
+        public string Value { get; set; }
+
+
+        /// <summary>
+        /// 创建时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime UpdateTime { get; set; }
+
+        /// <summary>
+        /// 创建时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+    /// <summary>
+    /// 数据库表映射
+    /// </summary>
+    public class KvPairMap : EntityTypeConfiguration<KvPair>
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public KvPairMap()
+        {
+            ToTable("KvPair").HasKey(p => p.Id);
+            //自增主键
+            Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            //底层的sql:CREATE TABLE "LocalImage" ([Id] integer, [GuidId] nvarchar, [Size] float NOT NULL, [LocalPath] nvarchar, [CreateTime] datetime NOT NULL, PRIMARY KEY(Id))
+            //long 底层对应 INTEGER
+            //double 底层对应 REAL
+            //string 底层对应 TEXT
+            //datetime 底层对应 NUMERIC  再底层对应 TEXT TEXT as ISO8601 strings Use the ISO-8601 format. Uses the "yyyy-MM-dd HH:mm:ss.FFFFFFFK" format for UTC DateTime values and "yyyy-MM-dd HH:mm:ss.FFFFFFF" format for local DateTime values). 
+        }
+    }
+
+    #endregion
 
 
     /// <summary>

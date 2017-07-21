@@ -18,6 +18,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
     /// 详情咨询网站：http://www.newtonsoft.com/json/help/html/Introduction.htm
     /// 支持list\Dictionary\object的序列化和反序列化
     /// [JsonIgnore]//JsonIgnore标记忽略序列化
+    /// 对象不需要加serialized等标记
     /// </summary>
     public static class JsonHelper
     {

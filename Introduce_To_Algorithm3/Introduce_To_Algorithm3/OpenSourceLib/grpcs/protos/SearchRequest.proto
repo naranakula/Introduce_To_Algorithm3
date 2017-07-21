@@ -4,6 +4,10 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 
 //  //表示注释
+//消息名和枚举名使用CamelCase方式，如SearchRequest
+//字段名使用_分割的小写方式 如page_number  result_per_page
+//枚举值使用 CAPITALS_WITH_UNDERSCORES  如 FIRST_VALUE
+//服务名和方法名使用CamelCase方式
 message SearchRequest {
 //每个字段必须赋值一个唯一的数字，1到15使用一个字节表示数字和类型，16到2047使用两个字节。最小的是1，最大的是 229 – 1=536,870,911。并且不能使用19000到 19999。
 //多个消息类型可以定义在一个.proto文件中。
@@ -24,8 +28,16 @@ message SearchRequest {
   Corpus corpus = 4;
   //时间对应C#的什么类型还没有确定
   google.protobuf.Timestamp createTime=5; 
+  //Proto3丢弃了required，默认是optional，除非加了repeated。Proto3中repeated默认是packed的
+  repeated int32 d = 6;
 }
 
+
+
+//服务名和方法名使用CamelCase方式
+service FooService {
+  rpc GetSomething(FooRequest) returns (FooResponse);
+}
 
 //import "myproject/other_protos.proto";
 //import public "new.proto";
@@ -42,6 +54,7 @@ message SearchRequest {
 
 //类型定义
 //map不保证顺序  repeated保证顺序
+//Proto3丢弃了required，默认是optional，除非加了repeated
 //map<key_type, value_type> map_field = N;//key_type can be any integral or string type (so, any scalar type except for floating point types and bytes). The value_type can be any type except another map.
 //map<string, Project> projects = 3;
 //proto Type	Notes	Java Type	C# Type

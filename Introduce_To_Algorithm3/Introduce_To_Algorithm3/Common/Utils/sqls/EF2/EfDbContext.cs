@@ -19,6 +19,7 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using NLog.Internal;
 using System.Linq.Expressions;
 using Z.EntityFramework.Plus;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 {
@@ -28,6 +29,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// DbContext类型
     /// 数据库迁移只影响必须影响的部分，无关的表不影响，也就是说不会把没有映射的原来存在的表删掉
     /// 应该尽量使用Guid作为主键，因为guid可以更好的保证插入的并行性，并且合并数据库时有决定性优势
+    /// fwghso from where group having select orderby
     /// </summary>
     public class EfDbContext : DbContext
     {
@@ -1452,6 +1454,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         [ConcurrencyCheck]
         public DateTime ModifyTime { get; set; }
+
+        //索引分为聚集索引和非聚集索引，聚集索引是数据存储的物理顺序
+        //聚集索引一个表只能有一个,而非聚集索引一个表可以存在多个
+        [Index("IX_Name_DepartmentMaster", IsClustered = false)]
+        public string Name { get; set; }
 
         /// <summary>
         /// 乐观锁来支持并发控制
