@@ -346,7 +346,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
 
         /// <summary>
-        /// 创建时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 更新时间  不会产生UTC问题,读取时全部转换为了本地时间
         /// 直接使用本地时间
         /// </summary>
         public DateTime UpdateTime { get; set; }

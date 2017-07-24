@@ -203,16 +203,18 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
             #region 设置默认的Schema
             //Configures the default database schema name.
-            modelBuilder.HasDefaultSchema("dbo");
+            //modelBuilder.HasDefaultSchema("dbo");
             #endregion
 
             #region 设置Map
 
             //建议使用显式的定义，而不是通过反射
             //设置所有的表定义映射
-            modelBuilder.Configurations.Add(new PersonMap());
-            modelBuilder.Configurations.Add(new PhoneMap());
-            modelBuilder.Entity<Phone>().HasRequired(s => s.Person).WithMany(s => s.Phones).HasForeignKey(s => s.PersonId).WillCascadeOnDelete(true);
+            modelBuilder.Configurations.Add(new KvPairMap());
+
+            //modelBuilder.Configurations.Add(new PersonMap());
+            //modelBuilder.Configurations.Add(new PhoneMap());
+            //modelBuilder.Entity<Phone>().HasRequired(s => s.Person).WithMany(s => s.Phones).HasForeignKey(s => s.PersonId).WillCascadeOnDelete(true);
 
             //以下代码自动注册所有的Map，自动获取当前代码中的Map,并注册
             //var typesToRegister = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.BaseType != null && !type.IsGenericType && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(EntityTypeConfiguration<>)).ToList();
@@ -244,6 +246,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         //该定义不是必须的
         //不需要加virtual
         //public DbSet<Person> Persons{get; set;}
+        /// <summary>
+        /// 键值对
+        /// </summary>
+        public DbSet<KvPair> KvPairs { get; set; } 
+
 
         /// <summary>
         ///  Returns a System.Data.Entity.DbSet<TEntity> instance for access to entities of the given type in the context and the underlying store.
@@ -1179,8 +1186,162 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
+        #region 键值对相关   经过测试
+
+        /// <summary>
+        /// 插入键值对，如果对应的键已经存在则更新，否则新增记录
+        /// 键或者值为null或空白，则什么也不做
+        /// 
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
+        /// <param name="value">值,数据库中按原样保存</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static void Add(string key, string value, Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            {
+                //键或者值为null或空白，则什么也不做
+                return;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                using (EfDbContext context = new EfDbContext())
+                {
+                    //即使在某些多线程同时写的极端情况，有唯一键保证，不会创建多条记录
+                    KvPair result = context.KvPairs.FirstOrDefault(r => r.Key == normalizedKey);
+                    if (result == null)
+                    {
+                        KvPair newKvPair = new KvPair();
+                        newKvPair.Key = normalizedKey;
+                        newKvPair.Value = value;
+                        newKvPair.UpdateTime = newKvPair.CreateTime = DateTime.Now;
+                        context.KvPairs.Add(newKvPair);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        //即使键值对没有变化，不更新
+                        if (result.Value != value)
+                        {
+                            result.Value = value;
+                            result.UpdateTime = DateTime.Now;
+                            context.SaveChanges();
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// 如果键为null或空白，直接返回null
+        /// 如果键对应的数据不存在，返回null
+        /// 返回时，键会被归一化处理
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static KvPair Get(string key, Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                using (EfDbContext context = new EfDbContext())
+                {
+                    //即使在某些多线程同时写的极端情况，有唯一键保证，不会创建多条记录
+                    KvPair result = context.KvPairs.FirstOrDefault(r => r.Key == normalizedKey);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return null;
+            }
+
+        }
+
+
+        /// <summary>
+        /// 删除键关联的数据项，并返回
+        /// 如果键为null或空白，直接返回null
+        /// 如果键对应的数据不存在，返回null
+        /// 返回时，键会被归一化处理
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static KvPair Delete(string key, Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                using (EfDbContext context = new EfDbContext())
+                {
+                    //在某些多线程同时写的极端情况，有了唯一键，不会创建多条记录
+                    KvPair result = context.KvPairs.FirstOrDefault(r => r.Key == normalizedKey);
+                    if (result != null)
+                    {
+                        context.KvPairs.Remove(result);
+                        context.SaveChanges();
+                    }
+
+                    return result;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+
+                return null;
+            }
+
+        }
+
+
+
+        #endregion
+
+
 
         #region Z.EntityFramework.Plus.EF6  拓展EF的功能，增加批量操作 没什么用不需要，使用原生sql
+
+        //https://github.com/zzzprojects/EntityFramework-Plus
+        //http://entityframework-plus.net/
+
 
         #region Batch Delete 批量删除，不必先加载对象
 
@@ -1217,6 +1378,66 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     }
 
     #endregion
+
+    #region 键值对相关  经过测试
+
+    /// <summary>
+    /// 键值对
+    /// </summary>
+    public class KvPair
+    {
+        /// <summary>
+        /// 键 最长长度256
+        /// 主键 聚簇索引
+        /// </summary>
+        public string Key { get; set; }
+        /// <summary>
+        /// 值  nvarchar(max) 最长2^31-1 约2g
+        /// </summary>
+        public string Value { get; set; }
+
+        /// <summary>
+        /// 更新时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime UpdateTime { get; set; }
+
+        /// <summary>
+        /// 创建时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+    /// <summary>
+    /// 键值对映射
+    /// </summary>
+    public class KvPairMap : EntityTypeConfiguration<KvPair>
+    {
+        public KvPairMap()
+        {
+            ToTable("KvPair").HasKey(t => t.Key);
+
+            //变长 nvarchar(256)
+            Property(x => x.Key)
+                .IsRequired()
+                .IsUnicode()
+                .HasMaxLength(256)
+                .IsVariableLength()
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            //nvarchar(max)
+            Property(x => x.Value)
+                .IsRequired()
+                .IsUnicode()
+                .HasMaxLength(null)
+                .IsVariableLength();
+
+        } 
+    }
+
+    #endregion
+
 
     #region Database Initializer
 
