@@ -365,13 +365,14 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
     {
         /// <summary>
         /// 构造函数
-        /// </summary>
         public KvPairMap()
         {
             ToTable("KvPair").HasKey(p => p.Id);
             //自增主键
             Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            //底层的sql:CREATE TABLE "LocalImage" ([Id] integer, [GuidId] nvarchar, [Size] float NOT NULL, [LocalPath] nvarchar, [CreateTime] datetime NOT NULL, PRIMARY KEY(Id))
+            //底层的sql:CREATE TABLE "KvPair" ([Id] integer, [Key] nvarchar UNIQUE ON CONFLICT REPLACE, [Value] nvarchar, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(Id))//sqlite默认integer主键自增
+            //select * from sqlite_master
+            //CREATE INDEX IX_Key ON "KvPair" (Key)
             //long 底层对应 INTEGER
             //double 底层对应 REAL
             //string 底层对应 TEXT
