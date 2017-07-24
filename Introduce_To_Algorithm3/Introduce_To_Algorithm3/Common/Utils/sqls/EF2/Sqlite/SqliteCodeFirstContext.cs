@@ -76,8 +76,8 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
             //设置初始化器，不像EfDbContext，这个不需要单独的Init函数
             //使用最新版的EF6.1.3，EF6.0不行
-            //var sqliteInitializer = new SqliteCreateDatabaseIfNotExists<SqliteCodeFirstContext>(modelBuilder);
-            var sqliteInitializer = new SqliteDropCreateDatabaseWhenModelChanges<SqliteCodeFirstContext>(modelBuilder);
+            var sqliteInitializer = new SqliteCreateDatabaseIfNotExists<SqliteCodeFirstContext>(modelBuilder);
+            //var sqliteInitializer = new SqliteDropCreateDatabaseWhenModelChanges<SqliteCodeFirstContext>(modelBuilder);
             Database.SetInitializer(sqliteInitializer);
 
             //设置所有的表定义映射
