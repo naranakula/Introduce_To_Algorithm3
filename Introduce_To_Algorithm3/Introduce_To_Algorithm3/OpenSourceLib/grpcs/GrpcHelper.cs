@@ -44,7 +44,10 @@ rpc BidiHello(stream HelloRequest) returns (stream HelloResponse){ }
 
 
 
-
+//pb的C#编译器 建立.net4.5工程 使用 nuget下载Google.Protobuf 和 google.protobuf.Tools  Tools包含了protoc.exe
+//grpc.tools增加了对grpc service的支持, google.protobuf.Tools支持原生的pb文件
+//执行命令 protoc -I=$SRC_DIR --csharp_out=$DST_DIR $SRC_DIR/addressbook.proto
+//-I指定查找import的目录，默认是程序当前目录，--sharp_out指定C#代码输出目录
 使用.proto文件定义服务，pb编译器生成客户端和服务器端代码。
 
 
