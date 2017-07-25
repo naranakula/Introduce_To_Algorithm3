@@ -1191,7 +1191,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 插入键值对，如果对应的键已经存在则更新，否则新增记录
         /// 键或者值为null或空白，则什么也不做
-        /// 
+        /// 键在数据库中是按小写存的
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
         /// <param name="value">值,数据库中按原样保存</param>
@@ -1249,6 +1249,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 如果键为null或空白，直接返回null
         /// 如果键对应的数据不存在，返回null
         /// 返回时，键会被归一化处理
+        /// 键在数据库中是按小写存的
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
         /// <param name="exceptionHandler">异常处理</param>
@@ -1289,6 +1290,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 如果键为null或空白，直接返回null
         /// 如果键对应的数据不存在，返回null
         /// 返回时，键会被归一化处理
+        /// 键在数据库中是按小写存的
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
         /// <param name="exceptionHandler">异常处理</param>

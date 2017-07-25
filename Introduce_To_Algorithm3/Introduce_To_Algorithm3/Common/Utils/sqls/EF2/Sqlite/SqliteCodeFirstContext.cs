@@ -167,7 +167,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <summary>
         /// 插入键值对，如果对应的键已经存在则更新，否则新增记录
         /// 键或者值为null或空白，则什么也不做
-        /// 
+        /// 键在数据库中是按小写存的
         /// 注：即使在某些多线程同时写的极端情况，有唯一键保证，不会创建多条记录
         /// 当发生UNIQUE约束冲突，先存在的，导致冲突的行在更改或插入发生冲突的行之前被删除。这样，更改和插入总是被执行。命令照常执行且不返回错误信息。(经过测试)
         /// </summary>
@@ -227,6 +227,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// 如果键为null或空白，直接返回null
         /// 如果键对应的数据不存在，返回null
         /// 返回时，键会被归一化处理
+        /// 键在数据库中是按小写存的
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
         /// <param name="exceptionHandler">异常处理</param>
@@ -267,6 +268,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// 如果键为null或空白，直接返回null
         /// 如果键对应的数据不存在，返回null
         /// 返回时，键会被归一化处理
+        /// 键在数据库中是按小写存的
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
         /// <param name="exceptionHandler">异常处理</param>
