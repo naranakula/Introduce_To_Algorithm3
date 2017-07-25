@@ -43,7 +43,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
             {
                 return string.Empty;
             }
-
+            
             return Convert.ToBase64String(arr);
         }
 

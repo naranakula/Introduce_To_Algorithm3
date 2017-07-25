@@ -1,3 +1,7 @@
 ﻿RabbitMQ
 GRPC -- 通用RPC框架
 ZooKeeper
+Ngnix
+Hadoop
+memcached redis
+python 机器学习

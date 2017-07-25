@@ -1,4 +1,9 @@
 ﻿// syntax = "proto3" 必须是第一个非空、非注释行，  如果不加，认为是proto2
+//https://github.com/google/protobuf
+//pb的C#编译器 建立.net4.5工程 使用 nuget下载Google.Protobuf 和 google.protobug.Tools  Tools包含了protoc.exe
+//执行命令 protoc -I=$SRC_DIR --csharp_out=$DST_DIR $SRC_DIR/addressbook.proto
+//-I指定查找import的目录，默认是程序当前目录，--sharp_out指定C#代码输出目录
+//C# pb需要.net4.5
 syntax = "proto3";
 
 //默认的包名
@@ -23,6 +28,41 @@ import "google/protobuf/timestamp.proto";
 //字段名使用_分割的小写方式 如page_number  result_per_page
 //枚举值使用 CAPITALS_WITH_UNDERSCORES  如 FIRST_VALUE
 //服务名和方法名使用CamelCase方式
+//proto没有继承的概念
+
+//Person john = ...;
+//using (var output = File.Create("john.dat"))
+//{
+//    john.WriteTo(output);
+//}
+
+//Person john;
+//using (var input = File.OpenRead("john.dat"))
+//{
+//    john = Person.Parser.ParseFrom(input);
+//}
+
+
+//public void PrintMessage(IMessage message)
+//{
+//    var descriptor = message.Descriptor;
+//    foreach (var field in descriptor.Fields.InDeclarationOrder())
+//    {
+//        Console.WriteLine(
+//            "Field {0} ({1}): {2}",
+//            field.FieldNumber,
+//            field.Name,
+//            field.Accessor.GetValue(message);
+//    }
+//}
+
+//协议兼容做到如下三点
+//you must not change the tag numbers of any existing fields.
+//you may delete fields.
+//you may add new fields but you must use fresh tag numbers
+//old code will happily read new messages and simply ignore any new fields. To the old code, singular fields that were deleted will simply have their default value, and deleted repeated fields will be empty. 
+
+
 message SearchRequest {
 //每个字段必须赋值一个唯一的数字，1到15使用一个字节表示数字和类型，16到2047使用两个字节。最小的是1，最大的是 229 – 1=536,870,911。并且不能使用19000到 19999。
 //多个消息类型可以定义在一个.proto文件中。
