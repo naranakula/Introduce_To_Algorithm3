@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package test;
+
+option csharp_namespace = "com.cmlu.services";
+
+service Greeter{
+	rpc SayHello (Request) returns (Response) {}
+}
+
+
+message Request{
+	string request = 1;
+}
+
+message Response{
+	string response = 1;
+}

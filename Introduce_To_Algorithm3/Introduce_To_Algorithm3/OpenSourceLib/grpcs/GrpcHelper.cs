@@ -12,10 +12,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// Works across languages and platforms
     /// Start quickly and scale Install runtime and dev environments with a single line and also scale to millions of RPCs per second with the framework
     /// Bi-directional streaming and fully integrated pluggable authentication with http/2 based transport
+    /// with pluggable support for load balancing, tracing, health checking and authentication. 
+    /// 可以连接手机(android ios)和浏览器(js)
+    /// 
     /// 
     /// grpc首先定义service，指定方法的参数和返回值。
     /// grpc默认使用protocol buffer.
     /// grpc依赖.net4.5
+    /// 
+    /// grpc好像必须一个输入一个输出
     /// </summary>
     public static class GrpcHelper
     {
@@ -52,6 +57,15 @@ rpc BidiHello(stream HelloRequest) returns (stream HelloResponse){ }
 
 
          */
+
+        /*
+         * grpc支持两种加密认证方式
+         * 1）ssl\TLS，认证和加密整个数据
+         * 
+         * 2)token-based authentication with google,需要连google
+         * 
+         */
+
 
         /*
          
