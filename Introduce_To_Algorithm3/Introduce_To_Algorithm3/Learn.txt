@@ -1,6 +1,6 @@
-﻿RabbitMQ ActiveMQ Kafka ZeroMQ
+﻿RabbitMQ ActiveMQ Kafka ZeroMQ RocketMQ
 GRPC -- 通用RPC框架
-ZooKeeper
+ZooKeeper  只提供java和C接口，没有.net接口
 Ngnix
 Hadoop
 memcached redis
