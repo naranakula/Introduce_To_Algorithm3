@@ -5,4 +5,4 @@ Ngnix
 Hadoop
 memcached redis
 python 机器学习 TensorFlow
-
+ZABBIX //The Enterprise-class Monitoring Solution for Everyone

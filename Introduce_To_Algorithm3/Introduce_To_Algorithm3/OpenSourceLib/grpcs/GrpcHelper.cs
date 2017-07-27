@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Grpc.Core;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -84,5 +86,71 @@ message HelloResponse {
 
          */
 
+        #region 定义常量
+
+        /// <summary>
+        /// 服务地址
+        /// </summary>
+        public static readonly string ServiceAddress = "127.0.0.1:50051";
+
+        #endregion
+
+
+       
+        /// <summary>
+        /// 安全调用grpc
+        /// </summary>
+        /// <param name="action">执行的操作，构建client并调用</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static void SafeInvoke(Action<Channel> action, Action<Exception> exceptionHandler = null) 
+        {
+            Channel channel = null;
+
+            try
+            {
+                //不使用加密
+                channel = new Channel(ServiceAddress, ChannelCredentials.Insecure);
+                
+
+                if(action != null)
+                {
+                    action(channel);
+                    //构建client
+                    //var client = new Greeter.GreeterClient(channel);
+                    //调用client,可以多次调用
+                    //var reply = client.SayHello(new Request() { Request_ = "Hello" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if(exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+            }
+            finally
+            {
+                if (channel != null)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        try
+                        {
+                            channel.ShutdownAsync().Wait();
+                            //安全关闭退出
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
+                        }
+                    }
+                }
+
+            }
+
+
+        }
     }
 }
