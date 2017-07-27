@@ -22,7 +22,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// grpc默认使用protocol buffer.
     /// grpc依赖.net4.5
     /// 
-    /// grpc好像必须一个输入一个输出
+    /// grpc必须有且仅有一个输入一个输出，并且建议每个方法专有自己的输入输出定义(当然这不是必须的，自己写的严格遵守)
+    /// gRPC service methods have exactly one input message and exactly one output message. Typically, these messages are used as input and output to only one method.
     /// </summary>
     public static class GrpcHelper
     {
