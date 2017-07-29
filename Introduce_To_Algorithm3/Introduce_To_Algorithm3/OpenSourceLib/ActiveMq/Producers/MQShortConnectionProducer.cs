@@ -41,6 +41,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                         message.NMSTimestamp = DateTime.UtcNow;
                         //The amount of time for which this message is valid.
                         message.NMSTimeToLive = TimeSpan.FromHours(2);
+                        //是否持久消息
+                        message.NMSDeliveryMode = MsgDeliveryMode.Persistent;
                         producer.Send(message);
                     }
                 }
@@ -67,6 +69,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                         message.NMSTimestamp = DateTime.UtcNow;
                         //The amount of time for which this message is valid.
                         message.NMSTimeToLive = TimeSpan.FromMinutes(20);
+                        //是否持久消息
+                        message.NMSDeliveryMode = MsgDeliveryMode.Persistent;
                         producer.Send(message);
                     }
                 }

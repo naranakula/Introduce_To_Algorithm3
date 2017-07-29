@@ -119,6 +119,46 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
         }
 
         /// <summary>
+        /// 判断字符串s是以start开始的，如果start是null或空白，直接返回true
+        /// 忽略字符串前后空白
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="start"></param>
+        /// <param name="isIgnoreCase">是否忽略大小写</param>
+        /// <returns></returns>
+        public static bool IsStartWith(string s,string start,bool isIgnoreCase = true)
+        {
+
+            if (string.IsNullOrWhiteSpace(start))
+            {
+                //start为空白，直接返回true
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                //start肯定不为空白
+                return false;
+            }
+
+            //此时s start肯定不为null或空白
+
+            string normalizedS = s.Trim();
+            string normalizedStart = start.Trim();
+
+            if (isIgnoreCase)
+            {
+                return normalizedS.StartsWith(normalizedStart, StringComparison.InvariantCultureIgnoreCase);
+            }
+            else
+            {
+                return normalizedS.StartsWith(normalizedStart);
+            }
+            
+        }
+
+
+        /// <summary>
         /// 分割字符串  取消空白项，去掉结果前后空白
         /// </summary>
         /// <param name="source"></param>

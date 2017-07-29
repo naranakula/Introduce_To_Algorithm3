@@ -106,11 +106,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                     connection.Start();
                 }
                 //创建回话
-                session = connection.CreateSession();
+                session = connection.CreateSession(AcknowledgementMode.AutoAcknowledge);
                 session.RequestTimeout = new TimeSpan(0, 0, 30);
                 NLogHelper.Info("建立名为{0}的{1}连接".FormatWith(TopicOrQueueName, IsTopic ? "Topic" : "Queue"));
-                //创建消费者
+                //创建消费者  如果是主题，非持久订阅，断线后消息会丢失，即使消息是持久的且没有过期
                 consumer = session.CreateConsumer(session.GetDestination(TopicOrQueueName,(IsTopic?DestinationType.Topic:DestinationType.Queue)));
+
+                //创建持久订阅
+                //session.CreateDurableConsumer
                 //注册监听事件
                 consumer.Listener += consumer_Listener;
                 
