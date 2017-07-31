@@ -126,7 +126,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
         /// <param name="start"></param>
         /// <param name="isIgnoreCase">是否忽略大小写</param>
         /// <returns></returns>
-        public static bool IsStartWith(string s,string start,bool isIgnoreCase = true)
+        public static bool StartWith(string s,string start,bool isIgnoreCase = true)
         {
 
             if (string.IsNullOrWhiteSpace(start))

@@ -372,6 +372,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                                 txtMsg.NMSTimestamp = DateTime.UtcNow;
                                 //The amount of time for which this message is valid.
                                 txtMsg.NMSTimeToLive = TimeSpan.FromMinutes(30);
+                                
                                 //是否持久消息
                                 txtMsg.NMSDeliveryMode = MsgDeliveryMode.Persistent;
 
