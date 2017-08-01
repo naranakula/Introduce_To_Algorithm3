@@ -806,6 +806,7 @@
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.pdb" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.xml" />
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
+    <Content Include="OpenSourceLib\ZooKeepers\zookeeper.txt" />
     <Content Include="Readme.txt" />
     <Content Include="Reference\edtFTPnet.dll" />
     <Content Include="Reference\HPSocket4CS\x64\HPSocket4C_U.dll" />
