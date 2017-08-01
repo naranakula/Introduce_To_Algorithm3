@@ -1,5 +1,6 @@
 ﻿using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Utils.Serial;
+using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite;
 using Introduce_To_Algorithm3.OpenSourceLib.Dapper;
 using Introduce_To_Algorithm3.OpenSourceLib.FTP;
 using Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples;
@@ -15,6 +16,7 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
+            SqliteCodeFirstContext.Add("Hello", "world",ex=>Console.WriteLine(ex));
             Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");

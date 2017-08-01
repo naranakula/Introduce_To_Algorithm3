@@ -847,7 +847,7 @@
     <None Include="Common\MachineLearning\Neural Networks Using C# Succinctly.docx" />
     <None Include="Common\Utils\sqls\EF2\EF适用于各种数据库.docx" />
     <None Include="Common\Utils\sqls\EF2\Sqlite\SQLite.NET.chm" />
-    <None Include="Common\Utils\sqls\EF2\Sqlite\sqlitestudio-3.1.0.zip" />
+    <None Include="Common\Utils\sqls\EF2\Sqlite\sqlitestudio-3.1.1.zip" />
     <None Include="Common\Utils\sqls\EF\EF.docx" />
     <None Include="HPSocket\ReadMe.docx" />
     <None Include="job_scheduling_data_2_0.xsd">
