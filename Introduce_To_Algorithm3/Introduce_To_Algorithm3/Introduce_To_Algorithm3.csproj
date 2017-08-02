@@ -781,6 +781,7 @@
     <Content Include="Common\Utils\Serial\UartAssist串口调试工具.exe" />
     <Content Include="Common\Utils\Serial\串口调试助手2.1.exe" />
     <Content Include="Common\Utils\sockets\NetAssist网络调试工具.exe" />
+    <Content Include="Common\Utils\sqls\EF2\Sqlite\DB.Browser.for.SQLite-3.9.1-win32.exe" />
     <Content Include="Learn.txt" />
     <Content Include="license.txt" />
     <Content Include="OpenSourceLib\grpcs\examples\exs\windows_x86\grpc_csharp_plugin.exe" />
