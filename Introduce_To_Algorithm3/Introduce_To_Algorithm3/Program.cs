@@ -19,13 +19,14 @@ namespace Introduce_To_Algorithm3
         public static void Main(string[] args)
         {
             DirectoryHold.ResetCurrentDir();
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.FFFFFFFK", CultureInfo.InvariantCulture));
+            Console.WriteLine(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.FFFFFFFK", CultureInfo.InvariantCulture));
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");
             NLogHelper.Warn("Warn");
             NLogHelper.Error("Error");
             NLogHelper.Fatal("Fatal");
-            
         }
     }
 }

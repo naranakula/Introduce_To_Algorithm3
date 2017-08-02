@@ -26,11 +26,16 @@ namespace Introduce_To_Algorithm3.Common.Utils
         ///fffff 秒的小数精度为五位。其余数字被截断。 
         ///ffffff 秒的小数精度为六位。其余数字被截断。 
         ///fffffff 秒的小数精度为七位。其余数字被截断。 
+        ///F和f的区别是显不显示结尾0
         ///最多7位
+        ///K 表示 DateTime.Kind 属性的不同值，即“Local”、“Utc”或“Unspecified”。此说明符以文本形式设置 Kind 值并保留时区。
+        ///如果 Kind 值为“Local”，则此说明符等效于“zzz”说明符，用于显示本地时间偏移量，例如“-07:00”。
+        ///对于“Utc”类型值，该说明符显示字符“Z”以表示 UTC 日期。
+        ///对于“Unspecified”类型值，该说明符等效于“”（无任何内容）。
         /// </summary>
         public static String NowString
         {
-            get { return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.FFFFFFFk",CultureInfo.InvariantCulture); }
+            get { return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffffK", CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
