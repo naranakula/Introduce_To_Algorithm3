@@ -30,7 +30,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         public static String NowString
         {
-            get { return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"); }
+            get { return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.FFFFFFFk",CultureInfo.InvariantCulture); }
         }
 
         /// <summary>
