@@ -10,6 +10,7 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 
 namespace Introduce_To_Algorithm3
@@ -19,8 +20,6 @@ namespace Introduce_To_Algorithm3
         public static void Main(string[] args)
         {
             DirectoryHold.ResetCurrentDir();
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.FFFFFFFK", CultureInfo.InvariantCulture));
-            Console.WriteLine(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.FFFFFFFK", CultureInfo.InvariantCulture));
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");
