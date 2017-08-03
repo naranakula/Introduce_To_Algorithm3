@@ -67,7 +67,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
 
             DateTime expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0));//过期时间
-
+            
             try
             {
                 DriveInfo driveInfo = null;
@@ -92,9 +92,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             {
                 //ignore
             }
-            
 
-            CleanFiles(LogDir,FilePattern,expireTime);
+            NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss")}之前的日志");
+
+            //清理文件
+            CleanFiles(LogDir,FilePattern,expireTime,0);
+            //清理空目录
+            CleanEmptyDirectory(LogDir,expireTime,0);
+
+            NLogHelper.Info("清理日志完成");
         }
 
         /// <summary>
@@ -105,21 +111,42 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 文件搜索模式 *所有文件 *.*有拓展名的文件
         /// *：表示0个或多个字符
         /// ?：表示0个或1个字符
+        /// 采用*.log|*.txt格式，多个项通过|隔开，该功能是通过自己写代码实现的
         /// </param>
         /// <param name="expireTime">文件过期时间</param>
-        private void CleanFiles(string topDir, string fileSearchPattern, DateTime expireTime)
+        /// <param name="currentDepth">当前递归深度</param>
+        private void CleanFiles(string topDir, string fileSearchPattern, DateTime expireTime,int currentDepth)
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(topDir);
-            if (!dirInfo.Exists)
+            if (currentDepth > MaxRecursiveDepth)
             {
-                NLogHelper.Info($"未找到{topDir}目录，无法清理");
+                NLogHelper.Warn($"日志文件夹存在快捷方式导致无穷递归");
                 return;
             }
 
-            FileInfo[] fileInfos = dirInfo.GetFiles(fileSearchPattern, SearchOption.AllDirectories);
-            //删除过期文件
-            foreach (FileInfo fileInfo in fileInfos)
+            DirectoryInfo dirInfo = new DirectoryInfo(topDir);
+            if (!dirInfo.Exists)
             {
+                NLogHelper.Warn($"未找到{topDir}目录，无法清理");
+                return;
+            }
+
+
+            //If you choose AllDirectories and the directory structure contains a link that creates a loop, the search operation enters an infinite loop.
+            //FileInfo[] fileInfos = dirInfo.GetFiles(fileSearchPattern, SearchOption.AllDirectories);
+
+            string[] searchPatternArr = fileSearchPattern.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim()).ToArray();
+
+            HashSet<string> fileInfos = new HashSet<string>();
+            foreach (string searchPatternItem in searchPatternArr)
+            {
+                dirInfo.GetFiles(searchPatternItem, SearchOption.TopDirectoryOnly).Select(r => r.FullName).ToList().ForEach(r => fileInfos.Add(r.Trim()));
+            }
+
+            //删除过期文件
+            foreach (string fileName in fileInfos)
+            {
+
+                FileInfo fileInfo = new FileInfo(fileName);
                 //文件过期
                 if (fileInfo.Exists && fileInfo.CreationTime < expireTime)
                 {
@@ -128,18 +155,64 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 }
             }
 
+            //递归子文件夹
+            DirectoryInfo[] subDirs = dirInfo.GetDirectories();//返回当前目录的子目录。如果没有子目录，则此方法返回一个空数组。 此方法不是递归的。
+            foreach (var subDir in subDirs)
+            {
+                CleanFiles(subDir.FullName,fileSearchPattern,expireTime,currentDepth+1);
+            }
+        }
 
-            DirectoryInfo[] subDirs = dirInfo.GetDirectories("*", SearchOption.AllDirectories);
+        /// <summary>
+        /// 清除空目录
+        /// </summary>
+        /// <param name="topDir">顶级目录</param>
+        /// <param name="expireTime">过期时间</param>
+        /// <param name="currentDepth">当前递归深度</param>
+        private void CleanEmptyDirectory(string topDir, DateTime expireTime, int currentDepth)
+        {
+            if (currentDepth > MaxRecursiveDepth)
+            {
+                NLogHelper.Warn($"日志文件夹存在快捷方式导致无穷递归");
+                return;
+            }
+
+            DirectoryInfo dirInfo = new DirectoryInfo(topDir);
+            if (!dirInfo.Exists)
+            {
+                NLogHelper.Warn($"未找到{topDir}目录，无法清理");
+                return;
+            }
+
+
+            //递归子文件夹
+            DirectoryInfo[] subDirs = dirInfo.GetDirectories();//返回当前目录的子目录。如果没有子目录，则此方法返回一个空数组。 此方法不是递归的。
+            //非空子目录集合
+            List<DirectoryInfo> nonEmptyDirList = new List<DirectoryInfo>();
+
             //删除空目录
             foreach (var currentDir in subDirs)
             {
                 //文件夹为空, 并且空目录2天前
-                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (DateTime.Now-currentDir.LastWriteTime).TotalDays>1.1)
+                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (DateTime.Now - currentDir.LastWriteTime).TotalDays > 1.1)
                 {
                     currentDir.Delete();
                     NLogHelper.Debug("删除目录：" + currentDir.FullName);
                 }
+
+                //获取存在子目录的目录
+                if (currentDir.Exists && currentDir.GetDirectories().Length != 0)
+                {
+                    nonEmptyDirList.Add(currentDir);
+                }
             }
+            
+            //递归子目录
+            foreach (var subDir in nonEmptyDirList)
+            {
+                CleanEmptyDirectory(subDir.FullName,expireTime,currentDepth+1);
+            }
+
         }
 
         #endregion
@@ -154,10 +227,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 保存多少天日志，与创建时间比较
         /// </summary>
-        private const int KeepDays = 120;
+        private const int KeepDays = 180;
 
         /// <summary>
         /// 过滤什么样的文件
+        /// 
+        /// 采用*.log|*.txt格式，多个项通过|隔开，该功能是通过自己写代码实现的
         /// </summary>
         private const string FilePattern = "*.log";
 
@@ -168,7 +243,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         private const double DriveAvailableLimit = 0.33;
 
         /// <summary>
-        /// 当到达硬盘利用极限时，保存的天数
+        /// 当到达硬盘利用极限时，保存的天数  与创建时间比较
         /// </summary>
         private const int KeepDaysWhenAvailableLimit = 30;
 
@@ -181,6 +256,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 回调函数是否正在执行
         /// </summary>
         private static bool _isRunning = false;
+
+        /// <summary>
+        /// 最大递归深度，  防止文件夹快捷方式造成的无穷递归
+        /// </summary>
+        private const int MaxRecursiveDepth = 128;
 
         #endregion
     }

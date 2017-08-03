@@ -24,6 +24,7 @@ message HealthRequest{
 message HealthResponse{
 	int32 result_code = 1;//结果码  尽量使用大于等于0的数
 	string result_desc = 2;//结果描述
+	int64 weight = 3;//该服务器繁忙程度，大于等于0,值越大，表示越繁忙 int64最大900亿亿 防止溢出
 }
 
 
