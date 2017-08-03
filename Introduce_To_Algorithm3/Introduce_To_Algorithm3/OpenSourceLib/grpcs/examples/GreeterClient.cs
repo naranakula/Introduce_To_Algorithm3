@@ -19,7 +19,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             //var channelCredentials = new SslCredentials(File.ReadAllText("roots.pem"));
             Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
             var client = new Greeter.GreeterClient(channel);
-
+            
             for (int i = 0; i < 10; i++)
             {
                 var reply = client.SayHello(new Request() { Request_ = "Hello" });

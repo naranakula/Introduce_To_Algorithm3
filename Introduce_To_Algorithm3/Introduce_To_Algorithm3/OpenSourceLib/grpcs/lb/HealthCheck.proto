@@ -1,0 +1,47 @@
+﻿syntax = "proto3";
+
+//本接口用于与服务器端健康检测
+//默认的包名
+package "com.common.cmlu.services";
+
+//生成C#时的包名  会覆盖默认的包名
+option csharp_namespace = "com.common.services";
+
+//定义接口 安全检查服务
+service HealthCheckService{
+	//该接口应该直接读取内存
+	rpc HealthCheck(HealthRequest) returns (HealthResponse){}
+	//拓展接口  执行命令
+	rpc RunCommand(CommandRequest) returns (CommandResponse){}
+}
+
+//定义请求响应
+message HealthRequest{
+	string command = 1;//请求的命令
+	string command_parameter = 2;//命令参数
+}
+
+message HealthResponse{
+	int32 result_code = 1;//结果码  尽量使用大于等于0的数
+	string result_desc = 2;//结果描述
+	int32 weight = 3;//该服务器繁忙程度，大于等于0,值越大，表示越繁忙
+}
+
+
+message CommandRequest{
+	string command = 1;//请求的命令
+	string command_parameter = 2;//命令参数
+}
+
+
+message CommandResponse{
+	int32 result_code = 1;//结果码  尽量使用大于等于0的数
+	string result_desc = 2;//结果描述
+	string extension = 3;//拓展字段，目前没有意义
+}
+
+
+
+
+
+

@@ -20,7 +20,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// 
     /// grpc首先定义service，指定方法的参数和返回值。
     /// grpc默认使用protocol buffer.
-    /// grpc依赖.net4.5
+    /// grpc依赖.net4.5，
     /// 
     /// grpc必须有且仅有一个输入一个输出，并且建议每个方法专有自己的输入输出定义(当然这不是必须的，自己写的严格遵守)
     /// gRPC service methods have exactly one input message and exactly one output message. Typically, these messages are used as input and output to only one method.
@@ -118,6 +118,7 @@ message HelloResponse {
                     action(channel);
                     //构建client
                     //var client = new Greeter.GreeterClient(channel);
+                    //客户端调用时指定deadline,如果不指定表示不超时
                     //调用client,可以多次调用
                     //var reply = client.SayHello(new Request() { Request_ = "Hello" });
                 }
@@ -153,5 +154,66 @@ message HelloResponse {
 
 
         }
+
+
+        /// <summary>
+        /// 安全调用grpc
+        /// </summary>
+        /// <param name="ip">ip地址</param>
+        /// <param name="port">端口</param>
+        /// <param name="action">执行的操作，构建client并调用</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static void SafeInvoke(string ip,int port,Action<Channel> action, Action<Exception> exceptionHandler = null)
+        {
+            Channel channel = null;
+
+            try
+            {
+                //不使用加密
+                channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
+
+
+                if (action != null)
+                {
+                    action(channel);
+                    //构建client
+                    //var client = new Greeter.GreeterClient(channel);
+                    //客户端调用时指定deadline,如果不指定表示不超时
+                    //调用client,可以多次调用
+                    //var reply = client.SayHello(new Request() { Request_ = "Hello" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+            }
+            finally
+            {
+                if (channel != null)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        try
+                        {
+                            channel.ShutdownAsync().Wait();
+                            //安全关闭退出
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+
     }
 }

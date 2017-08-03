@@ -1,0 +1,82 @@
+﻿syntax = "proto3";
+
+//本接口用于服务发现
+//默认的包名
+package "com.common.cmlu.services";
+
+//生成C#时的包名  会覆盖默认的包名
+option csharp_namespace = "com.common.services";
+
+
+// 定义接口
+//用于选举一个客户端
+service ElectService{
+	//该接口实现直接读取内存，不要查询数据库
+	rpc Elect(ElectRequest) returns (ElectResponse){}
+}
+
+
+//定义请求 响应接口
+
+message ElectRequest{
+	string command = 1;//请求的命令
+	string command_parameter = 2;//命令参数
+}
+
+message ElectResponse{
+	int32 result_code = 1;//结果码  尽量使用大于等于0的数
+	string result_desc = 2;//结果描述
+	string ip = 3;//服务器IP
+	int32 port = 4;//服务器端口
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+
+//定义监控服务
+
+service MonitorService{
+	//获取所有服务器信息
+	rpc GetServers(ServerRequest) returns (ServerResponse){}
+	//根据请求命令获取服务器报告
+	rpc GetReports(ReportRequest) returns (ReportResponse){}
+}
+
+message ServerRequest{
+	string command = 1;//请求的命令
+	string command_parameter = 2;//命令参数
+}
+
+message ServerResponse{
+	int32 result_code = 1;//结果码  尽量使用大于等于0的数
+	string result_desc = 2;//结果描述
+	repeated server_details = 3;//服务器详情信息
+}
+
+//服务器情况
+message ServerDetail{
+	string ip = 1;//服务器IP
+	int32 port = 2;//服务器端口
+	int32 status_code = 3;//服务器状态描述码
+	string status_desc = 4;//服务器状态描述
+}
+
+//报告请求
+message ReportRequest{
+	string command = 1;//请求的命令
+	string command_parameter = 2;//命令参数
+}
+
+message ReportResponse{
+	int32 result_code = 1;//结果码  尽量使用大于等于0的数
+	string result_desc = 2;//结果描述
+	string extension = 3;//拓展字段，目前没有意义
+}
+
+
+
+
+
+
+
+
