@@ -14,6 +14,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// nlog自动查找程序目录的NLog.config来配置程序
     /// 
     /// 基本原则：Trace和Debug不包含在上线产品中， Info及以上包含在上线产品中
+    /// 
+    /// 受限访问或者受限日志：在使用中，服务器端会记录大量日志，这时需要限制每分钟接口可以访问的次数。使用Token Bucket 算法，每次接口调用消耗Bucket中一个Token，Bucket中Token有最大上限，每分钟定时向Bucket中添加若干个Token，最大不可超过上限。
     /// </summary>
     public static class NLogHelper
     {
