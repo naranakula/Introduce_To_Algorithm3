@@ -14,6 +14,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
     /// 清理日志的job
     /// 建议的执行时间
     /// 0 17 4 ? * 1,2,4,6     每个星期天星期一星期三星期五4点17分执行
+    /// 0 37 3 ? * 2,5     每个星期一星期四3点37分执行
     /// 0 17 4 * * ?     每天4点17分执行
     /// </summary>
     public class CleanLogJob:IJob
@@ -60,30 +61,36 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             DirectoryInfo dirInfo = new DirectoryInfo(LogDir);
             if (!dirInfo.Exists)
             {
-                NLogHelper.Info("未找到{0}日志目录，无法清理".FormatWith(LogDir));
+                NLogHelper.Info($"未找到{LogDir}日志目录，无法清理");
                 return;
             }
 
-            DriveInfo driveInfo = null;
 
-            foreach (DriveInfo item in DriveInfo.GetDrives())
+            DateTime expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0));//过期时间
+
+            try
             {
-                if (StringUtils.EqualsEx(dirInfo.Root.Name, item.Name))
+                DriveInfo driveInfo = null;
+
+                foreach (DriveInfo item in DriveInfo.GetDrives())
                 {
-                    driveInfo = item;
-                    break;
+                    if (StringUtils.EqualsEx(dirInfo.Root.Name, item.Name))
+                    {
+                        driveInfo = item;
+                        break;
+                    }
+                }
+
+                //如果磁盘空间不足，保留更少的天数
+                if (driveInfo != null && driveInfo.AvailableFreeSpace < driveInfo.TotalSize * DriveAvailableLimit)
+                {
+                    //当到达硬盘利用极限时，保存的天数
+                    expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDaysWhenAvailableLimit, 0, 0, 0));
                 }
             }
-
-            DateTime expireTime;//过期时间
-            if (driveInfo != null && driveInfo.AvailableFreeSpace < driveInfo.TotalSize * DriveAvailableLimit)
+            catch
             {
-                //当到达硬盘利用极限时，保存的天数
-                expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDaysWhenAvailableLimit, 0, 0, 0));
-            }
-            else
-            {
-                expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0));
+                //ignore
             }
             
 
@@ -105,7 +112,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             DirectoryInfo dirInfo = new DirectoryInfo(topDir);
             if (!dirInfo.Exists)
             {
-                NLogHelper.Info("未找到{0}目录，无法清理".FormatWith(topDir));
+                NLogHelper.Info($"未找到{topDir}目录，无法清理");
                 return;
             }
 
@@ -127,7 +134,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             foreach (var currentDir in subDirs)
             {
                 //文件夹为空, 并且空目录2天前
-                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (DateTime.Now-currentDir.LastWriteTime).TotalDays>2)
+                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (DateTime.Now-currentDir.LastWriteTime).TotalDays>1.1)
                 {
                     currentDir.Delete();
                     NLogHelper.Debug("删除目录：" + currentDir.FullName);
