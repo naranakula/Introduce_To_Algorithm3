@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using SQLite.CodeFirst;
+using System.Data.SQLite;
+using System.Data;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
 {
@@ -85,6 +87,38 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             modelBuilder.Configurations.Add(new KvPairMap());
         }
 
+        #region 原生SQL调用
+
+        /// <summary>
+        /// ExecuteSqlCommnad method is useful in sending non-query commands to the database, such as the Insert, Update or Delete command. 
+        /// </summary>
+        /// <param name="sql">UPDATE dbo.Posts SET Rating = 5 WHERE Author = @p0  使用@po表示参数</param>
+        /// <param name="parameters">SQLiteParameter parameter = new SQLiteParameter("@p0", DbType.DateTime);parameter.Value = DateTime.Now;</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <returns>影响的行数 , -1表示命令执行失败</returns>
+        public static int ExecuteSqlCommand(string sql,Action<Exception> exceptionHandler, params SQLiteParameter[] parameters)
+        {
+            try
+            {
+                using (SqliteCodeFirstContext dbContext = new SqliteCodeFirstContext())
+                {
+                    if (parameters == null || parameters.Length == 0)
+                    {
+                        return dbContext.Database.ExecuteSqlCommand(sql);
+                    }
+                    else
+                    {
+                        return dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                exceptionHandler?.Invoke(ex);
+                return -1;
+            }
+        }
+        #endregion
 
         #region  通用任务
 

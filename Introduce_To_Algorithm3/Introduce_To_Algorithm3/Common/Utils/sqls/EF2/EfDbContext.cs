@@ -42,16 +42,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         private static string _nameOrConnectionString = "name=SqlSeverConnString";
 
-        /// <summary>
-        /// 实际的连接字符串
-        /// </summary>
-        private static string _trueConStrCache = string.Empty;
-
-        /// <summary>
-        /// 数据库的名字
-        /// </summary>
-        private static string _dbNameCache = string.Empty;
-
+        
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString格式
@@ -61,6 +52,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             get { return _nameOrConnectionString; }
             set { _nameOrConnectionString = value; }
         }
+
+
+        /// <summary>
+        /// 实际的连接字符串
+        /// </summary>
+        private static string _trueConStrCache = string.Empty;
+        
 
         /// <summary>
         /// 连接字符串
@@ -79,6 +77,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 return _trueConStrCache;
             }
         }
+
+
+        /// <summary>
+        /// 数据库的名字
+        /// </summary>
+        private static string _dbNameCache = string.Empty;
+
 
         /// <summary>
         /// 从连接字符串中获取数据库的名字
@@ -265,7 +270,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
-        #region 静态方法
+        #region 静态方法 原生调用
 
         #region  通用任务
 
@@ -391,7 +396,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
-        #region DbSet相关
+        #region DbSet相关 
 
         #region 查询 应尽量使用 Linq Method 或者 Linq Query
 
@@ -452,78 +457,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         {
             return dbQuery.AsNoTracking();
         }
-
-        #region 直接执行命令
-
-        /// <summary>
-        ///  Creates a raw SQL query that will return entities in this set. By default, the entities returned are tracked by the context; this can be changed by calling AsNoTracking on theDbSqlQuery<T> returned from this method.
-        /// 该方法用于查询。直到迭代返回结果时，sql才执行。
-        /// </summary>
-        /// <param name="dbSet"></param>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public static DbSqlQuery<T> SqlQuery<T>(DbSet<T> dbSet, string sql, params object[] parameters) where T : class
-        {
-            return dbSet.SqlQuery(sql, parameters);
-        }
-
-        /// <summary>
-        /// A SQL query returning instances of any type, including primitive types,
-        /// 该方法用于查询。直到迭代返回结果时，sql才执行。
-        /// </summary>
-        /// <param name="dbContext"></param>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public static DbRawSqlQuery<T> SqlQuery<T>(DbContext dbContext, string sql, params object[] parameters) where T : class
-        {
-            return dbContext.Database.SqlQuery<T>(sql, parameters);
-        }
-
-        /// <summary>
-        /// ExecuteSqlCommnad method is useful in sending non-query commands to the database, such as the Insert, Update or Delete command. 
-        /// </summary>
-        /// <param name="dbContext"></param>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <returns>影响的行数</returns>
-        public static int ExecuteSqlCommand(DbContext dbContext, string sql, params object[] parameters)
-        {
-            return dbContext.Database.ExecuteSqlCommand(sql, parameters);
-        }
-
-        /// <summary>
-        /// A SQL query returning instances of any type, including primitive types,
-        /// 该方法用于查询。直到迭代返回结果时，sql才执行。
-        /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public static DbRawSqlQuery<T> SqlQuery<T>(string sql, params object[] parameters) where T : class
-        {
-            using (EfDbContext dbContext = new EfDbContext())
-            {
-                return dbContext.Database.SqlQuery<T>(sql, parameters);
-            }
-        }
-
-        /// <summary>
-        /// ExecuteSqlCommnad method is useful in sending non-query commands to the database, such as the Insert, Update or Delete command. 
-        /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <returns>影响的行数</returns>
-        public static int ExecuteSqlCommand(string sql, params object[] parameters)
-        {
-            using (EfDbContext dbContext = new EfDbContext())
-            {
-                return dbContext.Database.ExecuteSqlCommand(sql, parameters);
-            }
-        }
-
-        #endregion
-
+        
         #endregion
 
         #region Add
@@ -724,6 +658,95 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         #endregion
 
         #endregion
+
+
+        #region 直接执行命令  推荐ExecuteSqlCommand
+
+        /// <summary>
+        ///  Creates a raw SQL query that will return entities in this set. By default, the entities returned are tracked by the context; this can be changed by calling AsNoTracking on theDbSqlQuery<T> returned from this method.
+        /// 该方法用于查询。直到迭代返回结果时，sql才执行。
+        /// </summary>
+        /// <param name="dbSet"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static DbSqlQuery<T> SqlQuery<T>(DbSet<T> dbSet, string sql, params object[] parameters) where T : class
+        {
+            return dbSet.SqlQuery(sql, parameters);
+        }
+
+        /// <summary>
+        /// A SQL query returning instances of any type, including primitive types,
+        /// 该方法用于查询。直到迭代返回结果时，sql才执行。
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static DbRawSqlQuery<T> SqlQuery<T>(DbContext dbContext, string sql, params object[] parameters) where T : class
+        {
+            return dbContext.Database.SqlQuery<T>(sql, parameters);
+        }
+
+        /// <summary>
+        /// ExecuteSqlCommnad method is useful in sending non-query commands to the database, such as the Insert, Update or Delete command. 
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns>影响的行数</returns>
+        public static int ExecuteSqlCommand(DbContext dbContext, string sql, params object[] parameters)
+        {
+            return dbContext.Database.ExecuteSqlCommand(sql, parameters);
+        }
+
+        /// <summary>
+        /// A SQL query returning instances of any type, including primitive types,
+        /// 该方法用于查询。直到迭代返回结果时，sql才执行。
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static DbRawSqlQuery<T> SqlQuery<T>(string sql, params object[] parameters) where T : class
+        {
+            using (EfDbContext dbContext = new EfDbContext())
+            {
+                return dbContext.Database.SqlQuery<T>(sql, parameters);
+            }
+        }
+
+        /// <summary>
+        /// ExecuteSqlCommnad method is useful in sending non-query commands to the database, such as the Insert, Update or Delete command. 
+        /// </summary>
+        /// <param name="sql">UPDATE dbo.Posts SET Rating = 5 WHERE Author = @p0  使用@po表示参数</param>
+        /// <param name="parameters">SqlParameter parameter = new SqlParameter("@p0", DbType.DateTime);parameter.Value = DateTime.Now;</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <returns>影响的行数 , -1表示命令执行失败</returns>
+        public static int ExecuteSqlCommand(string sql, Action<Exception> exceptionHandler, params SqlParameter[] parameters)
+        {
+            try
+            {
+                using (EfDbContext dbContext = new EfDbContext())
+                {
+                    if (parameters == null || parameters.Length == 0)
+                    {
+                        return dbContext.Database.ExecuteSqlCommand(sql);
+                    }
+                    else
+                    {
+                        return dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                exceptionHandler?.Invoke(ex);
+                return -1;
+            }
+        }
+
+        #endregion
+
 
         #region 无事务的原生调用
 
