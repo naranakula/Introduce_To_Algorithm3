@@ -682,6 +682,7 @@
     <Compile Include="Common\Utils\threads\TimerUtils.cs" />
     <Compile Include="Common\Utils\Time\StopWatchUtils.cs" />
     <Compile Include="Common\Utils\files\XMLHelper.cs" />
+    <Compile Include="Common\Utils\TokenBucket.cs" />
     <Compile Include="Common\Utils\wcfs\WcfExtensions.cs" />
     <Compile Include="Common\Utils\Web\CacheUtils.cs" />
     <Compile Include="Common\Utils\XmlUtils.cs" />
