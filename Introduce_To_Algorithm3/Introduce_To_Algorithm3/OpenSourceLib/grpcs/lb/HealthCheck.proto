@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-//本接口用于与服务器端健康检测
+//本接口用于与服务器端健康检测  是由服务器实现
 //默认的包名
 package "com.common.cmlu.services";
 
@@ -13,6 +13,8 @@ service HealthCheckService{
 	rpc HealthCheck(HealthRequest) returns (HealthResponse){}
 	//拓展接口  执行命令
 	rpc RunCommand(CommandRequest) returns (CommandResponse){}
+	//是否存活
+	rpc IsAlive(AliveRequest) returns (AliveResponse){}
 }
 
 //定义请求响应
@@ -40,6 +42,17 @@ message CommandResponse{
 	string extension = 3;//拓展字段，目前没有意义
 }
 
+message AliveRequest{
+	string command = 1;//请求的命令
+	string command_parameter = 2;//命令参数
+}
+
+
+message AliveResponse{
+	int32 result_code = 1;//结果码  尽量使用大于等于0的数
+	string result_desc = 2;//结果描述
+	string extension = 3;//拓展字段，目前没有意义
+}
 
 
 
