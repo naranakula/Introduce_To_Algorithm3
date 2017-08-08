@@ -38,7 +38,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         public static bool IsValidPort(int port)
         {
             //port under 500 are saved for windows
-            const int MINPORT = 501;
+            const int MINPORT = 1;
             const int MAXPORT = 65535;
 
             return port >= MINPORT && port <= MAXPORT;
