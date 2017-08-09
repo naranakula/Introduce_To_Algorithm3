@@ -7,7 +7,7 @@ ALTER DATABASE ScmisTAO SET RECOVERY SIMPLE   --简单模式
 GO
 USE ScmisTAO
 GO
-DBCC SHRINKFILE (N'ScmisTAO_log', 16, TRUNCATEONLY) --检查日志文件的名字是否正确
+DBCC SHRINKFILE (N'ScmisTAO_log', 16, TRUNCATEONLY) --检查日志文件的名字是否正确，16指收缩到16MB
 GO
 USE [master]
 GO

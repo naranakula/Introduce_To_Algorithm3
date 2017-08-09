@@ -22,7 +22,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static string GetString(string name)
+        public static string GetSettingsString(string name)
         {
             //使用如下属性名的方式更常见，使用索引只是为了演示
             //Properties.Settings.Default.myColor;
@@ -33,7 +33,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 设置
         /// </summary>
         /// <param name="name"></param>
-        public static void SetString(string name)
+        public static void SetSettingsString(string name)
         {
             //使用如下属性名的方式更常见，使用索引只是为了演示
             //只能用于User类型

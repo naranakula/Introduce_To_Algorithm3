@@ -93,6 +93,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// </summary>
         private static volatile Thread sendThread = null;
 
+        /// <summary>
+        /// 消息发送之后的处理
+        /// </summary>
+        private static volatile Action<MessageItem> actionAfterMsgSended = null;
+
         #region Producer相关
         /// <summary>
         /// 开启连接
@@ -327,8 +332,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// <summary>
         /// 初始化发送线程
         /// </summary>
+        /// <param name="actionAfterSend">消息发送之后的处理</param>
         /// <returns></returns>
-        public static void InitSendThread()
+        public static void InitSendThread(Action<MessageItem> actionAfterSend = null)
         {
             lock (locker)
             {
@@ -339,9 +345,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                 isRunning = true;
             }
 
+            actionAfterMsgSended = actionAfterSend;
+
             //消息发送线程
             sendThread = new Thread(() =>
             {
+                Action<MessageItem> tempActionAfterMsgSended = actionAfterMsgSended;
                 while (isRunning)
                 {
                     try
@@ -380,6 +389,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                                 //txtMsg.Properties.SetString(key, value);
 
                                 producer.Send(txtMsg);
+
+                                if (tempActionAfterMsgSended != null)
+                                {
+                                    try
+                                    {
+                                        tempActionAfterMsgSended(msg);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        NLogHelper.Error($"发送消息之后的处理失败:{ex}");
+                                    }
+                                }
                             }
                         }
                         

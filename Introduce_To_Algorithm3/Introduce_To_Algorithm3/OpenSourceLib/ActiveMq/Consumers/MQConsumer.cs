@@ -93,6 +93,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 NLogHelper.Info("开始初始化MQConsumer");
                 //通过工厂构建连接
                 connection = factory.CreateConnection();
+                //默认是不支持事务，自动确认的
+                //connection.AcknowledgementMode = AcknowledgementMode.AutoAcknowledge;
                 //设置唯一的客户端ID
                 connection.ClientId = Guid.NewGuid().ToString("N");
                 connection.ExceptionListener += connection_ExceptionListener;
@@ -170,6 +172,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 lastUpdateTime = DateTime.Now;
 
                 #region 获取消息
+
+                //MAP消息
+                //IMapMessage mapMessage = session.CreateMapMessage();//MAP消息
+                //字节消息
+                //IBytesMessage byteMsg = session.CreateBytesMessage(new byte[] { });//字节消息
                 ITextMessage txtMsg = message as ITextMessage;
               
                 if (txtMsg == null || string.IsNullOrWhiteSpace(txtMsg.Text))
