@@ -1,6 +1,7 @@
 ﻿using System;
 using Apache.NMS;
 using Apache.NMS.ActiveMQ;
+using Apache.NMS.ActiveMQ.Commands;
 using Introduce_To_Algorithm3.Common.Utils;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
@@ -65,13 +66,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                     {
                         connection.Start();
                         ITextMessage message = session.CreateTextMessage(msg);
-                        //The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
-                        message.NMSTimestamp = DateTime.UtcNow;
-                        //The amount of time for which this message is valid.
-                        message.NMSTimeToLive = TimeSpan.FromMinutes(20);
-                        //是否持久消息
-                        message.NMSDeliveryMode = MsgDeliveryMode.Persistent;
-                        producer.Send(message);
+                        ////The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
+                        //message.NMSTimestamp = DateTime.UtcNow;
+                        ////The amount of time for which this message is valid.
+                        //message.NMSTimeToLive = TimeSpan.FromMinutes(20);
+                        ////是否持久消息
+                        //message.NMSDeliveryMode = MsgDeliveryMode.Persistent;
+                        
+                        producer.Send(message,MsgDeliveryMode.Persistent,MsgPriority.Normal,TimeSpan.FromMinutes(30));
                     }
                 }
             }

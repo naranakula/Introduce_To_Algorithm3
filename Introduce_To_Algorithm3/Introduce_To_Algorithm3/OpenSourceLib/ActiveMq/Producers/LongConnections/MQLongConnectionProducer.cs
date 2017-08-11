@@ -377,18 +377,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
 
                                 //文本消息
                                 ITextMessage txtMsg = session.CreateTextMessage(msg.Message);
-                                //The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
-                                txtMsg.NMSTimestamp = DateTime.UtcNow;
-                                //The amount of time for which this message is valid.
-                                txtMsg.NMSTimeToLive = TimeSpan.FromMinutes(30);
-                                
-                                //是否持久消息
-                                txtMsg.NMSDeliveryMode = MsgDeliveryMode.Persistent;
+                                ////The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
+                                //txtMsg.NMSTimestamp = DateTime.UtcNow;
+                                ////The amount of time for which this message is valid.
+                                //txtMsg.NMSTimeToLive = TimeSpan.FromMinutes(30);
+
+                                ////是否持久消息
+                                //txtMsg.NMSDeliveryMode = MsgDeliveryMode.Persistent;
 
                                 //可以自己添加消息头属性
                                 //txtMsg.Properties.SetString(key, value);
 
-                                producer.Send(txtMsg);
+                                producer.Send(txtMsg, MsgDeliveryMode.Persistent, MsgPriority.Normal, TimeSpan.FromMinutes(30));
 
                                 if (tempActionAfterMsgSended != null)
                                 {

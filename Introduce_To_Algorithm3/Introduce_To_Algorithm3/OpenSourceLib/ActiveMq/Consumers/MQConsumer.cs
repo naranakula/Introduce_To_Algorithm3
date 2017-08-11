@@ -23,6 +23,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
     /// </summary>
     public static class MQConsumer
     {
+        /*
+         * 消息最大可以2G 如果超过100kb会认为是大消息，进行分包传输
+        Message：从字面上就可以看出是被发送的消息。它有下面几种类型：
+        StreamMessage：Java 数据流消息，用标准流操作来顺序的填充和读取。
+        MapMessage：一个Map类型的消息；名称为 string 类型，而值为 Java 的基本类型。
+        TextMessage：普通字符串消息，包含一个String。
+        ObjectMessage：对象消息，包含一个可序列化的Java 对象
+        BytesMessage：二进制数组消息，包含一个byte[]。
+        XMLMessage:  一个XML类型的消息。
+         */
+
         /// <summary>
         /// MQ地址  如：failover:(tcp://192.168.163.213:61616)
         /// </summary>
@@ -100,6 +111,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 connection.ExceptionListener += connection_ExceptionListener;
                 connection.ConnectionInterruptedListener += connection_ConnectionInterruptedListener;
                 connection.ConnectionResumedListener += ConnectionOnConnectionResumedListener;
+                //connection.RedeliveryPolicy;//重发策略
                 //超时16s
                 connection.RequestTimeout = new TimeSpan(0, 0, 30);
                 if (!connection.IsStarted)
@@ -157,6 +169,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 消费者监听
         /// 经测试该函数是在前一个回调完成之后执行的,即回调是单线程执行的,需要自己实现多线程
+        /// 消息保证是按顺序到达的，该方法不能抛异常，否则导致消息重发
         /// </summary>
         /// <param name="message"></param>
         private static void consumer_Listener(IMessage message)
