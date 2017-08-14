@@ -23,6 +23,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
     /// sqlite建议使用long做主键  实际上更应该使用字符串 guid做主键
     /// 已经做过测试，可用
     /// sqlite是区分大小写的
+    /// limit 返回数据项的数量
     /// https://www.sqlite.org/
     /// http://system.data.sqlite.org
     /// </summary>
