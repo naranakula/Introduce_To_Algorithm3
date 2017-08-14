@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using com.cmlu.services;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 {
@@ -176,11 +177,14 @@ message HelloResponse {
                 if (action != null)
                 {
                     action(channel);
-                    //构建client
-                    //var client = new Greeter.GreeterClient(channel);
+
+
+
+                    //构建client, 客户端不需要关闭
+                    var client = new Greeter.GreeterClient(channel);
                     //客户端调用时指定deadline,如果不指定表示不超时
-                    //调用client,可以多次调用
-                    //var reply = client.SayHello(new Request() { Request_ = "Hello" });
+                    //调用client,可以重用channel,多次调用方法
+                    var reply = client.SayHello(new Request() { Request_ = "Hello" },deadline:DateTime.Now.AddSeconds(12));
                 }
 
             }
@@ -208,6 +212,8 @@ message HelloResponse {
                             NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
                         }
                     }
+
+                    channel = null;
                 }
             }
 

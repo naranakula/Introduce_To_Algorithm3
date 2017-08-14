@@ -25,6 +25,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
         public override Task<Response> SayHello(Request request, ServerCallContext context)
         {
             Console.WriteLine(request.Request_);
+
+
+            return Task.FromResult(new Response() {Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss")});
+
+
             return Task.Factory.StartNew(()=> {
                 return new Response() { Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss") };
             });

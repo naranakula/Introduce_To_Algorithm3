@@ -251,10 +251,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             try
             {
 
-                NLogHelper.Info("开始关闭MQ Consumer:" + MqUri);
+               
 
                 if (consumer != null)
                 {
+                    NLogHelper.Info("开始关闭MQ Consumer:" + MqUri);
                     consumer.Close();
                     consumer = null;
                 }
