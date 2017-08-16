@@ -25,27 +25,41 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         /// 发送消息
         /// </summary>
         /// <param name="msg"></param>
-        public static void SendQueueMessage(string msg)
+        public static void SendQueueMessage(string msg,Action<Exception> exceptionHandler = null)
         {
-            using (var connection = factory.CreateConnection())
+            try
             {
-                using (var session = connection.CreateSession())
+                using (var connection = factory.CreateConnection())
                 {
-                    using (
-                        var producer =
-                            session.CreateProducer(session.GetDestination(ConfigUtils.GetString("DestQueue"),//queue的名称 
-                                DestinationType.Queue)))
+                    using (var session = connection.CreateSession())
                     {
-                        connection.Start();
-                        ITextMessage message = session.CreateTextMessage(msg);
-                        //The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
-                        message.NMSTimestamp = DateTime.UtcNow;
-                        //The amount of time for which this message is valid.
-                        message.NMSTimeToLive = TimeSpan.FromHours(2);
-                        //是否持久消息
-                        message.NMSDeliveryMode = MsgDeliveryMode.Persistent;
-                        producer.Send(message);
+                        using (
+                            var producer =
+                                session.CreateProducer(session.GetDestination(
+                                    ConfigUtils.GetString("DestQueue"), //queue的名称 
+                                    DestinationType.Queue)))
+                        {
+                            connection.Start();
+                            ITextMessage message = session.CreateTextMessage(msg);
+                            ////The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
+                            //message.NMSTimestamp = DateTime.UtcNow;
+                            ////The amount of time for which this message is valid.
+                            //message.NMSTimeToLive = TimeSpan.FromHours(2);
+                            ////是否持久消息
+                            //message.NMSDeliveryMode = MsgDeliveryMode.Persistent;
+                            //producer.Send(message);
+
+                            producer.Send(message, MsgDeliveryMode.Persistent, MsgPriority.Normal, TimeSpan.FromHours(2));
+
+                        }
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
                 }
             }
         }
@@ -53,30 +67,41 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         /// 发送消息
         /// </summary>
         /// <param name="msg"></param>
-        public static void SendTopicMessage(string msg)
+        public static void SendTopicMessage(string msg,Action<Exception> exceptionHandler = null)
         {
-            using (var connection = factory.CreateConnection())
+            try
             {
-                using (var session = connection.CreateSession())
+                using (var connection = factory.CreateConnection())
                 {
-                    using (
-                        var producer =
-                            session.CreateProducer(session.GetDestination(ConfigUtils.GetString("DestTopic"),//topic名称
-                                DestinationType.Topic)))
+                    using (var session = connection.CreateSession())
                     {
-                        connection.Start();
-                        ITextMessage message = session.CreateTextMessage(msg);
-                        ////The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
-                        //message.NMSTimestamp = DateTime.UtcNow;
-                        ////The amount of time for which this message is valid.
-                        //message.NMSTimeToLive = TimeSpan.FromMinutes(20);
-                        ////是否持久消息
-                        //message.NMSDeliveryMode = MsgDeliveryMode.Persistent;
-                        
-                        producer.Send(message,MsgDeliveryMode.Persistent,MsgPriority.Normal,TimeSpan.FromMinutes(30));
+                        using (
+                            var producer =
+                                session.CreateProducer(session.GetDestination(ConfigUtils.GetString("DestTopic"),//topic名称
+                                    DestinationType.Topic)))
+                        {
+                            connection.Start();
+                            ITextMessage message = session.CreateTextMessage(msg);
+                            ////The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
+                            //message.NMSTimestamp = DateTime.UtcNow;
+                            ////The amount of time for which this message is valid.
+                            //message.NMSTimeToLive = TimeSpan.FromMinutes(20);
+                            ////是否持久消息
+                            //message.NMSDeliveryMode = MsgDeliveryMode.Persistent;
+
+                            producer.Send(message, MsgDeliveryMode.NonPersistent, MsgPriority.Normal, TimeSpan.FromMinutes(30));
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+            }
+            
         }
 
     }

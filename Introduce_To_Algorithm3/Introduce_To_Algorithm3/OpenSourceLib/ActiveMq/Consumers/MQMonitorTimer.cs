@@ -31,6 +31,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private static bool isRunning = false;
 
         /// <summary>
+        /// 是否第一次启动mQ
+        /// </summary>
+        private static volatile bool isFirstTimeToStartMq = true;
+
+        /// <summary>
         /// 锁
         /// </summary>
         private static object locker = new object();
@@ -66,10 +71,23 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             {
                 if (!MQConsumer.IsAlive())
                 {
-                    NLogHelper.Warn("重启 MQConsumer");
-                    MQConsumer.InitConsumer();
-                }
+                    if (isFirstTimeToStartMq)
+                    {
+                        isFirstTimeToStartMq = false;
 
+                        NLogHelper.Debug("首次尝试启动MQConsumer");
+                        MQConsumer.InitConsumer();
+                    }
+                    else
+                    {
+                        NLogHelper.Warn("MQ异常，尝试重启 MQConsumer");
+                        MQConsumer.InitConsumer();
+                    }
+                }
+                else
+                {
+                    NLogHelper.Trace("检测MQ连接正常");
+                }
             }
             catch (Exception ex)
             {
