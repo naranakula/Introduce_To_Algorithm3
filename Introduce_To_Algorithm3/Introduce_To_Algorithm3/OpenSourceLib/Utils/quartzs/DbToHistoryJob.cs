@@ -26,7 +26,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             try
             {
                 //如果数据库中表数据较多，不要一次性转历史，每次转1000条
-                const int maxCountPerConvert = 1000;//每次转历史的最大条数
+                const int maxCountPerConvert = 100;//每次转历史的最大条数
 
             }
             catch (Exception ex)
