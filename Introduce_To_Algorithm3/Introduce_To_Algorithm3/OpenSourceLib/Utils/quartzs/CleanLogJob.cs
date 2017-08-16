@@ -99,7 +99,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             //清理文件
             try
             {
-                CleanFiles(LogDir, FilePattern, expireTime, 0);
+                CleanFiles(LogDir, FilePattern, expireTime, currentDepth:0);
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             try
             {
                 //清理空目录
-                CleanEmptyDirectory(LogDir,  0);
+                CleanEmptyDirectory(LogDir,  currentDepth:0);
             }
             catch (Exception ex)
             {

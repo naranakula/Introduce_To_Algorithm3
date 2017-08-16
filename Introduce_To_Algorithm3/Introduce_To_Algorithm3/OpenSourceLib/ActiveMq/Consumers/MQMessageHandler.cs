@@ -18,7 +18,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
     public class MQMessageHandler
     {
         /// <summary>
-        /// 线程安全集合提供阻塞和限制功能
+        /// 线程安全集合提供阻塞和限制功能  FIFO  无上限集合
         /// </summary>
         private static BlockingCollection<String> messageQueue = new BlockingCollection<string>();
 
@@ -91,7 +91,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                         NLogHelper.Error("处理消息失败,异常信息:" + ex);
                         try
                         {
-                            Thread.Sleep(5);
+                            Thread.Sleep(200);
                         }
                         catch (Exception)
                         {

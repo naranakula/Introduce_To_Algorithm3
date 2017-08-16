@@ -95,10 +95,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             {
                 lock (locker)
                 {
-                    if (connection != null)
-                    {
-                        CloseConsumer();
-                    }
+                    CloseConsumer();
                 }
 
                 NLogHelper.Info("开始初始化MQConsumer");
@@ -250,9 +247,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         {
             try
             {
-
-               
-
                 if (consumer != null)
                 {
                     NLogHelper.Info("开始关闭MQ Consumer:" + MqUri);
