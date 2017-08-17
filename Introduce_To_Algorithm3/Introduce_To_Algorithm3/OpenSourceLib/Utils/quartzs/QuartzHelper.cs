@@ -54,12 +54,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 调度器工厂
         /// </summary>
-        private ISchedulerFactory _schedulerFactory;
+        private volatile ISchedulerFactory _schedulerFactory;
 
         /// <summary>
         /// 调度器
         /// </summary>
-        private IScheduler _scheduler;
+        private volatile IScheduler _scheduler;
 
         #endregion
 
