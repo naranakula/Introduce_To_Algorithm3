@@ -58,6 +58,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 连接
         /// </summary>
+        //private static volatile Connection connection = null;
         private static volatile IConnection connection = null;
 
         /// <summary>
@@ -99,8 +100,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 }
 
                 NLogHelper.Info("开始初始化MQConsumer");
+                
                 //通过工厂构建连接
+                //connection = (Connection)factory.CreateConnection();
                 connection = factory.CreateConnection();
+
                 //默认是不支持事务，自动确认的
                 //connection.AcknowledgementMode = AcknowledgementMode.AutoAcknowledge;
                 //设置唯一的客户端ID
@@ -111,6 +115,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 //connection.RedeliveryPolicy;//重发策略
                 //超时16s
                 connection.RequestTimeout = new TimeSpan(0, 0, 30);
+                
                 if (!connection.IsStarted)
                 {
                     //启动连接
