@@ -31,6 +31,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
             {
                 using (var connection = factory.CreateConnection())
                 {
+                    //超时16s
+                    connection.RequestTimeout = new TimeSpan(0, 0, 16);
                     using (var session = connection.CreateSession())
                     {
                         using (
@@ -73,6 +75,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
             {
                 using (var connection = factory.CreateConnection())
                 {
+                    //超时16s
+                    connection.RequestTimeout = new TimeSpan(0, 0, 16);
                     using (var session = connection.CreateSession())
                     {
                         using (

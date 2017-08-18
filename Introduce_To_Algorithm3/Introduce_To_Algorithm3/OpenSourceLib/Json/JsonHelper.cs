@@ -28,7 +28,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
         /// [JsonConverter(typeof(StringEnumConverter))]
         /// 对于枚举属性，可以使用上面的注解为字符串，默认枚举转换为了相应的整数
         /// </summary>
-        private static readonly JsonSerializerSettings _jsonSerializerSettings;
+        private static volatile JsonSerializerSettings _jsonSerializerSettings;
 
         #region 静态构造函数
 
