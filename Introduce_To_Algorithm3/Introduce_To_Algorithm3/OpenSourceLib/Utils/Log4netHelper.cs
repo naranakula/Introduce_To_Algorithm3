@@ -4,7 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.Common.Utils.files;
+using log4net;
 using log4net.Core;
+using log4net.Repository;
 using MathNet.Numerics;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
@@ -22,21 +25,61 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 日志名
         /// </summary>
         private const string LOGGERNAME = "CustomLog";
+        
+        /// <summary>
+        /// 是否初始化
+        /// </summary>
+        private static volatile bool  isInited = false;
+
+        /// <summary>
+        /// 日志
+        /// </summary>
+        private static volatile ILog logger = null;
 
         #region 静态初始化
+
+        static Log4netHelper()
+        {
+            Init();
+        }
 
         /// <summary>
         /// 自动加载log4net.config
         /// </summary>
-        static Log4netHelper()
+        public static bool Init(Action<Exception> exceptionHandler = null)
         {
-            //获取应用程序的目录，并查找log4net.config文件
-            string dir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-
-            FileInfo file = new FileInfo(Path.Combine(dir, "log4net.config"));
-            if (file.Exists)
+            try
             {
-                log4net.Config.XmlConfigurator.ConfigureAndWatch(file);
+                if (isInited)
+                {
+                    return true;
+                }
+                
+                //获取应用程序的目录，并查找log4net.config文件
+                //string dir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+                string configFile = DirectoryHold.ResolveFile("log4net.config");
+                ILoggerRepository repository = LogManager.CreateRepository("CmluRepository");//该方法如果已经存在同名Repository，则抛出异常
+                if (!string.IsNullOrWhiteSpace(configFile))
+                {
+                    FileInfo file = new FileInfo(configFile);
+                    log4net.Config.XmlConfigurator.ConfigureAndWatch(repository,file);
+                    logger = log4net.LogManager.GetLogger(repository.Name, LOGGERNAME);
+                    isInited = true;
+                    return true;
+                }
+                else
+                {
+                    throw new Exception("未找到log4net.config配置文件");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return false;
             }
         }
 
@@ -53,7 +96,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Fatal(msg);
+            try
+            {
+                logger.Fatal(msg);
+            }
+            catch { }
         }
         /// <summary>
         /// 写Fatal日志
@@ -65,7 +112,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Fatal(msg);
+            try
+            {
+                logger.Fatal(msg);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -79,7 +130,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Fatal(string.Format(msg, args));
+            try
+            {
+                logger.Fatal(string.Format(msg, args));
+            }
+            catch
+            {
+                
+            }
         }
 
         /// <summary>
@@ -93,7 +151,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Fatal(msg, exception);
+            try
+            {
+                logger.Fatal(msg, exception);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -103,7 +165,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="args"></param>
         public static void FatalFormat(string format, params object[] args)
         {
-            log4net.LogManager.GetLogger(LOGGERNAME).FatalFormat(format, args);
+            try
+            {
+                logger.FatalFormat(format, args);
+            }
+            catch { }
         }
 
         #endregion
@@ -120,7 +186,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Error(msg);
+            try
+            {
+                logger.Error(msg);
+            }
+            catch { }
         }
         /// <summary>
         /// 写error日志
@@ -132,7 +202,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Error(msg);
+            try
+            {
+                logger.Error(msg);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -146,7 +220,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Error(string.Format(msg,args));
+
+            try
+            {
+                logger.Error(string.Format(msg, args));
+            }
+            catch { }
         }
 
         /// <summary>
@@ -160,7 +239,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Error(msg, exception);
+
+            try
+            {
+                logger.Error(msg, exception);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -170,7 +254,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="args"></param>
         public static void ErrorFormat(string format, params object[] args)
         {
-            log4net.LogManager.GetLogger(LOGGERNAME).ErrorFormat(format, args);
+            try
+            {
+                logger.ErrorFormat(format, args);
+            }
+            catch { }
         }
 
         #endregion
@@ -187,7 +275,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Warn(msg);
+
+            try
+            {
+                logger.Warn(msg);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -201,7 +294,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Warn(msg, exception);
+
+            try
+            {
+                logger.Warn(msg, exception);
+            }
+            catch { }
         }
 
 
@@ -215,7 +313,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Warn(msg);
+
+            try
+            {
+                logger.Warn(msg);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -229,7 +332,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Warn(string.Format(msg, args));
+
+            try
+            {
+                logger.Warn(string.Format(msg, args));
+            }
+            catch { }
         }
 
 
@@ -240,7 +348,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="args"></param>
         public static void WarnFormat(string format, params object[] args)
         {
-            log4net.LogManager.GetLogger(LOGGERNAME).WarnFormat(format, args);
+            try
+            {
+                logger.WarnFormat(format, args);
+            }
+            catch { }
         }
 
         #endregion
@@ -256,7 +368,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Info(msg);
+
+            try
+            {
+                logger.Info(msg);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -270,7 +387,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Info(msg, exception);
+            try
+            {
+                logger.Info(msg, exception);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -283,7 +404,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Info(msg);
+
+            try
+            {
+                logger.Info(msg);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -297,7 +423,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Info(string.Format(msg, args));
+
+            try
+            {
+                logger.Info(string.Format(msg, args));
+            }
+            catch { }
         }
 
 
@@ -308,7 +439,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="args"></param>
         public static void InfoFormat(string format, params object[] args)
         {
-            log4net.LogManager.GetLogger(LOGGERNAME).InfoFormat(format, args);
+            try
+            {
+                logger.InfoFormat(format, args);
+            }
+            catch { }
         }
 
         #endregion
@@ -325,7 +460,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Debug(msg);
+
+            try
+            {
+                logger.Debug(msg);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -339,7 +479,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Debug(msg, exception);
+
+            try
+            {
+                logger.Debug(msg, exception);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -349,7 +494,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="args"></param>
         public static void DebugFormat(string format, params object[] args)
         {
-            log4net.LogManager.GetLogger(LOGGERNAME).DebugFormat(format, args);
+            try
+            {
+                logger.DebugFormat(format, args);
+            }
+            catch { }
         }
 
 
@@ -363,7 +512,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Debug(msg);
+
+            try
+            {
+                logger.Debug(msg);
+            }
+            catch { }
         }
 
         /// <summary>
@@ -377,11 +531,101 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 return;
             }
-            log4net.LogManager.GetLogger(LOGGERNAME).Debug(string.Format(msg, args));
+
+            try
+            {
+                logger.Debug(string.Format(msg, args));
+            }
+            catch { }
         }
 
 
         #endregion
+
+
+        /// <summary>
+        /// 是否Fatal Enabled
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsFatalEnabled()
+        {
+            try
+            {
+                return logger.IsFatalEnabled;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// 是否Error Enabled
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsErrorEnabled()
+        {
+            try
+            {
+                return logger.IsErrorEnabled;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 是否Warn Enabled
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsWarnEnabled()
+        {
+            try
+            {
+                return logger.IsWarnEnabled;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// 是否Info Enabled
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsInfoEnabled()
+        {
+            try
+            {
+                return logger.IsInfoEnabled;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// 是否Debug Enabled
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsDebugEnabled()
+        {
+            try
+            {
+                return logger.IsDebugEnabled;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// 格式化数据
@@ -395,4 +639,5 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         }
 
     }
+
 }

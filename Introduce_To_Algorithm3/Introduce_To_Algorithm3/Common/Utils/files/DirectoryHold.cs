@@ -221,7 +221,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
             {
                 try
                 {
-                    return Environment.CurrentDirectory;
+                    return Directory.GetCurrentDirectory();//该实现兼容 net core
+                    //return Environment.CurrentDirectory;
                 }
                 catch (Exception)
                 {
