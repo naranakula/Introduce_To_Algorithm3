@@ -157,10 +157,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 
         /// <summary>
         /// An asynchronous listener that is notified when a Fault tolerant connection has been resumed.
-        /// 链接回复
+        /// 连接恢复
         /// </summary>
         private static void ConnectionOnConnectionResumedListener()
         {
+            //连接恢复
             lock (locker)
             {
                 isAlive = true;
@@ -223,6 +224,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// </summary>
         private static void connection_ConnectionInterruptedListener()
         {
+            //可以恢复的连接断开
             lock (locker)
             {
                 isAlive = false;
@@ -237,6 +239,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <param name="exception"></param>
         private static void connection_ExceptionListener(Exception exception)
         {
+            //不可恢复的连接断开
             lock (locker)
             {
                 isAlive = false;
@@ -255,6 +258,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 if (consumer != null)
                 {
                     NLogHelper.Info("开始关闭MQ Consumer:" + MqUri);
+                    consumer.Dispose();
                     consumer.Close();
                     consumer = null;
                 }

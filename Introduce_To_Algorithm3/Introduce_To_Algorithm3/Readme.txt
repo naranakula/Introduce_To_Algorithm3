@@ -208,6 +208,8 @@ AutoUpdater.net
 Fiddler//Http 测试工具
 PostMan //Http测试工具 这个好
 
+ xUnit.net  测试工具
+
 //二维码
 QRCoder
 ZXing.Net
@@ -257,6 +259,8 @@ NPOIHelper.cs//Excel读写
 LicenseHelper.cs//授权文件
 LibsodiumHelper.cs//加解密
 TokenBucket.cs
+MemoryStreamUtils.cs
+CultureUtils.cs
 
 
 
