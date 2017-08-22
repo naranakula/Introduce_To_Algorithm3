@@ -235,7 +235,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
         /// <param name="isTrim">是否去掉字符串前后的空格</param>
         /// <param name="separator">分隔符，只保留中间部分分隔符</param>
         /// <returns></returns>
-        public static string CombineEx(IEnumerable<String> enumerable, string separator = "", bool isTrim = true)
+        public static string CombineEx(IEnumerable<String> enumerable, string separator = ",", bool isTrim = true)
         {
             if (enumerable == null)
             {

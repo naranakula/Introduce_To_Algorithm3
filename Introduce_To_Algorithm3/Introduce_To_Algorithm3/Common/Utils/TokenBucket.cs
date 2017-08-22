@@ -47,9 +47,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 构造函数
         /// </summary>
         /// <param name="estimatePeriodInMillisecond">每次评估的时间周期 单位毫秒  默认1分钟</param>
-        /// <param name="bucketLimit">桶的最大容量 默认100，即每分钟可以执行最多100次</param>
-        /// <param name="appendStep">每次注水的量，即接口平均每分钟执行40次</param>
-        public TokenBucket(int estimatePeriodInMillisecond = 60*1000,int bucketLimit=100,int appendStep = 40)
+        /// <param name="bucketLimit">桶的最大容量 默认100，即每分钟可以执行最多60次</param>
+        /// <param name="appendStep">每次注水的量，即接口平均每分钟执行20次</param>
+        public TokenBucket(int estimatePeriodInMillisecond = 60*1000,int bucketLimit=60,int appendStep = 20)
         {
             this.estimatePeriodInMillisecond = estimatePeriodInMillisecond;
             this.bucketLimit = bucketLimit;
