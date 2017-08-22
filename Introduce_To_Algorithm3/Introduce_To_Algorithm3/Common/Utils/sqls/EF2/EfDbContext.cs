@@ -31,6 +31,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// 数据库迁移只影响必须影响的部分，无关的表不影响，也就是说不会把没有映射的原来存在的表删掉
     /// 应该尽量使用Guid作为主键，因为guid可以更好的保证插入的并行性，并且合并数据库时有决定性优势
     /// fwghso from where group having select orderby
+    /// 事务的默认隔离级别是数据库默认的隔离级别 对于sqlserver是READ COMMITTED
     /// </summary>
     public class EfDbContext : DbContext
     {
