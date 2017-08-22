@@ -89,9 +89,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDaysWhenAvailableLimit, 0, 0, 0));
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 //ignore
+                NLogHelper.Warn($"根据硬盘当前容量判断过期时间失败:{ex}");
             }
 
             NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss")}之前的日志");

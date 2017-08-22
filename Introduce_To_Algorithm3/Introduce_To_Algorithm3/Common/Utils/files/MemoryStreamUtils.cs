@@ -13,6 +13,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
     public static class MemoryStreamUtils
     {
 
+        /// <summary>
+        /// 向memorystream写数据，并获取写的内容的例子
+        /// </summary>
+        /// <param name="writeAction"></param>
+        /// <returns></returns>
         public static byte[] WriteBytes(Action<MemoryStream> writeAction)
         {
             byte[] result = null;
