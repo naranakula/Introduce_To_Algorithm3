@@ -2,7 +2,7 @@
 
 //本接口用于与服务器端健康检测  是由服务器实现
 //默认的包名
-package "com.common.cmlu.services";
+package com.common.cmlu.services;
 
 //生成C#时的包名  会覆盖默认的包名
 option csharp_namespace = "com.common.services";

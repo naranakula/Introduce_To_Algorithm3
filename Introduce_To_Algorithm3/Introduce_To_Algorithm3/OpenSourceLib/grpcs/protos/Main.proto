@@ -7,7 +7,7 @@
 //C# pb需要.net4.5
 syntax = "proto3";
 
-//默认的包名
+//默认的包名  package不加引号
 package tutorial;
 
 // [START java_declaration]
