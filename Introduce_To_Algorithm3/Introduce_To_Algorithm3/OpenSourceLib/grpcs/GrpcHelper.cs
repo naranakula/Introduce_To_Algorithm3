@@ -25,6 +25,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// 
     /// grpc必须有且仅有一个输入一个输出，并且建议每个方法专有自己的输入输出定义(当然这不是必须的，自己写的严格遵守)
     /// gRPC service methods have exactly one input message and exactly one output message. Typically, these messages are used as input and output to only one method.
+    /// 
+    /// 服务器代码参照GreeterServer
     /// </summary>
     public static class GrpcHelper
     {
@@ -110,8 +112,13 @@ message HelloResponse {
 
             try
             {
+                var options = new List<ChannelOption>()
+                {
+                    new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
+                    new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
+                };
                 //不使用加密
-                channel = new Channel(ServiceAddress, ChannelCredentials.Insecure);
+                channel = new Channel(ServiceAddress, ChannelCredentials.Insecure,options);
                 
 
                 if(action != null)
@@ -173,9 +180,14 @@ message HelloResponse {
 
             try
             {
+                var options = new List<ChannelOption>()
+                {
+                    new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
+                    new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
+                };
                 //不使用加密
                 //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
-                channel = new Channel(ip,port,ChannelCredentials.Insecure);
+                channel = new Channel(ip, port, ChannelCredentials.Insecure,options);
 
                 if (action != null)
                 {
@@ -187,10 +199,26 @@ message HelloResponse {
                     var client = new Greeter.GreeterClient(channel);
                     //客户端调用时指定deadline,如果不指定表示不超时
                     //调用client,可以重用channel,多次调用方法
-                    var reply = client.SayHello(new Request() { Request_ = "Hello" },deadline:DateTime.Now.AddSeconds(12));
+                    //deadLine必须使用UTC时间
+                    var reply = client.SayHello(new Request() {Request_ = "Hello"},
+                        deadline: DateTime.UtcNow.AddSeconds(16));
                 }
 
                 return true;
+            }
+            catch (RpcException rpcEx)
+            {
+                //判断是否正常
+                StatusCode statusCode = rpcEx.Status.StatusCode;
+                string detail = rpcEx.Status.Detail;
+
+                if (statusCode == StatusCode.Unavailable)
+                {
+                    //服务不可用
+                }
+
+                exceptionHandler?.Invoke(rpcEx);
+                return false;
             }
             catch (Exception ex)
             {

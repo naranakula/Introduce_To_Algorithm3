@@ -53,14 +53,23 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
         /// <param name="args"></param>
         public static void RunMain(string[] args)
         {
+
+            var options = new List<ChannelOption>()
+            {
+                new ChannelOption(ChannelOptions.MaxSendMessageLength,32*1024*1024),//最大可以发送的消息长度
+                new ChannelOption(ChannelOptions.MaxReceiveMessageLength,8*1024*1024),//最大允许接收的消息长度
+                new ChannelOption(ChannelOptions.MaxConcurrentStreams,1024),//最大允许的并发连接
+            };
+
             //Server可以服务多个services，绑定多个端口
-            Server server = new Server
+            Server server = new Server(options)
             {
                 //可以注册多个service
                 Services = { Greeter.BindService(new GreeterServiceImpl()), },
                 //可以注册多个端口
                 //0.0.0.0监听在本机的所有IP地址
-                Ports = { new ServerPort(IPAddress.Any.ToString()/*0.0.0.0*/, Port, ServerCredentials.Insecure/*没有安全验证*/) }
+                Ports = { new ServerPort(IPAddress.Any.ToString()/*0.0.0.0*/, Port, ServerCredentials.Insecure/*没有安全验证*/) },
+
             };
             
             //启动后后面的代码继续执行
