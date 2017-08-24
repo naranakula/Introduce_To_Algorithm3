@@ -72,7 +72,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             Console.ReadLine();
 
             //关闭服务
-            server.ShutdownAsync().Wait(5000);
+            server.ShutdownAsync().Wait(8000);
         }
     }
 

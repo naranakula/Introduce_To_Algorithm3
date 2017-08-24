@@ -91,7 +91,7 @@ message HelloResponse {
         #region 定义常量
 
         /// <summary>
-        /// 服务地址
+        /// 服务地址 ip:port
         /// </summary>
         public static readonly string ServiceAddress = "127.0.0.1:50051";
 
@@ -104,7 +104,7 @@ message HelloResponse {
         /// </summary>
         /// <param name="action">执行的操作，构建client并调用</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static void SafeInvoke(Action<Channel> action, Action<Exception> exceptionHandler = null) 
+        public static bool SafeInvoke(Action<Channel> action, Action<Exception> exceptionHandler = null) 
         {
             Channel channel = null;
 
@@ -124,6 +124,7 @@ message HelloResponse {
                     //var reply = client.SayHello(new Request() { Request_ = "Hello" });
                 }
 
+                return true;
             }
             catch (Exception ex)
             {
@@ -131,6 +132,8 @@ message HelloResponse {
                 {
                     exceptionHandler(ex);
                 }
+
+                return false;
             }
             finally
             {
@@ -140,7 +143,7 @@ message HelloResponse {
                     {
                         try
                         {
-                            channel.ShutdownAsync().Wait();
+                            channel.ShutdownAsync().Wait(6000);
                             //安全关闭退出
                             break;
                         }
@@ -164,15 +167,15 @@ message HelloResponse {
         /// <param name="port">端口</param>
         /// <param name="action">执行的操作，构建client并调用</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static void SafeInvoke(string ip,int port,Action<Channel> action, Action<Exception> exceptionHandler = null)
+        public static bool SafeInvoke(string ip,int port,Action<Channel> action, Action<Exception> exceptionHandler = null)
         {
             Channel channel = null;
 
             try
             {
                 //不使用加密
-                channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
-
+                //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
+                channel = new Channel(ip,port,ChannelCredentials.Insecure);
 
                 if (action != null)
                 {
@@ -187,6 +190,7 @@ message HelloResponse {
                     var reply = client.SayHello(new Request() { Request_ = "Hello" },deadline:DateTime.Now.AddSeconds(12));
                 }
 
+                return true;
             }
             catch (Exception ex)
             {
@@ -194,6 +198,8 @@ message HelloResponse {
                 {
                     exceptionHandler(ex);
                 }
+
+                return false;
             }
             finally
             {
@@ -203,7 +209,7 @@ message HelloResponse {
                     {
                         try
                         {
-                            channel.ShutdownAsync().Wait();
+                            channel.ShutdownAsync().Wait(6000);
                             //安全关闭退出
                             break;
                         }
@@ -213,11 +219,9 @@ message HelloResponse {
                         }
                     }
 
-                    channel = null;
+                    //channel = null;
                 }
             }
-
-
         }
 
 

@@ -26,7 +26,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
                 Console.WriteLine(reply.Response_);
             }
             //关闭信道
-            channel.ShutdownAsync().Wait();
+            channel.ShutdownAsync().Wait(5000);
             
         }
     }
