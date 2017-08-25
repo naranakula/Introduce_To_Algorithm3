@@ -114,7 +114,7 @@ message HelloResponse {
             {
                 var options = new List<ChannelOption>()
                 {
-                    new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
+                    new ChannelOption(ChannelOptions.MaxSendMessageLength,16*1024*1024),//最大可以发送的消息长度
                     new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
                 };
                 //不使用加密
@@ -126,7 +126,7 @@ message HelloResponse {
                     action(channel);
                     //构建client
                     //var client = new Greeter.GreeterClient(channel);
-                    //客户端调用时指定deadline,如果不指定表示不超时
+                    //客户端调用时指定deadline,如果不指定表示不超时，deadline使用utc时间
                     //调用client,可以多次调用
                     //var reply = client.SayHello(new Request() { Request_ = "Hello" });
                 }
@@ -202,6 +202,7 @@ message HelloResponse {
                     //deadLine必须使用UTC时间
                     var reply = client.SayHello(new Request() {Request_ = "Hello"},
                         deadline: DateTime.UtcNow.AddSeconds(16));
+                    
                 }
 
                 return true;

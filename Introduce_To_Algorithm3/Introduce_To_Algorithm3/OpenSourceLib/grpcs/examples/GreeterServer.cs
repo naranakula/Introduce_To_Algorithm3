@@ -57,8 +57,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             var options = new List<ChannelOption>()
             {
                 new ChannelOption(ChannelOptions.MaxSendMessageLength,32*1024*1024),//最大可以发送的消息长度
-                new ChannelOption(ChannelOptions.MaxReceiveMessageLength,8*1024*1024),//最大允许接收的消息长度
+                new ChannelOption(ChannelOptions.MaxReceiveMessageLength,16*1024*1024),//最大允许接收的消息长度
                 new ChannelOption(ChannelOptions.MaxConcurrentStreams,1024),//最大允许的并发连接
+                new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口
             };
 
             //Server可以服务多个services，绑定多个端口
