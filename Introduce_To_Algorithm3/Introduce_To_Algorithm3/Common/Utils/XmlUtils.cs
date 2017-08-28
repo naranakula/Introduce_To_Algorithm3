@@ -132,7 +132,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             try
             {
                 //查找xe的一级子目录
-                var temp = xe.GetFirstMatchElement(name);
+                var temp = GetFirstMatchElement(xe,name);
 
                 if (temp == null)
                 {

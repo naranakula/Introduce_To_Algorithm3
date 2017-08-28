@@ -14,6 +14,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
     /// <summary>
     /// socket客户端代理
     /// 通过SocketMonitorTimer启动
+    /// SocketMonitorTimer.Start()
+    /// SocketMonitorTimer.Stop()
     /// </summary>
     public static class SocketClientProxy
     {
@@ -274,7 +276,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
                             RecvByteList.Clear();
                         }
                         Thread.Sleep(1200);
-                        NLogHelper.Info("检测到socket没有连接");
+                        NLogHelper.Trace("检测到socket没有连接");
                         //不能使用break
                         continue;
                     }
@@ -381,7 +383,7 @@ true 如果连接已关闭、 重置，或者终止，则返回，
         private static void SendCallBack(object obj)
         {
             MessageItem item = null;
-            while (isRunning)
+            while (IsRunning)
             {
                 //阻塞1s
                 if (SendBlockingQueue.TryTake(out item, 1000))

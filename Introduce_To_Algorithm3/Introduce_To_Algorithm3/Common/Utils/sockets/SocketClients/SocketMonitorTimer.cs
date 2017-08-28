@@ -11,6 +11,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
 {
     /// <summary>
     /// 监控socket的Timer
+    /// 
+    /// SocketMonitorTimer.Start()
+    /// SocketMonitorTimer.Stop()
     /// </summary>
     public static class SocketMonitorTimer
     {
@@ -85,7 +88,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets.SocketClients
         {
             if (socketTimer != null)
             {
-                socketTimer.Dispose();
+                try
+                {
+                    socketTimer.Dispose();
+                }
+                catch { }
                 socketTimer = null;
             }
 

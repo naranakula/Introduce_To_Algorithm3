@@ -692,7 +692,6 @@
     <Compile Include="HPSocket\HPServerSocket.cs" />
     <Compile Include="HPSocket\HPServer.cs" />
     <Compile Include="MachineLearning\ReadMe.cs" />
-    <Compile Include="Models\CleanJob.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQConsumer.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQMessageHandler.cs" />
