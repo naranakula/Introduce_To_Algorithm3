@@ -15,6 +15,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
     /// </summary>
     public class OneRunTimerEx : IDisposable
     {
+        #region 私有属性
+
         /// <summary>
         /// 定时器
         /// </summary>
@@ -29,11 +31,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// 是否回调在运行
         /// </summary>
         private bool _isRunning = false;
-
+        
         /// <summary>
         /// 底层的回调
         /// </summary>
         private readonly Action actionCallback=null;
+
+        #endregion
 
         /// <summary>
         /// 构造函数
@@ -56,6 +60,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// <param name="state"></param>
         private void TimerCallback(object state)
         {
+            Action actionInTimer = null;
+
             lock (_locker)
             {
                 if (_isRunning)
@@ -64,13 +70,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
                     return;
                 }
                 _isRunning = true;
+                actionInTimer = this.actionCallback;
             }
 
             try
             {
-                if (actionCallback != null)
+                if (actionInTimer != null)
                 {
-                    actionCallback();
+                    actionInTimer();
                 }
             }
             catch (Exception ex)
@@ -93,7 +100,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         {
             if (_timer != null)
             {
-                _timer.Dispose();
+                try
+                {
+                    _timer.Dispose();
+                }
+                catch { }
                 _timer = null;
             }
         }
@@ -105,7 +116,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         {
             if (_timer != null)
             {
-                _timer.Dispose();
+                try
+                {
+                    _timer.Dispose();
+                }
+                catch { }
                 _timer = null;
             }
         }
