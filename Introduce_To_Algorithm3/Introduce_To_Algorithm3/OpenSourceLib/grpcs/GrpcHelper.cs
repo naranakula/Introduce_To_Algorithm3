@@ -244,7 +244,7 @@ message HelloResponse {
                     {
                         try
                         {
-                            channel.ShutdownAsync().Wait(6000);
+                            channel.ShutdownAsync().Wait(9000);
                             //安全关闭退出
                             break;
                         }
