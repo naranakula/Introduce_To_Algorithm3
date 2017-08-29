@@ -174,8 +174,14 @@ message HelloResponse {
         /// <param name="port">端口</param>
         /// <param name="action">执行的操作，构建client并调用</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static bool SafeInvoke(string ip,int port,Action<Channel> action, Action<Exception> exceptionHandler = null)
+        /// <param name="timeoutSeconds">过期时间  单位秒</param>
+        public static bool SafeInvoke(string ip,int port,Action<Channel> action, Action<Exception> exceptionHandler = null,int timeoutSeconds = 16)
         {
+            if (action == null)
+            {
+                return true;
+            }
+
             Channel channel = null;
 
             try
@@ -201,7 +207,7 @@ message HelloResponse {
                     //调用client,可以重用channel,多次调用方法
                     //deadLine必须使用UTC时间
                     var reply = client.SayHello(new Request() {Request_ = "Hello"},
-                        deadline: DateTime.UtcNow.AddSeconds(16));
+                        deadline: DateTime.UtcNow.AddSeconds(timeoutSeconds));
                     
                 }
 
