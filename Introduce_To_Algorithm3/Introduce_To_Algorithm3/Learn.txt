@@ -3,6 +3,6 @@ GRPC -- 通用RPC框架
 ZooKeeper consul(推荐) 只提供java和C接口，没有官方.net接口  ZooKeeperNetEx
 Ngnix
 Hadoop
-memcached redis
+memcached < redis
 python 机器学习 TensorFlow
 OSQuery ZABBIX //The Enterprise-class Monitoring Solution for Everyone
