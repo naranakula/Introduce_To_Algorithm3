@@ -26,7 +26,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             //使用如下属性名的方式更常见，使用索引只是为了演示
             //Properties.Settings.Default.myColor;
-            return Properties.Settings.Default[name] as string;
+            string str = Properties.Settings.Default[name] as string;
+            return str == null ? "" : str.Trim();
         }
 
         /// <summary>
@@ -107,11 +108,18 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             try
             {
-                int value;
+                
 
                 string settingValue = ConfigurationManager.AppSettings[key];
-                settingValue = settingValue == null ? "" : settingValue.Trim();
-                if (int.TryParse(settingValue, out value))
+
+                if (string.IsNullOrWhiteSpace(settingValue))
+                {
+                    return defaultValue;
+                }
+
+                
+                int value;
+                if (int.TryParse(settingValue.Trim(), out value))
                 {
                     return value;
                 }
