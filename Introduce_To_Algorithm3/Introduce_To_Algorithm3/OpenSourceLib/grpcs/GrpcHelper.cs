@@ -26,7 +26,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// grpc必须有且仅有一个输入一个输出，并且建议每个方法专有自己的输入输出定义(当然这不是必须的，自己写的严格遵守)
     /// gRPC service methods have exactly one input message and exactly one output message. Typically, these messages are used as input and output to only one method.
     /// 
-    /// 服务器代码参照GreeterServer
+    /// 服务器代码参照GrpcServer
     /// </summary>
     public static class GrpcHelper
     {
@@ -101,70 +101,70 @@ message HelloResponse {
 
 
        
-        /// <summary>
-        /// 安全调用grpc
-        /// </summary>
-        /// <param name="action">执行的操作，构建client并调用</param>
-        /// <param name="exceptionHandler">异常处理</param>
-        public static bool SafeInvoke(Action<Channel> action, Action<Exception> exceptionHandler = null) 
-        {
-            Channel channel = null;
+        ///// <summary>
+        ///// 安全调用grpc
+        ///// </summary>
+        ///// <param name="action">执行的操作，构建client并调用</param>
+        ///// <param name="exceptionHandler">异常处理</param>
+        //public static bool SafeInvoke(Action<Channel> action, Action<Exception> exceptionHandler = null) 
+        //{
+        //    Channel channel = null;
 
-            try
-            {
-                var options = new List<ChannelOption>()
-                {
-                    new ChannelOption(ChannelOptions.MaxSendMessageLength,16*1024*1024),//最大可以发送的消息长度
-                    new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
-                };
-                //不使用加密
-                channel = new Channel(ServiceAddress, ChannelCredentials.Insecure,options);
+        //    try
+        //    {
+        //        var options = new List<ChannelOption>()
+        //        {
+        //            new ChannelOption(ChannelOptions.MaxSendMessageLength,16*1024*1024),//最大可以发送的消息长度
+        //            new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
+        //        };
+        //        //不使用加密
+        //        channel = new Channel(ServiceAddress, ChannelCredentials.Insecure,options);
                 
 
-                if(action != null)
-                {
-                    action(channel);
-                    //构建client
-                    //var client = new Greeter.GreeterClient(channel);
-                    //客户端调用时指定deadline,如果不指定表示不超时，deadline使用utc时间
-                    //调用client,可以多次调用
-                    //var reply = client.SayHello(new Request() { Request_ = "Hello" });
-                }
+        //        if(action != null)
+        //        {
+        //            action(channel);
+        //            //构建client
+        //            //var client = new Greeter.GreeterClient(channel);
+        //            //客户端调用时指定deadline,如果不指定表示不超时，deadline使用utc时间
+        //            //调用client,可以多次调用
+        //            //var reply = client.SayHello(new Request() { Request_ = "Hello" });
+        //        }
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if(exceptionHandler != null)
-                {
-                    exceptionHandler(ex);
-                }
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if(exceptionHandler != null)
+        //        {
+        //            exceptionHandler(ex);
+        //        }
 
-                return false;
-            }
-            finally
-            {
-                if (channel != null)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        try
-                        {
-                            channel.ShutdownAsync().Wait(6000);
-                            //安全关闭退出
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-                            NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
-                        }
-                    }
-                }
+        //        return false;
+        //    }
+        //    finally
+        //    {
+        //        if (channel != null)
+        //        {
+        //            for (int i = 0; i < 2; i++)
+        //            {
+        //                try
+        //                {
+        //                    channel.ShutdownAsync().Wait(6000);
+        //                    //安全关闭退出
+        //                    break;
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
+        //                }
+        //            }
+        //        }
 
-            }
+        //    }
 
 
-        }
+        //}
 
 
         /// <summary>
