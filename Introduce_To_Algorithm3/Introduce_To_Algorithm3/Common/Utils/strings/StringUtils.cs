@@ -110,7 +110,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
 
             if (ignoreCase)
             {
-                return String.Equals(s1.Trim(), s2.Trim(), StringComparison.InvariantCultureIgnoreCase);
+                return String.Equals(s1.Trim(), s2.Trim(), StringComparison.CurrentCultureIgnoreCase);
             }
             else
             {
@@ -148,7 +148,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
 
             if (isIgnoreCase)
             {
-                return normalizedS.StartsWith(normalizedStart, StringComparison.InvariantCultureIgnoreCase);
+                return normalizedS.StartsWith(normalizedStart, StringComparison.CurrentCultureIgnoreCase);
             }
             else
             {
@@ -228,39 +228,39 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
         }
 
 
-        /// <summary>
-        /// 组合字符串，并且如果数据项为null，则用String.Empty连接
-        /// </summary>
-        /// <param name="enumerable"></param>
-        /// <param name="isTrim">是否去掉字符串前后的空格</param>
-        /// <param name="separator">分隔符，只保留中间部分分隔符</param>
-        /// <returns></returns>
-        public static string CombineEx(IEnumerable<String> enumerable, string separator = ",", bool isTrim = true)
-        {
-            if (enumerable == null)
-            {
-                return string.Empty;
-            }
+        ///// <summary>
+        ///// 组合字符串，并且如果数据项为null，则用String.Empty连接
+        ///// </summary>
+        ///// <param name="enumerable"></param>
+        ///// <param name="isTrim">是否去掉字符串前后的空格</param>
+        ///// <param name="separator">分隔符，只保留中间部分分隔符</param>
+        ///// <returns></returns>
+        //public static string CombineEx(IEnumerable<String> enumerable, string separator = ",", bool isTrim = true)
+        //{
+        //    if (enumerable == null)
+        //    {
+        //        return string.Empty;
+        //    }
 
-            StringBuilder sb = new StringBuilder();
+        //    StringBuilder sb = new StringBuilder();
 
-            //取消空白
-            var tempList = enumerable.Where(r => !String.IsNullOrWhiteSpace(r)).ToList();
+        //    //取消空白
+        //    var tempList = enumerable.Where(r => !String.IsNullOrWhiteSpace(r)).ToList();
 
 
-            for (int i = 0; i < tempList.Count; i++)
-            {
-                var item = tempList[i];
-                sb.Append(isTrim ? item.Trim() : item);
-                if (i != tempList.Count - 1)
-                {
-                    //不是最后一个
-                    sb.Append(separator);
-                }
-            }
+        //    for (int i = 0; i < tempList.Count; i++)
+        //    {
+        //        var item = tempList[i];
+        //        sb.Append(isTrim ? item.Trim() : item);
+        //        if (i != tempList.Count - 1)
+        //        {
+        //            //不是最后一个
+        //            sb.Append(separator);
+        //        }
+        //    }
 
-            return sb.ToString();
-        }
+        //    return sb.ToString();
+        //}
 
         /// <summary>
         /// 组合字符串，并且如果数据项为null，则用String.Empty连接
@@ -295,25 +295,25 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
             return sb.ToString();
         }
 
-        /// <summary>
-        /// 判断数组是否包含指定字符串。
-        /// 如果数组本身为null或者空，返回false.
-        /// 
-        /// 比较字符串是空、null、空白是相同的。
-        /// 比较字符串时忽略开头结尾的空白，忽略大小写
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        public static bool ContainsEx(String[] arr, string s)
-        {
-            if (arr == null || arr.Length == 0)
-            {
-                return false;
-            }
+        ///// <summary>
+        ///// 判断数组是否包含指定字符串。
+        ///// 如果数组本身为null或者空，返回false.
+        ///// 
+        ///// 比较字符串是空、null、空白是相同的。
+        ///// 比较字符串时忽略开头结尾的空白，忽略大小写
+        ///// </summary>
+        ///// <param name="arr"></param>
+        ///// <param name="s"></param>
+        ///// <returns></returns>
+        //public static bool ContainsEx(String[] arr, string s)
+        //{
+        //    if (arr == null || arr.Length == 0)
+        //    {
+        //        return false;
+        //    }
 
-            return arr.Any(item => EqualsEx(item, s));
-        }
+        //    return arr.Any(item => EqualsEx(item, s));
+        //}
 
         /// <summary>
         /// 判断列表是否包含指定字符串。
