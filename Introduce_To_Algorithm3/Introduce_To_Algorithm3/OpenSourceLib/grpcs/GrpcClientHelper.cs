@@ -195,7 +195,7 @@ message HelloResponse {
                 //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
                 channel = new Channel(ip, port, ChannelCredentials.Insecure,options);
 
-                if (action != null)
+                //if (action != null)
                 {
                     action(channel);
 
