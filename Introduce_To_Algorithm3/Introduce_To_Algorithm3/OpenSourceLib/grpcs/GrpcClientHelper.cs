@@ -28,7 +28,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// 
     /// 服务器代码参照GrpcServer
     /// </summary>
-    public static class GrpcHelper
+    public static class GrpcClientHelper
     {
         /*
 gRPC支持四种服务方法:grpc服务都是一个输入一个输出的
@@ -95,7 +95,7 @@ message HelloResponse {
         /// <summary>
         /// 服务地址 ip:port
         /// </summary>
-        public static readonly string ServiceAddress = "127.0.0.1:50051";
+        //public static readonly string ServiceAddress = "127.0.0.1:50051";
 
         #endregion
 
@@ -200,7 +200,9 @@ message HelloResponse {
                     action(channel);
 
 
-
+                    /*
+                     *
+                     *
                     //构建client, 客户端不需要关闭
                     var client = new Greeter.GreeterClient(channel);
                     //客户端调用时指定deadline,如果不指定表示不超时
@@ -208,7 +210,9 @@ message HelloResponse {
                     //deadLine必须使用UTC时间
                     var reply = client.SayHello(new Request() {Request_ = "Hello"},
                         deadline: DateTime.UtcNow.AddSeconds(timeoutSeconds));
-                    
+                    *
+                    *
+                    */
                 }
 
                 return true;

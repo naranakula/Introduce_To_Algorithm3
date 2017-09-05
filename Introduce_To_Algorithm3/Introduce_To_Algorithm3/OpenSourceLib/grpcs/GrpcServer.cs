@@ -10,6 +10,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 {
     /// <summary>
     /// Grpc服务器
+    /// 
+    /// GRPC的C#版本底层通过pinvoke调用的grpc c-based的版本
     /// </summary>
     public class GrpcServer
     {

@@ -711,7 +711,7 @@
     <Compile Include="OpenSourceLib\grpcs\examples\exs\Greeter\Test.cs" />
     <Compile Include="OpenSourceLib\grpcs\examples\GreeterClient.cs" />
     <Compile Include="OpenSourceLib\grpcs\examples\GreeterServer.cs" />
-    <Compile Include="OpenSourceLib\grpcs\GrpcHelper.cs" />
+    <Compile Include="OpenSourceLib\grpcs\GrpcClientHelper.cs" />
     <Compile Include="OpenSourceLib\grpcs\GrpcServer.cs" />
     <Compile Include="OpenSourceLib\grpcs\protos\removables\Addressbook.cs" />
     <Compile Include="OpenSourceLib\Json\JsonHelper.cs" />
