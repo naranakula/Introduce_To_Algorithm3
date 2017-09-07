@@ -872,6 +872,7 @@
     </None>
     <None Include="NLog2.config" />
     <None Include="OpenSourceLib\ActiveMq\ActiveMQ的安装.docx" />
+    <None Include="OpenSourceLib\ActiveMq\ActiveMQ的安装精简版.docx" />
     <None Include="OpenSourceLib\AutoMapper\AutoMapper.docx" />
     <None Include="OpenSourceLib\Consuls\Consul.docx" />
     <None Include="OpenSourceLib\grpcs\examples\exs\compile.bat" />
