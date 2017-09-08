@@ -13,26 +13,123 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
     //需要使用Nuget添加Grpc和Grpc.Tools
     /// <summary>
     /// GRPC服务器端接口实现
+    /// 
+    /// 服务实现类只创建一个实例的，即Greeter.BindService(new GreeterServiceImpl())时创建的实例,已验证
     /// </summary>
     public class GreeterServiceImpl:Greeter.GreeterBase
     {
+        public GreeterServiceImpl()
+        {
+            Console.WriteLine("创建了一个服务器实现实例");
+        }
+
         /// <summary>
-        /// 覆盖基类方法
+        ///Unary RPC  覆盖基类方法
+        /// 一般不加async
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
         public override Task<Response> SayHello(Request request, ServerCallContext context)
         {
+            //不要调用基类的方法，基类仅仅抛出异常
+            //base.SayHello(request, context);
+
+
             Console.WriteLine(request.Request_);
 
 
             return Task.FromResult(new Response() {Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss")});
 
 
-            return Task.Factory.StartNew(()=> {
-                return new Response() { Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss") };
-            });
+            //return Task.Factory.StartNew(()=> {
+            //    return new Response() { Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss") };
+            //});
+        }
+
+        /// <summary>
+        /// Server streaming RPC
+        /// 可能需要手动加async
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="responseStream"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override async Task SayHelloStreamServer(Request request, IServerStreamWriter<Response> responseStream, ServerCallContext context)
+        {
+            //不要调用基类的方法，基类仅仅抛出异常
+            //return base.SayHelloStreamServer(request, responseStream, context);
+            List<Response> list = new List<Response>();
+            list.Add(new Response() {Response_ = "1"});
+            list.Add(new Response() { Response_ = "2" });
+            list.Add(new Response() { Response_ = "3" });
+
+            foreach (var response in list)
+            {
+                //服务器端返回多个结果
+                await responseStream.WriteAsync(response);
+            }
+
+        }
+
+        /// <summary>
+        /// Client streaming RPC
+        /// 可能需要手动加async
+        /// </summary>
+        /// <param name="requestStream"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override async Task<Response> SayHelloStreamClient(IAsyncStreamReader<Request> requestStream, ServerCallContext context)
+        {
+            //不要调用基类的方法，基类仅仅抛出异常
+            //return base.SayHelloStreamClient(requestStream, context);
+
+            while (await requestStream.MoveNext())
+            {
+                //获取客户端的多个输入，不一定全部读取客户端的输入
+                Request curRequest = requestStream.Current;
+                //TODO: 处理输入
+            }
+
+            //不需要Task.FromResult
+            return new Response() {Response_ = "hello"};
+        }
+
+        /// <summary>
+        /// bidirectional streaming RPC
+        /// 可能需要手动加async
+        /// </summary>
+        /// <param name="requestStream"></param>
+        /// <param name="responseStream"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override async Task SayHelloStreamBidirectional(IAsyncStreamReader<Request> requestStream, IServerStreamWriter<Response> responseStream,
+            ServerCallContext context)
+        {
+            //不要调用基类的方法，基类仅仅抛出异常
+            //return base.SayHelloStreamBidirectional(requestStream, responseStream, context);
+
+            while (await requestStream.MoveNext())
+            {
+                //获取客户端的多个输入
+                Request curRequest = requestStream.Current;
+                //TODO: 处理输入,产生输出
+
+
+                List<Response> list = new List<Response>();
+                list.Add(new Response() { Response_ = "1" });
+                list.Add(new Response() { Response_ = "2" });
+                list.Add(new Response() { Response_ = "3" });
+
+                foreach (var response in list)
+                {
+                    //服务器端返回多个结果
+                    await responseStream.WriteAsync(response);
+                }
+
+
+
+            }
         }
     }
 

@@ -25,7 +25,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// 
     /// grpc必须有且仅有一个输入一个输出，并且建议每个方法专有自己的输入输出定义(当然这不是必须的，自己写的严格遵守)
     /// gRPC service methods have exactly one input message and exactly one output message. Typically, these messages are used as input and output to only one method.
-    /// 
+    /// GRPC的C#版本底层通过pinvoke调用的grpc c-based的版本
     /// 服务器代码参照GrpcServer
     /// </summary>
     public static class GrpcClientHelper
@@ -70,6 +70,13 @@ rpc BidiHello(stream HelloRequest) returns (stream HelloResponse){ }
          * 
          * 2)token-based authentication with google,需要连google
          * 
+         * 
+         * 认证可以在channel级别，也可以每次调用认证。
+         * 两种证书类型：
+         * Channel credentials, which are attached to a Channel, such as SSL credentials.
+         * Call credentials, which are attached to a call
+         * 
+         * https://grpc.io/docs/guides/auth.html
          */
 
 

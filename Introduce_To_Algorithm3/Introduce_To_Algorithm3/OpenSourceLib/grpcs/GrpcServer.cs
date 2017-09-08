@@ -12,6 +12,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// Grpc服务器
     /// 
     /// GRPC的C#版本底层通过pinvoke调用的grpc c-based的版本
+    /// 服务实现类只创建一个实例的，即Greeter.BindService(new GreeterServiceImpl())时创建的实例,已验证
+    /// examples下有完整例子
     /// </summary>
     public class GrpcServer
     {

@@ -93,6 +93,7 @@ message SearchRequest {
 
 //服务名和方法名使用CamelCase方式
 service FooService {
+  //方法的名字不能重复
   rpc GetSomething(FooRequest) returns (FooResponse);
 }
 

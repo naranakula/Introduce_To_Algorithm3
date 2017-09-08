@@ -23,9 +23,13 @@ namespace com.cmlu.services {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Cgp0ZXN0LnByb3RvEgR0ZXN0IhoKB1JlcXVlc3QSDwoHcmVxdWVzdBgBIAEo",
-            "CSIcCghSZXNwb25zZRIQCghyZXNwb25zZRgBIAEoCTI2CgdHcmVldGVyEisK",
-            "CFNheUhlbGxvEg0udGVzdC5SZXF1ZXN0Gg4udGVzdC5SZXNwb25zZSIAQhSq",
-            "AhFjb20uY21sdS5zZXJ2aWNlc2IGcHJvdG8z"));
+            "CSIcCghSZXNwb25zZRIQCghyZXNwb25zZRgBIAEoCTLwAQoHR3JlZXRlchIr",
+            "CghTYXlIZWxsbxINLnRlc3QuUmVxdWVzdBoOLnRlc3QuUmVzcG9uc2UiABI5",
+            "ChRTYXlIZWxsb1N0cmVhbVNlcnZlchINLnRlc3QuUmVxdWVzdBoOLnRlc3Qu",
+            "UmVzcG9uc2UiADABEjkKFFNheUhlbGxvU3RyZWFtQ2xpZW50Eg0udGVzdC5S",
+            "ZXF1ZXN0Gg4udGVzdC5SZXNwb25zZSIAKAESQgobU2F5SGVsbG9TdHJlYW1C",
+            "aWRpcmVjdGlvbmFsEg0udGVzdC5SZXF1ZXN0Gg4udGVzdC5SZXNwb25zZSIA",
+            "KAEwAUIUqgIRY29tLmNtbHUuc2VydmljZXNiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {

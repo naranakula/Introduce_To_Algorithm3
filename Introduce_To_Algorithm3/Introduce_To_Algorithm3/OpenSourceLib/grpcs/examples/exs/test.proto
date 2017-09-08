@@ -5,7 +5,15 @@ package test;
 option csharp_namespace = "com.cmlu.services";
 
 service Greeter{
+	//Unary RPC
 	rpc SayHello (Request) returns (Response) {}
+	//Server streaming RPC
+	rpc SayHelloStreamServer (Request) returns (stream Response){}
+	//Client streaming RPC
+	rpc SayHelloStreamClient (stream Request) returns (Response){}
+	//bidirectional streaming RPC
+	rpc SayHelloStreamBidirectional (stream Request) returns (stream Response){}
+
 }
 
 
