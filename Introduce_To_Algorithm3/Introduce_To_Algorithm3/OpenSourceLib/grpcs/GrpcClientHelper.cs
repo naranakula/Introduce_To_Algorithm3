@@ -100,7 +100,7 @@ message HelloResponse {
         #endregion
 
 
-       
+
         ///// <summary>
         ///// 安全调用grpc
         ///// </summary>
@@ -119,7 +119,7 @@ message HelloResponse {
         //        };
         //        //不使用加密
         //        channel = new Channel(ServiceAddress, ChannelCredentials.Insecure,options);
-                
+
 
         //        if(action != null)
         //        {
@@ -169,6 +169,7 @@ message HelloResponse {
 
         /// <summary>
         /// 安全调用grpc
+        /// Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
         /// </summary>
         /// <param name="ip">ip地址</param>
         /// <param name="port">端口</param>
@@ -188,6 +189,7 @@ message HelloResponse {
             {
                 var options = new List<ChannelOption>()
                 {
+                    ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
                     new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
                     new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
                 };
