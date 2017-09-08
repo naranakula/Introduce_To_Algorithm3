@@ -1,4 +1,5 @@
 ﻿// syntax = "proto3" 必须是第一个非空、非注释行，  如果不加，认为是proto2
+// 使用proto3
 //https://github.com/google/protobuf
 //pb的C#编译器 建立.net4.5工程 使用 nuget下载Google.Protobuf 和 google.protobuf.Tools  Tools包含了protoc.exe
 //grpc.tools增加了对grpc service的支持, google.protobuf.Tools支持原生的pb文件
