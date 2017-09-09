@@ -1,0 +1,178 @@
+﻿// syntax = "proto3" 必须是第一个非空、非注释行，  如果不加，认为是proto2
+// 使用proto3
+//https://github.com/google/protobuf
+//pb的C#编译器 建立.net4.5工程 使用 nuget下载Google.Protobuf 和 google.protobuf.Tools  Tools包含了protoc.exe
+//grpc.tools增加了对grpc service的支持, google.protobuf.Tools支持原生的pb文件
+//执行命令 protoc -I=$SRC_DIR --csharp_out=$DST_DIR $SRC_DIR/addressbook.proto
+//-I指定查找import的目录，默认是程序当前目录，--sharp_out指定C#代码输出目录
+//C# pb需要.net4.5
+syntax = "proto3";
+
+//默认的包名  package不加引号
+package tutorial;
+
+// [START java_declaration]
+//生成java时的包名 会覆盖默认的包名
+option java_package = "com.example.tutorial";
+//java_outer_classname是文件级别的选项，主要功能是显示的指定生成Java代码的外部类名称。如果没有指定该选项，Java代码的外部类名称为当前文件的文件名部分，同时还要将文件名转换为驼峰格式，如：my_project.proto，那么该文件的默认外部类名称将为MyProject。
+option java_outer_classname = "AddressBookProtos";
+// [END java_declaration]
+
+//生成C#时的包名  会覆盖默认的包名
+// [START csharp_declaration]
+option csharp_namespace = "Google.Protobuf.Examples.AddressBook";
+// [END csharp_declaration]
+
+// import默认是不传递的， import public传递引用
+////14长度的yyyyMMddHHmmss字符串日期表示，建议使用它进行数据交换
+import "google/protobuf/timestamp.proto";
+
+//  //表示注释
+//消息类型名和枚举名使用CamelCase方式，如SearchRequest
+//字段名使用_分割的小写方式 如page_number  result_per_page
+//枚举值使用 CAPITALS_WITH_UNDERSCORES  如 FIRST_VALUE
+//服务名和方法名使用CamelCase方式
+//proto没有继承的概念
+
+//Person john = ...;
+//using (var output = File.Create("john.dat"))
+//{
+//    john.WriteTo(output);
+//}
+
+//Person john;
+//using (var input = File.OpenRead("john.dat"))
+//{
+//    john = Person.Parser.ParseFrom(input);
+//}
+
+
+//public void PrintMessage(IMessage message)
+//{
+//    var descriptor = message.Descriptor;
+//    foreach (var field in descriptor.Fields.InDeclarationOrder())
+//    {
+//        Console.WriteLine(
+//            "Field {0} ({1}): {2}",
+//            field.FieldNumber,
+//            field.Name,
+//            field.Accessor.GetValue(message);
+//    }
+//}
+
+//协议兼容做到如下三点
+//you must not change the tag numbers of any existing fields.
+//you may delete fields.删除的标签不能再使用
+//you may add new fields but you must use fresh tag numbers
+//old code will happily read new messages and simply ignore any new fields. To the old code, singular fields that were deleted will simply have their default value, and deleted repeated fields will be empty. 
+
+
+//pb3中Message fields can be one of the following:  pb3默认是optional,没有required
+//singular: a well-formed message can have zero or one of this field (but not more than one). 
+//repeated: this field can be repeated any number of times (including zero) in a well-formed message. The order of the repeated values will be preserved.
+// In proto3,
+// repeated fields of scalar numeric types use packed encoding by default.
+
+message SearchRequest {
+//每个字段必须赋值一个唯一的数字，1到15使用一个字节表示数字和类型，16到2047使用两个字节。最小的是1，最大的是 2^29 – 1=536,870,911。并且不能使用19000到 19999。
+//多个消息类型可以定义在一个.proto文件中。
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+  //枚举第一个字段必须赋值为0,当消息不包含该类型时，第一个字段是默认值
+  //建议枚举字段从0开始每个字段赋值，必须显式赋值
+  enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+  }
+  Corpus corpus = 4;
+  //时间对应C#的什么类型还没有确定
+  google.protobuf.Timestamp createTime=5; 
+  //Proto3丢弃了required，默认是optional，除非加了repeated。Proto3中repeated默认是packed的，packed效率好
+  //repeated数据的顺序序列化反序列化是保持的
+  repeated int32 d = 6;
+}
+
+
+
+//服务名和方法名使用CamelCase方式
+service FooService {
+  //方法的名字不能重复
+  rpc GetSomething(FooRequest) returns (FooResponse);
+}
+
+//import "myproject/other_protos.proto";
+//import public "new.proto";
+//import可以引用别的proto文件 ，import是不传递引用的，import public传递引用
+//可以使用嵌套类型Parent.ChildType,不限制嵌套的层数
+
+
+
+//当更新一个消息类型时需要注意：
+//1、	不要改变现有的字段的数字标签
+//2、	如果新增字段，则原来的格式是完全兼容的，新的协议解析旧的时，新的字段会使用默认值。原来的格式在解析新的时忽略新的字段。未知字段会被忽略
+//3、	删除旧的字段，要保证原来的tag number不再使用。删除的字段会在旧的协议中忽略。
+
+//When a message is parsed, if it does not contain an optional element, the corresponding field in the parsed object is set to the default value for that field. 
+//If the default value is not specified for an optional element, a type-specific default value is used instead: 
+//for strings, the default value is the empty string. For bools, the default value is false. For numeric types, the default value is zero.
+// For enums, the default value is the first value listed in the enum's type definition.
+// 无法知道是用户设置的默认值，还是没有赋值而使用的默认值，默认值不会序列化到二进制流中
+
+
+
+//类型定义
+//map不保证顺序  repeated保证顺序
+//Proto3丢弃了required，默认是optional，除非加了repeated
+//map<key_type, value_type> map_field = N;//key_type can be any integral or string type (so, any scalar type except for floating point types and bytes). The value_type can be any type except another map.
+//map<string, Project> projects = 3;
+//proto Type	Notes	Java Type	C# Type
+//double		double	double
+//float		float	float
+//int32	Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead.	int	int
+//int64	Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead.	long	long
+//sint32	Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s.	int	int
+//sint64	Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s.	long	long
+//bool		boolean	bool
+//string	A string must always contain UTF-8 encoded or 7-bit ASCII text.	String	string
+//bytes	May contain any arbitrary sequence of bytes.	ByteString	ByteString
+
+//package foo.bar;
+//package包名用来解决命名冲突
+//In C# the package is used as the namespace after converting to PascalCase, unless you explicitly provide anoption csharp_namespace in your .proto file. 
+
+
+//定义rpc
+//service SearchService {
+//  rpc Search (SearchRequest) returns (SearchResponse);
+//}
+
+
+//编译proto文件
+//Protoc --cpp_out=DST_DIR --java_out=DST_DIR --python_out=DST_DIR --go_out=DST_DIR --ruby_out=DST_DIR --javanano_out=DST_DIR --objc_out=DST_DIR --csharp_out=DST_DIR path/to/file.proto
+//--csharp_out指定C#代码输出的路径
+//最后可以跟多个proto文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

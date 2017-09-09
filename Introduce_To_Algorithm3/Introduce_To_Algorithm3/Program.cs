@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos;
 
 namespace Introduce_To_Algorithm3
 {

@@ -9,8 +9,9 @@ option java_outer_classname = "AddressBookProtos";
 // [END java_declaration]
 
 // [START csharp_declaration]
-option csharp_namespace = "Google.Protobuf.Examples.AddressBook";
+option csharp_namespace = "cmlu.examples.pbs2";
 // [END csharp_declaration]
+
 
 // [START messages]
 message Person {

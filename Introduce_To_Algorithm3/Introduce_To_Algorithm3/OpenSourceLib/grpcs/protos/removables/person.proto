@@ -1,4 +1,9 @@
 ﻿syntax = "proto3";
+
+// [START csharp_declaration]
+option csharp_namespace = "cmlu.examples.pbs";
+// [END csharp_declaration]
+
 message Person {
   string name = 1;
   int32 id = 2;  // Unique ID number for this person.
