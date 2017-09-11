@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Grpc.Core;
 using System.Net;
+using System.Threading;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
 {
@@ -14,7 +15,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
     /// <summary>
     /// GRPC服务器端接口实现
     /// 
-    /// Unary只能传输少量数据，传输大数据使用stream流式接口
+    /// Unary只能传输少量数据，传输大数据使用stream流式接口,使用了约5GB的流量做了测试
     /// 服务实现类只创建一个实例的，即Greeter.BindService(new GreeterServiceImpl())时创建的实例,已验证
     /// </summary>
     public class GreeterServiceImpl:Greeter.GreeterBase
@@ -64,9 +65,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
 
             for (int i = 0; i < 1000 * 100 * 10000; i++)
             {
-                //测试1000M=1g大数据流式传输
+                //测试1000M=1g大数据流式传输  使用了约5GB的流量做了测试
                 var response =new Response() { Response_ = i.ToString() };
                 await responseStream.WriteAsync(response);
+                if (i % 100 == 0)
+                {
+                    Thread.Sleep(500);
+                }
             }
 
             /*

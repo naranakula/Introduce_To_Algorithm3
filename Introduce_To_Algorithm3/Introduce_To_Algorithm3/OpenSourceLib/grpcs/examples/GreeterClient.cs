@@ -47,7 +47,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
                     Response response = responseStream.Current;
                     //TODO：处理响应
 
-                    if (i++ % 1000 == 0)
+                    if (i++ % 100 == 0)
                     {
                         Console.WriteLine(response.Response_);
                     }
