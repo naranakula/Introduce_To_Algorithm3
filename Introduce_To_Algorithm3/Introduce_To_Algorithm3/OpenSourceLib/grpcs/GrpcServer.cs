@@ -59,7 +59,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     //Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
                     new ChannelOption(ChannelOptions.MaxSendMessageLength,32*1024*1024),//最大可以发送的消息长度
                     new ChannelOption(ChannelOptions.MaxReceiveMessageLength,16*1024*1024),//最大允许接收的消息长度
-                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,1024),//最大允许的并发连接
+                    //最大允许的Maximum number of concurrent incoming streams to allow on a http2 connection
+                    //单个http2连接允许的最大数量的stream
+                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,255),
                     new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口
                 };
 
