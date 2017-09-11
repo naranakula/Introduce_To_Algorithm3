@@ -12,14 +12,14 @@ syntax = "proto3";
 package tutorial;
 
 // [START java_declaration]
-//生成java时的包名 会覆盖默认的包名
+//生成java时的包名 会覆盖默认的包名 java包名全小写
 option java_package = "com.example.tutorial";
 //java_outer_classname是文件级别的选项，主要功能是显示的指定生成Java代码的外部类名称。如果没有指定该选项，Java代码的外部类名称为当前文件的文件名部分，同时还要将文件名转换为驼峰格式，如：my_project.proto，那么该文件的默认外部类名称将为MyProject。
 option java_outer_classname = "AddressBookProtos";
 // [END java_declaration]
 
 //生成C#时的包名  会覆盖默认的包名
-// [START csharp_declaration]
+// [START csharp_declaration]  C#命名空间采用驼峰式
 option csharp_namespace = "Google.Protobuf.Examples.AddressBook";
 // [END csharp_declaration]
 

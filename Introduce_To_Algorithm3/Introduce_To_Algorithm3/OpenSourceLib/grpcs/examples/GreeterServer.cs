@@ -60,17 +60,28 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
         {
             //不要调用基类的方法，基类仅仅抛出异常
             //return base.SayHelloStreamServer(request, responseStream, context);
-            List<Response> list = new List<Response>();
-            list.Add(new Response() {Response_ = "1"});
-            list.Add(new Response() { Response_ = "2" });
-            list.Add(new Response() { Response_ = "3" });
 
+
+            for (int i = 0; i < 1000 * 100 * 10000; i++)
+            {
+                //测试1000M=1g大数据流式传输
+                var response =new Response() { Response_ = i.ToString() };
+                await responseStream.WriteAsync(response);
+            }
+
+            /*
+            List<Response> list = new List<Response>();
+            for (int i = 0; i < 1000 * 100 * 10000; i++)
+            {
+                //测试1000M=1g大数据流式传输,考虑到数据太多，一次性读到内存是不可行的
+                list.Add(new Response() { Response_ = i.ToString() });
+            }
             foreach (var response in list)
             {
                 //服务器端返回多个结果
                 await responseStream.WriteAsync(response);
             }
-
+            */
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
@@ -39,11 +40,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             using (var serverStreamCall = client.SayHelloStreamServer(new Request() { Request_ = "" }))
             {
                 var responseStream = serverStreamCall.ResponseStream;
+                int i = 0;
                 while (await responseStream.MoveNext())
                 {
                     //读取当前返回值
                     Response response = responseStream.Current;
                     //TODO：处理响应
+
+                    if (i++ % 1000 == 0)
+                    {
+                        Console.WriteLine(response.Response_);
+                    }
                 }
             }
 
