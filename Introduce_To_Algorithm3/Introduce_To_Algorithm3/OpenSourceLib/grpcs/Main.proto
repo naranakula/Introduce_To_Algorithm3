@@ -8,7 +8,7 @@
 //C# pb需要.net4.5
 syntax = "proto3";
 
-//默认的包名  package不加引号
+//默认的包名  package不加引号 使用小写
 package tutorial;
 
 // [START java_declaration]
@@ -131,6 +131,7 @@ service FooService {
 //Proto3丢弃了required，默认是optional，除非加了repeated
 //map<key_type, value_type> map_field = N;//key_type can be any integral or string type (so, any scalar type except for floating point types and bytes). The value_type can be any type except another map.
 //map<string, Project> projects = 3;
+//map cannot be repeated. map不保证顺序
 //proto Type	Notes	Java Type	C# Type
 //double		double	double
 //float		float	float
