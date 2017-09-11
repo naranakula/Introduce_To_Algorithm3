@@ -11,6 +11,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
 {
     /// <summary>
     /// pb帮助类
+    /// 序列化 反序列化支持
     /// </summary>
     public static class PbHelper
     {
