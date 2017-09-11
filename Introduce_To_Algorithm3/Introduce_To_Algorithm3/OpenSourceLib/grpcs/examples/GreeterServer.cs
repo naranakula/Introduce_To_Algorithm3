@@ -68,9 +68,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
                 //测试1000M=1g大数据流式传输  使用了约5GB的流量做了测试
                 var response =new Response() { Response_ = i.ToString() };
                 await responseStream.WriteAsync(response);
-                if (i % 100 == 0)
+                if (i % 1000 == 0)
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(200);
                 }
             }
 
