@@ -63,7 +63,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             //return base.SayHelloStreamServer(request, responseStream, context);
 
 
-            for (int i = 0; i < 1000 * 100 * 10000; i++)
+            for (int i = 0; i < 1000 * 1000 * 1000; i++)
             {
                 //测试1000M=1g大数据流式传输  使用了约5GB的流量做了测试
                 var response =new Response() { Response_ = i.ToString() };
