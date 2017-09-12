@@ -17,6 +17,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
     /// 
     /// Unary只能传输少量数据，传输大数据使用stream流式接口,使用了不小于5GB的流量做了测试了7天7夜
     /// 服务实现类只创建一个实例的，即Greeter.BindService(new GreeterServiceImpl())时创建的实例,已验证
+    /// 
+    /// 服务器端尽量不要抛出异常，而是通过try catch，设置result_code result_desc来反映异常
     /// </summary>
     public class GreeterServiceImpl:Greeter.GreeterBase
     {
@@ -39,8 +41,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
 
 
             Console.WriteLine(request.Request_);
-
-
+            
             return Task.FromResult(new Response() {Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss")});
 
 
