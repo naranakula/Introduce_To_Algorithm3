@@ -257,7 +257,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
 
                 if (statusCode == StatusCode.Unavailable)
                 {
-                    //服务不可用
+                    //服务不可用，通常是因为网络原因
                 }
 
                 exceptionHandler?.Invoke(rpcEx);
