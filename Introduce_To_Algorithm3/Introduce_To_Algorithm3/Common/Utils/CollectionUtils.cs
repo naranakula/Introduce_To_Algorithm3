@@ -57,6 +57,30 @@ namespace Introduce_To_Algorithm3.Common.Utils
             return outList;
         }
 
+        /// <summary>
+        /// 浅复制
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="inList">IList继承ICollection</param>
+        /// <returns></returns>
+        public static List<T> ShallowCopy<T>(ICollection<T> inList)
+        {
+            List<T> outList = new List<T>();
+
+            if (inList == null || inList.Count == 0)
+            {
+                //没有元素
+                return outList;
+            }
+
+            //拷贝原来的一份数据
+            foreach (var item in inList)
+            {
+                outList.Add(item);
+            }
+
+            return outList;
+        }
 
     }
 
