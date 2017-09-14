@@ -304,8 +304,8 @@
       <HintPath>..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.5\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StackExchange.Redis, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StackExchange.Redis.1.2.1\lib\net45\StackExchange.Redis.dll</HintPath>
+    <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net45\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SuperSocket.Common, Version=1.6.4.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
@@ -742,6 +742,7 @@
     <Compile Include="OpenSourceLib\NPOIs\NPOIHelper.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
+    <Compile Include="OpenSourceLib\Redis_\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\RestSharp\RestSharpHelper.cs" />
     <Compile Include="OpenSourceLib\Rxs\RxHelper.cs" />
     <Compile Include="OpenSourceLib\SharpZipLib\SharpZipHelper.cs" />
@@ -817,6 +818,7 @@
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.dll" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.pdb" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.xml" />
+    <Content Include="OpenSourceLib\Redis_\ReadMe.txt" />
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="OpenSourceLib\ZooKeepers\zookeeper.txt" />
     <Content Include="Readme.txt" />
@@ -909,6 +911,7 @@
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Docs\NetWorkComms.Net文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Packages\NetworkCommsDotNet_v3.0.3_ALv2.zip" />
     <None Include="OpenSourceLib\RabbitMq\Rabbitmq.docx" />
+    <None Include="OpenSourceLib\Redis_\Redis文档.docx" />
     <None Include="OpenSourceLib\Utils\Nlog.docx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
