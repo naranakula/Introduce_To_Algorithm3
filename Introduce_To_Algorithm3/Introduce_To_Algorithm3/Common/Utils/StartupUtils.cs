@@ -14,8 +14,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// <summary>
     /// 开机启动工具
     /// 其原理是  在注册表中添加启动命令
-    /// 注册表的路径是SOFTWARE\Microsoft\Windows\CurrentVersion\Run 
-    /// 
+    /// 注册表的路径是HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run 
+    /// regedit编辑注册表
     /// 命令可以有启动参数如："C:\Program Files\Microsoft Security Client\msseces.exe" -hide -runkey
     /// 设置开机启动需要管理员权限  win7上需要，server上不需要
     /// </summary>
@@ -29,7 +29,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="keyName">要设置的注册表键</param>
         /// <param name="appToRun">开机运行的命令，可以带启动参数</param>
         /// <param name="isAutoStartup">true,设置自动启动，false,取消设置自动启动</param>
-        public static void SetStartup(string keyName, string appToRun, bool isAutoStartup=true)
+        public static bool SetStartup(string keyName, string appToRun, bool isAutoStartup=true,Action<Exception> exceptionHandler=null)
         {
             RegistryKey registry = null;
 
@@ -56,11 +56,19 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     registry.DeleteValue(keyName,false);
                     //registry.SetValue(keyName, false);
                 }
-                
+                return true;
             }
             catch(Exception ex)
             {
-                Log4netHelper.Error("添加注册表失败："+ex);
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+                else
+                {
+                    Log4netHelper.Error("添加注册表失败：" + ex);
+                }
+                return false;
             }
             finally
             {
@@ -76,10 +84,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="keyName">要设置的注册表键, 可以为程序建一个guid</param>
         /// <param name="isAutoStartup">true,设置自动启动，false,取消设置自动启动</param>
-        public static void SetStartup(string keyName,  bool isAutoStartup=true)
+        public static bool SetStartup(string keyName,  bool isAutoStartup=true,Action<Exception> exceptionHandler=null)
         {
             string appToRun = Process.GetCurrentProcess().MainModule.FileName;
-            SetStartup(keyName,appToRun,isAutoStartup);
+            return SetStartup(keyName,appToRun,isAutoStartup,exceptionHandler);
         }
 
 
@@ -87,12 +95,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 设置当前应用程序自动开机运行
         /// </summary>
         /// <param name="isAutoStartup">true,设置自动启动，false,取消设置自动启动</param>
-        public static void SetStartup( bool isAutoStartup = true)
-        {
-            string appToRun = Process.GetCurrentProcess().MainModule.FileName;
-            string keyName = Path.GetFileNameWithoutExtension(appToRun);
-            SetStartup(keyName, appToRun, isAutoStartup);
-        }
+        //public static bool SetStartup( bool isAutoStartup = true, Action<Exception> exceptionHandler = null)
+        //{
+        //    string appToRun = Process.GetCurrentProcess().MainModule.FileName;
+        //    string keyName = Path.GetFileNameWithoutExtension(appToRun);
+        //    return SetStartup(keyName, appToRun, isAutoStartup,exceptionHandler);
+        //}
         #endregion
 
         #region 程序退出重启

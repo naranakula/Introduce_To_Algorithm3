@@ -13,7 +13,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         /*
          * 1 通过Settings.Default来访问Setting
-         * 2 Setting项有两个作用域：用户作用域和应用程序作用域。应用程序域只能读，用户作用域可以读可以写。
+         * 2 Setting项有两个作用域：用户作用域和应用程序作用域。应用程序域只能读，用户作用域可以读可以写。用户作用域的修改不是直接修改app.config文件，而是保存在application data文件下
          * 3 Settings.Default.Save();保存对用户设置所做的更改
          */
 
