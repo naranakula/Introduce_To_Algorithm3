@@ -85,7 +85,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <returns></returns>
         public static bool ValidateLicense(string licenseFile,string publicKey)
         {
-            string xmlStr = File.ReadAllText(licenseFile).Trim();
+            string xmlStr = File.ReadAllText(licenseFile,Encoding.UTF8).Trim();
             License license = License.Load(xmlStr);
             //license.Expiration;
             //license.Type;

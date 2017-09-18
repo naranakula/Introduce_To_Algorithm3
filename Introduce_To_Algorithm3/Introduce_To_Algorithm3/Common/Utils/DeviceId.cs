@@ -27,6 +27,13 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         private static volatile string cacheIpV4 = string.Empty;
 
+
+        /// <summary>
+        /// 锁
+        /// </summary>
+        private static object locker = new object();
+
+
         /// <summary>
         /// 获取设备唯一id  32位 小写英文字母
         /// 此函数第1次调用耗时1-2秒
@@ -34,18 +41,28 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         public static string UniqueDeviceId()
         {
-            if (!String.IsNullOrWhiteSpace(cacheDeviceId))
+            lock (locker)
             {
-                return cacheDeviceId;
+                if (!String.IsNullOrWhiteSpace(cacheDeviceId))
+                {
+                    return cacheDeviceId;
+                }
             }
+            
 
             //bios是固化到主板的程序，有了主板id，可以忽略biosid
             //string deviceId = CpuId() + "_"+ BiosId() + "_" + DiskId() + "_" + MotherboardId();
             //现实中可能更换机器但不更换ip
             string deviceId = CpuId() + "_" + BiosId() + "_" + MotherboardId();
             NLogHelper.Info("DeviceId=" + deviceId);
-            cacheDeviceId = GetMD5HashFromString(deviceId);
-            return cacheDeviceId;
+            string tempDeviceId = GetMD5HashFromString(deviceId);
+
+            lock (locker)
+            {
+                cacheDeviceId = tempDeviceId;
+            }
+
+            return tempDeviceId;
         }
 
         /// <summary>
