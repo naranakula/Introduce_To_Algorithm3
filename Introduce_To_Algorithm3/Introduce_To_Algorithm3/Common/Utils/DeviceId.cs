@@ -117,19 +117,26 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         {
             StringBuilder sb = new StringBuilder();
-            using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
+            try
             {
-                byte[] bytValue, bytHash;
-
-                bytValue = Encoding.UTF8.GetBytes(str);
-
-                bytHash = md5.ComputeHash(bytValue);
-                
-                for (int i = 0; i < bytHash.Length; i++)
+                using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
                 {
-                    //转换为两位16进制
-                    sb.Append(bytHash[i].ToString("x2"));
+                    byte[] bytValue, bytHash;
+
+                    bytValue = Encoding.UTF8.GetBytes(str);
+
+                    bytHash = md5.ComputeHash(bytValue);
+
+                    for (int i = 0; i < bytHash.Length; i++)
+                    {
+                        //转换为两位16进制
+                        sb.Append(bytHash[i].ToString("x2"));
+                    }
                 }
+            }
+            catch
+            {
+                return str;
             }
             string result = sb.ToString().ToLower().PadLeft(32,'_');
             return result.Substring(0, result.Length > 32 ? 32 : result.Length);
@@ -144,24 +151,31 @@ namespace Introduce_To_Algorithm3.Common.Utils
         private static string Identifier(string wmiClass, string wmiProperty)
         {
             string result = string.Empty;
-            using (ManagementClass mc = new ManagementClass(wmiClass))
+            try
             {
-                ManagementObjectCollection moc = mc.GetInstances();
-                foreach (var mo in moc)
+                using (ManagementClass mc = new ManagementClass(wmiClass))
                 {
-                    //Only get the first one
-                    if (String.IsNullOrWhiteSpace(result))
+                    ManagementObjectCollection moc = mc.GetInstances();
+                    foreach (var mo in moc)
                     {
-                        try
+                        //Only get the first one
+                        if (String.IsNullOrWhiteSpace(result))
                         {
-                            result = mo[wmiProperty].ToString().Trim().ToLower();
-                            break;
-                        }
-                        catch
-                        {
+                            try
+                            {
+                                result = mo[wmiProperty].ToString().Trim().ToLower();
+                                break;
+                            }
+                            catch
+                            {
+                            }
                         }
                     }
                 }
+            }
+            catch
+            {
+                result = string.Empty;
             }
             return result;
         }
@@ -174,10 +188,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             //Uses first CPU identifier available in order of preference
             //Don't get all identifiers, as it is very time consuming
-            string retVal = Identifier("Win32_Processor", "UniqueId");
-            if (String.IsNullOrWhiteSpace(retVal)) //If no UniqueID, use ProcessorID
-            {
-                retVal = Identifier("Win32_Processor", "ProcessorId");
+            string retVal = Identifier("Win32_Processor", "UniqueId")+ Identifier("Win32_Processor", "ProcessorId");
+            //if (String.IsNullOrWhiteSpace(retVal)) //If no UniqueID, use ProcessorID
+            //{
+            //    retVal = Identifier("Win32_Processor", "ProcessorId");
                 //if (string.IsNullOrWhiteSpace(retVal)) //If no ProcessorId, use Name
                 //{
                 //    retVal = Identifier("Win32_Processor", "Name");
@@ -188,7 +202,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 //    //Add clock speed for extra security
                 //    retVal += Identifier("Win32_Processor", "MaxClockSpeed");
                 //}
-            }
+            //}
             return retVal;
         }
 
