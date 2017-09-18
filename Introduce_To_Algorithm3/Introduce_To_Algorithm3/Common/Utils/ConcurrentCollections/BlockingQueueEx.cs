@@ -12,7 +12,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
     /// 阻塞队列
     /// 
     /// </summary>
-    public class BlockingQueueEx<T>:IDisposable where T:class
+    public class BlockingQueueEx<T> where T:class
     {
         /// <summary>
         /// 底层是ConcurrentQueue
@@ -30,6 +30,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// </summary>
         private volatile Action<T> _dataHandler = null;
 
+
+        /// <summary>
+        /// 异常处理
+        /// </summary>
+        private volatile Action<Exception> _exceptionHandler = null;
+
         private Thread _thread = null;
 
         /// <summary>
@@ -40,6 +46,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         {
             _isRunning = true;
             this._dataHandler = dataHandler;
+            this._exceptionHandler = exceptionHandler;
             _thread = new Thread(() =>
             {
                 T item = null;
@@ -47,21 +54,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 {
                     try
                     {
-                        if (_blockingQueue.TryTake(out item, 1111))
+                        if (_blockingQueue.TryTake(out item, 713))
                         {
-                            if(_dataHandler != null)
-                            {
-                                _dataHandler(item);
-                            }
+                            _dataHandler?.Invoke(item);
                         }
                     }
                     catch(Exception ex)
                     {
-                        Thread.Sleep(1);
-                        if(exceptionHandler != null)
-                        {
-                            exceptionHandler(ex);
-                        }
+                        Thread.Sleep(10);
+                        _exceptionHandler?.Invoke(ex);
                     }
                 }
             });
@@ -78,27 +79,27 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             _blockingQueue.Add(item);
         }
 
-        /// <summary>
-        /// 移除一个数据项，移除之前会阻塞
-        /// 返回移除的数据项
-        /// </summary>
-        /// <returns></returns>
-        public T Take()
-        {
-            return _blockingQueue.Take();
-        }
+        ///// <summary>
+        ///// 移除一个数据项，移除之前会阻塞
+        ///// 返回移除的数据项
+        ///// </summary>
+        ///// <returns></returns>
+        //public T Take()
+        //{
+        //    return _blockingQueue.Take();
+        //}
 
-        /// <summary>
-        /// 尝试移除一个数据项，成功移除返回true
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="milliseconds">等待的毫秒数，或为 Infinite (-1)，表示无限期等待。</param>
-        /// <returns></returns>
-        public bool TryTake(out T item,int milliseconds)
-        {
-            return _blockingQueue.TryTake(out item, milliseconds);
-        }
+        ///// <summary>
+        ///// 尝试移除一个数据项，成功移除返回true
+        ///// 
+        ///// </summary>
+        ///// <param name="item"></param>
+        ///// <param name="milliseconds">等待的毫秒数，或为 Infinite (-1)，表示无限期等待。</param>
+        ///// <returns></returns>
+        //public bool TryTake(out T item,int milliseconds)
+        //{
+        //    return _blockingQueue.TryTake(out item, milliseconds);
+        //}
 
         /// <summary>
         /// 停止
@@ -110,42 +111,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             {
                 _blockingQueue.Dispose();
             }
+            _blockingQueue = null;
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // 要检测冗余调用
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: 释放托管状态(托管对象)。
-                }
-
-                // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。
-                // TODO: 将大型字段设置为 null。
-                Stop();
-                disposedValue = true;
-            }
-        }
-
-        // TODO: 仅当以上 Dispose(bool disposing) 拥有用于释放未托管资源的代码时才替代终结器。
-        // ~BlockingQueueEx() {
-        //   // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
-        //   Dispose(false);
-        // }
-
-        // 添加此代码以正确实现可处置模式。
-        public void Dispose()
-        {
-            // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
-            Dispose(true);
-            // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
 
 
 
