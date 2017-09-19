@@ -12,6 +12,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
     /// <summary>
     /// Portable.Licensing 
+    /// 具体实现参见单独的工程LicenseGenerater
     /// </summary>
     public static class LicenseHelper
     {
