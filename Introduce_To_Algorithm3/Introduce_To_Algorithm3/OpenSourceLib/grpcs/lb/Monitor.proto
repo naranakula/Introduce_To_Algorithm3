@@ -1,0 +1,56 @@
+﻿syntax = "proto3";
+
+//这是监控端，在被监控端端实现，监控端调用
+//默认的包名
+package com.common.cmlu.services;
+
+//生成C#时的包名  会覆盖默认的包名
+option csharp_namespace = "com.common.services";
+
+
+//定义监控接口
+service MonitorService{
+	//监控接口
+	rpc Monitor(MonitorRequest) returns (MonitorResponse){}
+	//是否存活
+	rpc IsAlive(MonitorAliveRequest) returns (MonitorAliveResponse){}
+}
+
+//监控请求
+message MonitorRequest{
+	string command = 1;//请求的命令
+	string command_parameter = 2;//命令参数
+}
+
+//监控响应
+message MonitorResponse{
+	int32 result_code = 1;//结果码  尽量使用大于等于0的数
+	string result_desc = 2;//结果描述
+	string extension = 3;//拓展字段，目前没有意义
+}
+
+
+
+//IsAlive  
+message MonitorAliveRequest{
+	string command = 1;//请求的命令
+	string command_parameter = 2;//命令参数
+}
+
+
+message MonitorAliveResponse{
+	int32 result_code = 1;//结果码  尽量使用大于等于0的数
+	string result_desc = 2;//结果描述
+	string extension = 3;//拓展字段，目前没有意义
+}
+
+
+
+
+
+
+
+
+
+
+
