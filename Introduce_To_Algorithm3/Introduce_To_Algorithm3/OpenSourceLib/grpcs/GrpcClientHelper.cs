@@ -118,6 +118,14 @@ The zero value needs to be the first element, for compatibility with the proto2 
 
          */
 
+            /*
+             * 国际化
+             * 方法名只能是ASCII码的。
+             * status detail/message 可以是unicode string
+             * metadata key/value 是unicode string
+             * 
+             */
+
 
 
         #region 定义常量
