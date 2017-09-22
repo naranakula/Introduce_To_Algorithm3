@@ -105,7 +105,13 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
                 //重试时间间隔从4000ms增长到20000ms
                 options.ReconnectRetryPolicy = new ExponentialRetry(4000,16000);
                 redisClient = ConnectionMultiplexer.Connect(options);
-                
+
+                //连接失败
+                //redisClient.ConnectionFailed
+                //连接恢复
+                //redisClient.ConnectionRestored
+
+
                 return true;
             }
             catch (Exception e)
@@ -155,7 +161,7 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
         }
 
         //Redis中string是binary的。 string和byte[]均可作为key和value  
-        //RedisKey可以隐式的与string和byte[]进行转换
+        //RedisKey可以隐式的与string和byte[]进行转换 key和value不能为null
 
         #region 设置超时，检测存在，删除
 
@@ -187,17 +193,30 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
         }
 
         /// <summary>
+        /// PERSIST key
+        /// Time complexity: O(1)
+        /// 1 if the timeout was removed. 0 if key does not exist or does not have an associated timeout.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool KeyPersist(IDatabase db, RedisKey key)
+        {
+            return db.KeyPersist(key);
+        }
+
+
+        /// <summary>
         /// TIME：O（1）
         /// 
         /// Set a timeout on key. After the timeout has expired, the key will automatically be deleted.
         /// 设置成功返回true，如果key不存在，则返回false。
-        /// expiry为null，移除超时时间
         /// </summary>
         /// <param name="db"></param>
         /// <param name="key"></param>
         /// <param name="expiry"></param>
         /// <returns></returns>
-        public bool KeyExpire(IDatabase db, RedisKey key, TimeSpan? expiry)
+        public bool KeyExpire(IDatabase db, RedisKey key, TimeSpan expiry)
         {
             return db.KeyExpire(key,expiry);
         }
@@ -243,6 +262,25 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
             return db.Ping();
         }
 
+        /// <summary>
+        /// 测试连接
+        /// </summary>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public Tuple<bool, TimeSpan?> TestConnect(Action<Exception> exceptionHandler =null)
+        {
+            Tuple<bool, TimeSpan?> result = null;
+            Visit(db =>
+            {
+               TimeSpan ts = db.Ping();
+               result = new Tuple<bool, TimeSpan?>(true,ts);
+            }, ex =>
+            {
+                exceptionHandler?.Invoke(ex);
+                result = new Tuple<bool, TimeSpan?>(false,null);
+            });
+            return result;
+        }
 
         #endregion
 
@@ -355,6 +393,285 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
         {
             return db.ListLeftPush(key, value);
         }
+
+        /// <summary>
+        /// LLEN key
+        /// TIME ：O(1)
+        /// Returns the length of the list stored at key. If key does not exist, it is interpreted as an empty list and 0 is returned.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public long ListLength(IDatabase db,RedisKey key)
+        {
+            return db.ListLength(key);
+        }
+
+        /// <summary>
+        /// LRANGE key start stop
+        /// O(n)
+        /// 返回key索引的list的所有元素
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public RedisValue[] ListRange(IDatabase db, RedisKey key)
+        {
+            return db.ListRange(key, start: 0, stop: -1);
+        }
+
+        /// <summary>
+        /// LREM key count value
+        /// O(N) where N is the length of the list.
+        /// 移除所有等于value的元素
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public long ListRemove(IDatabase db, RedisKey key, RedisValue value)
+        {
+            return db.ListRemove(key, value,count:0);
+        }
+
+        #endregion
+
+        #region hash 建议使用
+
+        /// <summary>
+        /// HDEL key field [field ...]
+        /// O(1)
+        ///  Removes the specified fields from the hash stored at key.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <param name="hashField"></param>
+        /// <returns></returns>
+        public bool HashDelete(IDatabase db,RedisKey key, RedisValue hashField)
+        {
+            return db.HashDelete(key, hashField);
+        }
+
+        /// <summary>
+        /// HEXISTS key field
+        /// Time complexity: O(1)
+        ///  1 if the hash contains field. 0 if the hash does not contain field, or key does not exist.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <param name="hashField"></param>
+        /// <returns></returns>
+        public bool HashExists(IDatabase db, RedisKey key, RedisValue hashField)
+        {
+            return db.HashExists(key, hashField);
+        }
+
+        /// <summary>
+        /// HGET key field
+        /// Time complexity: O(1)
+        /// the value associated with field, or nil when field is not present in the hash or key does not exist.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <param name="hashField"></param>
+        /// <returns></returns>
+        public RedisValue HashGet(IDatabase db, RedisKey key, RedisValue hashField)
+        {
+            return db.HashGet(key, hashField);
+        }
+
+        /// <summary>
+        /// HGETALL key
+        /// Time complexity: O(N) where N is the size of the hash
+        /// list of fields and their values stored in the hash, or an empty list when key does not exist.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public HashEntry[] HashGetAll(IDatabase db, RedisKey key)
+        {
+            return db.HashGetAll(key);
+        }
+
+        /// <summary>
+        /// HKEYS key
+        /// Time complexity: O(N) where N is the size of the hash.
+        ///  list of fields in the hash, or an empty list when key does not exist.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public RedisValue[] HashKeys(IDatabase db, RedisKey key)
+        {
+            return db.HashKeys(key);
+        }
+
+        /// <summary>
+        /// HLEN key
+        /// Time complexity: O(1)
+        ///  number of fields in the hash, or 0 when key does not exist.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public long HashLength(IDatabase db, RedisKey key)
+        {
+            return db.HashLength(key);
+        }
+
+        /// <summary>
+        /// HMSET key field value [field value ...]
+        /// O(1)
+        /// This command overwrites any specified fields already existing in the hash. If key does not exist, a new key holding a hash is created.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <param name="hashField"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool HashSet(IDatabase db, RedisKey key, RedisValue hashField, RedisValue value)
+        {
+            return db.HashSet(key, hashField, value);
+        }
+
+        #endregion
+
+        #region set 建议使用
+
+        /// <summary>
+        /// SADD key member [member ...]
+        /// O(1) for each element added
+        /// Add the specified members to the set stored at key. 
+        /// True if the specified member was not already present in the set, else False
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool SetAdd(IDatabase db,RedisKey key, RedisValue value)
+        {
+            return db.SetAdd(key, value);
+        }
+
+        /// <summary>
+        /// Time complexity: O(N) where N is the total number of elements in all given sets.
+        /// 对多个集合执行交并差操作并返回结果
+        /// 返回结果list with members of the resulting set.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="operation">集合的交并差操作</param>
+        /// <param name="keys"></param>
+        /// <returns></returns>
+        public RedisValue[] SetCombine(IDatabase db, SetOperation operation, RedisKey[] keys)
+        {
+            return db.SetCombine(operation, keys);
+        }
+
+        /// <summary>
+        /// SISMEMBER key member
+        /// Time complexity: O(1)
+        /// 1 if the element is a member of the set. 0 if the element is not a member of the set, or if key does not exist.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool SetContains(IDatabase db, RedisKey key, RedisValue value)
+        {
+            return db.SetContains(key, value);
+        }
+
+        /// <summary>
+        /// SCARD key
+        /// Time complexity: O(1)
+        /// 获取集合元素的数量
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public long SetLength(IDatabase db, RedisKey key)
+        {
+            return db.SetLength(key);
+        }
+
+        /// <summary>
+        /// SMEMBERS key
+        /// 返回集合所有元素
+        /// O(N) where N is the set cardinality.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public RedisValue[] SetMembers(IDatabase db, RedisKey key)
+        {
+            return db.SetMembers(key);
+        }
+
+        /// <summary>
+        ///  Removes and returns a random element from the set value stored at key.
+        /// Time complexity: O(1)
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public RedisValue SetPop(IDatabase db, RedisKey key)
+        {
+            return db.SetPop(key);
+        }
+
+        /// <summary>
+        /// O(1),
+        /// 返回集合中一个元素，不移除
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public RedisValue SetRandomMember(IDatabase db, RedisKey key)
+        {
+            return db.SetRandomMember(key);
+        }
+
+        /// <summary>
+        /// O(1)
+        ///  Remove the specified member from the set stored at key. Specified members that are not a member of this set are ignored.
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool SetRemove(IDatabase db, RedisKey key, RedisValue value)
+        {
+            return db.SetRemove(key, value);
+        }
+
+
+        #endregion
+
+        #region sort
+
+
+        /// <summary>
+        /// SORT key [BY pattern] [LIMIT offset count] [GET pattern [GET pattern ...]] [ASC|DESC] [ALPHA] [STORE destination]
+        ///  O(N+M*log(M)) where N is the number of elements in the list or set to sort, and M the number of returned elements. 
+        /// Sorts a list, set or sorted set (numerically or alphabetically, ascending by default); 
+        /// 
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="key"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <param name="order"></param>
+        /// <param name="sortType"></param>
+        /// <returns></returns>
+        public RedisValue[] Sort(IDatabase db, RedisKey key, long skip = 0, long take = -1, Order order = Order.Ascending,
+            SortType sortType = SortType.Alphabetic)
+        {
+            return db.Sort(key, skip, take, order, sortType);
+        }
+        
+        #endregion
+
+        #region sorted set
 
         #endregion
 
