@@ -12,6 +12,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
 
 
     /// <summary>
+    /// 建议先看FluentFTP
     /// 使用edtFTPnet/Free进行ftp操作
     /// Nuget的版本很旧，从官网下载
     /// 

@@ -31,7 +31,7 @@ Ninject>Autofac
 Hangfire
 aspose.cells NPOI  两者均不需要安装office
 SharpZipLib   压缩包库
-FTP.dll (收费，nuget是评估版 https://www.limilabs.com/) >(优于) > edtFTPnet/Free(http://enterprisedt.com/products/edtftpnet/使用, Nuget版本比较旧，从官网下载) > System.Net.FtpClient
+FluentFTP > FTP.dll (收费，nuget是评估版 https://www.limilabs.com/) >(优于) > edtFTPnet/Free(http://enterprisedt.com/products/edtftpnet/使用, Nuget版本比较旧，从官网下载) > System.Net.FtpClient
 CefSharp  （wpf和winform的chromium嵌入）
 Topshelf (构建windows service) //需要.net 4.5.2
 EntityFramework.Extended (Entity framework的拓展，谨慎使用)
