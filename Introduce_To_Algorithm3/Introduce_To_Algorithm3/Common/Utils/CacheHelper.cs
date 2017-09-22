@@ -19,7 +19,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
     {
         /// <summary>
         /// get a reference to default memorycache instance
-        /// 默认的限制缓存800M，扫描间隔2分钟
+        /// 默认的限制缓存800M，总内存限制的扫描间隔2分钟
         /// </summary>
         private static readonly MemoryCache cache = MemoryCache.Default;
 
