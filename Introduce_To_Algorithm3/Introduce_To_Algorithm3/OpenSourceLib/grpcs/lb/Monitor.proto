@@ -12,8 +12,6 @@ option csharp_namespace = "com.common.services";
 service MonitorService{
 	//监控接口
 	rpc Monitor(MonitorRequest) returns (MonitorResponse){}
-	//是否存活
-	rpc IsAlive(MonitorAliveRequest) returns (MonitorAliveResponse){}
 }
 
 //监控请求
@@ -27,31 +25,6 @@ message MonitorResponse{
 	int32 result_code = 1;//结果码  尽量使用大于等于0的数
 	bytes result_detail = 2;//结果描述  字节数组版本
 	string result_detail_str = 3;//结果描述 字符串版本 与result_detail两者只填其一
-	string extension = 4;//拓展字段，目前没有意义
 }
-
-
-
-//IsAlive  
-message MonitorAliveRequest{
-	string command = 1;//请求的命令
-	string command_parameter = 2;//命令参数
-}
-
-
-message MonitorAliveResponse{
-	int32 result_code = 1;//结果码  尽量使用大于等于0的数
-	string result_desc = 2;//结果描述
-	string extension = 3;//拓展字段，目前没有意义
-}
-
-
-
-
-
-
-
-
-
 
 
