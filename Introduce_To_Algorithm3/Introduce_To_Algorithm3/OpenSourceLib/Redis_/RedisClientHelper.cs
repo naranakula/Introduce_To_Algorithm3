@@ -541,7 +541,7 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
         /// <summary>
         /// SADD key member [member ...]
         /// O(1) for each element added
-        /// Add the specified members to the set stored at key. 
+        /// Add the specified members to the set stored at key. 如果值已经存在，则什么也不做，如果key不存在，则创建set
         /// True if the specified member was not already present in the set, else False
         /// </summary>
         /// <param name="db"></param>
