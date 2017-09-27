@@ -23,9 +23,10 @@ message MonitorRequest{
 //监控响应
 message MonitorResponse{
 	int32 result_code = 1;//结果码  尽量使用大于等于0的数，0表示正常，其它表示错误
-	string result_desc = 2;//结果描述
-	bytes result_detail = 3;//结果描述  字节数组版本
-	string result_detail_str = 4;//结果描述 字符串版本 使用json或者xml表示 与result_detail两者可以只填其一
+	int32 result_type =2;//结果类型， 根据结果类型确定result_detail, result_detail_str序列化反序列化类型
+	string result_desc = 3;//结果描述，友好提示信息，将在页面上显示
+	bytes result_detail = 4;//结果描述  字节数组版本
+	string result_detail_str = 5;//结果描述 字符串版本 使用json或者xml表示 与result_detail两者可以只填其一
 }
 
 
