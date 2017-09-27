@@ -1,6 +1,6 @@
 ﻿RabbitMQ ActiveMQ Kafka ZeroMQ RocketMQ
 GRPC -- 通用RPC框架
-ZooKeeper consul(推荐) 只提供java和C接口，没有官方.net接口  ZooKeeperNetEx
+ZooKeeper consul(推荐) < etcd (推荐,但windows支持在实验阶段) 只提供java和C接口，没有官方.net接口  ZooKeeperNetEx
 Ngnix
 Hadoop
 memcached < redis
