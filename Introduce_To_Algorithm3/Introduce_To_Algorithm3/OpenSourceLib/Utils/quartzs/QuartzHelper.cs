@@ -12,6 +12,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
     /// Cron表达式含义查询网站：
     /// http://cronexpressiondescriptor.azurewebsites.net
     /// 
+    /// 根据现实情况修改quartz.config中的配置文件中quartz最多的线程数
+    /// 
     /// ScheduleJob然后在Start， 最后shutdown ,如果不调用ShutDown,进程不会退出
     /// </summary>
     public class QuartzHelper
