@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
@@ -27,7 +28,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         {
             // 默认使用的是RAMJobStore，即信息保存在内存中
             //AdoJobStore 信息使用ADO.NET保存在数据库中 
-            _schedulerFactory = new StdSchedulerFactory();
+
+            //配置可以使用quartz.config，也可以使用NameValueCollection 以下是默认配置
+            NameValueCollection collection = new NameValueCollection();
+            collection.Add("quartz.scheduler.instanceName", "DefaultQuartzScheduler");
+            collection.Add("quartz.threadPool.threadCount", "10");
+            collection.Add("quartz.jobStore.misfireThreshold", "60000");
+            collection.Add("quartz.jobStore.type", "Quartz.Simpl.RAMJobStore, Quartz");
+
+
+            _schedulerFactory = new StdSchedulerFactory(collection);
             _scheduler = _schedulerFactory.GetScheduler();
         }
 
