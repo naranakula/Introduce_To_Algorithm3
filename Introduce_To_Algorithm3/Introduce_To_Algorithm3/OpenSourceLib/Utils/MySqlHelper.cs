@@ -101,7 +101,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 测试数据库连接是否畅通
         /// </summary>
         /// <returns>返回true，表示数据库连接畅通；表示false，表示数据库连接不畅通</returns>
-        public bool IsConnectionActive()
+        public bool IsConnectionActive(Action<Exception> exceptionHandler = null)
         {
             MySqlConnection conn = null;
 
@@ -111,15 +111,22 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                 conn.Open();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                exceptionHandler?.Invoke(ex);
                 return false;
             }
             finally
             {
                 if (conn != null)
                 {
-                    conn.Close();
+                    try
+                    {
+                        conn.Close();
+                    }
+                    catch
+                    {
+                    }
                 }
             }
         }

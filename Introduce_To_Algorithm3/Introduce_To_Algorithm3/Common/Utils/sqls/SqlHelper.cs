@@ -81,7 +81,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
         /// 如果返回值为true,表示数据库连接畅通。
         /// 如果返回值为false，表示数据库连接不畅通。通常修改连接字符串可解决该问题。
         /// </returns>
-        public bool IsConnectionActive()
+        public bool IsConnectionActive(Action<Exception> exceptionHanlder = null)
         {
             bool result = true;
             SqlConnection conn = null; 
@@ -92,14 +92,20 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
             }
             catch(Exception ex)
             {
-                Log4netHelper.Error(ex.ToString());
+                exceptionHanlder?.Invoke(ex);
                 result = false;
             }
             finally
             {
                 if (conn != null)
                 {
-                    conn.Close();
+                    try
+                    {
+                        conn.Close();
+                    }
+                    catch
+                    {
+                    }
                 }
             }
             return result;
