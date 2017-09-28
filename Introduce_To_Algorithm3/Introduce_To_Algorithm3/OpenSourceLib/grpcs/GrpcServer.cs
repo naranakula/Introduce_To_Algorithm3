@@ -95,7 +95,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //0.0.0.0表示监听本机所有ip地址， 没有安全验证
                 string ipAny = IPAddress.Any.ToString();
                 server.Ports.Add(ipAny, serverPort, ServerCredentials.Insecure);
-
+                
                 server.Start();
 
                 return true;
