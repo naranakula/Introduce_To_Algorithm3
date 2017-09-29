@@ -13,6 +13,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
 
     /// <summary>
     /// 建议先看FluentFTP
+    /// FluentFtp更好
+    /// 
     /// 使用edtFTPnet/Free进行ftp操作
     /// Nuget的版本很旧，从官网下载
     /// 
@@ -86,7 +88,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
                     connection.TransferType = FTPTransferType.BINARY;
                     //不用设置命令编码，采用默认值，注意传输文件名使用ASCII值
                     //只使用0-127的文件名不会出错。
-
+                    connection.Timeout = 6000;//单位毫秒
                     connection.Connect();
 
                     if (action != null)
