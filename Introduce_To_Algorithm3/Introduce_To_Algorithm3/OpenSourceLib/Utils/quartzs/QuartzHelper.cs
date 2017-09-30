@@ -4,6 +4,7 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
 using Quartz.Impl.Triggers;
+using System.Collections.Generic;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 {
@@ -151,7 +152,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         {
             _scheduler.ScheduleJob(jobDetail, trigger);
         }
-
+        
         /// <summary>
         /// 创建一个job
         /// job将会被认为是非持久的，使用了默认的组
@@ -159,7 +160,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="jobName">job名字，必须唯一</param>
         /// <param name="job"></param>
         /// <param name="data"></param>
-        public static  IJobDetail CreateJob(String jobName, IJob job, JobDataMap data = null)
+        public static IJobDetail CreateJob(String jobName, IJob job, IDictionary<string, object> data = null)
         {
             /*
 Durability - if a job is non - durable, it is automatically deleted from the scheduler once there are no longer any active triggers associated with it.In other words, non - durable jobs have a life span bounded by the existence of its triggers.
@@ -167,8 +168,8 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
             //Job 不持久 ， 不要求恢复， 使用默认的SchedulerConstants.DefaultGroup
             //Set the property JobDetail.Durable = true - which instructs Quartz not to delete the Job when it becomes an “orphan” (when the Job not longer has a Trigger referencing it).
             // if set to true, job will request recovery.  automatically re-executed after a scheduler fails.
-            IJobDetail jobDetail = new JobDetailImpl(jobName,null,job.GetType(),false,false);
-            
+            IJobDetail jobDetail = new JobDetailImpl(jobName, null, job.GetType(), false, false);
+
             if (data != null)
             {
                 foreach (var keyValuePair in data)
@@ -180,6 +181,7 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
             return jobDetail;
         }
 
+
         /// <summary>
         /// 创建一个job
         /// job将会被认为是非长久的，使用了默认的组
@@ -187,21 +189,21 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
         /// <param name="jobName">job名字，必须唯一</param>
         /// <param name="jobtype"></param>
         /// <param name="data"></param>
-        public static IJobDetail CreateJob(String jobName, Type jobtype,JobDataMap data = null)
+        public static IJobDetail CreateJob(String jobName, Type jobtype, IDictionary<string, object> data = null)
         {
             /*
 Durability - if a job is non - durable, it is automatically deleted from the scheduler once there are no longer any active triggers associated with it.In other words, non - durable jobs have a life span bounded by the existence of its triggers.
 RequestsRecovery - if a job “requests recovery”, and it is executing during the time of a ‘hard shutdown’ of the scheduler(i.e.the process it is running within crashes, or the machine is shut off), then it is re - executed when the scheduler is started again.In this case, the JobExecutionContext.Recovering property will return true.*/
 
-           //Job 不持久 ， 不要求恢复， 使用默认的SchedulerConstants.DefaultGroup
-           //Set the property JobDetail.Durable = true - which instructs Quartz not to delete the Job when it becomes an “orphan” (when the Job not longer has a Trigger referencing it).
-           // if set to true, job will request recovery.   automatically re-executed after a scheduler fails.
-           IJobDetail jobDetail = new JobDetailImpl(jobName, null, jobtype, false, false);
+            //Job 不持久 ， 不要求恢复， 使用默认的SchedulerConstants.DefaultGroup
+            //Set the property JobDetail.Durable = true - which instructs Quartz not to delete the Job when it becomes an “orphan” (when the Job not longer has a Trigger referencing it).
+            // if set to true, job will request recovery.   automatically re-executed after a scheduler fails.
+            IJobDetail jobDetail = new JobDetailImpl(jobName, null, jobtype, false, false);
             if (data != null)
             {
                 foreach (var keyValuePair in data)
                 {
-                    jobDetail.JobDataMap.Add(keyValuePair.Key,keyValuePair.Value);
+                    jobDetail.JobDataMap.Add(keyValuePair.Key, keyValuePair.Value);
                 }
             }
             //设置其他信息
@@ -209,6 +211,7 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
             //添加job的关联数据
             return jobDetail;
         }
+
 
         /// <summary>
         /// 暂停一个job
@@ -243,16 +246,16 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
         /// 意味着如果下一个周期到来，而上一次周期执行未完成，job仍然在一个新线程中执行
         /// </summary>
         /// <param name="triggerName">触发器的名字，必须唯一</param>
-        /// <param name="offsetSeconds">多长时间后触发器执行 即第一次job执行  单位为秒,0表示立刻执行</param>
-        /// <param name="periodSeconds">第一次之后每次触发器的执行周期，单位为秒,范围可以超过59</param>
+        /// <param name="offsetMilliSeconds">多长时间后触发器执行 即第一次job执行  单位为毫秒,0表示立刻执行</param>
+        /// <param name="periodSeconds">第一次之后每次触发器的执行周期，单位为毫秒,范围可以超过60</param>
         /// <returns></returns>
-        public static ITrigger CreateSimpleTrigger(string triggerName,int offsetSeconds,int periodSeconds)
+        public static ITrigger CreateSimpleTrigger(string triggerName,int offsetMilliSeconds,int periodSeconds)
         {
             //ITrigger trigger = new SimpleTriggerImpl(triggerName,DateTimeOffset.UtcNow.AddSeconds(offsetSeconds),null,SimpleTriggerImpl.RepeatIndefinitely,new TimeSpan(0,0,0,periodSeconds));
 
             //return trigger;
 
-            if (offsetSeconds <= 0)
+            if (offsetMilliSeconds <= 0)
             {
                 ITrigger trigger =
                     TriggerBuilder.Create()
@@ -267,7 +270,7 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
                 ITrigger trigger =
                 TriggerBuilder.Create()
                     .WithIdentity(triggerName)
-                    .StartAt(DateTimeOffset.UtcNow.AddSeconds(offsetSeconds))
+                    .StartAt(DateTimeOffset.UtcNow.AddMilliseconds(offsetMilliSeconds))
                     .WithSimpleSchedule(builder => builder.WithIntervalInSeconds(periodSeconds).RepeatForever())
                     .Build();
                 return trigger;
@@ -280,14 +283,14 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
         /// 意味着如果下一个周期到来，而上一次周期执行未完成，job仍然在一个新线程中执行
         /// </summary>
         /// <param name="triggerName">触发器的名字，必须唯一</param>
-        /// <param name="offsetSeconds">多长时间后触发器执行 即第一次job执行  单位为秒,0表示立刻执行</param>
+        /// <param name="offsetMilliSeconds">多长时间后触发器执行 即第一次job执行  单位为毫秒,0表示立刻执行</param>
         /// <param name="periodSpan">第一次之后每次触发器的执行周期</param>
         /// <returns></returns>
-        public static ITrigger CreateSimpleTrigger(string triggerName, int offsetSeconds, TimeSpan periodSpan)
+        public static ITrigger CreateSimpleTrigger(string triggerName, int offsetMilliSeconds, TimeSpan periodSpan)
         {
             //ITrigger trigger = new SimpleTriggerImpl(triggerName, DateTimeOffset.UtcNow.AddSeconds(offsetSeconds), null, SimpleTriggerImpl.RepeatIndefinitely, periodSpan);
 
-            if (offsetSeconds <= 0)
+            if (offsetMilliSeconds <= 0)
             {
                 ITrigger trigger =
                     TriggerBuilder.Create()
@@ -302,7 +305,7 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
                 ITrigger trigger =
                 TriggerBuilder.Create()
                     .WithIdentity(triggerName)
-                    .StartAt(DateTimeOffset.UtcNow.AddSeconds(offsetSeconds))
+                    .StartAt(DateTimeOffset.UtcNow.AddMilliseconds(offsetMilliSeconds))
                     .WithSimpleSchedule(builder => builder.WithInterval(periodSpan).RepeatForever())
                     .Build();
                 return trigger;
@@ -440,14 +443,14 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
         /// 0 0 4 ? * 1     每个星期天4点执行
         /// </summary>
         /// <param name="triggerName">triggerName,必须唯一</param>
-        /// <param name="offsetSeconds">trigger起始执行的时间,以秒为单位</param>
+        /// <param name="offsetMilliSeconds">trigger起始执行的时间,以毫秒为单位</param>
         /// <param name="cronExpression"></param>
         /// <returns></returns>
-        public static ITrigger CreateCronTrigger(String triggerName, int offsetSeconds, String cronExpression)
+        public static ITrigger CreateCronTrigger(String triggerName, int offsetMilliSeconds, String cronExpression)
         {
             ITrigger trigger =
                 TriggerBuilder.Create()
-                    .StartAt(DateTimeOffset.UtcNow.AddSeconds(offsetSeconds))
+                    .StartAt(DateTimeOffset.UtcNow.AddMilliseconds(offsetMilliSeconds))
                     .WithIdentity(triggerName)
                     .WithCronSchedule(cronExpression)
                     .Build();
