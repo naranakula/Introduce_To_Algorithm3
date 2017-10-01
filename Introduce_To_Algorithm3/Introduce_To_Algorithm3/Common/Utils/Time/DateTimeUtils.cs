@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Cache;
+using System.Net.Http;
 using System.Text;
+using System.Web.Caching;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
@@ -185,6 +190,124 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         #endregion
 
+        #region 从网络上获取真实时间
 
+        /// <summary>
+        /// 从网络获取时间
+        /// 如果返回为null,基本可以认为公网不可用
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime? GetNetworkDateTime()
+        {
+            var result = GetNetworkDateTime("http://www.baidu.com");
+
+            if (result == null)
+            {
+                result = GetNetworkDateTime("http://www.taobao.com");
+            }
+
+            if (result == null)
+            {
+                result = GetNetworkDateTime("http://www.qq.com/");
+            }
+
+            if (result == null)
+            {
+                result = GetNetworkDateTime("http://www.jd.com/");
+            }
+
+            if (result == null)
+            {
+                result = GetNetworkDateTime("http://www.360.com/");
+            }
+
+            if (result == null)
+            {
+                result = GetNetworkDateTime("http://www.163.com/");
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// 从网络获取时间
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static DateTime? GetNetworkDateTime(string url,Action<Exception> exceptionHandler =null)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return null;
+            }
+
+
+            NLogHelper.Trace(url);
+
+            WebRequest request = null;
+            WebResponse response = null;
+            try
+            {
+                request = WebRequest.Create(url);
+                request.Timeout = 6000;//单位毫秒
+                request.Credentials = CredentialCache.DefaultCredentials;
+                request.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+                response = request.GetResponse();
+                var headers = response.Headers;
+                string dateStr = null;
+                foreach (var item in headers.AllKeys)
+                {
+                    if (item == "Date")
+                    {
+                        //Http响应的Date
+                        dateStr = headers[item];
+                        break;
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(dateStr))
+                {
+                    //Convert将尽量尝试解析
+                    return Convert.ToDateTime(dateStr);
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return null;
+            }
+            finally
+            {
+                if (request != null)
+                {
+                    try
+                    {
+                        request.Abort();
+                    }
+                    catch 
+                    {
+                    }
+                }
+
+                if (response != null)
+                {
+                    try
+                    {
+                        response.Close();
+                    }
+                    catch (Exception e)
+                    {
+                    }
+                    
+                }
+            }
+
+        }
+
+        #endregion
     }
 }
