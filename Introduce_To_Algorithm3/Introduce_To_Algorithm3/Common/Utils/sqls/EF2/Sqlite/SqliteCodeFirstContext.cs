@@ -217,7 +217,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <param name="value">值,数据库中按原样保存</param>
         /// <param name="exceptionHandler">异常处理</param>
         /// <returns>返回新增或修改数据项，如果没有返回null</returns>
-        public static KvPair Add(string key, string value,Action<Exception> exceptionHandler =  null)
+        public static KvPair AddOrUpdate(string key, string value,Action<Exception> exceptionHandler =  null)
         {
             if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
             {
@@ -373,7 +373,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <param name="type">字典类型，默认为空，键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
         /// <param name="exceptionHandler"></param>
         /// <returns>返回新增或者修改数据项，如果没有新增或修改返回null</returns>
-        public static DictItem AddDict(string key, string value, string type = "",
+        public static DictItem AddOrUpdateDict(string key, string value, string type = "",
             Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
@@ -533,6 +533,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
     /// <summary>
     /// 键值对表
+    /// KvPair和DictItem一起添加
     /// </summary>
     public class KvPair
     {
@@ -547,7 +548,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// SQLite变长记录，字段不需要指定长度。
         /// 带有非聚簇索引IX_Key
         /// </summary>
-        [Index("IX_Key", IsClustered = false)]
+        [Index("IX_KvPair_Key", IsClustered = false)]
         //当发生UNIQUE约束冲突，先存在的，导致冲突的行在更改或插入发生冲突的行之前被删除。这样，更改和插入总是被执行。命令照常执行且不返回错误信息。
         [SQLite.CodeFirst.Unique(OnConflictAction.Replace)]//唯一键
         public string Key { get; set; }
@@ -616,14 +617,14 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// SQLite变长记录，字段不需要指定长度。
         /// 带有非聚簇索引IX_Key
         /// </summary>
-        [Index("IX_DictKey", IsClustered = false)]
+        [Index("IX_DictItem_Key", IsClustered = false)]
         public string DictKey { get; set; }
 
 
         /// <summary>
         /// 字典表类型，默认为空，表示不分类型
         /// </summary>
-        [Index("IX_DictType",IsClustered = false)]
+        [Index("IX_DictItem_Type",IsClustered = false)]
         public string DictType { get; set; }
 
 
@@ -675,6 +676,8 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
     #endregion
 
+
+    #region 可删除部分
 
 
     /// <summary>
@@ -732,5 +735,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             //datetime 底层对应 NUMERIC  再底层对应 TEXT TEXT as ISO8601 strings Use the ISO-8601 format. Uses the "yyyy-MM-dd HH:mm:ss.FFFFFFFK" format for UTC DateTime values and "yyyy-MM-dd HH:mm:ss.FFFFFFF" format for local DateTime values). 
         }
     }
+
+    #endregion
 
 }
