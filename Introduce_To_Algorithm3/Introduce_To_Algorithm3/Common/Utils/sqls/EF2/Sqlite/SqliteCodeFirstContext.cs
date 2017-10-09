@@ -624,7 +624,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <summary>
         /// 字典表类型，默认为空，表示不分类型
         /// </summary>
-        [Index("IX_DictItem_Type",IsClustered = false)]
+        //[Index("IX_DictItem_Type",IsClustered = false)]
         public string DictType { get; set; }
 
 
