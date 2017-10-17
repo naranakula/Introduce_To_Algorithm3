@@ -2,6 +2,7 @@
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -303,6 +304,109 @@ The zero value needs to be the first element, for compatibility with the proto2 
             }
         }
 
+
+        /// <summary>
+        /// 安全调用grpc
+        /// Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
+        /// </summary>
+        /// <param name="ip">ip地址</param>
+        /// <param name="port">端口</param>
+        /// <param name="action">执行的操作，构建client并调用</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <param name="timeoutSeconds">过期时间  单位秒</param>
+        public static bool SafeInvokeWithSsl(string ip, int port, Action<Channel> action, Action<Exception> exceptionHandler = null, int timeoutSeconds = 16)
+        {
+            if (action == null)
+            {
+                return true;
+            }
+
+            Channel channel = null;
+
+            try
+            {
+                var cacert = File.ReadAllText("server.crt");
+                //证书
+                var ssl = new SslCredentials(cacert);
+
+                var options = new List<ChannelOption>()
+                {
+                    ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
+                    new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
+                    new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
+                    new ChannelOption(ChannelOptions.SslTargetNameOverride,"root"),//表示使用自签证书
+                };
+                //不使用加密
+                //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
+                channel = new Channel(ip, port, ssl, options);
+
+                //if (action != null)
+                {
+                    action(channel);
+
+
+                    /*
+                     *
+                     *
+                    //构建client, 客户端不需要关闭
+                    var client = new Greeter.GreeterClient(channel);
+                    //客户端调用时指定deadline,如果不指定表示不超时
+                    //调用client,可以重用channel,多次调用方法
+                    //deadLine必须使用UTC时间
+                    var reply = client.SayHello(new Request() {Request_ = "Hello"},
+                        deadline: DateTime.UtcNow.AddSeconds(timeoutSeconds));
+                    *
+                    *
+                    */
+                }
+
+                return true;
+            }
+            catch (RpcException rpcEx)
+            {
+                //判断是否正常
+                StatusCode statusCode = rpcEx.Status.StatusCode;
+                string detail = rpcEx.Status.Detail;
+
+                if (statusCode == StatusCode.Unavailable)
+                {
+                    //服务不可用，通常是因为网络原因
+                }
+
+                exceptionHandler?.Invoke(rpcEx);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return false;
+            }
+            finally
+            {
+                if (channel != null)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        try
+                        {
+                            channel.ShutdownAsync().Wait(9000);
+                            //安全关闭退出
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
+                        }
+                    }
+
+                    //channel = null;
+                }
+            }
+        }
 
     }
 }
