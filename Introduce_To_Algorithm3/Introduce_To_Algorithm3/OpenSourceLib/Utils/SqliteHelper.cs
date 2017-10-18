@@ -130,7 +130,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         /// <summary>
         /// 执行sql语句, 返回受影响的行数
-        /// CREATE TABLE [Person] (
+        /// CREATE TABLE IF NOT EXISTS [Person] (
         /// [Id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
         /// [Name] TEXT  NULL,
         /// [CreateTime] DATE  NULL
