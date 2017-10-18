@@ -5,7 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using com.cmlu.services;
 using Grpc.Core;
+using Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 {
@@ -112,8 +114,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 使用ssl加密启动服务
         /// </summary>
-        /// <param name="serverCertFile"></param>
-        /// <param name="serverKeyFile"></param>
+        /// <param name="serverCertFile">共用证书</param>
+        /// <param name="serverKeyFile">私钥</param>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
         public bool StartWithSsl(string serverCertFile="server.crt",string serverKeyFile = "server.key",Action<Exception> exceptionHandler = null)
@@ -160,7 +162,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
                 #region ssl加密
 
-                //数字证书链
+                //数字证书
                 string serverCert = File.ReadAllText(serverCertFile, Encoding.UTF8);
                 //私钥
                 string serverKey = File.ReadAllText(serverKeyFile, Encoding.UTF8);
@@ -221,6 +223,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             return false;
 
         }
+
+
+        #region 测试 已测试
+
+
+        public static void TestMain(String[] args)
+        {
+            GrpcServer server = new GrpcServer(new List<ServerServiceDefinition>(){ Greeter.BindService(new GreeterServiceImpl()) }, 5142);
+            server.StartWithSsl();
+            Console.ReadLine();
+            Console.ReadLine();
+        }
+
+        #endregion
 
 
     }

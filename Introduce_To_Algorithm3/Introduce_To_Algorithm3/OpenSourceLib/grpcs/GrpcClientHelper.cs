@@ -325,7 +325,10 @@ The zero value needs to be the first element, for compatibility with the proto2 
 
             try
             {
+                //共用证书，不要每次读取物理文件，应该读取到内存中
+                //与服务器端的server.crt是同一个
                 var cacert = File.ReadAllText("server.crt");
+
                 //证书
                 var ssl = new SslCredentials(cacert);
 
@@ -334,7 +337,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
                     ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
                     new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
                     new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
-                    new ChannelOption(ChannelOptions.SslTargetNameOverride,"root"),//表示使用自签证书
+                    new ChannelOption(ChannelOptions.SslTargetNameOverride,"root"),//表示使用自签证书，需要注意下其中“ChannelOptions.SslTargetNameOverride”这部分是必须的，因为我们是自己生成的证书，所以域名是root
                 };
                 //不使用加密
                 //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
@@ -407,6 +410,24 @@ The zero value needs to be the first element, for compatibility with the proto2 
                 }
             }
         }
+
+
+        #region 测试  已测试
+
+        public static void TestMain(string[] args)
+        {
+            GrpcClientHelper.SafeInvokeWithSsl("192.168.163.159", 5142, channel =>
+            {
+                var client = new Greeter.GreeterClient(channel);
+                Request request = new Request();
+                request.Request_ = "request at" + DateTime.Now.ToString("yyyyMMdd HH:mm:ss");
+                Response response = client.SayHello(request, deadline: DateTime.UtcNow.AddSeconds(36));
+                Console.WriteLine(response.Response_);
+            });
+        }
+
+        #endregion 
+
 
     }
 }

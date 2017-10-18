@@ -887,6 +887,7 @@
     <None Include="OpenSourceLib\Consuls\Consul.docx" />
     <None Include="OpenSourceLib\grpcs\examples\exs\compile.bat" />
     <None Include="OpenSourceLib\grpcs\examples\exs\test.proto" />
+    <None Include="OpenSourceLib\grpcs\gen.cmd" />
     <None Include="OpenSourceLib\grpcs\GRPC文档.docx" />
     <None Include="OpenSourceLib\grpcs\Http2.docx" />
     <None Include="OpenSourceLib\grpcs\lb\GrpcServiceDiscovery.proto" />
@@ -907,6 +908,8 @@
     <None Include="OpenSourceLib\grpcs\protos\pb.cmd" />
     <None Include="OpenSourceLib\grpcs\protos\removables\addressbook.proto" />
     <None Include="OpenSourceLib\grpcs\protos\removables\person.proto" />
+    <None Include="OpenSourceLib\grpcs\server.crt" />
+    <None Include="OpenSourceLib\grpcs\server.key" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket.docx" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket_Development_Guide_%28v3.3-20150101%29.pdf" />
     <None Include="OpenSourceLib\Json\Json.docx" />
