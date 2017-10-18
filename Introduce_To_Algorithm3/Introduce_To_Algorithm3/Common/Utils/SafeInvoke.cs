@@ -34,10 +34,6 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 {
                     exceptionHandler(ex);
                 }
-                else
-                {
-                    NLogHelper.Error($"调用{action}异常：{ex}");
-                }
             }
             finally
             {

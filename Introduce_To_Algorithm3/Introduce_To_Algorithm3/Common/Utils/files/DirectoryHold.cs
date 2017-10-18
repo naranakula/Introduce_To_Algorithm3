@@ -56,10 +56,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
                 {
                     exceptionHandler(ex);
                 }
-                else
-                {
-                    NLogHelper.Error($"重置当前目录失败：{ex}");
-                }
             }
 
             if (isReset)
@@ -82,10 +78,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
                 if (exceptionHandler != null)
                 {
                     exceptionHandler(ex);
-                }
-                else
-                {
-                    NLogHelper.Error($"重置当前目录失败：{ex}");
                 }
             }
 
@@ -110,13 +102,30 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
                 {
                     exceptionHandler(ex);
                 }
-                else
-                {
-                    NLogHelper.Error($"重置当前目录失败：{ex}");
-                }
             }
             
             return isReset;
+        }
+
+
+        /// <summary>
+        /// 获取当前路径
+        /// </summary>
+        public static string CurrentDirectory
+        {
+            get
+            {
+                try
+                {
+                    return Directory.GetCurrentDirectory();//该实现兼容 net core
+                    //return Environment.CurrentDirectory;
+                }
+                catch (Exception)
+                {
+                    //ignored
+                    return string.Empty;
+                }
+            }
         }
 
         /// <summary>
@@ -211,26 +220,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.files
            
             return String.Empty;
         }
-
-        /// <summary>
-        /// 获取当前路径
-        /// </summary>
-        public static string CurrentDirectory
-        {
-            get
-            {
-                try
-                {
-                    return Directory.GetCurrentDirectory();//该实现兼容 net core
-                    //return Environment.CurrentDirectory;
-                }
-                catch (Exception)
-                {
-                    //ignored
-                    return string.Empty;
-                }
-            }
-        }
+        
 
         #endregion
     }

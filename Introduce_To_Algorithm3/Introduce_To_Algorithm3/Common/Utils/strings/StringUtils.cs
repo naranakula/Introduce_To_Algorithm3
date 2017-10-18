@@ -117,6 +117,22 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
                 return s1.Trim() == s2.Trim();
             }
         }
+        
+        /// <summary>
+        /// 截短字符串
+        /// 如果字符串为null，返回string.Empty
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string TrimEx(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+
+            return s.Trim();
+        }
 
         /// <summary>
         /// 判断字符串s是以start开始的，如果start是null或空白，直接返回true
@@ -185,22 +201,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
 
             return list;
         } 
-
-        /// <summary>
-        /// 截短字符串
-        /// 如果字符串为null，返回string.Empty
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        public static string TrimEx(string s)
-        {
-            if (string.IsNullOrEmpty(s))
-            {
-                return string.Empty;
-            }
-
-            return s.Trim();
-        }
 
         /// <summary>
         /// 截短字符串
