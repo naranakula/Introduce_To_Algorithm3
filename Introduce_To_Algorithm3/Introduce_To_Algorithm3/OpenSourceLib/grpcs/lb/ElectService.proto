@@ -1,32 +1,32 @@
 ﻿syntax = "proto3";
 
-//本接口用于服务发现，是由LB实现
-//默认的包名
+//本接口用于客户端获取服务器地址， 由LB实现
+
+
+//本接口用于与服务器端健康检测  由服务器端实现
 package com.common.cmlu.services;
 
-//生成C#时的包名  会覆盖默认的包名
+//生成C#代码时   使用的包名
 option csharp_namespace = "com.common.services";
 
 
-// 定义接口
-//用于选举一个客户端
+//定义选取端口
 service ElectService{
-	//该接口实现直接读取内存，不要查询数据库
+	//该接口直接读取内存，选举服务器
 	rpc Elect(ElectRequest) returns (ElectResponse){}
+
 	//是否存活
 	rpc IsAlive(LbAliveRequest) returns (LbAliveResponse){}
 }
 
-
-//定义请求 响应接口
-
+//定义请求  响应
 message ElectRequest{
-	string command = 1;//请求的命令
-	string command_parameter = 2;//命令参数
+	string command = 1;//请求的命令 目前没有意义
+	string command_parameter = 2;//请求参数 目前没有意义
 }
 
 message ElectResponse{
-	int32 result_code = 1;//结果码  尽量使用大于等于0的数， 0表示成功
+	int32 result_code =1; //结果码 >=0 0表示成功
 	string result_desc = 2;//结果描述
 	string ip = 3;//服务器IP
 	int32 port = 4;//服务器端口
@@ -47,5 +47,9 @@ message LbAliveResponse{
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 

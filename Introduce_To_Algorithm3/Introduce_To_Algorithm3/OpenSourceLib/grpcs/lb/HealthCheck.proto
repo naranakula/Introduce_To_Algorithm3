@@ -1,58 +1,68 @@
 ﻿syntax = "proto3";
 
-//本接口用于与服务器端健康检测  是由服务器实现
-//默认的包名
+//本接口用于与服务器端健康检测  由服务器端实现
 package com.common.cmlu.services;
 
-//生成C#时的包名  会覆盖默认的包名
+//生成C#代码时   使用的包名
 option csharp_namespace = "com.common.services";
 
-//定义接口 安全检查服务
+//定义接口  安全检查服务
+
 service HealthCheckService{
-	//该接口应该直接读取内存
+	//检测服务状态
 	rpc HealthCheck(HealthRequest) returns (HealthResponse){}
+
 	//拓展接口  执行命令
 	rpc RunCommand(CommandRequest) returns (CommandResponse){}
+
 	//是否存活
-	rpc IsAlive(AliveRequest) returns (AliveResponse){}
+	rpc IsAlive(ServerAliveRequest) returns (ServerAliveResponse){}
 }
 
-//定义请求响应
+
+//定义请求消息
 message HealthRequest{
-	string command = 1;//请求的命令
+	string command = 1;//请求的命名
 	string command_parameter = 2;//命令参数
 }
 
+//定义响应信息
 message HealthResponse{
 	int32 result_code = 1;//结果码  尽量使用大于等于0的数
 	string result_desc = 2;//结果描述
-	int64 weight = 3;//该服务器繁忙程度，大于等于0,值越大，表示越繁忙 int64最大900亿亿 防止溢出
+	int64 weight = 3;// 服务器繁忙程度，大于等于0 ，值越大，表示越繁忙
 }
 
 
+//定义命令请求
 message CommandRequest{
 	string command = 1;//请求的命令
 	string command_parameter = 2;//命令参数
 }
 
-
+//定义命令响应
 message CommandResponse{
-	int32 result_code = 1;//结果码  尽量使用大于等于0的数
+	int32 result_code = 1;//结果码
 	string result_desc = 2;//结果描述
-	string extension = 3;//拓展字段，目前没有意义
+	string extension = 3;//拓展字段
 }
 
-message AliveRequest{
+
+message ServerAliveRequest{
 	string command = 1;//请求的命令
 	string command_parameter = 2;//命令参数
 }
 
 
-message AliveResponse{
+message ServerAliveResponse{
 	int32 result_code = 1;//结果码  尽量使用大于等于0的数
 	string result_desc = 2;//结果描述
 	string extension = 3;//拓展字段，目前没有意义
 }
+
+
+
+
 
 
 
