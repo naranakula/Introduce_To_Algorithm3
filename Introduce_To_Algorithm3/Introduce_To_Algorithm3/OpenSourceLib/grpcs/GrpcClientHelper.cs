@@ -231,6 +231,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
                     ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
                     new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
                     new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
+                    new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
                 };
                 //不使用加密
                 //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
@@ -337,6 +338,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
                     ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
                     new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
                     new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
+                    new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
                     new ChannelOption(ChannelOptions.SslTargetNameOverride,"root"),//表示使用自签证书，需要注意下其中“ChannelOptions.SslTargetNameOverride”这部分是必须的，因为我们是自己生成的证书，所以域名是root
                 };
                 //不使用加密
