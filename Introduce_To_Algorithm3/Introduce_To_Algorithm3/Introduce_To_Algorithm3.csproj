@@ -887,6 +887,7 @@
     <None Include="OpenSourceLib\Consuls\Consul.docx" />
     <None Include="OpenSourceLib\grpcs\examples\exs\compile.bat" />
     <None Include="OpenSourceLib\grpcs\examples\exs\test.proto" />
+    <None Include="OpenSourceLib\grpcs\lb\TestService.proto" />
     <None Include="OpenSourceLib\grpcs\sslgen.cmd" />
     <None Include="OpenSourceLib\grpcs\GRPC文档.docx" />
     <None Include="OpenSourceLib\grpcs\Http2.docx" />
