@@ -205,7 +205,15 @@ The zero value needs to be the first element, for compatibility with the proto2 
 
         //}
 
-
+        ///
+        /// 避免每次创建options
+        private static readonly List<ChannelOption> GrpcOptions = new List<ChannelOption>(capacity: 3)
+        {
+            ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
+            new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
+            new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
+            new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
+        };
         /// <summary>
         /// 安全调用grpc
         /// Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
@@ -226,16 +234,16 @@ The zero value needs to be the first element, for compatibility with the proto2 
 
             try
             {
-                var options = new List<ChannelOption>()
-                {
-                    ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
-                    new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
-                    new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
-                    new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
-                };
+                //var options = new List<ChannelOption>(capacity:3)
+                //{
+                //    ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
+                //    new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
+                //    new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
+                //    new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
+                //};
                 //不使用加密
                 //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
-                channel = new Channel(ip, port, ChannelCredentials.Insecure,options);
+                channel = new Channel(ip, port, ChannelCredentials.Insecure,GrpcOptions);
 
                 //if (action != null)
                 {
@@ -290,7 +298,8 @@ The zero value needs to be the first element, for compatibility with the proto2 
                     {
                         try
                         {
-                            channel.ShutdownAsync().Wait(9000);
+                            //channel.ShutdownAsync().Wait(9000);
+                            channel.ShutdownAsync().Wait();
                             //安全关闭退出
                             break;
                         }
@@ -398,7 +407,8 @@ The zero value needs to be the first element, for compatibility with the proto2 
                     {
                         try
                         {
-                            channel.ShutdownAsync().Wait(9000);
+                            //channel.ShutdownAsync().Wait(9000);
+                            channel.ShutdownAsync().Wait();
                             //安全关闭退出
                             break;
                         }
