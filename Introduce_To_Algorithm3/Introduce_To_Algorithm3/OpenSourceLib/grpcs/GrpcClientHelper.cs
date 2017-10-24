@@ -54,8 +54,6 @@ rpc BidiHello(stream HelloRequest) returns (stream HelloResponse){ }
 客户端和服务器端都可以发送元数据metadata,metadata是一系列键值对。
 
 
-
-
 //pb的C#编译器 建立.net4.5工程 使用 nuget下载Google.Protobuf 和 google.protobuf.Tools  Tools包含了protoc.exe
 //grpc.tools增加了对grpc service的支持, google.protobuf.Tools支持原生的pb文件
 //执行命令 protoc -I=$SRC_DIR --csharp_out=$DST_DIR $SRC_DIR/addressbook.proto
@@ -64,6 +62,45 @@ rpc BidiHello(stream HelloRequest) returns (stream HelloResponse){ }
 
 
          */
+
+        /*
+         * 
+         * 
+
+发现一个问题，如果长时间存在异常job，发生如下错误：
+System.Net.Sockets.SocketException (0x80004005): 由于系统缓冲区空间不足或队列已满，不能执行套接字上的操作。
+An operation on a socket could not be performed because the system lacked sufficient buffer space or because a queue was full.
+
+http://blog.csdn.net/s_nuclear/article/details/25898597
+
+问题原因：
+
+服务器上部署有  WebService、处理服务：WebService有客户端轮询调用；处理服务也轮询数据库，进行相关处理后上传文件到SFTP上。
+
+netstat -ano|findstr WAIT
+服务器上修改这两个值 regedit
+修改两个注册表：
+HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Tcpip\Parameters\MaxUserPort  如果没有，则手动创建 DWord（32位）  ”数值数据“改为十进制65531 或者认为适当的值。
+此值表示 用户最大可以使用的端口数量，默认为5000。
+
+HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Tcpip\Parameters\TcpTimedWaitDelay 如果没有，则手动创建 DWord（32位）  ”数值数据“改为十进制30 或者你认为适当的值。
+此值表示一个关闭后的端口等待多久之后可以重新使用，默认为120秒，也就是2分钟才可以重新使用。
+重启系统
+
+
+一般部署方案:
+两个loadbalancer部署在不同的机器上，每个lb管理相同的server
+
+
+开发:
+2017年10月20日 13:06:10
+    增加后备模式，即先考虑负载均衡如果负载均衡失败再固定推荐
+
+
+         * 
+         */
+
+
 
         /*
          * grpc支持两种加密认证方式
@@ -119,13 +156,13 @@ The zero value needs to be the first element, for compatibility with the proto2 
 
          */
 
-            /*
-             * 国际化
-             * 方法名只能是ASCII码的。
-             * status detail/message 可以是unicode string
-             * metadata key/value 是unicode string
-             * 
-             */
+        /*
+         * 国际化
+         * 方法名只能是ASCII码的。
+         * status detail/message 可以是unicode string
+         * metadata key/value 是unicode string
+         * 
+         */
 
 
 
