@@ -335,8 +335,8 @@ The zero value needs to be the first element, for compatibility with the proto2 
                     {
                         try
                         {
-                            //channel.ShutdownAsync().Wait(9000);
-                            channel.ShutdownAsync().Wait();
+                            channel.ShutdownAsync().Wait(9000);
+                            //channel.ShutdownAsync().Wait();
                             //安全关闭退出
                             break;
                         }
@@ -444,8 +444,8 @@ The zero value needs to be the first element, for compatibility with the proto2 
                     {
                         try
                         {
-                            //channel.ShutdownAsync().Wait(9000);
-                            channel.ShutdownAsync().Wait();
+                            channel.ShutdownAsync().Wait(9000);
+                            //channel.ShutdownAsync().Wait();
                             //安全关闭退出
                             break;
                         }
