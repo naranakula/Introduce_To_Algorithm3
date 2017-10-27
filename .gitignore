@@ -163,3 +163,4 @@ pip-log.txt
 .DS_Store
 packages
 *.ide
+/Introduce_To_Algorithm3/.vs
