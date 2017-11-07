@@ -98,6 +98,7 @@ MetadataExtractor - Extracts Exif, IPTC, XMP, ICC and other metadata from image 
 Emgu CV - Cross-platform .NET wrapper for the OpenCV library.
 DotImaging - Minimalistic .NET imaging portable platform
 Magick.NET - .NET wrapper for the ImageMagick library.
+electron/electron（star 53.2k） Build cross platform desktop apps with JavaScript, HTML, and CSS
 
 //远程管理
 Ulterius/server
