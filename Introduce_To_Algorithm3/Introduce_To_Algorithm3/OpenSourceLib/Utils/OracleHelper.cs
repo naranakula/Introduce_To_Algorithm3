@@ -28,8 +28,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         /// <summary>
         /// 数据库连接字符串
+        /// 仅需要nuget的Oracle.ManagedDataAccess
         /// </summary>
-        private string _connectionString = "Data Source=数据库名;User Id=用户名;Password=密码";
+        //这种方式需要配置tnsnames.ora文件
+        //private string _connectionString = "Data Source=数据库名;User Id=用户名;Password=密码";
+        //这种方式不需要tnsnames.ora和app.config里有其它配置
+        private string _connectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=MyHost)(PORT=MyPort))(CONNECT_DATA=(SERVICE_NAME=MyOracleSID)));User Id = myUsername; Password=myPassword;";
 
         /// <summary>
         /// 获取使用默认连接字符串的SqlHelper唯一实例
@@ -100,7 +104,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 测试数据库连接是否畅通
         /// </summary>
         /// <returns>返回true，表示数据库连接畅通；表示false，表示数据库连接不畅通</returns>
-        public bool IsConnectionActive()
+        public bool IsConnectionActive(Action<Exception> exceptionHandler = null)
         {
             OracleConnection conn = null;
 
@@ -110,15 +114,23 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                 conn.Open();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                exceptionHandler?.Invoke(ex);
                 return false;
             }
             finally
             {
                 if(conn != null)
                 {
-                    conn.Close();
+                    try
+                    {
+
+                        conn.Close();
+                    }
+                    catch 
+                    {
+                    }
                 }
             }
         }
