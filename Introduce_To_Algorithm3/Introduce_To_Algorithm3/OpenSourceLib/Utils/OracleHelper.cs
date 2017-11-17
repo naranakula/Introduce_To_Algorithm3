@@ -24,7 +24,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <summary>
         /// OracleHelper的单件实例
         /// </summary>
-        private static OracleHelper _instance;
+        private static volatile OracleHelper _instance;
+
+        /// <summary>
+        /// 锁
+        /// </summary>
+        private static object locker = new object();
 
         /// <summary>
         /// 数据库连接字符串
@@ -41,8 +46,21 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <returns></returns>
         public  static OracleHelper GetInstance()
         {
+            if (_instance != null)
+            {
+                return _instance;
+            }
+
+            lock (locker)
+            {
+                if (_instance == null)
+                {
+                    _instance = new OracleHelper();
+                }
+            }
+
             //如果_instance为null，则构建一个实例
-            return _instance ?? (_instance = new OracleHelper());
+            return _instance;
         }
 
         /// <summary>

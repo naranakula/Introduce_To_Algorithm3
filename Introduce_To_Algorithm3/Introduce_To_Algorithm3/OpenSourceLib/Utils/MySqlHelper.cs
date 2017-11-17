@@ -25,7 +25,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <summary>
         /// MySqlHelper的单件实例
         /// </summary>
-        private static MySqlHelper _instance;
+        private static volatile MySqlHelper _instance;
+
+        /// <summary>
+        /// 锁
+        /// </summary>
+        private static object locker = new object();
+
 
         /// <summary>
         /// 数据库连接字符串
@@ -39,7 +45,21 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         public  static MySqlHelper GetInstance()
         {
             //如果_instance为null，则构建一个实例
-            return _instance ?? (_instance = new MySqlHelper());
+            if (_instance != null)
+            {
+                return _instance;
+            }
+
+            lock (locker)
+            {
+                if (_instance == null)
+                {
+                    _instance = new MySqlHelper();
+                }
+            }
+
+            //如果_instance为null，则构建一个实例
+            return _instance;
         }
 
         /// <summary>

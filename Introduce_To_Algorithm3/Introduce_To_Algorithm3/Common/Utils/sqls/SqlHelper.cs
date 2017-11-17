@@ -23,7 +23,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
         /// <summary>
         /// SqlHleper的单件实例
         /// </summary>
-        private static SqlHelper _instance;
+        private static volatile SqlHelper _instance;
+
+
+        /// <summary>
+        /// 锁
+        /// </summary>
+        private static object locker = new object();
+
 
         #region 其实多线程下获取实例时应该加锁，但不加不会引发错误(前提是连接字符串不变)
         /// <summary>
@@ -32,8 +39,21 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
         /// <returns></returns>
         public static SqlHelper GetInstance()
         {
+            if (_instance != null)
+            {
+                return _instance;
+            }
+
+            lock (locker)
+            {
+                if (_instance == null)
+                {
+                    _instance = new SqlHelper();
+                }
+            }
+
             //如果_instance为null，则构建一个实例
-            return _instance ?? (_instance = new SqlHelper());
+            return _instance;
         }
 
         /// <summary>
