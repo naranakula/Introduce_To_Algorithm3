@@ -61,7 +61,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                     }
                     catch(Exception ex)
                     {
-                        Thread.Sleep(10);
                         _exceptionHandler?.Invoke(ex);
                     }
                 }
