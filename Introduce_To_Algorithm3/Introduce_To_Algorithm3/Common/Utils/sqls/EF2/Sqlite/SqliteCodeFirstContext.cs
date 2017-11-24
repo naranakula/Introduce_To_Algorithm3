@@ -617,7 +617,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// SQLite变长记录，字段不需要指定长度。
         /// 带有非聚簇索引IX_Key
         /// </summary>
-        [Index("IX_DictItem_Key", IsClustered = false)]
+        //[Index("IX_DictItem_Key", IsClustered = false)]
         public string DictKey { get; set; }
 
 

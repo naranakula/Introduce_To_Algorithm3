@@ -254,8 +254,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         //public DbSet<Person> Persons{get; set;}
         /// <summary>
         /// 键值对
+        /// 键最长256， 值 max
         /// </summary>
-        public DbSet<KvPair> KvPairs { get; set; } 
+        public DbSet<KvPair> KvPairs { get; set; }
+
+
+        /// <summary>
+        /// 带类型字典表 键类型最长256， 值 max
+        /// </summary>
+        public DbSet<DictItem> DictItems { get; set; }
 
 
         /// <summary>
@@ -1362,6 +1369,171 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         #endregion
 
 
+        #region 字典表相关  键和类型共同确认一个数据项
+
+        /// <summary>
+        /// 添加字典表
+        /// 
+        /// 键和类型共同确认一个值
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        /// <param name="value"></param>
+        /// <param name="type">字典类型，默认为空，键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns>返回新增或者修改数据项，如果没有新增或修改返回null</returns>
+        public static DictItem AddOrUpdateDict(string key, string value, string type = "",
+            Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            {
+                //键或者值为null或空白，则什么也不做
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
+                using (EfDbContext context = new EfDbContext())
+                {
+                    //即使在某些多线程同时写的极端情况，有可能创建多条记录
+                    DictItem oldDictItem = context.DictItems.FirstOrDefault(r => r.DictKey == normalizedKey && r.DictType == normalizedType);
+                    if (oldDictItem == null)
+                    {
+                        //新增
+                        DictItem newDictItem = new DictItem();
+                        newDictItem.DictKey = normalizedKey;
+                        newDictItem.DictType = normalizedType;
+                        newDictItem.DictValue = value;
+                        newDictItem.CreateTime = newDictItem.UpdateTime = DateTime.Now;
+                        context.DictItems.Add(newDictItem);
+                        context.SaveChanges();
+                        return newDictItem;
+                    }
+                    else
+                    {
+                        //修改
+                        if (oldDictItem.DictValue != value)
+                        {
+                            oldDictItem.DictValue = value;
+                            oldDictItem.UpdateTime = DateTime.Now;
+                            context.SaveChanges();
+                        }
+
+                        return oldDictItem;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return null;
+            }
+        }
+
+
+        /// <summary>
+        /// 如果键为null或空白，直接返回null
+        /// 如果键和类型对应的数据不存在，返回null
+        /// 键和类型共同确认一个数据项
+        /// 返回时，键和类型会被归一化处理
+        /// 键和类型在数据库中是按小写存的
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <param name="type">字典表类型 忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        public static DictItem GetDict(string key, string type = "", Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
+                using (EfDbContext context = new EfDbContext())
+                {
+                    //即使在某些多线程同时写的极端情况，可能会创建多条记录
+                    DictItem result = context.DictItems.FirstOrDefault(r => r.DictKey == normalizedKey && r.DictType == normalizedType);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return null;
+            }
+
+        }
+
+
+        /// <summary>
+        /// 删除键和类型关联的数据项，并返回
+        /// 如果键为null或空白，直接返回null
+        /// 如果键对应的数据不存在，返回null
+        /// 键和类型共同确认一个数据项
+        /// 返回时，键和类型会被归一化处理
+        /// 键和类型在数据库中是按小写存的
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static DictItem DeleteDict(string key, string type = "", Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
+                using (EfDbContext context = new EfDbContext())
+                {
+                    //即使在某些多线程同时写的极端情况，可能会创建多条记录
+                    DictItem result = context.DictItems.FirstOrDefault(r => r.DictKey == normalizedKey && r.DictType == normalizedType);
+                    if (result != null)
+                    {
+                        context.DictItems.Remove(result);
+                        context.SaveChanges();
+                    }
+
+                    return result;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+
+                return null;
+            }
+
+        }
+
+
+        #endregion
+
 
         #region Z.EntityFramework.Plus.EF6  拓展EF的功能，增加批量操作 没什么用不需要，使用原生sql
 
@@ -1454,7 +1626,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
             //nvarchar(max)
             Property(x => x.Value)
-                .IsRequired()
+                .IsOptional()
                 .IsUnicode()
                 .HasMaxLength(null)
                 .IsVariableLength();
@@ -1463,6 +1635,91 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     }
 
     #endregion
+
+
+
+    #region 带类型字典表
+
+    /// <summary>
+    /// 带类型字典表
+    /// </summary>
+    public class DictItem
+    {
+        /// <summary>
+        /// 键 最长长度256
+        /// 主键 聚簇索引
+        /// </summary>
+        public string DictKey { get; set; }
+
+
+        /// <summary>
+        /// 键 最长长度256
+        /// </summary>
+        public string DictType { get; set; }
+
+
+        /// <summary>
+        /// 值  nvarchar(max) 最长2^31-1 约2g
+        /// </summary>
+        public string DictValue { get; set; }
+
+
+
+        /// <summary>
+        /// 更新时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime UpdateTime { get; set; }
+
+        /// <summary>
+        /// 创建时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+
+
+    /// <summary>
+    /// 数据库表映射
+    /// </summary>
+    public class DictItemMap : EntityTypeConfiguration<DictItem>
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public DictItemMap()
+        {
+            ToTable("DictItem").HasKey(p => p.DictKey);
+            //主键
+            Property(t => t.DictKey).IsRequired()
+                .IsUnicode()
+                .HasMaxLength(256)
+                .IsVariableLength()
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            Property(t => t.DictType).IsOptional()
+                .IsUnicode()
+                .HasMaxLength(256)
+                .IsVariableLength();
+
+            Property(x => x.DictValue)
+                .IsOptional()
+                .IsUnicode()
+                .HasMaxLength(null)
+                .IsVariableLength();
+            //底层的sql:CREATE TABLE "KvPair" ([Id] integer, [Key] nvarchar UNIQUE ON CONFLICT REPLACE, [Value] nvarchar, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(Id))//sqlite默认integer主键自增
+            //select * from sqlite_master
+            //CREATE INDEX IX_Key ON "KvPair" (Key)
+            //long 底层对应 INTEGER
+            //double 底层对应 REAL
+            //string 底层对应 TEXT
+            //datetime 底层对应 NUMERIC  再底层对应 TEXT TEXT as ISO8601 strings Use the ISO-8601 format. Uses the "yyyy-MM-dd HH:mm:ss.FFFFFFFK" format for UTC DateTime values and "yyyy-MM-dd HH:mm:ss.FFFFFFF" format for local DateTime values). 
+        }
+    }
+
+    #endregion
+
 
 
     #region Database Initializer
