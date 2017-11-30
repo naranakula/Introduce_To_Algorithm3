@@ -282,7 +282,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
                 //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
                 channel = new Channel(ip, port, ChannelCredentials.Insecure,GrpcOptions);
 
-                //if (action != null)
+                if (action != null)
                 {
                     action(channel);
 
@@ -314,6 +314,13 @@ The zero value needs to be the first element, for compatibility with the proto2 
                 {
                     //服务不可用，通常是因为网络原因
                 }
+
+
+                if (statusCode == StatusCode.DeadlineExceeded)
+                {
+                    //超时
+                }
+
 
                 exceptionHandler?.Invoke(rpcEx);
                 return false;
@@ -391,7 +398,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
                 //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
                 channel = new Channel(ip, port, ssl, options);
 
-                //if (action != null)
+                if (action != null)
                 {
                     action(channel);
 
@@ -423,6 +430,12 @@ The zero value needs to be the first element, for compatibility with the proto2 
                 {
                     //服务不可用，通常是因为网络原因
                 }
+
+                if (statusCode == StatusCode.DeadlineExceeded)
+                {
+                    //超时
+                }
+
 
                 exceptionHandler?.Invoke(rpcEx);
                 return false;
@@ -459,6 +472,125 @@ The zero value needs to be the first element, for compatibility with the proto2 
                 }
             }
         }
+
+
+        #region ServerCallContext相关
+
+
+        /// <summary>
+        /// 从调用上下文中获取客户端IP，
+        /// 如果获取失败，返回String.Empty或者null
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static string GetClientIp(ServerCallContext context, Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                string clientPeer = context.Peer;//例如:  ipv4:192.168.163.166:64205
+                if (string.IsNullOrWhiteSpace(clientPeer))
+                {
+                    return string.Empty;
+                }
+                // / test.Greeter / SayHello
+
+                string[] arr = clientPeer.Trim().Split(new char[] {':'}, StringSplitOptions.RemoveEmptyEntries);
+                if (arr.Length >= 2)
+                {
+                    return arr[1] == null ? string.Empty : arr[1].Trim();
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return string.Empty;
+            }
+        }
+
+
+        /// <summary>
+        /// 从调用上下文中获取客户端端口，
+        /// 如果获取失败，返回-1
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static int GetClientPort(ServerCallContext context, Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                string clientPeer = context.Peer;//例如:  ipv4:192.168.163.166:64205
+                if (string.IsNullOrWhiteSpace(clientPeer))
+                {
+                    return -1;
+                }
+                
+
+                string[] arr = clientPeer.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                if (arr.Length >= 3)
+                {
+                    string portStr = arr[2].Trim();
+                    int port = -1;
+                    if (int.TryParse(portStr, out port))
+                    {
+                        return port;
+                    }
+                    return -1;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return -1;
+            }
+        }
+
+
+        /// <summary>
+        /// 从调用上下文中获取客户端调用方法，
+        /// 如果获取失败，返回String.Empty或者null
+        /// // / test.Greeter / SayHello
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static string GetClientCallMethod(ServerCallContext context, Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                string method = context.Method;
+                // / test.Greeter / SayHello
+                if (string.IsNullOrEmpty(method))
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    return method;
+                }
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return string.Empty;
+            }
+        }
+
+
+
+        #endregion
+
+
+
 
 
         #region 测试  已测试

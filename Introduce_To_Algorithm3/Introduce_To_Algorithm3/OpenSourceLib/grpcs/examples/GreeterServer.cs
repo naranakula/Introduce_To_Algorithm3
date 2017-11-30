@@ -185,7 +185,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
                 //可以注册多个端口
                 //0.0.0.0监听在本机的所有IP地址
                 Ports = { new ServerPort(IPAddress.Any.ToString()/*0.0.0.0*/, Port, ServerCredentials.Insecure/*没有安全验证*/) },
-
+                
             };
             
             //启动后后面的代码继续执行
