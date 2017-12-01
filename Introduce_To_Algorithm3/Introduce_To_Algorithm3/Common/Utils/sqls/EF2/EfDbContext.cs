@@ -1586,7 +1586,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     public class KvPair
     {
         /// <summary>
-        /// 键 最长长度256
+        /// 键 最长长度128
         /// 主键 聚簇索引
         /// </summary>
         public string Key { get; set; }
@@ -1617,11 +1617,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         {
             ToTable("KvPair").HasKey(t => t.Key);
 
-            //变长 nvarchar(256)
+            //变长 nvarchar(128)
             Property(x => x.Key)
                 .IsRequired()
                 .IsUnicode()
-                .HasMaxLength(256)
+                .HasMaxLength(128)
                 .IsVariableLength()
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
@@ -1647,14 +1647,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     public class DictItem
     {
         /// <summary>
-        /// 键 最长长度256
+        /// 键 最长长度128
         /// 主键 聚簇索引
         /// </summary>
         public string DictKey { get; set; }
 
 
         /// <summary>
-        /// 键 最长长度256
+        /// 键 最长长度128
         /// </summary>
         public string DictType { get; set; }
 
@@ -1695,12 +1695,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //主键
             Property(t => t.DictKey).IsRequired()
                 .IsUnicode()
-                .HasMaxLength(256)
+                .HasMaxLength(128)
                 .IsVariableLength();
 
             Property(t => t.DictType).IsRequired()//所有的key组成属性必须not null
                 .IsUnicode()
-                .HasMaxLength(256)
+                .HasMaxLength(128)
                 .IsVariableLength();
 
             Property(x => x.DictValue)
