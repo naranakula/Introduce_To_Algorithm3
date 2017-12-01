@@ -217,6 +217,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //建议使用显式的定义，而不是通过反射
             //设置所有的表定义映射
             modelBuilder.Configurations.Add(new KvPairMap());
+            modelBuilder.Configurations.Add(new DictItemMap());
 
             //modelBuilder.Configurations.Add(new PersonMap());
             //modelBuilder.Configurations.Add(new PhoneMap());
@@ -1227,7 +1228,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
         /// <param name="value">值,数据库中按原样保存</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static void Add(string key, string value, Action<Exception> exceptionHandler = null)
+        public static void AddOrUpdateKvPair(string key, string value, Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
             {
@@ -1284,7 +1285,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static KvPair Get(string key, Action<Exception> exceptionHandler = null)
+        public static KvPair GetKvPair(string key, Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -1325,7 +1326,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static KvPair Delete(string key, Action<Exception> exceptionHandler = null)
+        public static KvPair DeleteKvPair(string key, Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -1463,7 +1464,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
                 using (EfDbContext context = new EfDbContext())
                 {
-                    //即使在某些多线程同时写的极端情况，可能会创建多条记录
+                    //即使在某些多线程同时写的极端情况，有组合主键保证，不可能会创建多条记录
                     DictItem result = context.DictItems.FirstOrDefault(r => r.DictKey == normalizedKey && r.DictType == normalizedType);
                     return result;
                 }
@@ -1690,15 +1691,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         public DictItemMap()
         {
-            ToTable("DictItem").HasKey(p => p.DictKey);
+            ToTable("DictItem").HasKey(t=>new {t.DictKey,t.DictType});/*组合主键*/
             //主键
             Property(t => t.DictKey).IsRequired()
                 .IsUnicode()
                 .HasMaxLength(256)
-                .IsVariableLength()
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .IsVariableLength();
 
-            Property(t => t.DictType).IsOptional()
+            Property(t => t.DictType).IsRequired()//所有的key组成属性必须not null
                 .IsUnicode()
                 .HasMaxLength(256)
                 .IsVariableLength();

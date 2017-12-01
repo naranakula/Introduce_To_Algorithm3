@@ -251,6 +251,8 @@ The zero value needs to be the first element, for compatibility with the proto2 
             new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
             new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
         };
+
+
         /// <summary>
         /// 安全调用grpc
         /// Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
@@ -259,8 +261,8 @@ The zero value needs to be the first element, for compatibility with the proto2 
         /// <param name="port">端口</param>
         /// <param name="action">执行的操作，构建client并调用</param>
         /// <param name="exceptionHandler">异常处理</param>
-        /// <param name="timeoutSeconds">过期时间  单位秒</param>
-        public static bool SafeInvoke(string ip,int port,Action<Channel> action, Action<Exception> exceptionHandler = null,int timeoutSeconds = 16)
+        /// <param name="timeoutSeconds">过期时间  单位秒 该参数实际上没有用</param>
+        public static bool SafeInvoke(string ip,int port,Action<Channel> action, Action<Exception> exceptionHandler = null/*,int timeoutSeconds = 16*/)
         {
             if (action == null)
             {
@@ -285,6 +287,118 @@ The zero value needs to be the first element, for compatibility with the proto2 
                 if (action != null)
                 {
                     action(channel);
+
+
+                    /*
+                     *
+                     *
+                    //构建client, 客户端不需要关闭
+                    var client = new Greeter.GreeterClient(channel);
+                    //客户端调用时指定deadline,如果不指定表示不超时
+                    //调用client,可以重用channel,多次调用方法
+                    //deadLine必须使用UTC时间
+                    var reply = client.SayHello(new Request() {Request_ = "Hello"},
+                        deadline: DateTime.UtcNow.AddSeconds(timeoutSeconds));
+                    *
+                    *
+                    */
+                }
+
+                return true;
+            }
+            catch (RpcException rpcEx)
+            {
+                //判断是否正常
+                StatusCode statusCode = rpcEx.Status.StatusCode;
+                string detail = rpcEx.Status.Detail;
+
+                if (statusCode == StatusCode.Unavailable)
+                {
+                    //服务不可用，通常是因为网络原因
+                }
+
+
+                if (statusCode == StatusCode.DeadlineExceeded)
+                {
+                    //超时
+                }
+
+
+                exceptionHandler?.Invoke(rpcEx);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return false;
+            }
+            finally
+            {
+                if (channel != null)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        try
+                        {
+                            channel.ShutdownAsync().Wait(9000);
+                            //channel.ShutdownAsync().Wait();
+                            //安全关闭退出
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
+                        }
+                    }
+
+                    //channel = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 安全调用采用了反射可能影响性能,不推荐使用
+        /// 不能实现channel级别的重用
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
+        /// <param name="action"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <param name="timeoutSeconds"></param>
+        /// <returns></returns>
+        public static bool SafeInvoke<T>(string ip, int port, Action<T> action,
+            Action<Exception> exceptionHandler = null/*, int timeoutSeconds = 16*/) where T : ClientBase<T>
+        {
+            if (action == null)
+            {
+                return true;
+            }
+
+            Channel channel = null;
+
+            try
+            {
+                //var options = new List<ChannelOption>(capacity:3)
+                //{
+                //    ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
+                //    new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
+                //    new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
+                //    new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
+                //};
+                //不使用加密
+                //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
+                channel = new Channel(ip, port, ChannelCredentials.Insecure, GrpcOptions);
+
+                if (action != null)
+                {
+                    T stub = Activator.CreateInstance(typeof(T), channel) as T;
+                    
+                    action(stub);
 
 
                     /*
@@ -597,6 +711,23 @@ The zero value needs to be the first element, for compatibility with the proto2 
 
         public static void TestMain(string[] args)
         {
+
+            GrpcClientHelper.SafeInvoke("127.0.0.1", 50051, channel =>
+            {
+                Greeter.GreeterClient client = new Greeter.GreeterClient(channel);
+                var result = client.SayHello(new Request(), deadline: DateTime.UtcNow.AddSeconds(12));
+                Console.WriteLine(result.Response_);
+            });
+
+
+            GrpcClientHelper.SafeInvoke<Greeter.GreeterClient>("127.0.0.1", 50051, client =>
+            {
+                var result = client.SayHello(new Request(),deadline:DateTime.UtcNow.AddSeconds(12));
+                Console.WriteLine(result.Response_);
+            });
+
+
+
             GrpcClientHelper.SafeInvokeWithSsl("192.168.163.159", 5142, channel =>
             {
                 var client = new Greeter.GreeterClient(channel);
