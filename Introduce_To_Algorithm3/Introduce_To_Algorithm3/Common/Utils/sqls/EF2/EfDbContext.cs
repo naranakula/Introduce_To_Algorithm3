@@ -1654,7 +1654,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
 
         /// <summary>
-        /// 键 最长长度128
+        /// 字典类型 最长长度128
         /// </summary>
         public string DictType { get; set; }
 
