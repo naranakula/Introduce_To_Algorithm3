@@ -42,8 +42,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
         
         public static void Test(string[] args)
         {
-            Mapper.CreateMap<A, B>();
-            Mapper.CreateMap<AA, BB>();
+           
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<A, B>();
+                cfg.CreateMap<AA, BB>();
+            });
             A ats = new A() { a = "Hello world", list = new List<AA>() };
             ats.list.Add(new AA() { aa = "agfaa" });
             B bts = Mapper.Map<A, B>(ats);
