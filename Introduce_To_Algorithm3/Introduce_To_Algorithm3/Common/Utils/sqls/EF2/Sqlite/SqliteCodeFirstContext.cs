@@ -217,7 +217,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <param name="value">值,数据库中按原样保存</param>
         /// <param name="exceptionHandler">异常处理</param>
         /// <returns>返回新增或修改数据项，如果没有返回null</returns>
-        public static KvPair AddOrUpdate(string key, string value,Action<Exception> exceptionHandler =  null)
+        public static KvPair AddOrUpdateKvPair(string key, string value,Action<Exception> exceptionHandler =  null)
         {
             if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
             {
@@ -278,7 +278,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static KvPair Get(string key, Action<Exception> exceptionHandler = null)
+        public static KvPair GetKvPair(string key, Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -319,7 +319,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static KvPair Delete(string key, Action<Exception> exceptionHandler = null)
+        public static KvPair DeleteKvPair(string key, Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -373,7 +373,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <param name="type">字典类型，默认为空，键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
         /// <param name="exceptionHandler"></param>
         /// <returns>返回新增或者修改数据项，如果没有新增或修改返回null</returns>
-        public static DictItem AddOrUpdateDict(string key, string value, string type = "",
+        public static DictItem AddOrUpdateDictItem(string key, string value, string type = "",
             Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
@@ -440,7 +440,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
         /// <param name="exceptionHandler">异常处理</param>
         /// <param name="type">字典表类型 忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
-        public static DictItem GetDict(string key,string type = "", Action<Exception> exceptionHandler = null)
+        public static DictItem GetDictItem(string key,string type = "", Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -483,7 +483,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static DictItem DeleteDict(string key, string type = "", Action<Exception> exceptionHandler = null)
+        public static DictItem DeleteDictItem(string key, string type = "", Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -538,19 +538,12 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
     public class KvPair
     {
         /// <summary>
-        /// 主键
-        /// 可以使用Long型，
-        /// </summary>
-        public long Id { get; set; }
-
-        /// <summary>
         /// 键 方法保证不为空或null
         /// SQLite变长记录，字段不需要指定长度。
-        /// 带有非聚簇索引IX_Key
+        /// 长度不要超过128
         /// </summary>
-        [Index("IX_KvPair_Key", IsClustered = false)]
         //当发生UNIQUE约束冲突，先存在的，导致冲突的行在更改或插入发生冲突的行之前被删除。这样，更改和插入总是被执行。命令照常执行且不返回错误信息。
-        [SQLite.CodeFirst.Unique(OnConflictAction.Replace)]//唯一键
+        //[SQLite.CodeFirst.Unique(OnConflictAction.Replace)]//唯一键
         public string Key { get; set; }
 
         /// <summary>
@@ -583,9 +576,11 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         public KvPairMap()
         {
-            ToTable("KvPair").HasKey(p => p.Id);
+            ToTable("KvPair").HasKey(p => p.Key);
+            //CREATE TABLE "KvPair" ([Key] nvarchar (128) NOT NULL, [Value] nvarchar, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(Key))
+
             //自增主键
-            Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            //Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             //底层的sql:CREATE TABLE "KvPair" ([Id] integer, [Key] nvarchar UNIQUE ON CONFLICT REPLACE, [Value] nvarchar, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(Id))//sqlite默认integer主键自增
             //select * from sqlite_master
             //CREATE INDEX IX_Key ON "KvPair" (Key)
@@ -607,15 +602,9 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
     public class DictItem
     {
         /// <summary>
-        /// 主键
-        /// 可以使用Long型，
-        /// </summary>
-        public long Id { get; set; }
-
-        /// <summary>
         /// 键 方法保证不为空或null
         /// SQLite变长记录，字段不需要指定长度。
-        /// 带有非聚簇索引IX_Key
+        /// 长度不要超过128
         /// </summary>
         //[Index("IX_DictItem_Key", IsClustered = false)]
         public string DictKey { get; set; }
@@ -623,6 +612,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         /// <summary>
         /// 字典表类型，默认为空，表示不分类型
+        /// 长度不要超过128
         /// </summary>
         //[Index("IX_DictItem_Type",IsClustered = false)]
         public string DictType { get; set; }
@@ -661,9 +651,13 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         public DictItemMap()
         {
-            ToTable("DictItem").HasKey(p => p.Id);
+            ToTable("DictItem").HasKey(p => new {p.DictKey,p.DictType});
+
+            //CREATE TABLE "DictItem" ([DictKey] nvarchar (128) NOT NULL, [DictType] nvarchar (128) NOT NULL, [DictValue] nvarchar, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(DictKey, DictType))
+
+
             //自增主键
-            Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            //Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             //底层的sql:CREATE TABLE "KvPair" ([Id] integer, [Key] nvarchar UNIQUE ON CONFLICT REPLACE, [Value] nvarchar, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(Id))//sqlite默认integer主键自增
             //select * from sqlite_master
             //CREATE INDEX IX_Key ON "KvPair" (Key)
