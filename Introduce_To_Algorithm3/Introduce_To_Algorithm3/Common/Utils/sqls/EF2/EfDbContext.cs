@@ -1481,6 +1481,37 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         }
 
+        /// <summary>
+        /// 根据类型获取字典表,如果异常，返回null
+        /// </summary>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <param name="type">字典表类型 忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        public static List<DictItem> GetDictItemsByType(string type = "", Action<Exception> exceptionHandler = null)
+        {
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
+                using (EfDbContext context = new EfDbContext())
+                {
+                    //即使在某些多线程同时写的极端情况，有组合主键保证，不可能会创建多条记录
+                    var result = context.DictItems.Where(r=>r.DictType == normalizedType).ToList();
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return null;
+            }
+
+        }
 
         /// <summary>
         /// 删除键和类型关联的数据项，并返回
