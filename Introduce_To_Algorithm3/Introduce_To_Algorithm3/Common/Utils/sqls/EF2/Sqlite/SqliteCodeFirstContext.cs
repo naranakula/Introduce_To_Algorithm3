@@ -632,6 +632,8 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
     /// </summary>
     public class DictItem
     {
+        //public long Id { get; set; }
+
         /// <summary>
         /// 键 方法保证不为空或null
         /// SQLite变长记录，字段不需要指定长度。
