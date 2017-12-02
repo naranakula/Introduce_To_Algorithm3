@@ -163,7 +163,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
                 #region ssl加密
 
-                //证书链PEM encoded certificate chain
+                //证书链PEM encoded certificate chain  包含公钥 有效期 签发者等信息，但不包含私钥
                 string serverCert = File.ReadAllText(serverCertFile, Encoding.UTF8);
                 //私钥PEM encoded private key  不能公开，只有服务器上有
                 string privateKey = File.ReadAllText(privateKeyFile, Encoding.UTF8);
