@@ -494,7 +494,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
             try
             {
                 //共用证书，不要每次读取物理文件，应该读取到内存中
-                //与服务器端的server.crt是同一个
+                //与服务器端的server.crt是同一个 PEM encoded root certificate
                 var cacert = File.ReadAllText("server.crt");
 
                 //证书

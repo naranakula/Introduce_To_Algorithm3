@@ -162,9 +162,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
                 #region ssl加密
 
-                //数字证书
+                //证书链PEM encoded certificate chain
                 string serverCert = File.ReadAllText(serverCertFile, Encoding.UTF8);
-                //私钥
+                //私钥PEM encoded private key  不能公开，只有服务器上有
                 string serverKey = File.ReadAllText(serverKeyFile, Encoding.UTF8);
 
 
