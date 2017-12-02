@@ -113,12 +113,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
         /// <summary>
         /// 使用ssl加密启动服务
+        /// 建议使用RSA  密钥长度可以为1024，2048 或者 4096 bits
         /// </summary>
         /// <param name="serverCertFile">共用证书</param>
-        /// <param name="serverKeyFile">私钥</param>
+        /// <param name="privateKeyFile">私钥</param>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
-        public bool StartWithSsl(string serverCertFile="server.crt",string serverKeyFile = "server.key",Action<Exception> exceptionHandler = null)
+        public bool StartWithSsl(string serverCertFile="server.crt",string privateKeyFile = "server.key",Action<Exception> exceptionHandler = null)
         {
             try
             {
@@ -165,10 +166,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //证书链PEM encoded certificate chain
                 string serverCert = File.ReadAllText(serverCertFile, Encoding.UTF8);
                 //私钥PEM encoded private key  不能公开，只有服务器上有
-                string serverKey = File.ReadAllText(serverKeyFile, Encoding.UTF8);
+                string privateKey = File.ReadAllText(privateKeyFile, Encoding.UTF8);
 
 
-                var keyPair = new KeyCertificatePair(serverCert, serverKey);
+                var keyPair = new KeyCertificatePair(serverCert, privateKey);
 
                 var sslCredentials = new SslServerCredentials(new List<KeyCertificatePair>(){keyPair});
 
