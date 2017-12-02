@@ -322,6 +322,8 @@ The zero value needs to be the first element, for compatibility with the proto2 
                 {
                     //超时
                 }
+                
+                //与网络相关的异常只有这两个
 
 
                 exceptionHandler?.Invoke(rpcEx);
