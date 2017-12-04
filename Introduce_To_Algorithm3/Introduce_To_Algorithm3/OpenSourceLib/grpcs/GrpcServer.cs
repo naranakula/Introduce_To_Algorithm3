@@ -114,6 +114,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 使用ssl加密启动服务
         /// 建议使用RSA  密钥长度可以为1024，2048 或者 4096 bits
+        /// 可以使用sslgen.cmd每次生成不同的密钥
         /// </summary>
         /// <param name="serverCertFile">共用证书</param>
         /// <param name="privateKeyFile">私钥</param>
