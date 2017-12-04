@@ -64,7 +64,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 config.Add("physicalMemoryLimitPercentage", "50");
                 //获取或设置 MemoryCache 对象的实例可增长到的最大内存大小（以兆字节为单位）。默认值为零，指示 MemoryCache 实例会基于计算机上安装的内存量来管理自己的内存。
                 config.Add("cacheMemoryLimitMegabytes", "1024");
-                //缓存实现将当前内存负载与为缓存实例设置的绝对内存和内存百分比限制进行比较所采用的时间间隔。
+                //缓存实现将当前内存负载与为缓存实例设置的绝对内存和内存百分比限制进行比较所采用的时间间隔。HH:mm:ss 每2分钟扫描一次
                 config.Add("pollingInterval", "00:02:00");
 
                 Cache = new MemoryCache("cmlu.common.Cache",config);
