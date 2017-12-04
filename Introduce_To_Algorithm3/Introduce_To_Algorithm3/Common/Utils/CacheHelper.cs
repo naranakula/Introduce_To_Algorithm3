@@ -14,6 +14,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// it like system.Web.Caching.Cache but it can runs at wpf or winform or console
     /// 
     /// System.Runtime.Caching.MemoryCache is thread safe  多线程安全
+    /// MemoryCache的key和value均不能为null
     /// </summary>
     public static class CacheHelper
     {
@@ -21,14 +22,42 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// get a reference to default memorycache instance
         /// 默认的限制缓存800M，总内存限制的扫描间隔2分钟
         /// </summary>
-        private static readonly MemoryCache cache = MemoryCache.Default;
+        private static MemoryCache cache = null;// MemoryCache.Default;
+
+
+        /// <summary>
+        /// 锁
+        /// </summary>
+        private static object locker = new object();
+
+        /// <summary>
+        /// 缓存实例
+        /// </summary>
+        public static MemoryCache Cache
+        {
+            get
+            {
+                lock (locker)
+                {
+                    return cache;
+                }
+            }
+            private set
+            {
+                lock (locker)
+                {
+                    cache = value;
+                }
+            }
+        }
+
 
         /// <summary>
         /// 静态构造函数
         /// </summary>
         static CacheHelper()
         {
-            if (cache == null)
+            if (Cache == null)
             {
                 NameValueCollection config = new NameValueCollection(3);
                 //缓存可使用的物理内存的百分比（0到100的整数）。默认值为零，指示 MemoryCache 实例会基于计算机上安装的内存量来管理自己的内存。
@@ -38,7 +67,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 //缓存实现将当前内存负载与为缓存实例设置的绝对内存和内存百分比限制进行比较所采用的时间间隔。
                 config.Add("pollingInterval", "00:02:00");
 
-                cache = new MemoryCache("cmlu.common.cache",config);
+                Cache = new MemoryCache("cmlu.common.Cache",config);
             }
         }
 
@@ -54,7 +83,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             CacheItemPolicy policy = new CacheItemPolicy();
             policy.Priority = CacheItemPriority.Default;
             policy.AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(expireSeconds);
-            cache.Set(cacheKey,value,policy);
+            Cache.Set(cacheKey,value,policy);
         }
 
 
@@ -65,14 +94,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="cacheKey"></param>
         /// <param name="value"></param>
         /// <param name="expireSeconds">过多少秒后过期,指的是Add之后多长时间过期</param>
-        /// <returns>true if insertion succeeded, or false if there is an already an entry in the cache that has the same key as key.</returns>
+        /// <returns>true if insertion succeeded, or false if there is an already an entry in the Cache that has the same key as key.</returns>
         public static bool Add<T>(string cacheKey, T value, int expireSeconds)
         {
             CacheItemPolicy policy = new CacheItemPolicy();
             policy.Priority = CacheItemPriority.Default;
             policy.AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(expireSeconds);
-            //true if insertion succeeded, or false if there is an already an entry in the cache that has the same key as key.
-            return cache.Add(cacheKey, value, policy);
+            //true if insertion succeeded, or false if there is an already an entry in the Cache that has the same key as key.
+            return Cache.Add(cacheKey, value, policy);
         }
 
         /// <summary>
@@ -82,7 +111,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         public static bool Contains(string key)
         {
-            return cache.Contains(key);
+            return Cache.Contains(key);
         }
 
         /// <summary>
@@ -91,27 +120,27 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         public static long GetCount()
         {
-            return cache.GetCount();
+            return Cache.GetCount();
         }
 
         /// <summary>
-        /// A reference to the cache entry that is identified by key, if the entry exists; otherwise, null.
+        /// A reference to the Cache entry that is identified by key, if the entry exists; otherwise, null.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         public static object Get(string key)
         {
-            return cache.Get(key);
+            return Cache.Get(key);
         }
 
         /// <summary>
-        /// A reference to the cache entry that is identified by key, if the entry exists; otherwise, null.
+        /// A reference to the Cache entry that is identified by key, if the entry exists; otherwise, null.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         public static T Get<T>(string key) where T:class
         {
-            return cache.Get(key) as T;
+            return Cache.Get(key) as T;
         }
 
         /// <summary>
@@ -121,7 +150,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         public static object Remove(string key)
         {
-            return cache.Remove(key);
+            return Cache.Remove(key);
         }
 
         /// <summary>
@@ -130,7 +159,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         public static List<KeyValuePair<string, object>> ToList()
         {
-            return cache.ToList();
+            return Cache.ToList();
         }
 
         /// <summary>
@@ -139,18 +168,18 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns></returns>
         public static List<string> Keys()
         {
-            return cache.Select(r => r.Key).ToList();
+            return Cache.Select(r => r.Key).ToList();
         }
 
         /// <summary>
-        /// 清空cache
+        /// 清空Cache
         /// </summary>
         public static void Clear()
         {
-            var keys = cache.Select(r => r.Key).ToList();
+            var keys = Cache.Select(r => r.Key).ToList();
             foreach (var key in keys)
             {
-                cache.Remove(key);
+                Cache.Remove(key);
             }
         }
 
@@ -161,7 +190,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <returns>从缓存中移除的数量</returns>
         public static long Trim(int percent)
         {
-            return cache.Trim(percent);
+            return Cache.Trim(percent);
         }
     }
+
 }
