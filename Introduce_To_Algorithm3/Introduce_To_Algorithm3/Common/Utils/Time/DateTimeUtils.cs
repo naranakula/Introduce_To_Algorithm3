@@ -44,6 +44,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 //14长度的字符串日期表示，建议使用它进行数据交换
                 String date14Str = DateTime.Now.ToString("yyyyMMddHHmmss", CultureInfo.CurrentCulture);
+                String date17Str = DateTime.Now.ToString("yyyyMMddHHmmssfff", CultureInfo.CurrentCulture);
                 return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffffK", CultureInfo.InvariantCulture);
             }
         }
