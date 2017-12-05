@@ -161,12 +161,20 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
-        /// 返回缓存项的个数
+        /// 返回缓存项的个数  如果异常返回-1
         /// </summary>
         /// <returns></returns>
-        public static long GetCount()
+        public static long GetCount(Action<Exception> exceptionHandler = null)
         {
-            return Cache.GetCount();
+            try
+            {
+                return Cache.GetCount();
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return -1;
+            }
         }
 
         /// <summary>
@@ -228,21 +236,38 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
-        /// 返回一个当时缓存的快照副本
+        /// 返回一个当时缓存的快照副本  如果异常返回null
         /// </summary>
         /// <returns></returns>
-        public static List<KeyValuePair<string, object>> ToList()
+        public static List<KeyValuePair<string, object>> ToList(Action<Exception> exceptionHandler = null)
         {
-            return Cache.ToList();
+            try
+            {
+                return Cache.ToList();
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return null;
+            }
         }
 
         /// <summary>
         /// 获取所有key的快照副本
         /// </summary>
         /// <returns></returns>
-        public static List<string> Keys()
+        public static List<string> Keys(Action<Exception> exceptionHandler = null)
         {
-            return Cache.Select(r => r.Key).ToList();
+            try
+            {
+                return Cache.Select(r => r.Key).ToList();
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return null;
+            }
+            
         }
 
         /// <summary>
@@ -271,10 +296,20 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 从缓存中移除指定比例的缓存项
         /// </summary>
         /// <param name="percent">要移除的缓存项的总数的百分比 0-100</param>
-        /// <returns>从缓存中移除的数量</returns>
-        public static long Trim(int percent)
+        /// <param name="exceptionHandler"></param>
+        /// <returns>从缓存中移除的数量  如果异常返回-1</returns>
+        public static long Trim(int percent,Action<Exception> exceptionHandler = null)
         {
-            return Cache.Trim(percent);
+            try
+            {
+                return Cache.Trim(percent);
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return -1;
+            }
+            
         }
     }
 
