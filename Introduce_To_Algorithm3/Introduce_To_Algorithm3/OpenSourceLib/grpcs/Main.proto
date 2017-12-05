@@ -8,7 +8,11 @@
 //C# pb需要.net4.5
 syntax = "proto3";
 
-//默认的包名  package不加引号 使用小写
+//默认的包名  package不加引号 使用小写  这个名称会用来识别service标志，不管定义的java_package或csharp_namespace（它们定义生成的类所在的包），
+//namespace com.common.services {//java_package或csharp_namespace（它们定义生成的类所在的包）
+//	public static partial class HealthCheckService
+//	{
+//		static readonly string __ServiceName = "com.common.cmlu.services.HealthCheckService";//这个名称会用来识别service标志
 package tutorial;
 
 // [START java_declaration]
