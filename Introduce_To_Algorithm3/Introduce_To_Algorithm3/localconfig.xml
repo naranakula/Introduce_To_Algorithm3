@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ConfigCollection>
+  <ConfigItems>
+    <ConfigItem>
+      <ConfigKey>k2</ConfigKey>
+      <ConfigValue>v2</ConfigValue>
+      <ConfigDesc />
+    </ConfigItem>
+    <ConfigItem>
+      <ConfigKey>k1</ConfigKey>
+      <ConfigValue>v1</ConfigValue>
+      <ConfigDesc />
+    </ConfigItem>
+  </ConfigItems>
+</ConfigCollection>

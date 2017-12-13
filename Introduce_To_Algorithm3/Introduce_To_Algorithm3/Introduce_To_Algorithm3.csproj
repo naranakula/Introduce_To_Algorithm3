@@ -780,6 +780,7 @@
     <Content Include="Common\Utils\sqls\EF2\收缩sql server数据库日志的sql.sql" />
     <Content Include="Learn.txt" />
     <Content Include="license.txt" />
+    <Content Include="localconfig.xml" />
     <Content Include="OpenSourceLib\grpcs\examples\exs\windows_x86\grpc_csharp_plugin.exe" />
     <Content Include="OpenSourceLib\grpcs\examples\exs\windows_x86\protoc.exe" />
     <Content Include="OpenSourceLib\grpcs\protos\ReadMe.txt" />

@@ -280,7 +280,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         #endregion
 
-        #region 加载&保存本地配置
+        #region 加载&保存本地配置  键是唯一的
         /// <summary>
         /// 建议保存个性化配置，全局配置放到app.config中
         /// 保存本地配置的xml文件
