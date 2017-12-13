@@ -218,6 +218,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //设置所有的表定义映射
             modelBuilder.Configurations.Add(new KvPairMap());
             modelBuilder.Configurations.Add(new DictItemMap());
+            modelBuilder.Configurations.Add(new BaseEntityMap());
 
             //modelBuilder.Configurations.Add(new PersonMap());
             //modelBuilder.Configurations.Add(new PhoneMap());
@@ -1224,16 +1225,17 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 插入键值对，如果对应的键已经存在则更新，否则新增记录
         /// 键或者值为null或空白，则什么也不做
         /// 键在数据库中是按小写存的
+        /// 返回新增或者修改的数据项，如果失败，返回null
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白</param>
         /// <param name="value">值,数据库中按原样保存</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static void AddOrUpdateKvPair(string key, string value, Action<Exception> exceptionHandler = null)
+        public static KvPair AddOrUpdateKvPair(string key, string value, Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
             {
                 //键或者值为null或空白，则什么也不做
-                return;
+                return null;
             }
 
             try
@@ -1253,6 +1255,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                         newKvPair.UpdateTime = newKvPair.CreateTime = DateTime.Now;
                         context.KvPairs.Add(newKvPair);
                         context.SaveChanges();
+                        return newKvPair;
                     }
                     else
                     {
@@ -1263,8 +1266,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                             result.UpdateTime = DateTime.Now;
                             context.SaveChanges();
                         }
+                        return result;
                     }
-
+                    
                 }
             }
             catch (Exception ex)
@@ -1273,6 +1277,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 {
                     exceptionHandler(ex);
                 }
+                return null;
             }
 
         }
@@ -1956,6 +1961,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// <summary>
     /// 基类Entity
     /// EF支持枚举
+    /// 不要使用基类，这里是作为一个例子，供以后写代码方便查看使用
     /// </summary>
     public class BaseEntity
     {
@@ -2005,8 +2011,72 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         [Timestamp]
         public byte[] RowVersion { get; set; }
 
+        /// <summary>
+        /// 如果不配置，默认Byte[]->[varbinary](max) NULL,,Boolean->bit
+        /// </summary>
+        public byte[] BytesExample { get; set; }
+    }
 
-        
+    /// <summary>
+    /// 做测试的例子
+    /// </summary>
+    public class BaseEntityMap : EntityTypeConfiguration<BaseEntity>
+    {
+        public BaseEntityMap()
+        {
+            ToTable(nameof(BaseEntity)).HasKey(t => t.Id);
+            //guid带-36位，不带32位
+            Property(t => t.Id).IsRequired().HasMaxLength(36).IsUnicode().IsVariableLength().HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            //字符串常用配置
+            Property(t => t.Name).IsOptional().HasMaxLength(128).IsUnicode().IsVariableLength();
+
+//           USE[SqlDb]
+//           GO
+//
+///****** Object:  Table [dbo].[BaseEntity]    Script Date: 2017/12/13 11:12:19 ******/
+//                SET ANSI_NULLS ON
+//            GO
+
+//                SET QUOTED_IDENTIFIER ON
+//            GO
+
+//                SET ANSI_PADDING ON
+//            GO
+
+//                CREATE TABLE[dbo].[BaseEntity](
+
+//                [Id][nvarchar](36) NOT NULL,
+
+//                [ModifiedTime] [datetime] NULL,
+//                [CreateTime]
+//                [datetime]
+//            NOT NULL,
+
+//                [ModifyTime] [datetime]
+//            NOT NULL,
+
+//                [Name] [nvarchar] (128) NULL,
+//                [RowVersion]
+//                [timestamp]
+//            NOT NULL,
+
+//                [BytesExample] [varbinary] (2048) NULL,
+//            CONSTRAINT[PK_dbo.BaseEntity] PRIMARY KEY CLUSTERED
+//                (
+//                [Id] ASC
+//                )WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]
+//                ) ON[PRIMARY]
+
+//            GO
+
+//                SET ANSI_PADDING OFF
+//            GO
+
+
+            //如果不加下面的配置，将是[BytesExample] [varbinary](max) NULL,  添加之后是[BytesExample] [varbinary](2048) NULL,
+        Property(t => t.BytesExample).IsOptional().HasMaxLength(2048);
+        }
     }
 
     /// <summary>
@@ -2018,6 +2088,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     {
         public BaseMap()
         {
+            
             //配置表T的属性
             #region 设置表名和主键
             //设置表名和主键

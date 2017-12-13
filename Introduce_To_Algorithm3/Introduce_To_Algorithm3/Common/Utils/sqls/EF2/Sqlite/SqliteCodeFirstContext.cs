@@ -93,6 +93,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             modelBuilder.Configurations.Add(new KvPairMap());
             //添加字典表映射
             modelBuilder.Configurations.Add(new DictItemMap());
+            modelBuilder.Configurations.Add(new BaseEntityMap());
         }
 
         #region 原生SQL调用
@@ -700,6 +701,64 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             //datetime 底层对应 NUMERIC  再底层对应 TEXT TEXT as ISO8601 strings Use the ISO-8601 format. Uses the "yyyy-MM-dd HH:mm:ss.FFFFFFFK" format for UTC DateTime values and "yyyy-MM-dd HH:mm:ss.FFFFFFF" format for local DateTime values). 
         }
     }
+
+    #endregion
+
+    #region 样例 供写代码时查看使用
+
+    /// <summary>
+    /// 样例 供写代码时查看使用
+    /// </summary>
+    public class BaseEntity
+    {
+        /// <summary>
+        /// ID 36位guid
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 字符串
+        /// 无需配置因为sqlite是变长的
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 不为null的时间
+        /// </summary>
+        public DateTime NonNullTime { get; set; }
+
+        /// <summary>
+        /// 可null时间
+        /// </summary>
+        public DateTime? NullableTime { get; set; }
+
+        /// <summary>
+        /// bool类型例子
+        /// </summary>
+        public bool BoolExample { get; set; }
+
+        /// <summary>
+        /// byte[]的例子
+        /// 因为sqlite是可变类型，无需配置
+        /// </summary>
+        public byte[] BytesExample { get; set; }
+    }
+
+    /// <summary>
+    /// 样例 供写代码时查看使用
+    /// </summary>
+    public class BaseEntityMap : EntityTypeConfiguration<BaseEntity>
+    {
+        public BaseEntityMap()
+        {
+            ToTable(nameof(BaseEntity)).HasKey(t => t.Id);
+            //guid带-36位，不带32位
+            Property(t => t.Id).IsRequired().HasMaxLength(36).IsUnicode().IsVariableLength().HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            //生成如下sql
+            //CREATE TABLE "BaseEntity" ([Id] nvarchar (36) NOT NULL PRIMARY KEY, [Name] nvarchar, [NonNullTime] datetime NOT NULL, [NullableTime] datetime, [BoolExample] bit NOT NULL, [BytesExample] blob (2147483647))
+        }
+    }
+
 
     #endregion
 
