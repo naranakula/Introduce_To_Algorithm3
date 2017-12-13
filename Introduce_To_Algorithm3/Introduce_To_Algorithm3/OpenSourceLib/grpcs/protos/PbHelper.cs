@@ -17,6 +17,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
     {
         public static void TestMain(string[] args)
         {
+            Jack jack = new Jack();
+            if (jack.Person == null)
+            {
+                //对于C#默认的组合field是null
+                Console.WriteLine("default value for combined message field is null");
+            }
+            
             #region 将对象序列化
             Person person = new Person();
             person.Id = 1;
@@ -49,6 +56,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
             person = Person.Parser.ParseFrom(byteString);
 
             #endregion
+
+            #region 反射
+
+            var descriptor = Person.Descriptor;
+
+            foreach (var field in descriptor.Fields.InDeclarationOrder())
+            {
+                //获取类的字段，并从实例获取字段值
+                Console.WriteLine($"{field.FieldNumber}{field.Name}{field.Accessor.GetValue(person)}");
+            }
+            
+            #endregion
+
         }
     }
 }

@@ -22,3 +22,9 @@ message Person {
 
   repeated PhoneNumber phones = 4;
 }
+
+message Jack{
+	string name=1;
+	Person person=2;
+}
+

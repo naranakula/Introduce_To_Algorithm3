@@ -1,11 +1,14 @@
 ﻿// syntax = "proto3" 必须是第一个非空、非注释行，  如果不加，认为是proto2
-// 使用proto3
+// 使用proto3  
+// 一个pb文件可以包含多个message和service定义
 //https://github.com/google/protobuf
 //pb的C#编译器 建立.net4.5工程 使用 nuget下载Google.Protobuf 和 google.protobuf.Tools  Tools包含了protoc.exe
 //grpc.tools增加了对grpc service的支持, google.protobuf.Tools支持原生的pb文件
 //执行命令 protoc -I=$SRC_DIR --csharp_out=$DST_DIR $SRC_DIR/addressbook.proto
 //-I指定查找import的目录，默认是程序当前目录，--sharp_out指定C#代码输出目录
 //C# pb需要.net4.5
+//pb文件支持两种注释:// /*  */
+//对于repeated的field默认值只读，空list，对于嵌入的message filed默认值null（对于C#，其实是语言依赖的）
 syntax = "proto3";
 
 //默认的包名  package不加引号 使用小写  这个名称会用来识别service标志，不管定义的java_package或csharp_namespace（它们定义生成的类所在的包），
@@ -36,6 +39,7 @@ import "google/protobuf/timestamp.proto";
 //字段名使用_分割的小写方式 如page_number  result_per_page
 //枚举值使用 CAPITALS_WITH_UNDERSCORES  如 FIRST_VALUE
 //服务名和方法名使用CamelCase方式
+//文件名建议以ChangeMessages或者ChangeServices格式定义
 //proto没有继承的概念
 
 //Person john = ...;
@@ -99,6 +103,7 @@ message SearchRequest {
   google.protobuf.Timestamp createTime=5; 
   //Proto3丢弃了required，默认是optional，除非加了repeated。Proto3中repeated默认是packed的，packed效率好
   //repeated数据的顺序序列化反序列化是保持的
+  //One point to highlight is that any properties corresponding to repeated fields are read-only. You can add items to the collection or remove items from it, but you can't replace it with an entirely separate collection. The collection type for repeated fields is always RepeatedField<T>. 
   repeated int32 d = 6;
 }
 
@@ -119,8 +124,13 @@ service FooService {
 
 //当更新一个消息类型时需要注意：
 //1、	不要改变现有的字段的数字标签
-//2、	如果新增字段，则原来的格式是完全兼容的，新的协议解析旧的时，新的字段会使用默认值。原来的格式在解析新的时忽略新的字段。未知字段会被忽略
+//2、	新增字段必须使用新的数字标签，如果新增字段，则原来的格式是完全兼容的，新的协议解析旧的时，新的字段会使用默认值。原来的格式在解析新的时忽略新的字段。未知字段会被忽略
 //3、	删除旧的字段，要保证原来的tag number不再使用。删除的字段会在旧的协议中忽略。
+//you must not change the tag numbers of any existing fields.
+//you may delete fields.
+//you may add new fields but you must use fresh tag numbers (i.e. tag numbers that were never used in this protocol buffer, not even by deleted fields).
+//If you follow these rules, old code will happily read new messages and simply ignore any new fields. To the old code, singular fields that were deleted will simply have their default value, and deleted repeated fields will be empty. New code will also transparently read old messages.
+
 
 //When a message is parsed, if it does not contain an optional element, the corresponding field in the parsed object is set to the default value for that field. 
 //If the default value is not specified for an optional element, a type-specific default value is used instead: 
@@ -163,11 +173,18 @@ service FooService {
 //--csharp_out指定C#代码输出的路径
 //最后可以跟多个proto文件
 
+//for C#, the pb（not grpc） compiler generates a .cs file from each .proto, with a class for each message type described in your file.
 
+/*
+When a message is parsed, if the encoded message does not contain a particular singular element, the corresponding field in the parsed object is set to the default value for that field. These defaults are type-specific:
 
-
-
-
+For strings, the default value is the empty string.
+For bytes, the default value is empty bytes.
+For bools, the default value is false.
+For numeric types, the default value is zero.
+For enums, the default value is the first defined enum value, which must be 0.
+For message fields, the field is not set. Its exact value is language-dependent. See the generated code guide for details.
+The default value for repeated fields is empty (generally an empty list in the appropriate language).*/
 
 
 
