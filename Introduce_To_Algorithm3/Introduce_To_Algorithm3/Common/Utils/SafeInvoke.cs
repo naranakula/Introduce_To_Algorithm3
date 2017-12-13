@@ -15,18 +15,18 @@ namespace Introduce_To_Algorithm3.Common.Utils
     {
         /// <summary>
         /// 安全调用
+        /// 返回true，表示没有异常，false表示发生异常
         /// </summary>
         /// <param name="action"></param>
         /// <param name="exceptionHandler"></param>
         /// <param name="finallyHandler">最终处理</param>
-        public static void Safe(this Action action,Action<Exception> exceptionHandler = null,Action finallyHandler = null)
+        public static bool Safe(this Action action,Action<Exception> exceptionHandler = null,Action finallyHandler = null)
         {
             try
             {
-                if (action != null)
-                {
-                    action();
-                }
+                action();
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -34,6 +34,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 {
                     exceptionHandler(ex);
                 }
+
+                return false;
             }
             finally
             {
@@ -46,16 +48,19 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         /// <summary>
         /// 安全调用
+        /// 返回true，表示没有异常，false表示发生异常
         /// </summary>
         /// <param name="action"></param>
         /// <param name="obj"></param>
         /// <param name="exceptionHandler">catch处理</param>
         /// <param name="finallyHandler">finally处理</param>
-        public static void Safe<T>(this Action<T> action,T obj, Action<Exception> exceptionHandler = null, Action finallyHandler = null)
+        public static bool Safe<T>(this Action<T> action,T obj, Action<Exception> exceptionHandler = null, Action finallyHandler = null)
         {
             try
             {
                 action(obj);
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -63,6 +68,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 {
                     exceptionHandler(ex);
                 }
+                return false;
             }
             finally
             {
