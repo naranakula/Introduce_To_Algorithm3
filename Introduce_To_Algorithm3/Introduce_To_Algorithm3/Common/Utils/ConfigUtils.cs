@@ -1,5 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
@@ -229,5 +236,244 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 return defaultValue;
             }
         }
+
+        #region 自定义的配置信息
+
+        #region 数据结构定义
+
+        /// <summary>
+        /// 一个配置项
+        /// </summary>
+        public class  ConfigItem
+        {
+            /// <summary>
+            /// 配置的键
+            /// </summary>
+            public string ConfigKey { get; set; }
+
+            /// <summary>
+            /// 配置的值
+            /// </summary>
+            public string ConfigValue { get; set; }
+
+            /// <summary>
+            /// 关于配置信息的描述，作为辅助信息，不直接使用
+            /// </summary>
+            public string ConfigDesc { get; set; }
+        }
+
+        /// <summary>
+        /// 配置集合
+        /// </summary>
+        public class ConfigCollection
+        {
+            public ConfigCollection()
+            {
+                ConfigItems = new List<ConfigItem>();
+            }
+
+            /// <summary>
+            /// 具体的配置项
+            /// </summary>
+            public List<ConfigItem> ConfigItems { get; set; }
+        }
+
+        #endregion
+
+        #region 加载&保存本地配置
+        /// <summary>
+        /// 建议保存个性化配置，全局配置放到app.config中
+        /// 保存本地配置的xml文件
+        /// </summary>
+        private static readonly string ConfigXmlFileName = "localconfig.xml";
+
+        /// <summary>
+        /// 从localconfig.xml中加载或者重新加载本地配置文件
+        /// 返回是否加载成功
+        /// </summary>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static bool LoadLocalConfig(Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                if (!File.Exists(ConfigXmlFileName))
+                {
+                    //没有配置
+                    _localConfigDicts.Clear();
+                    //配置文件不存在
+                    return true;
+                }
+
+                ConfigUtils.ConfigCollection configs = LoadFileToObject<ConfigCollection>(ConfigXmlFileName, ex =>
+                {
+                    exceptionHandler?.Invoke(ex);
+                });
+
+                if (configs == null)
+                {
+                    //加载失败
+                    return false;
+                }
+
+                //清空，并重新加载
+                _localConfigDicts.Clear();
+                foreach (ConfigItem item in configs.ConfigItems)
+                {
+                    _localConfigDicts.AddOrUpdate(item.ConfigKey, item, (k, v) => item);
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 持久化本地配置信息到localconfig中,如果文件存在，则覆盖
+        /// </summary>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static bool SaveLocalConfig(Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                var configList = _localConfigDicts.Values.ToList();
+                ConfigCollection collection = new ConfigCollection();
+                collection.ConfigItems.AddRange(configList);
+                
+                return ToFile(collection,ConfigXmlFileName, ex =>
+                {
+                    exceptionHandler?.Invoke(ex);
+                });
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 添加或者更新新的本地配置
+        ///  未持久化到文件
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public static void AddOrUpdateLocalConfig(string key, string value)
+        {
+            ConfigItem oldItem = null;
+            _localConfigDicts.TryGetValue(key, out oldItem);
+            ConfigItem newItem = new ConfigItem();
+            if (oldItem != null)
+            {
+                newItem.ConfigValue = value;
+                newItem.ConfigDesc = oldItem.ConfigDesc;
+            }
+            else
+            {
+                newItem.ConfigKey = key;
+                newItem.ConfigValue = value;
+                newItem.ConfigDesc = string.Empty;
+            }
+            _localConfigDicts.AddOrUpdate(key, newItem, (k, v) => newItem);
+        }
+
+        /// <summary>
+        /// 删除本地配置
+        /// 未持久化到文件
+        /// </summary>
+        /// <param name="key"></param>
+        public static void DeleteLocalConfig(string key)
+        {
+            ConfigItem oldItem = null;
+            _localConfigDicts.TryRemove(key, out oldItem);
+        }
+
+
+        /// <summary>
+        /// 底层存储
+        /// </summary>
+        private static readonly ConcurrentDictionary<string,ConfigItem> _localConfigDicts = new ConcurrentDictionary<string, ConfigItem>();
+
+        #endregion
+
+        #region 序列化反序列化辅助方法
+
+        /// <summary>
+        /// 将对象序列化到文件destFile中
+        /// 如果成功返回true,失败返回false
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="destFile">如果文件不存在，创建；否则覆盖</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static bool ToFile<T>(T obj, string destFile, Action<Exception> exceptionHandler = null) where T : class
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                ns.Add(string.Empty, string.Empty);
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Encoding = Encoding.UTF8;
+                settings.Indent = true;
+
+                using (StreamWriter streamWriter = new StreamWriter(destFile, false, Encoding.UTF8))
+                {
+                    using (XmlWriter writer = XmlWriter.Create(streamWriter, settings))
+                    {
+                        serializer.Serialize(writer, obj, ns);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 加载xml文件将其转换为对象
+        /// 加载失败返回null
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="fileName">文件名，本方法不检测文件是否存在</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <returns></returns>
+        public static T LoadFileToObject<T>(string fileName, Action<Exception> exceptionHandler = null) where T : class
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                using (StreamReader reader = new StreamReader(fileName, Encoding.UTF8))
+                {
+                    return (T)serializer.Deserialize(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return null;
+            }
+        }
+
+        #endregion
+        #endregion
+
     }
 }
