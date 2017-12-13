@@ -26,7 +26,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 实际使用中在对应的类中创建一个_logger，这样就可以使用${callsite}了
         /// 使用不同name的logger，根据名称记录不同的日志：如邮件，数据库日志
         /// </summary>
-        private static volatile Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         
         ///// <summary>
         ///// 静态构造函数
