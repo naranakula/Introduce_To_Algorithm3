@@ -14,7 +14,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
     /// </summary>
     public class JobImpl:IJob
     {
+
         #region IJob实现
+        
         /// <summary>
         /// 注：该方法将定期按时执行，
         /// 意味着如果下一个周期到来，而上一次执行未完成，该方法开启一个新线程执行
@@ -26,9 +28,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         {
             JobDataMap dataMap = context.JobDetail.JobDataMap;//获取job的数据
             
-            Console.WriteLine(Thread.CurrentThread.ManagedThreadId+"   "+DateTime.Now.ToString());
+            Console.WriteLine(Thread.CurrentThread.ManagedThreadId+"   "+DateTime.Now);
 
-            lock (locker)
+            lock (_locker)
             {
                 if (_isRunning)
                 {
@@ -37,17 +39,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 _isRunning = true;
             }
 
+            string jobName = GetType().Name;
             try
             {
-                NLogHelper.Info("回调正在执行");
+                NLogHelper.Info($"开始执行任务{jobName}");
             }
             catch (Exception ex)
             {
-                Log4netHelper.Error("执行任务异常：" + ex);
+                NLogHelper.Error($"执行任务{jobName}异常:" + ex);
             }
             finally
             {
-                lock (locker)
+                lock (_locker)
                 {
                     _isRunning = false;
                 }
@@ -60,18 +63,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// </summary>
         public JobImpl()
         {
+            //每次job执行均创建一个job实例
             Console.WriteLine("创建一个job实例");
         }
 
 
         #region 辅助属性
-
-       
-
+        
         /// <summary>
         /// 锁
         /// </summary>
-        private static Object locker = new Object();
+        private static readonly Object _locker = new Object();
 
         /// <summary>
         /// 回调函数是否正在执行
@@ -81,5 +83,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         #endregion
 
         #endregion
+
     }
 }
