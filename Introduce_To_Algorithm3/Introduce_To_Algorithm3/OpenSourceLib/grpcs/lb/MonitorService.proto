@@ -5,7 +5,7 @@
 package com.common.cmlu.services;
 
 //生成C#时的包名  会覆盖默认的包名
-option csharp_namespace = "com.common.services";
+option csharp_namespace = "com.common.cmlu.services";
 
 
 //定义监控接口

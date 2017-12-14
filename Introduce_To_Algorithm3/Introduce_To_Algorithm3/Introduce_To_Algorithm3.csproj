@@ -873,15 +873,14 @@
     <None Include="OpenSourceLib\Consuls\Consul.docx" />
     <None Include="OpenSourceLib\grpcs\examples\exs\compile.bat" />
     <None Include="OpenSourceLib\grpcs\examples\exs\test.proto" />
-    <None Include="OpenSourceLib\grpcs\lb\TestService.proto" />
+    <None Include="OpenSourceLib\grpcs\lb\HealthCheckService.proto" />
+    <None Include="OpenSourceLib\grpcs\lb\MonitorService.proto" />
     <None Include="OpenSourceLib\grpcs\server2.crt" />
     <None Include="OpenSourceLib\grpcs\server2.key" />
     <None Include="OpenSourceLib\grpcs\sslgen.cmd" />
     <None Include="OpenSourceLib\grpcs\GRPC文档.docx" />
     <None Include="OpenSourceLib\grpcs\Http2.docx" />
     <None Include="OpenSourceLib\grpcs\lb\ElectService.proto" />
-    <None Include="OpenSourceLib\grpcs\lb\HealthCheck.proto" />
-    <None Include="OpenSourceLib\grpcs\lb\Monitor.proto" />
     <None Include="OpenSourceLib\grpcs\Main.proto" />
     <None Include="OpenSourceLib\grpcs\protos\google\protobuf\any.proto" />
     <None Include="OpenSourceLib\grpcs\protos\google\protobuf\api.proto" />
@@ -899,6 +898,7 @@
     <None Include="OpenSourceLib\grpcs\protos\removables\person.proto" />
     <None Include="OpenSourceLib\grpcs\server.crt" />
     <None Include="OpenSourceLib\grpcs\server.key" />
+    <None Include="OpenSourceLib\grpcs\TestService.proto" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket.docx" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket_Development_Guide_%28v3.3-20150101%29.pdf" />
     <None Include="OpenSourceLib\Json\Json.docx" />
