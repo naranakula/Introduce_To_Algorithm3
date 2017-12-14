@@ -39,8 +39,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
 
             _schedulerFactory = new StdSchedulerFactory(collection);
+            //_schedulerFactory = new StdSchedulerFactory();//不需要配置使用该行
             _scheduler = _schedulerFactory.GetScheduler();
         }
+
+        /// <summary>
+        /// 锁
+        /// </summary>
+        private static readonly object _locker = new object();
 
         /// <summary>
         /// 获取一个实例
@@ -52,12 +58,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             {
                 return _instance;
             }
-
-            if (_instance == null)
+            lock (_locker)
             {
-                _instance = new QuartzHelper();
+                if (_instance == null)
+                {
+                    _instance = new QuartzHelper();
+                }
             }
-
             return _instance;
         }
         #endregion
