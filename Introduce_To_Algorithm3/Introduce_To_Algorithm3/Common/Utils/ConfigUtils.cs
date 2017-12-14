@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Introduce_To_Algorithm3.Common.Utils.strings;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
@@ -407,6 +408,107 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         #region 获取本地配置
 
+        /// <summary>
+        /// 从本地配置获取值
+        /// </summary>
+        /// <param name="key">键，不区分大小写</param>
+        /// <param name="defaultValue">获取不到返回的默认值</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <returns></returns>
+        public static string GetLocalConfigString(string key, string defaultValue = "",Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                var keyList = _localConfigDicts.Keys.ToList();
+                string actualKey = null;//实际的键
+
+                foreach (var item in keyList)
+                {
+                    if (StringUtils.EqualsEx(key, item))
+                    {
+                        actualKey = item;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(actualKey))
+                {
+                    return defaultValue;
+                }
+
+                ConfigItem configItem = null;
+                if (_localConfigDicts.TryGetValue(actualKey, out configItem) && configItem != null)
+                {
+                    return StringUtils.TrimEx(configItem.ConfigValue);
+                }
+                else
+                {
+                    return defaultValue;
+                }
+
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return defaultValue;
+            }
+        }
+
+        /// <summary>
+        /// 从本地配置获取值
+        /// </summary>
+        /// <param name="key">键，不区分大小写</param>
+        /// <param name="defaultValue">获取不到返回的默认值</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <returns></returns>
+        public static int GetLocalConfigInteger(string key, int defaultValue = -1, Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                var keyList = _localConfigDicts.Keys.ToList();
+                string actualKey = null;//实际的键
+
+                foreach (var item in keyList)
+                {
+                    if (StringUtils.EqualsEx(key, item))
+                    {
+                        actualKey = item;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(actualKey))
+                {
+                    return defaultValue;
+                }
+
+                ConfigItem configItem = null;
+                if (_localConfigDicts.TryGetValue(actualKey, out configItem) && configItem != null)
+                {
+                    string theValue = StringUtils.TrimEx(configItem.ConfigValue);
+                    int returnInt = -1;
+                    if (int.TryParse(theValue, out returnInt))
+                    {
+                        return returnInt;
+                    }
+                    else
+                    {
+                        return defaultValue;
+                    }
+                }
+                else
+                {
+                    return defaultValue;
+                }
+
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return defaultValue;
+            }
+        }
+        
         #endregion
 
         #endregion
