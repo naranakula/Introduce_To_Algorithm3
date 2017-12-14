@@ -33,13 +33,17 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     //5s后强制退出
                     if (maxWaitMilliSecondBeforeExit > 0)
                     {
-                        try
+                        const int sleepPeriod = 100;//每次休眠100毫秒
+                        for (int i = 0; i * sleepPeriod < maxWaitMilliSecondBeforeExit; i++)
                         {
-                            Thread.Sleep(maxWaitMilliSecondBeforeExit);
-                        }
-                        catch
-                        {
-                            //ignore
+                            try
+                            {
+                                Thread.Sleep(sleepPeriod);
+                            }
+                            catch
+                            {
+                                //ignore
+                            }
                         }
                     }
 

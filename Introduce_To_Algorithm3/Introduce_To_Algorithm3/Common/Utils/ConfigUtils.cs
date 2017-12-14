@@ -54,6 +54,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
         #endregion
 
+        #region appSettings
+
         /// <summary>
         /// 获取配置字符串
         /// </summary>
@@ -237,6 +239,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
+        #endregion
+
+
         #region 自定义的配置信息
 
         #region 数据结构定义
@@ -341,7 +346,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             try
             {
-                var configList = _localConfigDicts.Values.ToList();
+                var configList = _localConfigDicts.Values.ToList().OrderBy(r=>r.ConfigKey).ToList();
                 ConfigCollection collection = new ConfigCollection();
                 collection.ConfigItems.AddRange(configList);
                 
@@ -398,6 +403,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 底层存储
         /// </summary>
         private static readonly ConcurrentDictionary<string,ConfigItem> _localConfigDicts = new ConcurrentDictionary<string, ConfigItem>();
+
+
+        #region 获取本地配置
+
+        #endregion
 
         #endregion
 
