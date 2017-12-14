@@ -16,7 +16,8 @@ syntax = "proto3";
 //	public static partial class HealthCheckService
 //	{
 //		static readonly string __ServiceName = "com.common.cmlu.services.HealthCheckService";//这个名称会用来识别service标志
-package tutorial;
+//package 唯一标记服务(跟服务名一起)
+package com.common.cmlu.services;
 
 // [START java_declaration]
 //生成java时的包名 会覆盖默认的包名 java包名全小写
@@ -25,7 +26,7 @@ option java_package = "com.example.tutorial";
 option java_outer_classname = "AddressBookProtos";
 // [END java_declaration]
 
-//生成C#时的包名  会覆盖默认的包名
+//生成C#时的包名  会覆盖默认的包名  这里用来生成C#类的namespace,不标记服务的名称
 // [START csharp_declaration]  C#命名空间采用驼峰式
 option csharp_namespace = "Google.Protobuf.Examples.AddressBook";
 // [END csharp_declaration]
