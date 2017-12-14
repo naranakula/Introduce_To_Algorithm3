@@ -6,7 +6,7 @@
 package com.common.cmlu.services;
 
 //生成C#代码时   使用的包名
-option csharp_namespace = "com.common.services";
+option csharp_namespace = "com.common.cmlu.services";
 
 //定义测试接口
 service HelloService{
