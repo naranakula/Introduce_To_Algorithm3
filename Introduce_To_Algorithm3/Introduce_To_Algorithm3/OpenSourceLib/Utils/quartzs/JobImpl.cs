@@ -43,6 +43,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             try
             {
                 NLogHelper.Info($"开始执行任务{jobName}");
+
+                //调用实际的任务
+                ActualJobCallback();
+
+                NLogHelper.Info($"结束执行任务{jobName}");
             }
             catch (Exception ex)
             {
@@ -56,6 +61,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 }
             }
         }
+
+
+        /// <summary>
+        /// 实际的任务回调，不需要处理异常
+        /// </summary>
+        private void ActualJobCallback()
+        {
+
+        }
+
 
         /// <summary>
         /// 每次job执行均创建一个job实例
