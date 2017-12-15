@@ -75,12 +75,17 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <summary>
         /// 添加一个数据项
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">要处理的数据项，如果为null，则什么也不做</param>
         /// <param name="exceptionHandler">异常处理</param>
         public void Add(T item,Action<Exception> exceptionHandler = null)
         {
             try
             {
+                if (item == null)
+                {
+                    return;
+                }
+
                 _blockingQueue.Add(item);
             }
             catch (Exception e)
