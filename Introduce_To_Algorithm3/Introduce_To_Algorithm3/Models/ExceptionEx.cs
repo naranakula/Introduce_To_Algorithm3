@@ -26,5 +26,15 @@ namespace Introduce_To_Algorithm3.Models
         /// </summary>
         public Exception TheInnerException { get; set; }
 
+        public ExceptionEx()
+        {
+            
+        }
+
+        public ExceptionEx(string message) : base(message)
+        {
+            
+        }
+
     }
 }
