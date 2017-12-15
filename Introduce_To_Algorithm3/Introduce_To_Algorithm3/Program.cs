@@ -26,8 +26,8 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-            NLogHelper.Info(GuidUtils.GetGuid2());
             DirectoryHold.ResetCurrentDir();
+            NLogHelper.Info(GuidUtils.GetGuid2());
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");
