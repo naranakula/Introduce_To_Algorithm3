@@ -18,7 +18,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// 底层是ConcurrentQueue
         /// 该实例没有上限
         /// </summary>
-        private BlockingCollection<T> _blockingQueue = new BlockingCollection<T>();
+        private readonly BlockingCollection<T> _blockingQueue = new BlockingCollection<T>();
 
         /// <summary>
         /// 是否正在运行
@@ -28,20 +28,23 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <summary>
         /// 数据处理
         /// </summary>
-        private volatile Action<T> _dataHandler = null;
-
-
+        private readonly Action<T> _dataHandler = null;
+        
         /// <summary>
         /// 异常处理
         /// </summary>
-        private volatile Action<Exception> _exceptionHandler = null;
-
-        private Thread _thread = null;
+        private readonly Action<Exception> _exceptionHandler = null;
 
         /// <summary>
-        /// 构造函数
+        /// 底层线程
+        /// </summary>
+        private readonly Thread _thread = null;
+
+        /// <summary>
+        /// 构造函数  构造完即开启处理线程
         /// </summary>
         /// <param name="dataHandler">数据处理</param>
+        /// <param name="exceptionHandler">数据处理异常后的处理</param>
         public BlockingQueueEx(Action<T> dataHandler = null,Action<Exception> exceptionHandler = null)
         {
             _isRunning = true;
@@ -73,9 +76,17 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// 添加一个数据项
         /// </summary>
         /// <param name="item"></param>
-        public void Add(T item)
+        /// <param name="exceptionHandler">异常处理</param>
+        public void Add(T item,Action<Exception> exceptionHandler = null)
         {
-            _blockingQueue.Add(item);
+            try
+            {
+                _blockingQueue.Add(item);
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+            }
         }
 
         ///// <summary>
@@ -110,7 +121,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             {
                 _blockingQueue.Dispose();
             }
-            _blockingQueue = null;
         }
 
 
