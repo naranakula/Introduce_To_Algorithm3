@@ -272,7 +272,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 避免每次递归创建
         /// </summary>
-        private static readonly string[] SearchPatternArr = FilePattern.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim()).ToArray();
+        private static readonly string[] SearchPatternArr = new string[]{"*.log"};//FilePattern.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim()).ToArray();
 
         /// <summary>
         /// 硬盘空间极限可用值。
@@ -288,7 +288,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 锁
         /// </summary>
-        private static Object locker = new Object();
+        private static readonly Object locker = new Object();
 
         /// <summary>
         /// 回调函数是否正在执行
