@@ -250,6 +250,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
         #endregion
 
+
         #region 辅助属性
 
         /// <summary>
@@ -301,6 +302,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         private const int MaxRecursiveDepth = 32;
 
         #endregion
+
+
     }
 
 }
