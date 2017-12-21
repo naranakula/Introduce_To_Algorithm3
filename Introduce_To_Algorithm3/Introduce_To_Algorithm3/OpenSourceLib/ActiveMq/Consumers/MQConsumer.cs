@@ -194,6 +194,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 //字节消息
                 //IBytesMessage byteMsg = session.CreateBytesMessage(new byte[] { });//字节消息
                 ITextMessage txtMsg = message as ITextMessage;
+
+                //建议使用ByteMessage,结合ProtoBuffer使用
+                IBytesMessage byteMsg = message as IBytesMessage;
+                if (byteMsg == null)
+                {
+                    return;
+                }
+                byte[] byteArr = byteMsg.Content;//访问Content导致流读完
+                //此时可以对数据操作
               
                 if (txtMsg == null || string.IsNullOrWhiteSpace(txtMsg.Text))
                 {

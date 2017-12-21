@@ -377,6 +377,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
 
                                 //文本消息
                                 ITextMessage txtMsg = session.CreateTextMessage(msg.Message);
+
+                                //建议使用ByteMessage,结合ProtoBuffer使用
+                                IBytesMessage byteMsg = session.CreateBytesMessage(new byte[] { });
+                                
                                 ////The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
                                 //txtMsg.NMSTimestamp = DateTime.UtcNow;
                                 ////The amount of time for which this message is valid.
