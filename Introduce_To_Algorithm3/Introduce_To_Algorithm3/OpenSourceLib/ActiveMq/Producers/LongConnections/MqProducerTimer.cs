@@ -28,6 +28,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// </summary>
         private static bool isRunning = false;
 
+
+        /// <summary>
+        /// 是否第一次启动mQ
+        /// </summary>
+        private static volatile bool _isFirstTimeToStartMq = true;
+
+
         /// <summary>
         /// 锁
         /// </summary>
@@ -63,8 +70,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
             {
                 if (!MQLongConnectionProducer.IsAlive())
                 {
-                    NLogHelper.Warn("重启 MQProducer");
-                    MQLongConnectionProducer.StartProducer();
+                    if (_isFirstTimeToStartMq)
+                    {
+                        _isFirstTimeToStartMq = false;
+
+                        NLogHelper.Debug("首次尝试启动MQProducer");
+                        MQLongConnectionProducer.StartProducer();
+                    }
+                    else
+                    {
+                        NLogHelper.Warn("重启MQProducer");
+                        MQLongConnectionProducer.StartProducer();
+                    }
+
                 }
 
             }
