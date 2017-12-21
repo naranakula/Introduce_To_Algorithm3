@@ -46,12 +46,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// <summary>
         /// 没有容量上限的消息队列
         /// </summary>
-        private static BlockingCollection<MessageItem> msgQueue = new BlockingCollection<MessageItem>();
+        private static readonly BlockingCollection<MessageItem> MsgQueue = new BlockingCollection<MessageItem>();
 
         /// <summary>
-        /// 消息最大容量
+        /// 消息最大容量, 当超过该容量消息将被丢弃
         /// </summary>
-        private const int MaxQueueCapacity = 1000;
+        private const int MaxQueueCapacity = 2048;
 
         /// <summary>
         /// 表示连接
@@ -71,32 +71,32 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// <summary>
         /// 锁
         /// </summary>
-        private static object locker = new object();
+        private static readonly object locker = new object();
 
         /// <summary>
         /// 最近一次通信时间
         /// </summary>
-        private static DateTime lastCommunicateTime = DateTime.Now.AddDays(-1);
+        private static DateTime _lastCommunicateTime = DateTime.Now.AddDays(-1);
 
         /// <summary>
         /// 是否可以发送消息
         /// </summary>
-        private static volatile bool isRunning = false;
+        private static volatile bool _isRunning = false;
 
         /// <summary>
         /// MQ连接是否存活
         /// </summary>
-        private static volatile bool isAlive = false;
+        private static volatile bool _isAlive = false;
 
         /// <summary>
         /// 消息发送线程
         /// </summary>
-        private static volatile Thread sendThread = null;
+        private static volatile Thread _sendThread = null;
 
         /// <summary>
         /// 消息发送之后的处理
         /// </summary>
-        private static volatile Action<MessageItem> actionAfterMsgSended = null;
+        private static volatile Action<MessageItem> _actionAfterMsgSended = null;
 
         #region Producer相关
         /// <summary>
@@ -142,11 +142,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                     IsTopic ? DestinationType.Topic : DestinationType.Queue));
 
                 //最近一次通信时间
-                lastCommunicateTime = DateTime.Now;
+                _lastCommunicateTime = DateTime.Now;
                 
                 lock (locker)
                 {
-                    isAlive = true;
+                    _isAlive = true;
                 }
                 
                 NLogHelper.Debug($"MQ Producer初始化成功,{(IsTopic?"主题":"队列")}的名字为{TopicOrQueueName}");
@@ -157,7 +157,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
 
                 lock (locker)
                 {
-                    isAlive = false;
+                    _isAlive = false;
                 }
 
                 NLogHelper.Error($"MQ Producer初始化失败:{e}");
@@ -214,7 +214,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
 
             lock (locker)
             {
-                isAlive = false;
+                _isAlive = false;
             }
         }
 
@@ -227,7 +227,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         {
             lock (locker)
             {
-                return isAlive;
+                return _isAlive;
             }
 
             //最好的方式，安装通信时间判断
@@ -257,7 +257,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         {
             lock (locker)
             {
-                isAlive = true;
+                _isAlive = true;
             }
             NLogHelper.Warn("ConnectionOnConnectionResumedListener连接恢复");
         }
@@ -269,7 +269,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         {
             lock (locker)
             {
-                isAlive = false;
+                _isAlive = false;
             }
 
             NLogHelper.Error("ConnectionInterruptedListener连接发生异常连接断开");
@@ -283,7 +283,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         {
             lock (locker)
             {
-                isAlive = false;
+                _isAlive = false;
             }
             NLogHelper.Error("connection_ExceptionListener连接发生异常：" + exception);
         }
@@ -305,23 +305,23 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
 
             MessageItem msgItem = null;
             #region 丢弃超出容量的消息
-            if (msgQueue.Count > MaxQueueCapacity)
+            if (MsgQueue.Count > MaxQueueCapacity)
             {
-                msgQueue.TryTake(out msgItem);
+                MsgQueue.TryTake(out msgItem);
                 NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                msgQueue.TryTake(out msgItem);
+                MsgQueue.TryTake(out msgItem);
                 NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                msgQueue.TryTake(out msgItem);
+                MsgQueue.TryTake(out msgItem);
                 NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                msgQueue.TryTake(out msgItem);
+                MsgQueue.TryTake(out msgItem);
                 NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                msgQueue.TryTake(out msgItem);
+                MsgQueue.TryTake(out msgItem);
                 NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
             }
             #endregion
 
             msgItem = new MessageItem(message);
-            msgQueue.Add(msgItem);
+            MsgQueue.Add(msgItem);
 
         }
 
@@ -338,34 +338,34 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         {
             lock (locker)
             {
-                if (isRunning)
+                if (_isRunning)
                 {
                     return;
                 }
-                isRunning = true;
+                _isRunning = true;
             }
 
-            actionAfterMsgSended = actionAfterSend;
+            _actionAfterMsgSended = actionAfterSend;
 
             //消息发送线程
-            sendThread = new Thread(() =>
+            _sendThread = new Thread(() =>
             {
-                Action<MessageItem> tempActionAfterMsgSended = actionAfterMsgSended;
-                while (isRunning)
+                Action<MessageItem> tempActionAfterMsgSended = _actionAfterMsgSended;
+                while (_isRunning)
                 {
                     try
                     {
                         #region  具体的消息发送
                         
-                        if (!isAlive)
+                        if (!_isAlive)
                         {
                             //mq连接不活
-                            Thread.Sleep(20);
+                            Thread.Sleep(10);
                             continue;
                         }
 
                         MessageItem msg = null;
-                        if (msgQueue.TryTake(out msg, 713))
+                        if (MsgQueue.TryTake(out msg, 713))
                         {
                             if (msg != null && !String.IsNullOrEmpty(msg.Message))
                             {
@@ -387,9 +387,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
 
                                 //可以自己添加消息头属性
                                 //txtMsg.Properties.SetString(key, value);
-
+                                //如果发送不出去，将会阻塞
                                 producer.Send(txtMsg, MsgDeliveryMode.Persistent, MsgPriority.Normal, TimeSpan.FromMinutes(30));
-
+                                _lastCommunicateTime = DateTime.Now;
                                 if (tempActionAfterMsgSended != null)
                                 {
                                     try
@@ -409,11 +409,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                     catch (Exception e)
                     {
                         NLogHelper.Error($"发送消息失败:{e}");
-                        Thread.Sleep(10);
                     }
                 }
             });
-            sendThread.Start();
+            _sendThread.Start();
         }
 
         /// <summary>
@@ -421,7 +420,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// </summary>
         public static void CloseSendThread()
         {
-            isRunning = false;
+            _isRunning = false;
+            //没有必要dispose，因为程序退出
+            //MsgQueue.Dispose();
         }
 
         #endregion

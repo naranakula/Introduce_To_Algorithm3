@@ -69,7 +69,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 是否连接是活的
         /// </summary>
-        private static volatile bool isAlive = false;
+        private static volatile bool _isAlive = false;
 
         /// <summary>
         /// 消费者
@@ -79,12 +79,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 锁
         /// </summary>
-        private static object locker = new object();
+        private static readonly object locker = new object();
 
         /// <summary>
         /// 最近一次通信时间
         /// </summary>
-        private static DateTime lastUpdateTime = DateTime.Now.AddDays(-1);
+        private static DateTime _lastUpdateTime = DateTime.Now.AddDays(-1);
 
         /// <summary>
         /// 初始化消费者
@@ -134,12 +134,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 consumer.Listener += consumer_Listener;
                 
                 //最近一次通信时间
-                lastUpdateTime = DateTime.Now;
+                _lastUpdateTime = DateTime.Now;
 
                 NLogHelper.Info("MQ初始化成功");
                 lock (locker)
                 {
-                    isAlive = true;
+                    _isAlive = true;
                 }
                 return true;
             }
@@ -147,7 +147,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             {
                 lock (locker)
                 {
-                    isAlive = false;
+                    _isAlive = false;
                 }
                 
                 NLogHelper.Error("MQ初始化失败：" + ex);
@@ -164,7 +164,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             //连接恢复
             lock (locker)
             {
-                isAlive = true;
+                _isAlive = true;
             }
             NLogHelper.Warn("ConnectionOnConnectionResumedListener连接恢复");
         }
@@ -185,7 +185,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 
             try
             {
-                lastUpdateTime = DateTime.Now;
+                _lastUpdateTime = DateTime.Now;
 
                 #region 获取消息
 
@@ -227,7 +227,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             //可以恢复的连接断开
             lock (locker)
             {
-                isAlive = false;
+                _isAlive = false;
             }
             
             NLogHelper.Error("ConnectionInterruptedListener连接发生异常连接断开");
@@ -242,7 +242,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             //不可恢复的连接断开
             lock (locker)
             {
-                isAlive = false;
+                _isAlive = false;
             }
             NLogHelper.Error("connection_ExceptionListener连接发生异常：" + exception);
         }
@@ -258,7 +258,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 if (consumer != null)
                 {
                     NLogHelper.Info("开始关闭MQ Consumer:" + MqUri);
-                    consumer.Dispose();
                     consumer.Close();
                     consumer = null;
                 }
@@ -300,7 +299,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 
             lock (locker)
             {
-                isAlive = false;
+                _isAlive = false;
             }
         }
 
@@ -312,7 +311,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         {
             lock (locker)
             {
-                return isAlive;
+                return _isAlive;
             }
 
             //最好的方式，安装通信时间判断

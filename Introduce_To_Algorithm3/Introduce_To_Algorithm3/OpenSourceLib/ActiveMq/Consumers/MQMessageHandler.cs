@@ -20,17 +20,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 线程安全集合提供阻塞和限制功能  FIFO  无上限集合
         /// </summary>
-        private static BlockingCollection<String> messageQueue = new BlockingCollection<string>();
+        private static readonly BlockingCollection<String> MessageQueue = new BlockingCollection<string>();
 
         /// <summary>
         /// 是否正在运行，用来判断程序是否关闭
         /// </summary>
-        private static volatile bool isRunning = true;
+        private static volatile bool _isRunning = true;
 
         /// <summary>
         /// 消息处理线程
         /// </summary>
-        private static volatile Thread messageHandlerThread = null;
+        private static volatile Thread _messageHandlerThread = null;
 
         /// <summary>
         /// 添加到消息队列
@@ -38,7 +38,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <param name="message"></param>
         public static void AddToQueue(String message)
         {
-            messageQueue.Add(message);
+            MessageQueue.Add(message);
         }
 
 
@@ -48,29 +48,29 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// </summary>
         public static void Init()
         {
-            lock (messageQueue)
+            lock (MessageQueue)
             {
 
-                if (messageHandlerThread != null)
+                if (_messageHandlerThread != null)
                 {
                     return;
                 }
 
                 //设置为运行
-                isRunning = true;
+                _isRunning = true;
             }
 
 
 
-            messageHandlerThread = new Thread(() =>
+            _messageHandlerThread = new Thread(() =>
             {
-                while (isRunning)
+                while (_isRunning)
                 {
                     try
                     {
                         String message = null;
-                        //等待317ms获取消息
-                        if (messageQueue.TryTake(out message, 317))
+                        //等待517ms获取消息
+                        if (MessageQueue.TryTake(out message, 517))
                         {
                             #region 处理消息message
 
@@ -89,20 +89,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                     catch (Exception ex)
                     {
                         NLogHelper.Error("处理消息失败,异常信息:" + ex);
-                        try
-                        {
-                            Thread.Sleep(200);
-                        }
-                        catch (Exception)
-                        {
-                            //ignore
-                        }
+                        
                     }
                 }
             });
 
             
-            messageHandlerThread.Start();
+            _messageHandlerThread.Start();
 
             NLogHelper.Info("初始化消息处理线程成功");
 
@@ -126,9 +119,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// </summary>
         public static void Stop()
         {
-            lock (messageQueue)
+            lock (MessageQueue)
             {
-                isRunning = false;
+                _isRunning = false;
             }
         }
 

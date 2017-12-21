@@ -23,32 +23,32 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 底层的timer
         /// </summary>
-        private static Timer mqTimer = null;
+        private static Timer _mqTimer = null;
 
         /// <summary>
         /// 定时器是否正在运行
         /// </summary>
-        private static bool isRunning = false;
+        private static bool _isRunning = false;
 
         /// <summary>
         /// 是否第一次启动mQ
         /// </summary>
-        private static volatile bool isFirstTimeToStartMq = true;
+        private static volatile bool _isFirstTimeToStartMq = true;
 
         /// <summary>
         /// 锁
         /// </summary>
-        private static object locker = new object();
+        private static readonly object locker = new object();
 
         /// <summary>
         /// 通过定时器开启MQ，不要直接开启mQ
         /// </summary>
         public static void Start()
         {
-            if (mqTimer == null)
+            if (_mqTimer == null)
             {
                 //执行周期17s
-                mqTimer = new Timer(new TimerCallback(MQTimerCallBack),null,500,17130);
+                _mqTimer = new Timer(new TimerCallback(MQTimerCallBack),null,500,17130);
             }
         }
 
@@ -60,20 +60,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         {
             lock (locker)
             {
-                if (isRunning)
+                if (_isRunning)
                 {
                     return;
                 }
-                isRunning = true;
+                _isRunning = true;
             }
             
             try
             {
                 if (!MQConsumer.IsAlive())
                 {
-                    if (isFirstTimeToStartMq)
+                    if (_isFirstTimeToStartMq)
                     {
-                        isFirstTimeToStartMq = false;
+                        _isFirstTimeToStartMq = false;
 
                         NLogHelper.Debug("首次尝试启动MQConsumer");
                         MQConsumer.InitConsumer();
@@ -97,7 +97,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             {
                 lock (locker)
                 {
-                    isRunning = false;
+                    _isRunning = false;
                 }
             }
         }
@@ -107,10 +107,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// </summary>
         public static void Stop()
         {
-            if (mqTimer != null)
+            if (_mqTimer != null)
             {
-                mqTimer.Dispose();
-                mqTimer = null;
+                _mqTimer.Dispose();
+                _mqTimer = null;
             }
 
             //关闭MQ
