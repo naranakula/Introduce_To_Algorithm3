@@ -23,7 +23,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
                 //对于C#默认的组合field是null
                 Console.WriteLine("default value for combined message field is null");
             }
-            
+
+            //ToString()是用于测试的代码，很慢
+            //{}
+            string str = jack.ToString();
             #region 将对象序列化
             Person person = new Person();
             person.Id = 1;
@@ -34,7 +37,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
             //repeated的Phones是只读的
             //The collection type for repeated fields is always RepeatedField<T>. 
             person.Phones.Add(new Person.Types.PhoneNumber { Number = "555-1212" });
-
+            //{ "name": "jack", "id": 1, "phones": [ { "number": "555-1212" } ] }
+            str = person.ToString();
             byte[] bytes = null;
             using (MemoryStream stream = new MemoryStream())
             {
