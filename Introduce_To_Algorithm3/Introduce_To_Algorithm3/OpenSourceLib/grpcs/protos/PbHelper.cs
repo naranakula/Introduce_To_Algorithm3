@@ -23,7 +23,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
                 //对于C#默认的组合field是null
                 Console.WriteLine("default value for combined message field is null");
             }
-
+            
             //ToString()是用于测试的代码，很慢
             //{}
             string str = jack.ToString();
@@ -51,7 +51,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
             byte[] byte2 = person.ToByteArray();
             //转换为字节
             ByteString byteString = person.ToByteString();
-
+            byte2 = byteString.ToByteArray();
             #endregion
 
             #region 将字节反序列化
