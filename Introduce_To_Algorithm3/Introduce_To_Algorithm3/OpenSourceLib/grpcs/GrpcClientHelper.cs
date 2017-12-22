@@ -371,7 +371,6 @@ The zero value needs to be the first element, for compatibility with the proto2 
         /// <param name="port"></param>
         /// <param name="action"></param>
         /// <param name="exceptionHandler"></param>
-        /// <param name="timeoutSeconds"></param>
         /// <returns></returns>
         public static bool SafeInvoke<T>(string ip, int port, Action<T> action,
             Action<Exception> exceptionHandler = null/*, int timeoutSeconds = 16*/) where T : ClientBase<T>
@@ -605,7 +604,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
         {
             try
             {
-                string clientPeer = context.Peer?.Trim();//例如:  ipv4:192.168.163.166:64205   //例如:  ipv4:192.168.163.166:64205  ipv6:fe80::d11:b6b6:1588:a2c2:1221
+                string clientPeer = context?.Peer?.Trim();//例如:  ipv4:192.168.163.166:64205   //例如:  ipv4:192.168.163.166:64205  ipv6:fe80::d11:b6b6:1588:a2c2:1221
                 if (string.IsNullOrEmpty(clientPeer))
                 {
                     return string.Empty;
@@ -644,7 +643,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
         {
             try
             {
-                string clientPeer = context.Peer;//例如:  ipv4:192.168.163.166:64205
+                string clientPeer = context?.Peer;//例如:  ipv4:192.168.163.166:64205
                 if (string.IsNullOrWhiteSpace(clientPeer))
                 {
                     return -1;
@@ -688,7 +687,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
         {
             try
             {
-                string method = context.Method;
+                string method = context?.Method;
                 // / test.Greeter / SayHello
                 if (string.IsNullOrEmpty(method))
                 {
