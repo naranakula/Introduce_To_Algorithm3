@@ -372,7 +372,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
         /// <param name="action"></param>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
-        public static bool SafeInvoke<T>(string ip, int port, Action<T> action,
+        public static bool SafeInvoke2<T>(string ip, int port, Action<T> action,
             Action<Exception> exceptionHandler = null/*, int timeoutSeconds = 16*/) where T : ClientBase<T>
         {
             if (action == null)
@@ -726,7 +726,7 @@ The zero value needs to be the first element, for compatibility with the proto2 
             });
 
 
-            GrpcClientHelper.SafeInvoke<Greeter.GreeterClient>("127.0.0.1", 50051, client =>
+            GrpcClientHelper.SafeInvoke2<Greeter.GreeterClient>("127.0.0.1", 50051, client =>
             {
                 var result = client.SayHello(new Request(),deadline:DateTime.UtcNow.AddSeconds(12));
                 Console.WriteLine(result.Response_);

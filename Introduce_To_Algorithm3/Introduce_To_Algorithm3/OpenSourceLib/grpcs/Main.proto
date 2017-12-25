@@ -114,6 +114,7 @@ message SearchRequest {
 service FooService {
   //方法的名字不能重复
   rpc GetSomething(FooRequest) returns (FooResponse);
+  //可以裁剪服务，如只提供部分方法，给别人使用（经过测试）
 }
 
 //import "myproject/other_protos.proto";
