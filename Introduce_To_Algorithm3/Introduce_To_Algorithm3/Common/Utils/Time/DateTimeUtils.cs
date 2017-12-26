@@ -300,7 +300,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     {
                         response.Close();
                     }
-                    catch (Exception e)
+                    catch
                     {
                     }
                     
