@@ -24,6 +24,16 @@ namespace Introduce_To_Algorithm3.Models
         public OperationResultType ResultType { get; set; }
 
         /// <summary>
+        /// 结果码
+        /// </summary>
+        public int ResultCode { get; set; }
+
+        /// <summary>
+        /// 结果描述
+        /// </summary>
+        public string ResultDesc { get; set; }
+
+        /// <summary>
         /// 操作异常时的异常
         /// </summary>
         public Exception ResultException { get; set; }
