@@ -11,6 +11,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
     /// <summary>
     /// Map工具
     /// 将同名属性映射，创建目标对象，如果Src中存在同名的，将Src的同名属性值赋给dest,不存在Src同名属性，则不作处理
+    /// https://github.com/AutoMapper/AutoMapper
+    /// http://automapper.readthedocs.io/en/latest/Getting-started.html
     /// </summary>
     public class AutoMapperUtils
     {
