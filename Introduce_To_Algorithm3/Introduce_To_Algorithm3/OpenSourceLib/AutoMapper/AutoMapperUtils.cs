@@ -13,24 +13,56 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
     /// 将同名属性映射，创建目标对象，如果Src中存在同名的，将Src的同名属性值赋给dest,不存在Src同名属性，则不作处理
     /// https://github.com/AutoMapper/AutoMapper
     /// http://automapper.readthedocs.io/en/latest/Getting-started.html
+    /// 
+    /// AutoMapper的CreateMap不是多线程安全的，但Map是多线程安全的
     /// </summary>
     public class AutoMapperUtils
     {
         /// <summary>
-        /// 静态构造函数
+        /// 初始化
+        /// 在程序启动时初始化一次
         /// </summary>
-        static AutoMapperUtils()
+        public static bool InitAutoMapperUtils(Action<Exception> exceptionHandler = null)
         {
-            //初始化Map
-            //Mapper.CreateMap<CalendarEvent, CalendarEventForm>().ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.Date.Date)).ForMember(dest => dest.EventHour, opt => opt.MapFrom(src => src.Date.Hour)).ForMember(dest => dest.EventMinute, opt => opt.MapFrom(src => src.Date.Minute));
-            
-            //忽略某些字段
-            //.ForMember(r => r.Passenger, opt => opt.Ignore());
             //createmap的顺序是不重要的
+            try
+            {
+                Mapper.Initialize(cfg =>
+                {
+                    #region 初始化代码
+                    //经测试，所有的类型转换必须先CreateMap，即使是从A到A的转换  从A到B和从B到A是两个转换
+                    //cfg.CreateMap<A, B>();
+                    //默认是MemberList.Destination，表示Check that all destination members are mapped 所有目标成员都必须映射
+                    //MemberList.None表示不检查
+                    //A是源类型,B是目标类型
+                    //PreserveReferences()是默认的配置
+                    var imap = cfg.CreateMap<A, B>(MemberList.Destination).PreserveReferences().ForMember(b=>b.a,opt=>opt.MapFrom(a=>a.a/*对某些字段进行定制的转换*/)).ForMember(b=>b.a,opt=>opt.Ignore()/*对某些字段不转换*/);
+
+                    
+                    #region 循环引用
+                    // Self-referential mapping指定循环引用的递归深度
+                    //cfg.CreateMap<Category, CategoryDto>().MaxDepth(3);
+                    //PreserveReferences()是默认的配置
+                    // Circular references between users and groups循环引用保持引用，而不是map
+                    //cfg.CreateMap<User, UserDto>().PreserveReferences();
+                    #endregion
+                    var imap2 = cfg.CreateMap<AA, BB>(MemberList.None);
+
+                    #endregion
+                });
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
         }
 
         /// <summary>
         /// 将Source对象映射到target上
+        /// 多线程安全
         /// </summary>
         /// <typeparam name="Source"></typeparam>
         /// <typeparam name="Target"></typeparam>
@@ -41,10 +73,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
             return Mapper.Map<Source, Target>(src);
         }
 
-        
+        /// <summary>
+        /// 将Source对象映射到target上
+        /// 多线程安全
+        /// </summary>
+        /// <typeparam name="Target"></typeparam>
+        /// <param name="src"></param>
+        /// <returns></returns>
+        public static Target Map2<Target>(object src)
+        {
+            return Mapper.Map<Target>(src);
+        }
+
         public static void Test(string[] args)
         {
-           
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<A, B>();
@@ -56,28 +98,28 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
             Console.WriteLine(bts);
         }
       
-
-        class A
-        {
-            public string a { get; set; }
-            public List<AA> list { get; set; }
-        }
-
-        class AA
-        {
-            public string aa { get; set; }
-        }
-
-        class B
-        {
-            public string a { get; set; }
-            public List<BB> list { get; set; }
-        }
-
-        class BB
-        {
-            public string aa { get; set; }
-        }
-
     }
+
+    class A
+    {
+        public string a { get; set; }
+        public List<AA> list { get; set; }
+    }
+
+    class AA
+    {
+        public string aa { get; set; }
+    }
+
+    class B
+    {
+        public string a { get; set; }
+        public List<BB> list { get; set; }
+    }
+
+    class BB
+    {
+        public string aa { get; set; }
+    }
+
 }
