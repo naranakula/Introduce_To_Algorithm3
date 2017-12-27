@@ -69,8 +69,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
         /// <typeparam name="Target"></typeparam>
         /// <param name="src"></param>
         /// <returns></returns>
-        public static Target Map<Source, Target>(Source src)
+        public static Target Map<Source, Target>(Source src) where Source:class 
         {
+            if (src == null)
+            {
+                return default(Target);
+            }
             return Mapper.Map<Source, Target>(src);
         }
 
@@ -83,6 +87,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
         /// <returns></returns>
         public static Target Map2<Target>(object src)
         {
+            if (src == null)
+            {
+                return default(Target);
+            }
+
             return Mapper.Map<Target>(src);
         }
 
