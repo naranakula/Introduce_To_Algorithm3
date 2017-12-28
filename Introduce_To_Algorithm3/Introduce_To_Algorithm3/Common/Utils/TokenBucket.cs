@@ -31,7 +31,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 锁
         /// </summary>
-        private object locker = new object();
+        private readonly object locker = new object();
 
         /// <summary>
         /// 当前桶的容量
