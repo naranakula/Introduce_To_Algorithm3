@@ -41,8 +41,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString格式
         /// </summary>
-        private static string _nameOrConnectionString = "name=SqlSeverConnString";
+        private const string _nameOrConnectionString = "name=SqlSeverConnString";
 
+        /// <summary>
+        /// 锁
+        /// </summary>
+        private static readonly object _locker = new object();
         
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
@@ -51,14 +55,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public static string NameOrConnectionString
         {
             get { return _nameOrConnectionString; }
-            set { _nameOrConnectionString = value; }
         }
 
 
         /// <summary>
         /// 实际的连接字符串
         /// </summary>
-        private static string _trueConStrCache = string.Empty;
+        private static volatile string _trueConStrCache = string.Empty;
         
 
         /// <summary>
@@ -83,7 +86,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 数据库的名字
         /// </summary>
-        private static string _dbNameCache = string.Empty;
+        private static volatile string _dbNameCache = string.Empty;
 
 
         /// <summary>
@@ -312,10 +315,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 安全的使用EfDbContext执行通用任务
+        /// 返回true，表示没有异常，false表示发生异常
         /// </summary>
         /// <param name="action">数据库操作</param>
         /// <param name="exceptionHanlder">异常处理</param>
-        public static void ActionSafe(Action<EfDbContext> action, Action<Exception> exceptionHanlder = null)
+        public static bool ActionSafe(Action<EfDbContext> action, Action<Exception> exceptionHanlder = null)
         {
             try
             {
@@ -323,6 +327,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 {
                     action(context);
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -330,6 +336,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 {
                     exceptionHanlder(ex);
                 }
+
+                return false;
             }
         }
 
@@ -523,12 +531,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 //加上ToList,否则有可能 generates "Collection was modified; enumeration operation may not execute error"
                 foreach (var child in parent.Children.ToList())
                 {
+                    //注意是从context中删除
                     context.Children.Remove(child);
                 }
             }
             context.Parents.Remove(parent);
             */
-
+            
             return dbSet.Remove(entity);
         }
 
@@ -785,7 +794,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             {
                 if (conn != null)
                 {
-                    conn.Close();
+                    try
+                    {
+                        conn.Close();
+                    }
+                    catch { }
                 }
             }
             return result;
@@ -1543,7 +1556,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
                 using (EfDbContext context = new EfDbContext())
                 {
-                    //即使在某些多线程同时写的极端情况，可能会创建多条记录
+                    //即使在某些多线程同时写的极端情况，也不可能会创建多条记录(主键)
                     DictItem result = context.DictItems.FirstOrDefault(r => r.DictKey == normalizedKey && r.DictType == normalizedType);
                     if (result != null)
                     {
@@ -2031,51 +2044,54 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //字符串常用配置
             Property(t => t.Name).IsOptional().HasMaxLength(128).IsUnicode().IsVariableLength();
 
-//           USE[SqlDb]
-//           GO
-//
-///****** Object:  Table [dbo].[BaseEntity]    Script Date: 2017/12/13 11:12:19 ******/
-//                SET ANSI_NULLS ON
-//            GO
-
-//                SET QUOTED_IDENTIFIER ON
-//            GO
-
-//                SET ANSI_PADDING ON
-//            GO
-
-//                CREATE TABLE[dbo].[BaseEntity](
-
-//                [Id][nvarchar](36) NOT NULL,
-
-//                [ModifiedTime] [datetime] NULL,
-//                [CreateTime]
-//                [datetime]
-//            NOT NULL,
-
-//                [ModifyTime] [datetime]
-//            NOT NULL,
-
-//                [Name] [nvarchar] (128) NULL,
-//                [RowVersion]
-//                [timestamp]
-//            NOT NULL,
-
-//                [BytesExample] [varbinary] (2048) NULL,
-//            CONSTRAINT[PK_dbo.BaseEntity] PRIMARY KEY CLUSTERED
-//                (
-//                [Id] ASC
-//                )WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]
-//                ) ON[PRIMARY]
-
-//            GO
-
-//                SET ANSI_PADDING OFF
-//            GO
-
-
+            
             //如果不加下面的配置，将是[BytesExample] [varbinary](max) NULL,  添加之后是[BytesExample] [varbinary](2048) NULL,
-        Property(t => t.BytesExample).IsOptional().HasMaxLength(2048);
+            Property(t => t.BytesExample).IsOptional().HasMaxLength(2048);
+
+
+
+            //           USE[SqlDb]
+            //           GO
+            //
+            ///****** Object:  Table [dbo].[BaseEntity]    Script Date: 2017/12/13 11:12:19 ******/
+            //                SET ANSI_NULLS ON
+            //            GO
+
+            //                SET QUOTED_IDENTIFIER ON
+            //            GO
+
+            //                SET ANSI_PADDING ON
+            //            GO
+
+            //                CREATE TABLE[dbo].[BaseEntity](
+
+            //                [Id][nvarchar](36) NOT NULL,
+
+            //                [ModifiedTime] [datetime] NULL,
+            //                [CreateTime]
+            //                [datetime]
+            //            NOT NULL,
+
+            //                [ModifyTime] [datetime]
+            //            NOT NULL,
+
+            //                [Name] [nvarchar] (128) NULL,
+            //                [RowVersion]
+            //                [timestamp]
+            //            NOT NULL,
+
+            //                [BytesExample] [varbinary] (2048) NULL,
+            //            CONSTRAINT[PK_dbo.BaseEntity] PRIMARY KEY CLUSTERED
+            //                (
+            //                [Id] ASC
+            //                )WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]
+            //                ) ON[PRIMARY]
+
+            //            GO
+
+            //                SET ANSI_PADDING OFF
+            //            GO
+
         }
     }
 
