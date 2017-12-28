@@ -20,12 +20,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// <summary>
         /// 定时器
         /// </summary>
-        private Timer _timer = null;
+        private volatile Timer _timer = null;
 
         /// <summary>
         /// 锁
         /// </summary>
-        private object _locker = new object();
+        private readonly object _locker = new object();
 
         /// <summary>
         /// 是否回调在运行

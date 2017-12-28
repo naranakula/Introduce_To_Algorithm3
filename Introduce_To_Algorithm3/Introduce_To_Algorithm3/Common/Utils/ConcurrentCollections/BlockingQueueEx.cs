@@ -21,6 +21,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private readonly BlockingCollection<T> _blockingQueue = new BlockingCollection<T>();
 
         /// <summary>
+        /// 锁
+        /// </summary>
+        private readonly object _locker = new object();
+
+        /// <summary>
         /// 是否正在运行
         /// </summary>
         private volatile bool _isRunning = false;
@@ -47,24 +52,38 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <param name="exceptionHandler">数据处理异常后的处理</param>
         public BlockingQueueEx(Action<T> dataHandler = null,Action<Exception> exceptionHandler = null)
         {
-            _isRunning = true;
-            this._dataHandler = dataHandler;
-            this._exceptionHandler = exceptionHandler;
+            
+            lock (_locker)
+            {
+                _isRunning = true;
+                this._dataHandler = dataHandler;
+                this._exceptionHandler = exceptionHandler;
+            }
             _thread = new Thread(() =>
             {
                 T item = null;
+                Action<T> dataHandlerInThread = null;
+                Action<Exception> exceptionHandlerInThread = null;
+
+                lock (_locker)
+                {
+                    dataHandlerInThread = this._dataHandler;
+                    exceptionHandlerInThread = this._exceptionHandler;
+                }
+
+
                 while (_isRunning)
                 {
                     try
                     {
-                        if (_blockingQueue.TryTake(out item, 713))
+                        if (_blockingQueue.TryTake(out item, 513))
                         {
-                            _dataHandler?.Invoke(item);
+                            dataHandlerInThread?.Invoke(item);
                         }
                     }
                     catch(Exception ex)
                     {
-                        _exceptionHandler?.Invoke(ex);
+                        exceptionHandlerInThread?.Invoke(ex);
                     }
                 }
             });
@@ -132,4 +151,5 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
 
     }
+
 }
