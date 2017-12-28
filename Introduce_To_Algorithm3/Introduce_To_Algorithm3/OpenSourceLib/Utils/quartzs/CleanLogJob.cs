@@ -216,11 +216,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             //非空子目录集合
             List<DirectoryInfo> nonEmptyDirList = new List<DirectoryInfo>();
 
+
+            DateTime now = DateTime.Now;
             //删除空目录
             foreach (var currentDir in subDirs)
             {
                 //文件夹为空, 并且空目录至少2天没有使用
-                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (DateTime.Now - currentDir.LastWriteTime).TotalDays > 2)
+                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (now - currentDir.LastWriteTime).TotalDays > 2)
                 {
                     try
                     {
