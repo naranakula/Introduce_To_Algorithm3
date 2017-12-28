@@ -10,7 +10,7 @@ option csharp_namespace = "com.common.cmlu.services";
 
 //定义监控接口
 service MonitorService{
-	//监控接口
+	//监控接口  监控端用来监控
 	rpc Monitor(MonitorRequest) returns (MonitorResponse){}
 }
 

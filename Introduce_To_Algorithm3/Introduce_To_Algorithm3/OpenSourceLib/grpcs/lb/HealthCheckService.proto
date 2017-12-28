@@ -9,13 +9,13 @@ option csharp_namespace = "com.common.cmlu.services";
 //定义接口  安全检查服务
 
 service HealthCheckService{
-	//检测服务状态
+	//检测服务状态 已使用 lb用来选举服务器
 	rpc HealthCheck(HealthRequest) returns (HealthResponse){}
 
 	//拓展接口  执行命令  目前未使用
 	rpc RunCommand(CommandRequest) returns (CommandResponse){}
 
-	//是否存活
+	//是否存活  已使用 客户端用来检测是否存活
 	rpc IsAlive(ServerAliveRequest) returns (ServerAliveResponse){}
 }
 
