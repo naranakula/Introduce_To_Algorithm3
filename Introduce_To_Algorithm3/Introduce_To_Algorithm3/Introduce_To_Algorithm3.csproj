@@ -875,6 +875,7 @@
     <None Include="OpenSourceLib\grpcs\examples\exs\test.proto" />
     <None Include="OpenSourceLib\grpcs\lb\HealthCheckService.proto" />
     <None Include="OpenSourceLib\grpcs\lb\MonitorService.proto" />
+    <None Include="OpenSourceLib\grpcs\lb\RegisterService.proto" />
     <None Include="OpenSourceLib\grpcs\server2.crt" />
     <None Include="OpenSourceLib\grpcs\server2.key" />
     <None Include="OpenSourceLib\grpcs\sslgen.cmd" />
