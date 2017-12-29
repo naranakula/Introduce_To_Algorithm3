@@ -148,7 +148,7 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
         /// Indicates whether any servers are connected
         /// </summary>
         /// <returns></returns>
-        public bool IsConnected()
+        public bool IsConnected(Action<Exception> exceptionHandler = null)
         {
             try
             {
@@ -156,6 +156,7 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
             }
             catch (Exception e)
             {
+                exceptionHandler?.Invoke(e);
                 return false;
             }
         }

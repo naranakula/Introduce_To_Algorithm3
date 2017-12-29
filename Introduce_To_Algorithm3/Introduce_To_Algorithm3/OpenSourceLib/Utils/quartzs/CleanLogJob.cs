@@ -39,7 +39,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
             try
             {
+                //开始时间
+                DateTime startTime = DateTime.Now;
+
+                #region 清理工作
+
+                //清理日志
                 CleanLog();
+
+                #endregion
+
+                //清理日志使用的时间
+                TimeSpan usedTimeSpan = DateTime.Now - startTime;
+                NLogHelper.Info($"耗时{usedTimeSpan.TotalSeconds}秒--({usedTimeSpan})");
             }
             catch (Exception ex)
             {
@@ -59,6 +71,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// </summary>
         public void CleanLog()
         {
+            
             NLogHelper.Info("开始清理日志");
             DirectoryInfo dirInfo = new DirectoryInfo(LogDir);
             if (!dirInfo.Exists)
@@ -108,7 +121,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             }
             catch (Exception ex)
             {
-                NLogHelper.Warn($"清理文件失败：{ex}");
+                NLogHelper.Warn($"清理文件失败:{ex}");
             }
 
             try
@@ -120,8 +133,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             {
                 NLogHelper.Warn($"清理空目录失败:{ex}");
             }
+            
 
-            NLogHelper.Info("清理日志完成");
+            NLogHelper.Info($"清理日志完成");
         }
 
         /// <summary>
@@ -233,7 +247,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     try
                     {
                         currentDir.Delete();
-                        NLogHelper.Trace("删除目录：" + currentDir.FullName);
+                        NLogHelper.Trace("删除目录:" + currentDir.FullName);
                     }
                     catch (Exception ex)
                     {
@@ -258,12 +272,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 要清理日志的目录
         /// </summary>
-        private const string LogDir = "logs";
+        private const string LogDir = @"logs";
 
         /// <summary>
         /// 保存多少天日志，与创建时间比较
         /// </summary>
-        private const int KeepDays = 60;
+        private const int KeepDays = 90;
 
         /// <summary>
         /// 过滤什么样的文件
