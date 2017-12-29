@@ -70,8 +70,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 清理日志
         /// </summary>
         public void CleanLog()
-        {
-            
+        {            
             NLogHelper.Info("开始清理日志");
             DirectoryInfo dirInfo = new DirectoryInfo(LogDir);
             if (!dirInfo.Exists)
@@ -112,7 +111,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             }
             #endregion
 
-            NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss",CultureInfo.CurrentCulture)}之前的日志");
+            
+            NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss",CultureInfo.CurrentCulture)}之前的{dirInfo}目录的日志");
 
             //清理文件
             try
@@ -247,11 +247,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     try
                     {
                         currentDir.Delete();
-                        NLogHelper.Trace("删除目录:" + currentDir.FullName);
+                        NLogHelper.Trace("删除空目录:" + currentDir.FullName);
                     }
                     catch (Exception ex)
                     {
-                        NLogHelper.Warn($"删除目录{currentDir.FullName}失败:{ex}");
+                        NLogHelper.Warn($"删除空目录{currentDir.FullName}失败:{ex}");
                     }
                 }
             }
