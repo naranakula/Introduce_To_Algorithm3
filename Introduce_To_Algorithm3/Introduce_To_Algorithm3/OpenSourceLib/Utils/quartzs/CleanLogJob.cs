@@ -301,7 +301,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 最大递归深度，  防止文件夹快捷方式造成的无穷递归
         /// </summary>
-        private const int MaxRecursiveDepth = 32;
+        private const int MaxRecursiveDepth = 15;
 
         #endregion
 
