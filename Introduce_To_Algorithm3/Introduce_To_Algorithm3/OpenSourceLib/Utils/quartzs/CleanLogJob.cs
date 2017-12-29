@@ -226,7 +226,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 {
                     nonEmptyDirList.Add(currentDir);
                 }
-                else if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (now - currentDir.LastWriteTime).TotalDays > 2)
+                else if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (now - currentDir.CreationTime).TotalDays > 2)
                 {
                     // 删除放在后面
                     //文件夹为空, 并且空目录至少2天没有使用
