@@ -23,7 +23,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 底层的timer
         /// </summary>
-        private static Timer _mqTimer = null;
+        private static volatile Timer _mqTimer = null;
 
         /// <summary>
         /// 定时器是否正在运行

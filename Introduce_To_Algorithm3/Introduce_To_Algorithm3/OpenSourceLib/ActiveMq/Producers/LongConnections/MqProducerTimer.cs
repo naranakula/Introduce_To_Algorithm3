@@ -21,7 +21,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// <summary>
         /// 底层的timer
         /// </summary>
-        private static Timer mqTimer = null;
+        private static volatile Timer mqTimer = null;
 
         /// <summary>
         /// 定时器是否正在运行
@@ -38,7 +38,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// <summary>
         /// 锁
         /// </summary>
-        private static object locker = new object();
+        private static readonly object locker = new object();
 
         /// <summary>
         /// 通过定时器开启MQ，不要直接开启mQ

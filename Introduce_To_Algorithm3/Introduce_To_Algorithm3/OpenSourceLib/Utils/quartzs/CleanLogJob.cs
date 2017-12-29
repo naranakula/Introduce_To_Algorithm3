@@ -270,7 +270,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 
         /// 采用*.log|*.txt格式，多个项通过|隔开，该功能是通过自己写代码实现的
         /// </summary>
-        private const string FilePattern = "*.log";
+        //private const string FilePattern = "*.log";
 
         /// <summary>
         /// 避免每次递归创建

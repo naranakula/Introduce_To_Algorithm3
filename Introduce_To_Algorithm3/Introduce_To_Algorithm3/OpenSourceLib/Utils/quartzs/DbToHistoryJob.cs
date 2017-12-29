@@ -48,7 +48,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 锁
         /// </summary>
-        private static Object locker = new Object();
+        private static readonly Object locker = new Object();
 
         /// <summary>
         /// 回调函数是否正在执行
