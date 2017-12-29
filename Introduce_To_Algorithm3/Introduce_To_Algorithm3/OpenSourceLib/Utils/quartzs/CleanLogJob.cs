@@ -112,7 +112,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             #endregion
 
             
-            NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss",CultureInfo.CurrentCulture)}之前的{dirInfo}目录的日志");
+            NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss",CultureInfo.CurrentCulture)}之前的{dirInfo.FullName}目录的日志");
 
             //清理文件
             try
@@ -154,6 +154,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         {
             if (currentDepth > MaxRecursiveDepth)
             {
+                //目录的快捷方式会被认为是一个文件
                 NLogHelper.Warn($"日志文件夹深度太大或者存在快捷方式导致无穷递归");
                 return;
             }
