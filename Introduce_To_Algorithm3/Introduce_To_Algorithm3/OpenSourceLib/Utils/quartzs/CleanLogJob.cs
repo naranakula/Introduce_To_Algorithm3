@@ -221,9 +221,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             //删除空目录
             foreach (var currentDir in subDirs)
             {
-                //文件夹为空, 并且空目录至少2天没有使用
-                if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (now - currentDir.LastWriteTime).TotalDays > 2)
+                //获取存在子目录的目录
+                if (currentDir.Exists && currentDir.GetDirectories().Length != 0)
                 {
+                    nonEmptyDirList.Add(currentDir);
+                }
+                else if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (now - currentDir.LastWriteTime).TotalDays > 2)
+                {
+                    // 删除放在后面
+                    //文件夹为空, 并且空目录至少2天没有使用
                     try
                     {
                         currentDir.Delete();
@@ -233,12 +239,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     {
                         NLogHelper.Warn($"删除目录{currentDir.FullName}失败:{ex}");
                     }
-                }
-
-                //获取存在子目录的目录
-                if (currentDir.Exists && currentDir.GetDirectories().Length != 0)
-                {
-                    nonEmptyDirList.Add(currentDir);
                 }
             }
             
