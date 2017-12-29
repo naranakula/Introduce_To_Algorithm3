@@ -117,7 +117,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             //清理文件
             try
             {
-                CleanFiles(LogDir, SearchPatternArr, expireTime, currentDepth:0);
+                int delCount = CleanFiles(LogDir, SearchPatternArr, expireTime, currentDepth:0);
+                NLogHelper.Info($"共删除{delCount}个文件");
             }
             catch (Exception ex)
             {
@@ -127,7 +128,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             try
             {
                 //清理空目录
-                CleanEmptyDirectory(LogDir,  currentDepth:0);
+                int delCount = CleanEmptyDirectory(LogDir,  currentDepth:0);
+                NLogHelper.Info($"共删除{delCount}个目录");
             }
             catch (Exception ex)
             {
@@ -150,20 +152,21 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// </param>
         /// <param name="expireTime">文件过期时间</param>
         /// <param name="currentDepth">当前递归深度</param>
-        private void CleanFiles(string topDir, string[] fileSearchPatternArr, DateTime expireTime,int currentDepth)
+        /// <returns>返回删除文件的个数</returns>
+        private int CleanFiles(string topDir, string[] fileSearchPatternArr, DateTime expireTime,int currentDepth)
         {
             if (currentDepth > MaxRecursiveDepth)
             {
                 //目录的快捷方式会被认为是一个文件
                 NLogHelper.Warn($"日志文件夹深度太大或者存在快捷方式导致无穷递归");
-                return;
+                return 0;
             }
 
             DirectoryInfo dirInfo = new DirectoryInfo(topDir);
             if (!dirInfo.Exists)
             {
                 NLogHelper.Warn($"未找到{topDir}目录，无法清理");
-                return;
+                return 0;
             }
 
 
@@ -177,6 +180,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 dirInfo.GetFiles(searchPatternItem, SearchOption.TopDirectoryOnly).Select(r => r.FullName).ToList().ForEach(r => fileInfos.Add(r.Trim()));
             }
 
+            //删除文件的个数
+            int delCount = 0;
             //删除过期文件
             foreach (string fileName in fileInfos)
             {
@@ -188,6 +193,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     try
                     {
                         fileInfo.Delete();
+                        delCount++;
                         NLogHelper.Trace("删除文件:" + fileInfo.FullName);
                     }
                     catch (Exception ex)
@@ -201,8 +207,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             DirectoryInfo[] subDirs = dirInfo.GetDirectories();//返回当前目录的子目录。如果没有子目录，则此方法返回一个空数组。 此方法不是递归的。
             foreach (var subDir in subDirs)
             {
-                CleanFiles(subDir.FullName,fileSearchPatternArr,expireTime,currentDepth+1);
+                delCount += CleanFiles(subDir.FullName,fileSearchPatternArr,expireTime,currentDepth+1);
             }
+
+            return delCount;
         }
 
         /// <summary>
@@ -210,19 +218,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// </summary>
         /// <param name="topDir">顶级目录</param>
         /// <param name="currentDepth">当前递归深度</param>
-        private void CleanEmptyDirectory(string topDir,  int currentDepth)
+        /// <returns>删除目录的个数</returns>
+        private int CleanEmptyDirectory(string topDir,  int currentDepth)
         {
             if (currentDepth > MaxRecursiveDepth)
             {
                 NLogHelper.Warn($"日志文件夹存在快捷方式导致无穷递归");
-                return;
+                return 0;
             }
 
             DirectoryInfo dirInfo = new DirectoryInfo(topDir);
             if (!dirInfo.Exists)
             {
                 NLogHelper.Warn($"未找到{topDir}目录，无法清理");
-                return;
+                return 0;
             }
 
 
@@ -233,6 +242,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
 
             DateTime now = DateTime.Now;
+
+            //删除目录的个数
+            int delCount = 0;
             //删除空目录
             foreach (var currentDir in subDirs)
             {
@@ -248,6 +260,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     try
                     {
                         currentDir.Delete();
+                        delCount++;
                         NLogHelper.Trace("删除空目录:" + currentDir.FullName);
                     }
                     catch (Exception ex)
@@ -260,9 +273,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             //递归子目录
             foreach (var subDir in nonEmptyDirList)
             {
-                CleanEmptyDirectory(subDir.FullName,currentDepth+1);
+                delCount += CleanEmptyDirectory(subDir.FullName,currentDepth+1);
             }
 
+            return delCount;
         }
 
         #endregion
@@ -316,7 +330,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 最大递归深度，  防止文件夹快捷方式造成的无穷递归
         /// </summary>
-        private const int MaxRecursiveDepth = 15;
+        private const int MaxRecursiveDepth = 31;
 
         #endregion
 
