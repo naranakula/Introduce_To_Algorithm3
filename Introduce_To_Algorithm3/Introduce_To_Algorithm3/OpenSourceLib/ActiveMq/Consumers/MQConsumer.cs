@@ -53,7 +53,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 创建连接工厂
         /// </summary>
-        private static volatile IConnectionFactory factory = new ConnectionFactory(MqUri);
+        private static readonly IConnectionFactory factory = new ConnectionFactory(MqUri);
 
         /// <summary>
         /// 连接

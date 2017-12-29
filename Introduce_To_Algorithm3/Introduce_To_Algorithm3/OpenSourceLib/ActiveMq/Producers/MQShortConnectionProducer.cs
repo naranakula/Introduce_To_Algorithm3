@@ -19,7 +19,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         /// <summary>
         /// 创建连接工厂
         /// </summary>
-        private static IConnectionFactory factory = new ConnectionFactory(ConfigUtils.GetString(MQUri));
+        private static readonly IConnectionFactory factory = new ConnectionFactory(ConfigUtils.GetString(MQUri));
 
         /// <summary>
         /// 发送消息

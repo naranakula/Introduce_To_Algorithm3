@@ -41,7 +41,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// <summary>
         /// 创建连接工厂
         /// </summary>
-        private static volatile IConnectionFactory factory = new ConnectionFactory(MqUri);
+        private static readonly IConnectionFactory factory = new ConnectionFactory(MqUri);
 
         /// <summary>
         /// 没有容量上限的消息队列
