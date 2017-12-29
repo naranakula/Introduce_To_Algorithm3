@@ -8,12 +8,14 @@ using Polly;
 using Polly.Bulkhead;
 using Polly.CircuitBreaker;
 using Polly.Fallback;
+using Polly.NoOp;
 using Polly.Timeout;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
     /// <summary>
     /// 通过Nuget安装Polly Install-Package Polly
+    /// 策略均可以考虑重用
     /// polly allows developers to express transient exception handling policies such as Retry, Retry Forever, Wait and Retry or Circuit Breaker in a fluent manner.
     /// 下面每个函数都有异步的版本
     /// All Polly policies are fully thread-safe. You can safely re-use policies at multiple call sites, and execute through policies concurrently on different threads.
@@ -29,35 +31,45 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
     /// </summary>
     public static class PollyHelper
     {
-        #region RetryPolicy可以只创建一个实例
 
-        #endregion
-
-
-        #region NoOp 没有策略 仅仅执行业务逻辑
+        #region 安全执行一次 NoOp 没有策略 仅仅执行业务逻辑
 
         /// <summary>
-        /// 执行业务逻辑
+        /// 该策略是多线程安全的
+        /// 策略均可以考虑重用
+        /// </summary>
+        private static readonly NoOpPolicy noOpPolicy = Policy.NoOp();
+
+        /// <summary>
+        /// 安全的执行业务逻辑
+        /// 该方法不会抛出异常，只执行一次
         /// </summary>
         /// <param name="action">执行的业务逻辑</param>
         /// <returns></returns>
         public static PolicyResult RunSafe(Action action)
         {
-            return Policy.NoOp().ExecuteAndCapture(action);
+            //retryCount必须大于等于0  策略可以考虑重用
+            return Policy.Handle<Exception>().Retry(0).ExecuteAndCapture(action);
+            //下面是等价的
+            //return Policy.NoOp().ExecuteAndCapture(action);
         }
 
         /// <summary>
         /// 执行业务逻辑
+        /// 该方法不会抛出异常，只执行一次
         /// </summary>
         /// <param name="func">执行的业务逻辑</param>
         /// <returns></returns>
         public static PolicyResult<T> RunSafe<T>(Func<T> func)
         {
-            return Policy.NoOp().ExecuteAndCapture(func);
+            //retryCount必须大于等于0
+            return Policy.Handle<Exception>().Retry(0).ExecuteAndCapture(func);
+            //return Policy.NoOp().ExecuteAndCapture(func);
         }
 
         #endregion
 
+        #region 重试
 
         #region 重试一次 没有时间间隔 即最多运行两次(经过测试，的确最多执行2次)
 
@@ -68,6 +80,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         public static PolicyResult RetryOnce(Action action)
         {
+            //Retry重试一次
             PolicyResult result = Policy.Handle<Exception>().Retry().ExecuteAndCapture(action);
 
             return result;
@@ -96,7 +109,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="action">需要执行的业务逻辑</param>
         /// <param name="retryCallback">每次重试前的回调</param>
         /// <returns></returns>
-        public static PolicyResult Retry(Action action, int retryCount=1, Action<Exception, int> retryCallback = null)
+        public static PolicyResult Retry(Action action, int retryCount = 1, Action<Exception, int> retryCallback = null)
         {
             PolicyResult result = Policy.Handle<Exception>().Retry(retryCount, ((exception, count) =>
             {
@@ -116,7 +129,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="func">需要执行的业务逻辑</param>
         /// <param name="retryCallback">每次重试前的回调</param>
         /// <returns>The result of executing the policy. Will be default(TResult) is the policy failed</returns>
-        public static PolicyResult<T> Retry<T>(Func<T> func, int retryCount=1, Action<Exception, int> retryCallback = null)
+        public static PolicyResult<T> Retry<T>(Func<T> func, int retryCount = 1, Action<Exception, int> retryCallback = null)
         {
             PolicyResult<T> result = Policy.Handle<Exception>().Retry(retryCount, ((exception, count) =>
             {
@@ -131,7 +144,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         }
 
         #endregion
-        
+
         #region Retry forever
 
         /// <summary>
@@ -140,13 +153,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="action">实际的业务逻辑</param>
         /// <param name="retryCallback">每次重试之前的回调</param>
         /// <returns></returns>
-        public static PolicyResult RetryForver(Action action,Action<Exception> retryCallback = null)
+        public static PolicyResult RetryForver(Action action, Action<Exception> retryCallback = null)
         {
-            PolicyResult result =  Policy.Handle<Exception>().RetryForever(exception =>
-            {
+            PolicyResult result = Policy.Handle<Exception>().RetryForever(exception =>
+           {
                 //重试之前的回调
                 retryCallback?.Invoke(exception);
-            }).ExecuteAndCapture(action);
+           }).ExecuteAndCapture(action);
 
             return result;
         }
@@ -180,7 +193,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="sleepDurationProvider">每次重试之前的休眠时间提供者，如果为null，使用默认的的指数实现 1，2，4</param>
         /// <param name="retryCallback">每次重试之前的回调</param>
         /// <returns></returns>
-        public static PolicyResult RetryAndWait(Action action, int retryCount = 2,
+        public static PolicyResult RetryAndWait(Action action, int retryCount = 1,
             Func<int, TimeSpan> sleepDurationProvider = null, Action<Exception, TimeSpan, int> retryCallback = null)
         {
             PolicyResult result = Policy.Handle<Exception>().WaitAndRetry(retryCount, currentCount =>
@@ -191,9 +204,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                 }
                 else
                 {
-                    const int MaxPow = 7;//2^6 =64s 2^7=128
-                    //i从1开始计数
-                    double secondsToSleep = Math.Pow(2, currentCount - 1 > MaxPow ? MaxPow : currentCount - 1);//避免overflow
+                    const int maxPow = 7;//2^6 =64s 2^7=128
+                    //currentCount从1开始计数
+                    double secondsToSleep = Math.Pow(2, currentCount - 1 > maxPow ? maxPow : currentCount - 1);//避免overflow
 
                     return TimeSpan.FromSeconds(secondsToSleep);
                 }
@@ -213,7 +226,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="sleepDurationProvider">每次重试之前的休眠时间提供者，如果为null，使用默认的的指数实现1，2，4</param>
         /// <param name="retryCallback">每次重试之前的回调</param>
         /// <returns></returns>
-        public static PolicyResult<T> RetryAndWait<T>(Func<T> func, int retryCount = 2,
+        public static PolicyResult<T> RetryAndWait<T>(Func<T> func, int retryCount = 1,
             Func<int, TimeSpan> sleepDurationProvider = null, Action<Exception, TimeSpan, int> retryCallback = null)
         {
 
@@ -225,9 +238,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                 }
                 else
                 {
-                    const int MaxPow = 7;//2^6 =64s 2^7=128
+                    const int maxPow = 7;//2^6 =64s 2^7=128
                     //i从1开始计数
-                    double secondsToSleep = Math.Pow(2, currentCount - 1 > MaxPow ? MaxPow : currentCount - 1);//避免overflow
+                    double secondsToSleep = Math.Pow(2, currentCount - 1 > maxPow ? maxPow : currentCount - 1);//避免overflow
 
                     return TimeSpan.FromSeconds(secondsToSleep);
                 }
@@ -247,12 +260,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="action">要执行的业务逻辑action</param>
         /// <param name="retryCallback"></param>
         /// <returns>执行成功，返回true，否则返回false</returns>
-        public static PolicyResult RetryAndWaitImplicitly(Action action, IEnumerable<TimeSpan> sleepDurations,Action<Exception,TimeSpan,int> retryCallback = null)
+        public static PolicyResult RetryAndWaitImplicitly(Action action, IEnumerable<TimeSpan> sleepDurations, Action<Exception, TimeSpan, int> retryCallback = null)
         {
-            PolicyResult result = Policy.Handle<Exception>().WaitAndRetry(sleepDurations, (exception, span,count,context) =>
+            PolicyResult result = Policy.Handle<Exception>().WaitAndRetry(sleepDurations, (exception, span, count, context) =>
             {
                 //在每次重试之前执行，span表示当前重试的时间间隔 count表示重试次数，从1开始计数
-                retryCallback?.Invoke(exception,span,count);
+                retryCallback?.Invoke(exception, span, count);
             }).ExecuteAndCapture(action);
 
             return result;
@@ -264,8 +277,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// </summary>
         /// <param name="sleepDurations">每次重试之前的间隔 不能为null</param>
         /// <param name="func">要执行的业务逻辑func</param>
+        /// <param name="retryCallback"></param>
         /// <returns>The result of executing the policy. Will be default(TResult) is the policy failed</returns>
-        public static PolicyResult<T> RetryAndWaitImplicitly<T>(Func<T> func,IEnumerable<TimeSpan> sleepDurations, Action<Exception, TimeSpan, int> retryCallback = null)
+        public static PolicyResult<T> RetryAndWaitImplicitly<T>(Func<T> func, IEnumerable<TimeSpan> sleepDurations, Action<Exception, TimeSpan, int> retryCallback = null)
         {
             PolicyResult<T> result = Policy.Handle<Exception>().WaitAndRetry(sleepDurations, (exception, span, count, context) =>
             {
@@ -287,7 +301,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="sleepDurationProvider">每次重试之前的等待时间</param>
         /// <param name="retryCallback">每次重试之前的回调</param>
         /// <returns></returns>
-        public static PolicyResult RetryAndWaitForever(Action action,Func<int, TimeSpan> sleepDurationProvider = null,Action < Exception, TimeSpan> retryCallback=null)
+        public static PolicyResult RetryAndWaitForever(Action action, Func<int, TimeSpan> sleepDurationProvider = null, Action<Exception, TimeSpan> retryCallback = null)
         {
             PolicyResult result = Policy.Handle<Exception>().WaitAndRetryForever(currentCount =>
             {
@@ -298,16 +312,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                 }
                 else
                 {
-                    const int MaxPow = 7;//2^6 =64s 2^7=128
+                    const int maxPow = 7;//2^6 =64s 2^7=128
                     //i从1开始计数
-                    double secondsToSleep = Math.Pow(2, currentCount - 1 > MaxPow ? MaxPow : currentCount - 1);//避免overflow
+                    double secondsToSleep = Math.Pow(2, currentCount - 1 > maxPow ? maxPow : currentCount - 1);//避免overflow
 
                     return TimeSpan.FromSeconds(secondsToSleep);
                 }
             }, (exception, span) =>
             {
                 //在每次重试之前执行，span表示当前重试的时间间隔
-                retryCallback?.Invoke(exception,span);
+                retryCallback?.Invoke(exception, span);
             }).ExecuteAndCapture(action);
 
             return result;
@@ -330,9 +344,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                 }
                 else
                 {
-                    const int MaxPow = 7;//2^6 =64s 2^7=128
+                    const int maxPow = 7;//2^6 =64s 2^7=128
                     //i从1开始计数
-                    double secondsToSleep = Math.Pow(2, currentCount - 1 > MaxPow ? MaxPow : currentCount - 1);//避免overflow
+                    double secondsToSleep = Math.Pow(2, currentCount - 1 > maxPow ? maxPow : currentCount - 1);//避免overflow
 
                     return TimeSpan.FromSeconds(secondsToSleep);
                 }
@@ -348,7 +362,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         #endregion
 
-        #region Circuit Breaker 断路器
+        #endregion
+
+        #region 连续多次错误后failfast一段时间 Circuit Breaker 断路器
+
+        #region 普通断路器
 
         /*
          * 断路器有三种状态，Close Open HalfOpen
@@ -370,25 +388,24 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             /// <summary>
             /// 底层的断路器
             /// </summary>
-            private volatile CircuitBreakerPolicy _circuitBreaker = null;
+            private readonly CircuitBreakerPolicy _circuitBreaker = null;
 
             /// <summary>
             /// 构造函数
             /// </summary>
             /// <param name="consecutiveExceptionsAllowedBeforeBreaking">在多少连续异常后断路器断开</param>
-            /// <param name="durationOfBreak">断路器断开的时间间隔，之后进入HalfOpen状态 如果为null，断开120秒</param>
+            /// <param name="durationOfBreak">断路器断开的时间间隔，之后进入HalfOpen状态</param>
             /// <param name="onBreak"></param>
             /// <param name="onReset"></param>
             /// <param name="onHalfOpen"></param>
-            public CircuitBreakerEx(int consecutiveExceptionsAllowedBeforeBreaking =5, TimeSpan? durationOfBreak=null, Action<Exception, TimeSpan> onBreak=null, Action onReset=null, Action onHalfOpen=null)
+            public CircuitBreakerEx(TimeSpan durationOfBreak, int consecutiveExceptionsAllowedBeforeBreaking = 5, Action<Exception, TimeSpan> onBreak = null, Action onReset = null, Action onHalfOpen = null)
             {
-                TimeSpan breakDuration = durationOfBreak ?? TimeSpan.FromSeconds(2*60);
                 //初始化断路器
                 _circuitBreaker = Policy.Handle<Exception>()
-                    .CircuitBreaker(consecutiveExceptionsAllowedBeforeBreaking, breakDuration,
+                    .CircuitBreaker(consecutiveExceptionsAllowedBeforeBreaking, durationOfBreak,
                         (exception, timeSpan) =>
                         {
-                            //onbreak  断路时执行
+                            //onbreak  断路时执行  timespan:短路时间
                             onBreak?.Invoke(exception, timeSpan);
                         }, () =>
                         {
@@ -400,6 +417,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                             onHalfOpen?.Invoke();
                         });
             }
+
+            /// <summary>
+            /// 获取断路器状态
+            /// </summary>
+            public CircuitState CircuitState { get { return _circuitBreaker.CircuitState; } }
 
             /// <summary>
             /// 同步执行并返回结果
@@ -424,6 +446,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         }
 
+        #endregion
+
+        #region 先进断路器  在采样时间内错误超过一定比例(在样本超过一定次数的统计情况下)
+
+        //在采样时间内错误超过一定比例(在样本超过一定次数的统计情况下)
         //     The circuit will break if, within any timeslice of duration samplingDuration,
         //     the proportion of actions resulting in a handled exception exceeds failureThreshold,
         //     provided also that the number of actions through the circuit in the timeslice
@@ -446,7 +473,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             /// <summary>
             /// 底层的断路器
             /// </summary>
-            private CircuitBreakerPolicy _circuitBreaker = null;
+            private readonly CircuitBreakerPolicy _circuitBreaker = null;
 
             /// <summary>
             /// 构造函数
@@ -459,13 +486,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             /// <param name="onReset">onreset  闭路之后执行</param>
             /// <param name="onHalfOpen">断路时间过后，进入HalfOpen状态，之后的调用如果成功，断路器重置，如果失败，重新进入断路状态</param>
             public AdvancedCircuitBreakerEx(double failureThreshold, TimeSpan samplingDuration, int minimumThroughput,
-                TimeSpan durationOfBreak, Action<Exception, TimeSpan> onBreak=null, Action onReset=null, Action onHalfOpen=null)
+                TimeSpan durationOfBreak, Action<Exception, TimeSpan> onBreak = null, Action onReset = null, Action onHalfOpen = null)
             {
                 _circuitBreaker = Policy.Handle<Exception>()
                     .AdvancedCircuitBreaker(failureThreshold, samplingDuration, minimumThroughput, durationOfBreak,
                         (exception, timeSpan) =>
                         {
-                            //onbreak  断路时执行
+                            //onbreak  断路时执行 
                             onBreak?.Invoke(exception, timeSpan);
                         }, () =>
                         {
@@ -477,6 +504,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                             onHalfOpen?.Invoke();
                         });
             }
+            
+            /// <summary>
+            /// 获取断路器状态
+            /// </summary>
+            public CircuitState CircuitState { get { return _circuitBreaker.CircuitState; } }
 
             /// <summary>
             /// 同步执行并返回结果
@@ -501,9 +533,49 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         }
 
-
         #endregion
 
+        #endregion
+        
+        #region Fallback 回退策略 如果执行失败，执行替代action或者返回替代结果
+
+        //FallbackPolicy是多线程安全的和可重用的
+
+        /// <summary>
+        /// FallbackPolicy是多线程安全的和可重用的
+        /// </summary>
+        /// <param name="action">要执行的业务逻辑</param>
+        /// <param name="fallbackAction">业务逻辑执行失败后，执行的挽救代码</param>
+        /// <returns></returns>
+        public static PolicyResult Fallback(Action action, Action fallbackAction = null)
+        {
+            FallbackPolicy policy = Policy.Handle<Exception>().Fallback(() =>
+            {
+                fallbackAction?.Invoke();
+            });
+
+            return policy.ExecuteAndCapture(action);
+        }
+
+
+        /// <summary>
+        /// FallbackPolicy是多线程安全的和可重用的
+        /// </summary>
+        /// <param name="func">要执行的业务逻辑</param>
+        /// <param name="fallbackAction">业务逻辑执行失败后，执行的挽救代码</param>
+        /// <returns></returns>
+        public static PolicyResult<T> Fallback<T>(Func<T> func, Action fallbackAction = null)
+        {
+            FallbackPolicy policy = Policy.Handle<Exception>().Fallback(() =>
+            {
+                fallbackAction?.Invoke();
+            });
+
+            return policy.ExecuteAndCapture(func);
+        }
+
+        #endregion
+        
         #region Timeout policy 确保操作不会超过指定的时间
 
         // TimeoutPolicy是多线程安全和可重用的
@@ -513,15 +585,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <summary>
         /// 调用action with timeout，不会抛出异常
         /// </summary>
-        /// <param name="action">调用的业务逻辑，action在task中执行</param>
-        /// <param name="timeoutSeconds">多少秒后过期</param>
+        /// <param name="action">调用的业务逻辑，action在task中执行(即和调用线程不是一个)</param>
+        /// <param name="timeoutSpan">多少时间后过期</param>
         /// <param name="onTimeout">过期后的回调，过期后Polly不会杀死task，task仍然执行</param>
         /// <returns></returns>
-        public static PolicyResult RunWithTimeOut(Action action, int timeoutSeconds, Action<Context, TimeSpan, Task> onTimeout = null)
+        public static PolicyResult RunWithTimeOut(Action action, TimeSpan timeoutSpan, Action<Context, TimeSpan, Task> onTimeout = null)
         {
             //TimeoutStrategy.Pessimistic recognises that there are cases where you need to execute delegates which have no in-built timeout, and do not honor cancellation.Policy使用Task执行user delegate
             //在悲观模式下，Polly不会杀死底层的线程，而是将task传递到onTimeout回调中
-            TimeoutPolicy policy = Policy.Timeout(timeoutSeconds, TimeoutStrategy.Pessimistic,
+            TimeoutPolicy policy = Policy.Timeout(timeoutSpan, TimeoutStrategy.Pessimistic,
                 (context, timeSpan, task) =>
                 {
                     if (onTimeout != null)
@@ -541,15 +613,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <summary>
         /// 调用func with timeout，不会抛出异常
         /// </summary>
-        /// <param name="func">调用的业务逻辑，func在task中执行</param>
-        /// <param name="timeoutSeconds">多少秒后过期</param>
+        /// <param name="func">调用的业务逻辑，func在task中执行(即和调用线程不是一个)</param>
+        /// <param name="timeoutSpan">多少时间后过期</param>
         /// <param name="onTimeout">过期后的回调，过期后Polly不会杀死task，task仍然执行</param>
         /// <returns></returns>
-        public static PolicyResult<T> RunWithTimeOut<T>(Func<T> func, int timeoutSeconds, Action<Context, TimeSpan, Task> onTimeout = null)
+        public static PolicyResult<T> RunWithTimeOut<T>(Func<T> func, TimeSpan timeoutSpan, Action<Context, TimeSpan, Task> onTimeout = null)
         {
             //TimeoutStrategy.Pessimistic recognises that there are cases where you need to execute delegates which have no in-built timeout, and do not honor cancellation.Policy使用Task执行user delegate
             //在悲观模式下，Polly不会杀死底层的线程，而是将task传递到onTimeout回调中
-            TimeoutPolicy policy = Policy.Timeout(timeoutSeconds, TimeoutStrategy.Pessimistic,
+            TimeoutPolicy policy = Policy.Timeout(timeoutSpan, TimeoutStrategy.Pessimistic,
                 (context, timeSpan, task) =>
                 {
                     if (onTimeout != null)
@@ -568,43 +640,28 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         #endregion
 
-        #region Bulkhead 隔水舱 不要因为局部错误而导致整艘船沉没 One fault shouldn't bring down the whole ship!
+        #region Bulkhead 隔水舱 限制最大允许并行执行的actions 不要因为局部错误而导致整艘船沉没 One fault shouldn't bring down the whole ship!
 
         //Bulkhead通过限制最大允许并行执行的actions,避免消耗过多的资源，
         //如果并行数超过限制，将action放到queue中，如果超过maxQueuingActions，抛弃action，直接抛出异常
         //The policy itself does not place calls onto threads; it assumes upstream systems have already placed calls into threads, but limits their parallelization of execution.
         //Bulkhead本身不会创建多线程，而是假设上游已经在多线程中使用
         //Bulkhead是多线程安全和可重用的
-        
+
         /// <summary>
         /// 隔水舱
         /// </summary>
         public class BulkheadEx
         {
-            #region 预定义的配置实例
-            /// <summary>
-            /// 默认的配置实例 , 只有一个action能够并发执行
-            /// </summary>
-            public static BulkheadEx Default { get; private set; }
-
-            /// <summary>
-            /// 静态构造函数
-            /// </summary>
-            static BulkheadEx()
-            {
-                Default = new BulkheadEx(1,0);
-            }
-            #endregion
-
             #region 私有的变量
 
             /// <summary>
             /// 底层隔水舱实例
             /// </summary>
-            private BulkheadPolicy _bulkhead;
+            private readonly BulkheadPolicy _bulkhead;
 
             #endregion
-            
+
             #region 构造函数
 
             /// <summary>
@@ -626,13 +683,22 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             #region 公有函数
 
             /// <summary>
+            /// 获取舱内可用的空间
+            /// </summary>
+            public int BulkheadAvailableCount
+            {
+                get { return _bulkhead.BulkheadAvailableCount; }
+            }
+
+
+            /// <summary>
             /// 使用blukhead执行业务逻辑
             /// </summary>
             /// <param name="action"></param>
             /// <returns></returns>
             public PolicyResult ExecuteAndCapture(Action action)
             {
-               return _bulkhead.ExecuteAndCapture(action);
+                return _bulkhead.ExecuteAndCapture(action);
             }
 
             /// <summary>
@@ -652,46 +718,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
         #endregion
 
-        #region Fallback 回退策略 如果执行失败，执行替代action或者返回替代结果
-
-        //FallbackPolicy是多线程安全的和可重用的
-
-        /// <summary>
-        /// FallbackPolicy是多线程安全的和可重用的
-        /// </summary>
-        /// <param name="action">要执行的业务逻辑</param>
-        /// <param name="fallbackAction">业务逻辑执行失败后，执行的挽救代码</param>
-        /// <returns></returns>
-        public static PolicyResult Fallback(Action action,Action fallbackAction=null)
-        {
-            FallbackPolicy policy = Policy.Handle<Exception>().Fallback(() =>
-            {
-                fallbackAction?.Invoke();
-            });
-            
-            return policy.ExecuteAndCapture(action);
-        }
-
-
-        /// <summary>
-        /// FallbackPolicy是多线程安全的和可重用的
-        /// </summary>
-        /// <param name="func">要执行的业务逻辑</param>
-        /// <param name="fallbackAction">业务逻辑执行失败后，执行的挽救代码</param>
-        /// <returns></returns>
-        public static PolicyResult<T> Fallback<T>(Func<T> func, Action fallbackAction = null)
-        {
-            FallbackPolicy policy = Policy.Handle<Exception>().Fallback(() =>
-            {
-                fallbackAction?.Invoke();
-            });
-            
-            return policy.ExecuteAndCapture(func);
-        }
-
-        #endregion
-
-        #region Cache Polly V5.1 目前未实现
+        #region Cache 
 
         #endregion
 
