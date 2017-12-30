@@ -51,7 +51,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 #region 清理日志文件工作
 
                 //清理日志
-                CleanLog();
+                CleanLog(LogDir);
 
                 #endregion
 
@@ -75,13 +75,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 清理日志
         /// </summary>
-        public void CleanLog()
+        public void CleanLog(string logDirToClean)
         {            
             NLogHelper.Info("开始清理日志");
-            DirectoryInfo dirInfo = new DirectoryInfo(LogDir);
+            DirectoryInfo dirInfo = new DirectoryInfo(logDirToClean);
             if (!dirInfo.Exists)
             {
-                NLogHelper.Warn($"未找到{LogDir}日志目录，无法清理");
+                NLogHelper.Warn($"未找到{logDirToClean}日志目录，无法清理");
                 return;
             }
 
@@ -123,7 +123,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             //清理文件
             try
             {
-                int delCount = CleanFiles(LogDir, SearchPatternArr, expireTime, currentDepth:0);
+                int delCount = CleanFiles(logDirToClean, SearchPatternArr, expireTime, currentDepth:0);
                 NLogHelper.Info($"共删除{delCount}个文件");
             }
             catch (Exception ex)
@@ -134,7 +134,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             try
             {
                 //清理空目录
-                int delCount = CleanEmptyDirectory(LogDir,  currentDepth:0);
+                int delCount = CleanEmptyDirectory(logDirToClean,  currentDepth:0);
                 NLogHelper.Info($"共删除{delCount}个目录");
             }
             catch (Exception ex)
