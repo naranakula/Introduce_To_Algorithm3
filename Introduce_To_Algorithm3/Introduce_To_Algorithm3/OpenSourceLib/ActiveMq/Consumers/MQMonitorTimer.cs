@@ -91,7 +91,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             }
             catch (Exception ex)
             {
-                NLogHelper.Error("MQ定时器异常："+ex);
+                NLogHelper.Error("MQ定时器异常:"+ex);
             }
             finally
             {

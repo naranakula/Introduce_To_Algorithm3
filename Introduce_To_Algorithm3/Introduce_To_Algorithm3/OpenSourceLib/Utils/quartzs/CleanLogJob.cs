@@ -41,8 +41,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             {
                 //开始时间
                 DateTime startTime = DateTime.Now;
+                //过期时间
+                DateTime expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0));
 
-                #region 清理工作
+                #region 其它清理工作
+
+                #endregion
+
+                #region 清理日志文件工作
 
                 //清理日志
                 CleanLog();
@@ -51,11 +57,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 //清理日志使用的时间
                 TimeSpan usedTimeSpan = DateTime.Now - startTime;
-                NLogHelper.Info($"耗时{usedTimeSpan.TotalSeconds}秒--({usedTimeSpan})");
+                NLogHelper.Info($"耗时{usedTimeSpan.TotalSeconds}秒----({usedTimeSpan})");
             }
             catch (Exception ex)
             {
-                NLogHelper.Error("清理日志失败："+ex);
+                NLogHelper.Error("清理日志失败:"+ex);
             }
             finally
             {
@@ -253,10 +259,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 {
                     nonEmptyDirList.Add(currentDir);
                 }
-                else if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (now - currentDir.CreationTime).TotalDays > 2)
+                else if (currentDir.Exists && currentDir.GetFileSystemInfos().Length == 0 && (now - currentDir.CreationTime).TotalDays > 3)
                 {
                     // 删除放在后面
-                    //文件夹为空, 并且空目录至少2天没有使用
+                    //文件夹为空, 并且空目录至少3天没有使用
                     try
                     {
                         currentDir.Delete();

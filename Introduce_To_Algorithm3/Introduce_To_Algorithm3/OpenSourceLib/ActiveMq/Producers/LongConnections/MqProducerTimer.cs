@@ -88,7 +88,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
             }
             catch (Exception ex)
             {
-                NLogHelper.Error("MQProducer定时器异常：" + ex);
+                NLogHelper.Error("MQProducer定时器异常:" + ex);
             }
             finally
             {
