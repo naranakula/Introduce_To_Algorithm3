@@ -24,17 +24,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// 服务列表
         /// Greeter.BindService(new GreeterServiceImpl())
         /// </summary>
-        private List<ServerServiceDefinition> serviceList = null;
+        private readonly List<ServerServiceDefinition> serviceList = null;
 
         /// <summary>
         /// 服务器端口
         /// </summary>
-        private int serverPort;
+        private readonly int serverPort;
 
         /// <summary>
         /// 底层服务
         /// </summary>
-        private Server server = null;
+        private volatile Server server = null;
 
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     new ChannelOption(ChannelOptions.MaxReceiveMessageLength,16*1024*1024),//最大允许接收的消息长度
                     //最大允许的Maximum number of concurrent incoming streams to allow on a http2 connection
                     //单个http2连接允许的最大数量的stream
-                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,2047),
+                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,4095),
                     new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口
                     //HTTP/2 默认的 window size 是 64 KB，实际这个值太小了，在 TiKV 里面我们直接设置成 1 GB。
                     //TCP两端都有缓冲区来保存接收的数据，如果满了，那么在缓冲区清空之前不能接收更多的数据
@@ -132,7 +132,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     new ChannelOption(ChannelOptions.MaxReceiveMessageLength,16*1024*1024),//最大允许接收的消息长度
                     //最大允许的Maximum number of concurrent incoming streams to allow on a http2 connection
                     //单个http2连接允许的最大数量的stream
-                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,2047),
+                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,4095),
                     new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
                     //HTTP/2 默认的 window size 是 64 KB，实际这个值太小了，在 TiKV 里面我们直接设置成 1 GB。
                     //TCP两端都有缓冲区来保存接收的数据，如果满了，那么在缓冲区清空之前不能接收更多的数据
@@ -215,10 +215,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 }
                 catch (Exception ex)
                 {
-                    if (i == 1)
-                    {
-                        exceptionHandler?.Invoke(ex);
-                    }
+                    exceptionHandler?.Invoke(ex);
                 }
             }
 
@@ -233,7 +230,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         public static void TestMain(String[] args)
         {
             GrpcServer server = new GrpcServer(new List<ServerServiceDefinition>(){ Greeter.BindService(new GreeterServiceImpl()) }, 5142);
-            server.StartWithSsl();
+            //server.StartWithSsl();
+            server.Start();
             Console.ReadLine();
             Console.ReadLine();
         }
