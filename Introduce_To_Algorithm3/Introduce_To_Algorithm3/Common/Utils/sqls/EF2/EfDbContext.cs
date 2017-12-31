@@ -903,8 +903,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                             }
                         }
                     }
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    adapter.Fill(ds);
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(ds);
+                    }
                 }
             }
             return ds;
@@ -956,8 +958,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                             }
                         }
                     }
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    adapter.Fill(data);
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(data);
+                    }
                 }
             }
             return data;

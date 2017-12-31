@@ -29,7 +29,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 锁
         /// </summary>
-        private static object locker = new object();
+        private static readonly object locker = new object();
 
         /// <summary>
         /// 缓存实例

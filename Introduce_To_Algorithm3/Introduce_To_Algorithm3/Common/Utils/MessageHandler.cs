@@ -10,7 +10,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
     ///     /// 外部调用
     /// MQMessageHandler.Init();
     /// MQMonitorTimer.Start();
+    /// 
+    /// 被BlockingQueueEx<T>替代
     /// </summary>
+    [Obsolete("被BlockQueueEx替代")]
     public class MessageHandler
     {
         /// <summary>
