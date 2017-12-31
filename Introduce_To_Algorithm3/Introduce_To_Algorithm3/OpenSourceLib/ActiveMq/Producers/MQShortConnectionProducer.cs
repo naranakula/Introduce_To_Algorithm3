@@ -22,6 +22,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         private static readonly IConnectionFactory factory = new ConnectionFactory(ConfigUtils.GetString(MQUri));
 
         /// <summary>
+        /// 发送的目标队列
+        /// </summary>
+        private static readonly string destQueueName = ConfigUtils.GetString("DestQueue");
+
+        /// <summary>
+        /// 发送的目标主题
+        /// </summary>
+        private static readonly string destTopicName = ConfigUtils.GetString("DestTopic");
+
+        /// <summary>
         /// 发送消息
         /// </summary>
         /// <param name="msg"></param>
@@ -38,7 +48,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                         using (
                             var producer =
                                 session.CreateProducer(session.GetDestination(
-                                    ConfigUtils.GetString("DestQueue"), //queue的名称 
+                                    destQueueName, //queue的名称 
                                     DestinationType.Queue)))
                         {
                             connection.Start();
@@ -81,7 +91,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                     {
                         using (
                             var producer =
-                                session.CreateProducer(session.GetDestination(ConfigUtils.GetString("DestTopic"),//topic名称
+                                session.CreateProducer(session.GetDestination(destTopicName,//topic名称
                                     DestinationType.Topic)))
                         {
                             connection.Start();

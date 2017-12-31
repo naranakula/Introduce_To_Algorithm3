@@ -87,6 +87,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                     }
                 }
             });
+
+            //后台线程
+            _thread.IsBackground = true;
+
             _thread.Start();
         }
 
@@ -141,10 +145,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         public void Stop()
         {
             _isRunning = false;
-            if (_blockingQueue != null)
-            {
-                _blockingQueue.Dispose();
-            }
+            //if (_blockingQueue != null)
+            //{
+            //    //没有必要dispose,因为程序退出
+            //    //_blockingQueue.Dispose();
+            //}
         }
 
 

@@ -107,11 +107,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// </summary>
         public static void Stop()
         {
-            if (_mqTimer != null)
+            try
             {
-                _mqTimer.Dispose();
-                _mqTimer = null;
+                if (_mqTimer != null)
+                {
+                    _mqTimer.Dispose();
+                    _mqTimer = null;
+                }
             }
+            catch { }
 
             //关闭MQ
             MQConsumer.CloseConsumer();

@@ -298,30 +298,36 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// <param name="message"></param>
         public static void AddMessage(String message)
         {
-            if (String.IsNullOrWhiteSpace(message))
+            try
             {
-                return;
-            }
+                if (String.IsNullOrEmpty(message))
+                {
+                    return;
+                }
 
-            MessageItem msgItem = null;
-            #region 丢弃超出容量的消息
-            if (MsgQueue.Count > MaxQueueCapacity)
-            {
-                MsgQueue.TryTake(out msgItem);
-                NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                MsgQueue.TryTake(out msgItem);
-                NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                MsgQueue.TryTake(out msgItem);
-                NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                MsgQueue.TryTake(out msgItem);
-                NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                MsgQueue.TryTake(out msgItem);
-                NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-            }
-            #endregion
+                MessageItem msgItem = null;
+                #region 丢弃超出容量的消息
+                if (MsgQueue.Count > MaxQueueCapacity)
+                {
+                    MsgQueue.TryTake(out msgItem);
+                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    MsgQueue.TryTake(out msgItem);
+                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    MsgQueue.TryTake(out msgItem);
+                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    MsgQueue.TryTake(out msgItem);
+                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    MsgQueue.TryTake(out msgItem);
+                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    MsgQueue.TryTake(out msgItem);
+                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                }
+                #endregion
 
-            msgItem = new MessageItem(message);
-            MsgQueue.Add(msgItem);
+                msgItem = new MessageItem(message);
+                MsgQueue.Add(msgItem);
+            }
+            catch { }
 
         }
 
@@ -365,7 +371,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                         }
 
                         MessageItem msg = null;
-                        if (MsgQueue.TryTake(out msg, 713))
+                        if (MsgQueue.TryTake(out msg, 513))
                         {
                             if (msg != null && !String.IsNullOrEmpty(msg.Message))
                             {
@@ -416,6 +422,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                     }
                 }
             });
+
+            //设置为后台线程
+            _sendThread.IsBackground = true;
             _sendThread.Start();
         }
 

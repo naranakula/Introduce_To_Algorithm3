@@ -38,7 +38,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <param name="message"></param>
         public static void AddToQueue(String message)
         {
-            MessageQueue.Add(message);
+            try
+            {
+                if (string.IsNullOrEmpty(message))
+                {
+                    return;
+                }
+
+                MessageQueue.Add(message);
+            }
+            catch
+            {
+                //没有必要异常处理
+            }
         }
 
 
@@ -94,7 +106,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 }
             });
 
-            
+            //后台线程
+            _messageHandlerThread.IsBackground = true;
+                        
             _messageHandlerThread.Start();
 
             NLogHelper.Info("初始化消息处理线程成功");
@@ -123,6 +137,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             {
                 _isRunning = false;
             }
+
+            //没有必要dispose MessageQueue
         }
 
     }

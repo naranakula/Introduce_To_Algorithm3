@@ -106,8 +106,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         {
             if (mqTimer != null)
             {
-                mqTimer.Dispose();
-                mqTimer = null;
+                try
+                {
+                    mqTimer.Dispose();
+                    mqTimer = null;
+                }
+                catch
+                {
+
+                }
             }
 
             //关闭MQ
