@@ -40,7 +40,7 @@ Microsoft open tech group支持win64版本地址:https://github.com/MicrosoftArc
         /// <summary>
         /// 锁
         /// </summary>
-        private object locker = new object();
+        private readonly object locker = new object();
 
 
 
@@ -84,7 +84,7 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
         /// <summary>
         /// 启动连接
         /// 合适的配置   localhost:6379,connectRetry=3,connectTimeout=5000,keepAlive=60
-        /// 含义：在connect时重试次数,connect超时5s,keepAlive发送消息检查连接
+        /// 含义：在connect时重试次数,connect超时5s,keepAlive 60s发送消息检查连接
         /// </summary>
         /// <param name="configuration">配置，逗号分割  server1:6379,server2:6379</param>
         /// <param name="exceptionHandler"></param>
