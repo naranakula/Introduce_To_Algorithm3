@@ -51,7 +51,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private static readonly string TopicOrQueueName = ConfigUtils.GetString("TopicOrQueueName");
 
         /// <summary>
-        /// 创建连接工厂
+        /// 创建连接工厂  多线程安全
         /// </summary>
         private static readonly IConnectionFactory factory = new ConnectionFactory(MqUri);
 
