@@ -210,7 +210,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             {
                 try
                 {
-                    server.ShutdownAsync().Wait(5500);
+                    server.ShutdownAsync().Wait(7543);
                     return true;
                 }
                 catch (Exception ex)
