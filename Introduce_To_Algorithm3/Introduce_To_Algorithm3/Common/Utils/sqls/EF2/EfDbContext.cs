@@ -140,7 +140,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //延迟加载导航属性
             this.Configuration.LazyLoadingEnabled = false;//默认是true的
 
-            #region 设置命令超时时间
+            #region 设置命令超时时间  默认是30s
             //方式1
             IObjectContextAdapter objectContext = (this as IObjectContextAdapter);
             //超时时间单位秒
