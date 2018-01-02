@@ -139,6 +139,18 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //this.Configuration.ProxyCreationEnabled = false;//默认是true的
             //延迟加载导航属性
             this.Configuration.LazyLoadingEnabled = false;//默认是true的
+
+            #region 设置命令超时时间
+            //方式1
+            IObjectContextAdapter objectContext = (this as IObjectContextAdapter);
+            //超时时间单位秒
+            objectContext.ObjectContext.CommandTimeout = 120;
+
+            //方式2 超时时间单位秒
+            this.Database.CommandTimeout = 120;
+
+            #endregion
+
         }
 
         #endregion
