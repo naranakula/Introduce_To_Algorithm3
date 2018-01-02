@@ -183,7 +183,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             try
             {
                 double value;
-                if (double.TryParse(ConfigurationManager.AppSettings[key], out value))
+                if (double.TryParse(ConfigurationManager.AppSettings[key]?.Trim(), out value))
                 {
                     return value;
                 }
