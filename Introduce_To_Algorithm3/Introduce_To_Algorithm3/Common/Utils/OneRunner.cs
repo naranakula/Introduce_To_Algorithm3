@@ -153,7 +153,11 @@ namespace Common
         {
             if (OneRunMutex != null)
             {
-                OneRunMutex.ReleaseMutex();
+                try
+                {
+                    OneRunMutex.ReleaseMutex();
+                }
+                catch { }
                 OneRunMutex = null;
             }
         }
@@ -225,4 +229,6 @@ namespace Common
         #endregion
 
     }
+
+
 }
