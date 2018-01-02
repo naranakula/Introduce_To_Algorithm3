@@ -24,17 +24,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// 服务列表
         /// Greeter.BindService(new GreeterServiceImpl())
         /// </summary>
-        private readonly List<ServerServiceDefinition> serviceList = null;
+        private readonly List<ServerServiceDefinition> _serviceList = null;
 
         /// <summary>
         /// 服务器端口
         /// </summary>
-        private readonly int serverPort;
+        private readonly int _serverPort;
 
         /// <summary>
         /// 底层服务
         /// </summary>
-        private volatile Server server = null;
+        private volatile Server _server = null;
 
 
         /// <summary>
@@ -44,8 +44,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <param name="serverPort"></param>
         public GrpcServer(List<ServerServiceDefinition> services,int serverPort)
         {
-            this.serverPort = serverPort;
-            this.serviceList = services;
+            this._serverPort = serverPort;
+            this._serviceList = services;
         }
 
         /// <summary>
@@ -86,21 +86,21 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //};
 
                 //Server可以定义多个服务，绑定多个端口
-                server = new Server(options);
+                _server = new Server(options);
 
                 //添加多个服务
-                foreach (var serviceItem in serviceList)
+                foreach (var serviceItem in _serviceList)
                 {
-                    server.Services.Add(serviceItem);
+                    _server.Services.Add(serviceItem);
                 }
 
                 
                 //添加多个监听端口
                 //0.0.0.0表示监听本机所有ip地址， 没有安全验证
                 string ipAny = IPAddress.Any.ToString();
-                server.Ports.Add(ipAny, serverPort, ServerCredentials.Insecure);
+                _server.Ports.Add(ipAny, _serverPort, ServerCredentials.Insecure);
                 
-                server.Start();
+                _server.Start();
 
                 return true;
             }
@@ -154,12 +154,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //};
 
                 //Server可以定义多个服务，绑定多个端口
-                server = new Server(options);
+                _server = new Server(options);
 
                 //添加多个服务
-                foreach (var serviceItem in serviceList)
+                foreach (var serviceItem in _serviceList)
                 {
-                    server.Services.Add(serviceItem);
+                    _server.Services.Add(serviceItem);
                 }
 
                 #region ssl加密
@@ -180,9 +180,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //0.0.0.0表示监听本机所有ip地址， 没有安全验证
                 string ipAny = IPAddress.Any.ToString();
                 //ssl证书
-                server.Ports.Add(ipAny, serverPort, sslCredentials);
+                _server.Ports.Add(ipAny, _serverPort, sslCredentials);
 
-                server.Start();
+                _server.Start();
 
                 return true;
             }
@@ -201,7 +201,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <returns></returns>
         public bool  Stop(Action<Exception> exceptionHandler = null)
         {
-            if (server == null)
+            if (_server == null)
             {
                 return true;
             }
@@ -210,7 +210,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             {
                 try
                 {
-                    server.ShutdownAsync().Wait(7543);
+                    _server.ShutdownAsync().Wait(7543);
                     return true;
                 }
                 catch (Exception ex)
@@ -219,7 +219,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 }
             }
 
-            server = null;
+            _server = null;
 
             return false;
 
