@@ -35,7 +35,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// <summary>
         /// 底层的回调
         /// </summary>
-        private readonly Action actionCallback=null;
+        private readonly Action _actionCallback=null;
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// <param name="state"> An object containing information to be used by the callback method, or null.</param>
         public OneRunTimerEx(Action actionCallback,int dueTime = 0, int period = 1000, object state =null)
         {
-            this.actionCallback = actionCallback;
+            this._actionCallback = actionCallback;
             //实际上初始化完成后，回调已经开始执行
             _timer = new Timer(new TimerCallback(TimerCallback), state, dueTime, period);
         }
@@ -70,7 +70,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
                     return;
                 }
                 _isRunning = true;
-                actionInTimer = this.actionCallback;
+                actionInTimer = this._actionCallback;
             }
 
             try
