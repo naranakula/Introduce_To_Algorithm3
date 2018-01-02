@@ -146,7 +146,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //超时时间单位秒
             objectContext.ObjectContext.CommandTimeout = 120;
 
-            //方式2 超时时间单位秒
+            //方式2 超时时间单位秒 可以放到ActionSafe里
             this.Database.CommandTimeout = 120;
 
             #endregion
