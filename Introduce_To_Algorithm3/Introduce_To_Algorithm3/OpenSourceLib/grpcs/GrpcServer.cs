@@ -219,6 +219,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 }
             }
 
+            server = null;
+
             return false;
 
         }
