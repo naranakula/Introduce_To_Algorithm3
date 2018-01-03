@@ -19,6 +19,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// with pluggable support for load balancing, tracing, health checking and authentication. 
     /// 可以连接手机(android ios)和浏览器(js)
     /// 
+    /// gRPC service methods have exactly one input message and exactly one output message. Typically, these messages are used as input and output to only one method. This is on purpose, as it allows easily adding new parameters later (to the messages) while maintaining backward compatibility.
+    /// 
+    /// If you don't want any input or output parameters, you can use the well-known proto google.protobuf.Empty. However, this is discouraged as it prevents you from adding parameters to the method in the future.  Do not use well-known google proto file.
+    /// 
     /// 
     /// grpc首先定义service，指定方法的参数和返回值。
     /// grpc默认使用protocol buffer.
