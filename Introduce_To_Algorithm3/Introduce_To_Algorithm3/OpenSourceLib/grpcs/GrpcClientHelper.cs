@@ -244,12 +244,13 @@ The zero value needs to be the first element, for compatibility with the proto2 
 
         ///
         /// 避免每次创建options
-        private static readonly List<ChannelOption> GrpcOptions = new List<ChannelOption>(capacity: 3)
+        private static readonly List<ChannelOption> GrpcOptions = new List<ChannelOption>(capacity: 2)
         {
             ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
             new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
             new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
-            new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
+            //new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
+            //new ChannelOption(ChannelOptions.MaxConcurrentStreams,100),//单个连接最大允许的并发流
         };
 
 
