@@ -104,6 +104,29 @@ HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Tcpip\Parameters\TcpTimedWa
          * 
          */
 
+        /*
+         * https://github.com/grpc/grpc/blob/master/doc/connectivity-semantics-and-api.md
+         * Grpc connectivity
+         * channel抽象客户端与服务器的连接.channel封装了tcp连接（with retries and backoff）. 
+         * channel also handle errors on established connections and reconnect.
+         * channel的5种状态:
+         *      CONNECTING: channel try to eatablish a connection or just created
+         *      READY: channel established a connection and ready to use
+         *      TRANSIENT_FAILURE:(暂时错误) channel in this state will eventually switch to CONNECTING state and try to establish a connection again.（指数增长的重试时间） Since retries are done with exponential backoff, channels that fail to connect will start out spending very little time in this state but as the attempts fail repeatedly, the channel will spend increasingly large amounts of time in this state.
+         *      IDLE: channel in this state when channel lack of pending rpc.没有服务调用，经过IDLE_TIMEOUT从CONNECTING或者READY进入该状态
+         *      SHUTDOWN:channel has started shuting down. channel that enter this state never leave this state. Channels may enter this state either because the application explicitly requested a shutdown or if a non-recoverable error has happened during attempts to connect communicate . (As of 6/12/2015, there are no known errors (while connecting or communicating) that are classified as non-recoverable)
+         * 
+         * 
+         * 
+         * 
+         *     
+         * 
+         * 
+         *      
+         * 
+         * 
+         */
+
 
 
         /*
@@ -291,6 +314,9 @@ The zero value needs to be the first element, for compatibility with the proto2 
                 //不使用加密
                 //channel = new Channel(string.Format("{0}:{1}",ip,port), ChannelCredentials.Insecure);
                 channel = new Channel(ip, port, ChannelCredentials.Insecure,GrpcOptions);
+
+                //通道状态
+                //ChannelState channelState = channel.State;
 
                 //if (action != null)
                 {
