@@ -257,7 +257,9 @@ The zero value needs to be the first element, for compatibility with the proto2 
         /// <summary>
         /// 安全调用grpc
         /// Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
-        /// channel应该尽可能的重用
+        /// 创建channel是expensive operation compared to invoking a remote call.
+        /// channel is an abstraction of long-lived connections to remote server. more client objects can reuse the same channel.（来自官方文档）
+        /// channel应该尽可能的重用(channel貌似提供了自动重连和线程安全)
         /// </summary>
         /// <param name="ip">ip地址</param>
         /// <param name="port">端口</param>
