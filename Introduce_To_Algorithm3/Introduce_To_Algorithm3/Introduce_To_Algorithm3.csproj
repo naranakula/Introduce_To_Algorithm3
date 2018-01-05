@@ -701,6 +701,7 @@
     <Compile Include="OpenSourceLib\grpcs\examples\GreeterServer.cs" />
     <Compile Include="OpenSourceLib\grpcs\GrpcClientHelper.cs" />
     <Compile Include="OpenSourceLib\grpcs\GrpcServer.cs" />
+    <Compile Include="OpenSourceLib\grpcs\LongRunChannel.cs" />
     <Compile Include="OpenSourceLib\grpcs\protos\PbHelper.cs" />
     <Compile Include="OpenSourceLib\grpcs\protos\removables\Addressbook.cs" />
     <Compile Include="OpenSourceLib\grpcs\protos\removables\Person.cs" />
