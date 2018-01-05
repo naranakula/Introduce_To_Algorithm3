@@ -32,6 +32,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
         #endregion
 
+        #region 构造函数
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -42,6 +44,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             this._serverIp = serverIp;
             this._serverPort = serverPort;
         }
+
+        #endregion
+
     }
 
     
