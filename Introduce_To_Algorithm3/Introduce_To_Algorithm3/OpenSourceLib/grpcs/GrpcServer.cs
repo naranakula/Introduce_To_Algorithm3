@@ -64,7 +64,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     new ChannelOption(ChannelOptions.MaxReceiveMessageLength,16*1024*1024),//最大允许接收的消息长度
                     //最大允许的Maximum number of concurrent incoming streams to allow on a http2 connection
                     //单个http2连接允许的最大数量的stream
-                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,100),//单个连接最大允许的并发流
+                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,63),//单个连接最大允许的并发流
                     new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口
                     //HTTP/2 默认的 window size 是 64 KB，实际这个值太小了，在 TiKV 里面我们直接设置成 1 GB。
                     //TCP两端都有缓冲区来保存接收的数据，如果满了，那么在缓冲区清空之前不能接收更多的数据

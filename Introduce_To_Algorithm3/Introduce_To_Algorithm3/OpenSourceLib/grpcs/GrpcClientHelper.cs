@@ -277,8 +277,42 @@ The zero value needs to be the first element, for compatibility with the proto2 
             new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
             new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
             //new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
-            new ChannelOption(ChannelOptions.MaxConcurrentStreams,100),//单个连接最大允许的并发流
+            new ChannelOption(ChannelOptions.MaxConcurrentStreams,63),//单个连接最大允许的并发流
         };
+
+        /*
+         * channel线程安全的代码样例
+         * 
+         * 
+        Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
+
+        Task task1 = Task.Factory.StartNew(() =>
+        {
+
+            var client = new Greeter.GreeterClient(channel);
+            String user = "you";
+            var reply = client.SayHello(new HelloRequest {Name = user});
+            Console.WriteLine("Greeting: " + reply.Message);
+        });
+
+        Task task2 = Task.Factory.StartNew(() =>
+        {
+
+            var client = new Greeter.GreeterClient(channel);
+            String user = "you";
+            var secondReply = client.SayHelloAgain(new HelloRequest {Name = user});
+            Console.WriteLine("Greeting: " + secondReply.Message);
+
+        });
+
+        task1.Wait();
+        task2.Wait();
+        channel.ShutdownAsync().Wait();
+        Console.WriteLine("Press any key to exit...");
+        Console.ReadKey();
+         * 
+         * 
+         */
 
 
         /// <summary>
@@ -286,7 +320,13 @@ The zero value needs to be the first element, for compatibility with the proto2 
         /// Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
         /// 创建channel是expensive operation compared to invoking a remote call.
         /// channel is an abstraction of long-lived connections to remote server. more client objects can reuse the same channel.（来自官方文档）
-        /// channel应该尽可能的重用(channel貌似提供了自动重连和线程安全)
+        /// channel应该尽可能的重用(channel提供了自动重连和线程安全[已确认])
+        /// 关于自动重连参见文档:
+        /// https://github.com/grpc/grpc/blob/master/doc/connection-backoff.md
+        /// 关于线程安全参见文档:
+        /// https://github.com/grpc/grpc/blob/master/doc/connectivity-semantics-and-api.md
+        /// https://github.com/grpc/grpc/blob/master/src/csharp/Grpc.IntegrationTesting/StressTestClient.cs
+        /// client是否线程安全仍有待确认
         /// </summary>
         /// <param name="ip">ip地址</param>
         /// <param name="port">端口</param>
