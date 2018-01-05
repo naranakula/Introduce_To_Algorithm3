@@ -285,6 +285,8 @@ The zero value needs to be the first element, for compatibility with the proto2 
          * the channel definitely is thread safe. Ideally, your app should be using just one channel to talk to a given server and you should be making all your calls using that channel.
 You can also have multiple clients (for different services) use the same channel (if the server servers all those services of course).
 
+            note that client-side RPC invocations and server-side RPC handlers are thread-safe and are meant to be run on concurrent goroutines. But also note that for individual streams, incoming and outgoing data is bi-directional but serial; so e.g. individual streams do not support concurrent reads or concurrent writes (but reads are safely concurrent with writes).
+
 Every channel creates it's own TCP connection
          * 
         Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
@@ -329,7 +331,7 @@ Every channel creates it's own TCP connection
         /// 关于线程安全参见文档:
         /// https://github.com/grpc/grpc/blob/master/doc/connectivity-semantics-and-api.md
         /// https://github.com/grpc/grpc/blob/master/src/csharp/Grpc.IntegrationTesting/StressTestClient.cs
-        /// client是否线程安全仍有待确认
+        /// client是否线程安全仍有待确认（应该是线程安全的）
         /// </summary>
         /// <param name="ip">ip地址</param>
         /// <param name="port">端口</param>
