@@ -282,7 +282,10 @@ The zero value needs to be the first element, for compatibility with the proto2 
 
         /*
          * channel线程安全的代码样例
-         * 
+         * the channel definitely is thread safe. Ideally, your app should be using just one channel to talk to a given server and you should be making all your calls using that channel.
+You can also have multiple clients (for different services) use the same channel (if the server servers all those services of course).
+
+Every channel creates it's own TCP connection
          * 
         Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
 
