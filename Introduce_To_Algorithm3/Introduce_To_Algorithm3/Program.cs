@@ -28,6 +28,8 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
+            //红黑树
+            SortedDictionary<string,string> rbTree = new SortedDictionary<string, string>();
             DirectoryHold.ResetCurrentDir();
             NLogHelper.Info(GuidUtils.GetGuid());
             NLogHelper.Trace("Trace");

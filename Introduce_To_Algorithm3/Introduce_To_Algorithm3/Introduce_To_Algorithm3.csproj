@@ -543,6 +543,7 @@
     <Compile Include="Common\Utils\ClipboardHelper.cs" />
     <Compile Include="Common\Utils\CollectionUtils.cs" />
     <Compile Include="Common\Utils\ConcurrentCollections\BlockingQueueEx.cs" />
+    <Compile Include="Common\Utils\ConcurrentCollections\ConcurrentRbTree.cs" />
     <Compile Include="Common\Utils\DeepClone.cs" />
     <Compile Include="Common\Utils\DeviceId.cs" />
     <Compile Include="Common\Utils\files\AssemblyHelper.cs" />
