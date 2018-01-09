@@ -155,6 +155,48 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
+        #region 测试数据库连接
+
+
+        /// <summary>
+        /// 测试数据库连接是否畅通。
+        /// </summary>
+        /// <returns>
+        /// 如果返回值为true,表示数据库连接畅通。
+        /// 如果返回值为false，表示数据库连接不畅通。通常修改连接字符串可解决该问题。
+        /// </returns>
+        public static bool IsConnectionAvailable(Action<Exception> exceptionHandler = null)
+        {
+            bool result = true;
+            SqlConnection conn = null;
+            try
+            {
+                conn = new SqlConnection(TrueConnectionString);
+                conn.Open();
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                exceptionHandler?.Invoke(ex);
+                result = false;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    try
+                    {
+                        conn.Close();
+                    }
+                    catch { }
+                }
+            }
+            return result;
+        }
+
+
+        #endregion
+
         #region 设置上下文
 
         ///// <summary>
@@ -780,42 +822,6 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
 
         #region 无事务的原生调用
-
-        /// <summary>
-        /// 测试数据库连接是否畅通。
-        /// </summary>
-        /// <returns>
-        /// 如果返回值为true,表示数据库连接畅通。
-        /// 如果返回值为false，表示数据库连接不畅通。通常修改连接字符串可解决该问题。
-        /// </returns>
-        public static bool IsConnectionActive(Action<Exception> exceptionHandler = null)
-        {
-            bool result = true;
-            SqlConnection conn = null;
-            try
-            {
-                conn = new SqlConnection(TrueConnectionString);
-                conn.Open();
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                exceptionHandler?.Invoke(ex);
-                result = false;
-            }
-            finally
-            {
-                if (conn != null)
-                {
-                    try
-                    {
-                        conn.Close();
-                    }
-                    catch { }
-                }
-            }
-            return result;
-        }
 
         /// <summary>
         /// ExecuteNonQuery操作，对数据库进行 增、删、改 操作（1）
