@@ -190,12 +190,25 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 
                 #region 获取消息
 
+                if (message == null)
+                {
+                    NLogHelper.Warn("接收到空消息");
+                    return;
+                }
+
+
+
                 //MAP消息
                 //IMapMessage mapMessage = session.CreateMapMessage();//MAP消息
                 //字节消息
                 //IBytesMessage byteMsg = session.CreateBytesMessage(new byte[] { });//字节消息
                 ITextMessage txtMsg = message as ITextMessage;
 
+                if (txtMsg == null || string.IsNullOrWhiteSpace(txtMsg.Text))
+                {
+                    NLogHelper.Warn("消息内容为空或不是ITextMessage,消息类型=" + message.GetType());
+                    return;
+                }
                 //建议使用ByteMessage,结合ProtoBuffer使用
                 IBytesMessage byteMsg = message as IBytesMessage;
                 if (byteMsg == null)
