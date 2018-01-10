@@ -35,7 +35,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         /// 发送消息
         /// </summary>
         /// <param name="msg"></param>
-        public static void SendQueueMessage(string msg,Action<Exception> exceptionHandler = null)
+        public static void SendQueueMessage(string msg, Action<Exception> exceptionHandler = null)
         {
             try
             {
@@ -43,6 +43,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                 {
                     //超时16s
                     connection.RequestTimeout = new TimeSpan(0, 0, 16);
+                    //start应该放在这
+                    connection.Start();
                     using (var session = connection.CreateSession())
                     {
                         using (
@@ -51,7 +53,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                                     destQueueName, //queue的名称 
                                     DestinationType.Queue)))
                         {
-                            connection.Start();
+                            //start不能放在这
+                            //connection.Start();
                             ITextMessage message = session.CreateTextMessage(msg);
                             ////The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
                             //message.NMSTimestamp = DateTime.UtcNow;
@@ -79,7 +82,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         /// 发送消息
         /// </summary>
         /// <param name="msg"></param>
-        public static void SendTopicMessage(string msg,Action<Exception> exceptionHandler = null)
+        public static void SendTopicMessage(string msg, Action<Exception> exceptionHandler = null)
         {
             try
             {
@@ -87,6 +90,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                 {
                     //超时16s
                     connection.RequestTimeout = new TimeSpan(0, 0, 16);
+                    //start应该放在这
+                    connection.Start();
                     using (var session = connection.CreateSession())
                     {
                         using (
@@ -94,7 +99,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                                 session.CreateProducer(session.GetDestination(destTopicName,//topic名称
                                     DestinationType.Topic)))
                         {
-                            connection.Start();
+                            //start不能放在这
+                            //connection.Start();
                             ITextMessage message = session.CreateTextMessage(msg);
                             ////The timestamp of when the message was pubished in UTC time. If the publisher disables setting the timestamp on the message, the time will be set to the start of the UNIX epoc (1970-01-01 00:00:00).
                             //message.NMSTimestamp = DateTime.UtcNow;
@@ -115,7 +121,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
                     exceptionHandler(ex);
                 }
             }
-            
+
         }
 
     }
