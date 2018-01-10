@@ -33,6 +33,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private static volatile Thread _messageHandlerThread = null;
 
         /// <summary>
+        /// 队列中允许最大的数量的消息
+        /// </summary>
+        private const int MaxNumberDataInQueue = 2048;
+
+        /// <summary>
         /// 添加到消息队列
         /// </summary>
         /// <param name="message"></param>
@@ -44,6 +49,33 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 {
                     return;
                 }
+
+                #region 避免queue内存溢出
+
+                int curCount = MessageQueue.Count;
+
+                if (curCount > MaxNumberDataInQueue)
+                {
+                    String delMsg = null;
+                    if(MessageQueue.TryTake(out delMsg))
+                    {
+                        NLogHelper.Warn($"丢弃消息:{delMsg}");
+                    }
+                    if (MessageQueue.TryTake(out delMsg))
+                    {
+                        NLogHelper.Warn($"丢弃消息:{delMsg}");
+                    }
+                    if (MessageQueue.TryTake(out delMsg))
+                    {
+                        NLogHelper.Warn($"丢弃消息:{delMsg}");
+                    }
+                    if (MessageQueue.TryTake(out delMsg))
+                    {
+                        NLogHelper.Warn($"丢弃消息:{delMsg}");
+                    }
+                }
+
+                #endregion
 
                 MessageQueue.Add(message);
             }
