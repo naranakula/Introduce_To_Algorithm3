@@ -26,7 +26,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private readonly object _locker = new object();
 
         /// <summary>
-        /// 是否正在运行
+        /// 是否程序运行，当退出时设置为false
         /// </summary>
         private volatile bool _isRunning = false;
 

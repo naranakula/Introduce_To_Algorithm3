@@ -36,6 +36,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 
         /// <summary>
         /// MQ地址  如：failover:(tcp://192.168.163.213:61616)
+        /// uri配置参考文档:http://activemq.apache.org/connection-configuration-uri.html
         /// </summary>
         private static readonly string MqUri = ConfigUtils.GetString("MQUri");
 
