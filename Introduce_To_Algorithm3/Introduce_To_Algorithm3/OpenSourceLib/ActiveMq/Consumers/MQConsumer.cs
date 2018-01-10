@@ -52,7 +52,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         private static readonly string TopicOrQueueName = ConfigUtils.GetString("TopicOrQueueName");
 
         /// <summary>
-        /// 创建连接工厂  多线程安全
+        /// 创建连接工厂  多线程安全 
         /// </summary>
         private static readonly IConnectionFactory factory = new ConnectionFactory(MqUri);
 
@@ -119,7 +119,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 
                 if (!connection.IsStarted)
                 {
-                    //启动连接
+                    //启动连接 如果加了failover，不抛异常
                     connection.Start();
                 }
                 //创建回话
