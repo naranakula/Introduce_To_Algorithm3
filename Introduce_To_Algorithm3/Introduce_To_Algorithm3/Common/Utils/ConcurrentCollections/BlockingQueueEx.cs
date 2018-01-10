@@ -12,7 +12,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
     /// 阻塞队列
     /// 
     /// </summary>
-    public class BlockingQueueEx<T> where T:class
+    public class BlockingQueueEx<T> where T : class
     {
         /// <summary>
         /// 底层是ConcurrentQueue
@@ -34,7 +34,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// 数据处理
         /// </summary>
         private readonly Action<T> _dataHandler = null;
-        
+
         /// <summary>
         /// 异常处理
         /// </summary>
@@ -46,18 +46,34 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private readonly Thread _thread = null;
 
         /// <summary>
+        /// 队列中消息的最大数量，超过该数量，之前的消息将被丢弃
+        /// </summary>
+        private readonly int _maxNumDataInQueue = 2048;
+
+        /// <summary>
         /// 构造函数  构造完即开启处理线程
         /// </summary>
         /// <param name="dataHandler">数据处理</param>
         /// <param name="exceptionHandler">数据处理异常后的处理</param>
-        public BlockingQueueEx(Action<T> dataHandler = null,Action<Exception> exceptionHandler = null)
+        /// <param name="maxNumberDataInQueue">队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100</param>
+        public BlockingQueueEx(Action<T> dataHandler = null, Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 2048)
         {
-            
+
             lock (_locker)
             {
                 _isRunning = true;
                 this._dataHandler = dataHandler;
                 this._exceptionHandler = exceptionHandler;
+
+                //队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100
+                if (maxNumberDataInQueue < 100)
+                {
+                    this._maxNumDataInQueue = 100;
+                }
+                else
+                {
+                    this._maxNumDataInQueue = maxNumberDataInQueue;
+                }
             }
             _thread = new Thread(() =>
             {
@@ -81,7 +97,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                             dataHandlerInThread?.Invoke(item);
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         exceptionHandlerInThread?.Invoke(ex);
                     }
@@ -100,7 +116,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// </summary>
         /// <param name="item">要处理的数据项，如果为null，则什么也不做</param>
         /// <param name="exceptionHandler">异常处理</param>
-        public void Add(T item,Action<Exception> exceptionHandler = null)
+        /// <param name="abandonAction">当queue中数量超过QueueLimit时,T被抛弃时的毁掉</param>
+        public void Add(T item, Action<T> abandonAction = null, Action<Exception> exceptionHandler = null)
         {
             try
             {
@@ -108,6 +125,48 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 {
                     return;
                 }
+
+                int curCount = _blockingQueue.Count;
+
+                #region 超出limit 抛弃旧元素
+                if (curCount > _maxNumDataInQueue)
+                {
+                    T delT = null;
+                    //TryTake立刻返回
+                    if (_blockingQueue.TryTake(out delT))
+                    {
+                        abandonAction?.Invoke(delT);
+                    }
+                    if (_blockingQueue.TryTake(out delT))
+                    {
+                        abandonAction?.Invoke(delT);
+                    }
+                    if (_blockingQueue.TryTake(out delT))
+                    {
+                        abandonAction?.Invoke(delT);
+                    }
+                    if (_blockingQueue.TryTake(out delT))
+                    {
+                        abandonAction?.Invoke(delT);
+                    }
+                    if (_blockingQueue.TryTake(out delT))
+                    {
+                        abandonAction?.Invoke(delT);
+                    }
+                    if (_blockingQueue.TryTake(out delT))
+                    {
+                        abandonAction?.Invoke(delT);
+                    }
+                    if (_blockingQueue.TryTake(out delT))
+                    {
+                        abandonAction?.Invoke(delT);
+                    }
+                    if (_blockingQueue.TryTake(out delT))
+                    {
+                        abandonAction?.Invoke(delT);
+                    }
+                }
+                #endregion
 
                 _blockingQueue.Add(item);
             }
