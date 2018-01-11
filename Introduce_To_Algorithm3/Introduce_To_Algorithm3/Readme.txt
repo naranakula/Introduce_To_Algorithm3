@@ -258,11 +258,12 @@ CsvUtils.cs
 SqliteCodeFirstContext.cs//Sqlite数据库
 NPOIHelper.cs//Excel读写
 LicenseHelper.cs//授权文件
-LibsodiumHelper.cs//加解密
+LibsodiumHelper.cs//加解密,使用CryptoHelper.cs
 TokenBucket.cs
 MemoryStreamUtils.cs
 CultureUtils.cs
-CollectionUtils
+CollectionUtils.cs
+CryptoHelper.cs//加解密
 
 
 

@@ -82,6 +82,54 @@ namespace Introduce_To_Algorithm3.Common.Utils
             return outList;
         }
 
+        /// <summary>
+        /// 比较两个集合
+        /// 对于数值类型没有问题
+        /// 对于类类型，要求集合中的元素不能为null，否则会抛异常
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="inList1"></param>
+        /// <param name="inList2"></param>
+        /// <returns></returns>
+        public static bool EqualsEx<T>(IList<T> inList1, IList<T> inList2) where T:IEquatable<T>
+        {
+            bool isEmpty1 = inList1 == null || inList1.Count == 0;
+            bool isEmpty2 = inList2 == null || inList2.Count == 0;
+
+            //同时为空
+            if (isEmpty1 && isEmpty2)
+            {
+                return true;
+            }
+
+            //只有一个为空
+            if (isEmpty1 || isEmpty2)
+            {
+                return false;
+            }
+
+            int count1 = inList1.Count;
+            int count2 = inList2.Count;
+            if (count2 != count1)
+            {
+                //数量不一致
+                return false;
+            }
+
+
+            for (int i = 0; i < count1; i++)
+            {
+                T item1 = inList1[i];
+                T item2 = inList2[i];
+                //这个实现是有问题的
+                if (item1.Equals(item2) == false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 
 
