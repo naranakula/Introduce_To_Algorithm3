@@ -48,7 +48,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             if (_mqTimer == null)
             {
                 //执行周期17s
-                _mqTimer = new Timer(new TimerCallback(MQTimerCallBack),null,500,19130);
+                _mqTimer = new Timer(new TimerCallback(MQTimerCallBack),null,500,19571);
             }
         }
 

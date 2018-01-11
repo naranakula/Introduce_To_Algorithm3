@@ -47,7 +47,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         {
             if (mqTimer == null)
             {
-                mqTimer = new Timer(new TimerCallback(MQTimerCallBack), null, 700, 19130);
+                mqTimer = new Timer(new TimerCallback(MQTimerCallBack), null, 700, 19573);
             }
         }
 
