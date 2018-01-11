@@ -80,7 +80,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                     }
                     else
                     {
-                        NLogHelper.Warn("MQ异常，尝试重启 MQConsumer");
+                        NLogHelper.Warn("MQ异常,尝试重启 MQConsumer");
                         MQConsumer.InitConsumer();
                     }
                 }
