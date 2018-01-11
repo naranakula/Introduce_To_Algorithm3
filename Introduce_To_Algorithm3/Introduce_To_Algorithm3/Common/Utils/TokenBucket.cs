@@ -16,32 +16,32 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 每次评估的时间周期 单位毫秒  默认1分钟
         /// </summary>
-        private readonly int estimatePeriodInMillisecond;
+        private readonly int _estimatePeriodInMillisecond;
 
         /// <summary>
         /// 桶的最大容量
         /// </summary>
-        private readonly int bucketLimit;
+        private readonly int _bucketLimit;
 
         /// <summary>
         /// 每次注水的量
         /// </summary>
-        private readonly int appendStep;
+        private readonly int _appendStep;
 
         /// <summary>
         /// 锁
         /// </summary>
-        private readonly object locker = new object();
+        private readonly object _locker = new object();
 
         /// <summary>
         /// 当前桶的容量
         /// </summary>
-        private int curBucketCount;
+        private int _curBucketCount;
 
         /// <summary>
         /// 上一次注水时间
         /// </summary>
-        private DateTime? lastAppendTime;
+        private DateTime? _lastAppendTime;
 
         #region 静态实例
 
@@ -86,10 +86,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="appendStep">每次注水的量，即接口平均每分钟执行20次</param>
         public TokenBucket(int estimatePeriodInMillisecond = 60*1000,int bucketLimit=60,int appendStep = 20)
         {
-            this.estimatePeriodInMillisecond = estimatePeriodInMillisecond;
-            this.bucketLimit = bucketLimit;
-            this.appendStep = appendStep;
-            curBucketCount = 0;
+            this._estimatePeriodInMillisecond = estimatePeriodInMillisecond;
+            this._bucketLimit = bucketLimit;
+            this._appendStep = appendStep;
+            _curBucketCount = 0;
         }
 
 
@@ -104,32 +104,32 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
             bool canRunAction = false;//是否可以调用Action
             #region token bucket算法
-            lock (locker)
+            lock (_locker)
             {
                 DateTime now = DateTime.Now;
                 //注水
-                if(lastAppendTime==null || (now - lastAppendTime.Value).TotalMilliseconds > estimatePeriodInMillisecond)
+                if(_lastAppendTime==null || (now - _lastAppendTime.Value).TotalMilliseconds > _estimatePeriodInMillisecond)
                 {
                     //需要注水
-                    lastAppendTime = now;
+                    _lastAppendTime = now;
                     //计算当前水量
-                    int curCount = curBucketCount + appendStep;
-                    if (curCount > bucketLimit)
+                    int curCount = _curBucketCount + _appendStep;
+                    if (curCount > _bucketLimit)
                     {
-                        curCount = bucketLimit;
+                        curCount = _bucketLimit;
                     }
-                    curBucketCount = curCount;
+                    _curBucketCount = curCount;
                 }
 
                 //检测是否可以调用action
-                if (curBucketCount > 0)
+                if (_curBucketCount > 0)
                 {
-                    curBucketCount--;
+                    _curBucketCount--;
                     canRunAction = true;
                 }
                 else
                 {
-                    curBucketCount = 0;
+                    _curBucketCount = 0;
                     canRunAction = false;
                 }
             }
