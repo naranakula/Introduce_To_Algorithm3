@@ -9,6 +9,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
     /// <summary>
     /// MQ产生者
     /// 每次发送消息一个连接
+    /// 长连接uri使用failvoer,短链接不要使用
     /// </summary>
     public class MQShortConnectionProducer
     {
