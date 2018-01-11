@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 {
@@ -19,6 +20,24 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// 该实例没有上限
         /// </summary>
         private readonly BlockingCollection<T> _blockingQueue = new BlockingCollection<T>();
+
+        /// <summary>
+        /// queue中剩余未处理的数据量
+        /// </summary>
+        public int UnHandleCount
+        {
+            get
+            {
+                try
+                {
+                    return _blockingQueue.Count;
+                }
+                catch 
+                {
+                    return 0;
+                }
+            }
+        }
 
         /// <summary>
         /// 锁
@@ -102,6 +121,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                         exceptionHandlerInThread?.Invoke(ex);
                     }
                 }
+
+                NLogHelper.Trace($"Message处理循环退出");
             });
 
             //后台线程
@@ -133,6 +154,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 {
                     T delT = null;
                     //TryTake立刻返回
+                    //If the collection is empty, this method immediately returns false.
                     if (_blockingQueue.TryTake(out delT))
                     {
                         abandonAction?.Invoke(delT);

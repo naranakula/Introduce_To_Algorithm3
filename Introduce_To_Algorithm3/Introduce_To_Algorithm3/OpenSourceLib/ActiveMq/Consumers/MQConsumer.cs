@@ -203,32 +203,38 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 //字节消息
                 //IBytesMessage byteMsg = session.CreateBytesMessage(new byte[] { });//字节消息
                 ITextMessage txtMsg = message as ITextMessage;
-
-                if (txtMsg == null || string.IsNullOrWhiteSpace(txtMsg.Text))
+                //避免多次调用txtMsg.Text，虽然没什么错
+                if (txtMsg == null /*|| string.IsNullOrWhiteSpace(txtMsg.Text)*/)
                 {
-                    NLogHelper.Warn("消息内容为空或不是ITextMessage,消息类型=" + message.GetType());
+                    NLogHelper.Warn("不是ITextMessage,消息类型=" + message.GetType());
                     return;
                 }
+
+                //建议原样保存消息
+                string msg = StringUtils.TrimEx(txtMsg.Text);//txtMsg.Text.Trim();
+
+                if (string.IsNullOrEmpty(msg))
+                {
+                    NLogHelper.Warn("接收到Empty String");
+                    return;
+                }
+
+                NLogHelper.Info("接收到消息：" + msg);
+
+
                 //建议使用ByteMessage,结合ProtoBuffer使用
                 IBytesMessage byteMsg = message as IBytesMessage;
                 if (byteMsg == null)
                 {
                     return;
                 }
+                //避免多次调用byteMsg.Content,访问Content导致流读完
                 byte[] byteArr = byteMsg.Content;//访问Content导致流读完
                 //此时可以对数据操作
               
-                if (txtMsg == null || string.IsNullOrWhiteSpace(txtMsg.Text))
-                {
-                    NLogHelper.Warn("接收到空消息");
-                    return;
-                }
                 #endregion
 
-                //原样保存消息
-                string msg = txtMsg.Text;//txtMsg.Text.Trim();
-                NLogHelper.Info("接收到消息：" + msg);
-
+               
                 #region 开始处理消息
 
                 //注：经测试该函数是在前一个回调完成之后执行的,即回调是单线程执行的,需要自己实现多线程

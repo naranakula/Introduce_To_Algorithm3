@@ -43,6 +43,41 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         private DateTime? lastAppendTime;
 
+        #region 静态实例
+
+        /// <summary>
+        /// 静态锁
+        /// </summary>
+        private static readonly object sLocker = new object();
+
+
+        private static TokenBucket _sTokenBucket = null;
+
+        /// <summary>
+        /// 一个线程安全的TokenBucket静态实例
+        /// 每分钟增加10，最大30
+        /// </summary>
+        public static TokenBucket Instance
+        {
+            get
+            {
+                lock (sLocker)
+                {
+                    if (_sTokenBucket != null)
+                    {
+                        return _sTokenBucket;
+                    }
+
+                    _sTokenBucket = new TokenBucket(estimatePeriodInMillisecond:60000,bucketLimit:30,appendStep:10);
+                    return _sTokenBucket;
+                }
+            }
+        }
+
+
+        #endregion
+
+
         /// <summary>
         /// 构造函数
         /// </summary>

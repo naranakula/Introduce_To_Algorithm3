@@ -309,18 +309,30 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                 #region 丢弃超出容量的消息
                 if (MsgQueue.Count > MaxQueueCapacity)
                 {
-                    MsgQueue.TryTake(out msgItem);
-                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    MsgQueue.TryTake(out msgItem);
-                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    MsgQueue.TryTake(out msgItem);
-                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    MsgQueue.TryTake(out msgItem);
-                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    MsgQueue.TryTake(out msgItem);
-                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    MsgQueue.TryTake(out msgItem);
-                    NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    if (MsgQueue.TryTake(out msgItem))
+                    {
+                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    }
+                    if (MsgQueue.TryTake(out msgItem))
+                    {
+                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    }
+                    if (MsgQueue.TryTake(out msgItem))
+                    {
+                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    }
+                    if (MsgQueue.TryTake(out msgItem))
+                    {
+                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    }
+                    if (MsgQueue.TryTake(out msgItem))
+                    {
+                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    }
+                    if (MsgQueue.TryTake(out msgItem))
+                    {
+                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                    }
                 }
                 #endregion
 
