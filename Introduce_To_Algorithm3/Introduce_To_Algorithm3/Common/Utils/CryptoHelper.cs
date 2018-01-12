@@ -31,6 +31,7 @@ System.Object
 提供了7种实现,常用的有MD5,SHA1,SHA256
 安全性MD5<SHA1<SHA256
 速度  MD5>SHA1>SHA256  建议使用SHA1
+散列hash加盐,在用户原来密码基础上(规定位置如结尾)添加上一段随机salt,然后再散列
          * 
          */
 
@@ -172,6 +173,8 @@ System.Object
         建议使用aes
         安全性aes>3des>des
         酸度aes>des>3des
+ 对称加密的密钥是相同的，对于同样的明文产生相同的密文,这时就需要初始向量，初始向量在明文的固定位置(如结尾)插入(实际上可能不是这样，但原理是这样)，这样加密对于同样的明文产生不一样的密文
+ 对称加密密钥相同，但每隔一段时间要求更换初始向量
          */
 
         #region Aes加密
@@ -459,7 +462,7 @@ System.Object
     System.Security.Cryptography.ECDiffieHellman
     System.Security.Cryptography.ECDsa
     System.Security.Cryptography.RSA
-建议使用RSA
+建议使用RSA,Rsa很慢，只能用于加密少量数据
          * 
          * 
          */
@@ -485,13 +488,12 @@ System.Object
         /// .NET Framework 中提供的 RSA 算法规定：待加密的字节数不能超过密钥的长度值除以 8 再减去 11（即：RSACryptoServiceProvider.KeySize / 8 - 11）
         /// 如果keysize是1024(默认的),则最大是117
         /// </summary>
-        private const int MaxNumBytePerEncryptDecrypt = 111;
-
+       
         /// <summary>
         /// Rsa加密
         /// </summary>
         /// <param name="xmlKeyPair">加密仅需公钥</param>
-        /// <param name="inputBytes"></param>
+        /// <param name="inputBytes">待加密的字节数不能超过密钥的长度值除以 8 再减去 11（即：RSACryptoServiceProvider.KeySize / 8 - 11）</param>
         /// <returns></returns>
         public static byte[] RsaEncrypt(string xmlKeyPair, byte[] inputBytes)
         {
@@ -500,7 +502,7 @@ System.Object
                 return null;
             }
             //.NET Framework 中提供的 RSA 算法规定：待加密的字节数不能超过密钥的长度值除以 8 再减去 11（即：RSACryptoServiceProvider.KeySize / 8 - 11）
-
+            //有更好的RsaCng类，但需要.net4.5
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
             {
                 int maxNumPerEncrypt = rsa.KeySize / 8 - 12;
@@ -513,9 +515,10 @@ System.Object
 
         /// <summary>
         /// Rsa解密
+        /// 
         /// </summary>
         /// <param name="xmlKeyPair">解密需要私钥</param>
-        /// <param name="inputBytes"></param>
+        /// <param name="inputBytes">最长可以是KeySize/8</param>
         /// <returns></returns>
         public static byte[] RsaDecrypt(String xmlKeyPair, byte[] inputBytes)
         {
@@ -543,7 +546,7 @@ System.Object
             //sha1哈希
             byte[] bytes = Sha1Hash(Encoding.UTF8.GetBytes(text));
             //生成指定长度的随机字符串
-            bytes = GenerateRfc2898Bytes("123456", GenerateRandomBytes(8), 1000);
+            bytes = GenerateRfc2898Bytes("123456", GenerateRandomBytes(8), 300000);
 
             var tupleKeyIv = GenerateAesKeyAndIv();
             var bytes2 = AesEncrypt(tupleKeyIv.Item1, tupleKeyIv.Item2, bytes);
