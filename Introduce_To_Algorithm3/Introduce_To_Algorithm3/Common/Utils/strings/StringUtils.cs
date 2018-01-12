@@ -114,7 +114,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
             }
             else
             {
-                return s1.Trim() == s2.Trim();
+                return string.Equals(s1.Trim(), s2.Trim(), StringComparison.CurrentCulture);
             }
         }
         
