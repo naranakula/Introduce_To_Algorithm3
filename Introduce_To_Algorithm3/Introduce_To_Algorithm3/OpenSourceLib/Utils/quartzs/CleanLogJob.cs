@@ -299,7 +299,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 保存多少天日志，与创建时间比较
         /// 网络安全法第二十一条规定网络日志至少保存半年
         /// </summary>
-        private const int KeepDays = 200;
+        //private const int KeepDays = 200;
+        private static readonly int KeepDays = ConfigUtils.GetInteger("LogKeepDays", 200);
 
         /// <summary>
         /// 过滤什么样的文件
