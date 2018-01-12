@@ -50,6 +50,20 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private volatile bool _isRunning = false;
 
         /// <summary>
+        /// 是否程序运行，当退出时设置为false
+        /// </summary>
+        private bool IsRunning
+        {
+            get
+            {
+                lock (_locker)
+                {
+                    return _isRunning;
+                }
+            }
+        }
+
+        /// <summary>
         /// 数据处理
         /// </summary>
         private readonly Action<T> _dataHandler = null;
@@ -107,7 +121,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 }
 
 
-                while (_isRunning)
+                while (IsRunning)
                 {
                     try
                     {
