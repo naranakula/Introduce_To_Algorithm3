@@ -491,6 +491,7 @@ System.Object
        
         /// <summary>
         /// Rsa加密
+        /// 经测试本算法inputBytes的长度从0到117(keysize/8-11)，返回的结果永远是128(keysize/8)位
         /// </summary>
         /// <param name="xmlKeyPair">加密仅需公钥</param>
         /// <param name="inputBytes">待加密的字节数不能超过密钥的长度值除以 8 再减去 11（即：RSACryptoServiceProvider.KeySize / 8 - 11）</param>
@@ -505,7 +506,7 @@ System.Object
             //有更好的RsaCng类，但需要.net4.5
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
             {
-                int maxNumPerEncrypt = rsa.KeySize / 8 - 12;
+                //int maxNumPerEncrypt = rsa.KeySize / 8 - 12;
                 
                 rsa.FromXmlString(xmlKeyPair);
                 //true,使用OAEP padding(只在xp以后支持),false使用PKCS#1 v1.5 padding
@@ -534,7 +535,89 @@ System.Object
                 return rsa.Decrypt(inputBytes, false);
             }
         }
-        
+
+        /// <summary>
+        /// Rsa加密
+        /// 去除输入数组的长度限制
+        /// </summary>
+        /// <param name="xmlKeyPair">加密仅需公钥</param>
+        /// <param name="inputBytes">无限制的长度</param>
+        /// <returns></returns>
+        public static byte[] RsaLongEncrypt(string xmlKeyPair, byte[] inputBytes)
+        {
+            if (inputBytes == null)
+            {
+                return null;
+            }
+            //.NET Framework 中提供的 RSA 算法规定：待加密的字节数不能超过密钥的长度值除以 8 再减去 11（即：RSACryptoServiceProvider.KeySize / 8 - 11）
+            //有更好的RsaCng类，但需要.net4.5
+            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+            {
+                rsa.FromXmlString(xmlKeyPair);
+
+                int maxNumPerEncrypt = rsa.KeySize / 8 - 11;//单块最大长度
+                using (MemoryStream inputStream = new MemoryStream(inputBytes))
+                {
+                    using (MemoryStream outStream = new MemoryStream())
+                    {
+                        byte[] buffer = new byte[maxNumPerEncrypt];
+                        int readSize = 0;
+                        while ((readSize = inputStream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            var temp = new byte[readSize];
+                            Array.Copy(buffer,0,temp,0,readSize);
+                            //true,使用OAEP padding(只在xp以后支持),false使用PKCS#1 v1.5 padding
+                            byte[] encryptedBytes = rsa.Encrypt(temp, false);
+                            outStream.Write(encryptedBytes,0,encryptedBytes.Length);
+                        }
+                        outStream.Flush();
+                        return outStream.ToArray();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Rsa解密
+        /// 去除输入数组的长度限制
+        /// </summary>
+        /// <param name="xmlKeyPair">解密需要私钥</param>
+        /// <param name="inputBytes">去除输入数组的长度限制</param>
+        /// <returns></returns>
+        public static byte[] RsaLongDecrypt(String xmlKeyPair, byte[] inputBytes)
+        {
+            if (inputBytes == null)
+            {
+                return null;
+            }
+
+            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+            {
+                rsa.FromXmlString(xmlKeyPair);
+                int maxNumPerEncrypt = rsa.KeySize / 8;//单块最大长度
+                using (MemoryStream inputStream = new MemoryStream(inputBytes))
+                {
+                    using (MemoryStream outStream = new MemoryStream())
+                    {
+                        byte[] buffer = new byte[maxNumPerEncrypt];
+                        int readCount = 0;
+                        while ((readCount = inputStream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            byte[] temp = new byte[readCount];
+                            Array.Copy(buffer,0,temp,0,readCount);
+                            //true,使用OAEP padding(只在xp以后支持),false使用PKCS#1 v1.5 padding
+                            byte[] decryptBytes = rsa.Decrypt(temp, false);
+                            outStream.Write(decryptBytes,0,decryptBytes.Length);
+                        }
+                        outStream.Flush();
+                        return outStream.ToArray();
+                    }
+                }
+            }
+        }
+
+
+
         #endregion
 
         #region 测试
@@ -546,7 +629,7 @@ System.Object
             //sha1哈希
             byte[] bytes = Sha1Hash(Encoding.UTF8.GetBytes(text));
             //生成指定长度的随机字符串
-            bytes = GenerateRfc2898Bytes("123456", GenerateRandomBytes(8), 300000);
+            bytes = GenerateRfc2898Bytes("123456", GenerateRandomBytes(8), 30000);
 
             var tupleKeyIv = GenerateAesKeyAndIv();
             var bytes2 = AesEncrypt(tupleKeyIv.Item1, tupleKeyIv.Item2, bytes);
@@ -564,8 +647,23 @@ System.Object
             result = CollectionUtils.EqualsEx(bytes, byte3);
 
             var keyPair = GenerateRsaKeyInXmlFormat();
-            bytes2 = RsaEncrypt(keyPair.Item2, bytes);
-            byte3 = RsaDecrypt(keyPair.Item1, bytes2);
+            
+
+            for (int i = 0; i < 1000; i++)
+            {
+                try
+                {
+                    var result4 = RsaEncrypt(keyPair.Item2, GenerateRandomBytes(i));
+                    Console.WriteLine("len"+result4.Length+",i="+i);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(i+":"+ex);
+                    break;
+                }
+            }
+            bytes2 = RsaLongEncrypt(keyPair.Item2, bytes);
+            byte3 = RsaLongDecrypt(keyPair.Item1, bytes2);
             result = CollectionUtils.EqualsEx(bytes, byte3);
         }
         #endregion
