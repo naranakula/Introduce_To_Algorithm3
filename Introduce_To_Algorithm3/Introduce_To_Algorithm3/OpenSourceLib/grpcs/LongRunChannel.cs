@@ -204,26 +204,26 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     {
                         throw new CommonException(exceptionCode:1,exceptionDesc:"channel已经被停止");
                     }
-
-                    DateTime now = DateTime.Now;
+                    
                     //是否需要重建
                     bool isNeedToReBuild = false;
 
                     lock (_locker)
                     {
-                        if ((now - _lastRebuildChannelTime).TotalMilliseconds >
+                        if ((DateTime.Now - _lastRebuildChannelTime).TotalMilliseconds >
                             MinReEstablishChannelTimeIntervalInMilliseconds)
                         {
-                            _lastRebuildChannelTime = now;
                             isNeedToReBuild = true;
+
+                            //重建Channel,重建放在锁了，避免某些多线程异常
+                            Start();
+                            //因为重建需要耗时，所以重新调用Now
+                            _lastRebuildChannelTime = DateTime.Now;
                         }
                     }
 
                     if (isNeedToReBuild)
                     {
-                        //重建Channel
-                        Start(exceptionHandler);
-
                         //重建后，重新初始化状态
                         state = this.ChannelState;
                         tempChannel = _channel;
