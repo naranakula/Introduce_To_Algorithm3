@@ -112,7 +112,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     return ChannelState.Shutdown;
                 }
 
-                //通道状态，底层已经实现了锁和异常处理
+                //通道状态，grpc底层已经实现了锁和异常处理(看过源代码)
                 return tempChannel.State;
             }
         }
