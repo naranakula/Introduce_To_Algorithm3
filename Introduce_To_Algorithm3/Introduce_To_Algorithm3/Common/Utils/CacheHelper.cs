@@ -16,12 +16,16 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// 
     /// System.Runtime.Caching.MemoryCache is thread safe  多线程安全
     /// MemoryCache的key和value均不能为null
+    /// 
+    /// CacheHelper.InitCacheHelper
+    /// ...
     /// </summary>
     public static class CacheHelper
     {
         /// <summary>
         /// get a reference to default memorycache instance
         /// 默认的限制缓存800M，总内存限制的扫描间隔2分钟
+        /// 只有一个实例可以不用Dispose，频繁的创建MemoryCache实例需要dispose
         /// </summary>
         private static volatile MemoryCache _cache = null;// MemoryCache.Default;
 
@@ -70,7 +74,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
                         //获取或设置 MemoryCache 对象的实例可增长到的最大内存大小（以兆字节为单位）。默认值为零，指示 MemoryCache 实例会基于计算机上安装的内存量来管理自己的内存。
                         config.Add("cacheMemoryLimitMegabytes", "1024");
                         //缓存实现将当前内存负载与为缓存实例设置的绝对内存和内存百分比限制进行比较所采用的时间间隔。HH:mm:ss 每2分钟扫描一次
-                        config.Add("pollingInterval", "00:02:00");
+                        //默认值DefaultValue = "00:02:00"
+                        config.Add("pollingInterval", "00:02:47");
 
                         _cache = new MemoryCache("cmlu.common.Cache", config);
                     }
