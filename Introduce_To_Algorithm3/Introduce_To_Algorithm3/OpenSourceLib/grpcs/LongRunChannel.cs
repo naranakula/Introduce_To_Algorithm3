@@ -227,11 +227,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                         //重建后，重新初始化状态
                         state = this.ChannelState;
                         tempChannel = _channel;
-                        
+
                         if (state == ChannelState.Shutdown)
                         {
                             throw new CommonException(exceptionCode: 2, exceptionDesc: "Channel状态为ShutDown");
                         }
+                    }
+                    else
+                    {
+                        throw new CommonException(exceptionCode: 2, exceptionDesc: "Channel状态为ShutDown");
                     }
                 }
                 #endregion
