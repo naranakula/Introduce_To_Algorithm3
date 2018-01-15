@@ -21,7 +21,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// longChannel.Stop()
     /// 
     /// </summary>
-    public class LongRunChannel
+    public class LongRunChannel:IDisposable
     {
 
         #region 属性
@@ -258,6 +258,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
         #endregion
 
+        #region IDispose接口
+
+        /// <summary>
+        /// IDispose接口
+        /// </summary>
+        public void Dispose()
+        {
+            Stop();
+        }
+
+        #endregion
     }
 
     
