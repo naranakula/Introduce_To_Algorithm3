@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
 
         #region 常用
 
-        #region 字节数组和字符串 Base64转换
+        #region 字节数组和字符串 Base64转换 base64比x2短
 
         /*
          * byte是表示[0,255]的无符号整数
