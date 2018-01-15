@@ -199,37 +199,43 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 #region ShutDown重新建立连接
                 if (state == ChannelState.Shutdown)
                 {
+                    //已经人为停止，不需要重建
                     if (_isStop)
                     {
                         throw new CommonException(exceptionCode:1,exceptionDesc:"channel已经被停止");
                     }
 
                     DateTime now = DateTime.Now;
+                    //是否需要重建
+                    bool isNeedToReBuild = false;
+
                     lock (_locker)
                     {
                         if ((now - _lastRebuildChannelTime).TotalMilliseconds >
                             MinReEstablishChannelTimeIntervalInMilliseconds)
                         {
                             _lastRebuildChannelTime = now;
-                            
-                            //重建Channel
-                            Start(exceptionHandler);
+                            isNeedToReBuild = true;
+                        }
+                    }
 
-                            //重建后，重新初始化状态
-                            state = this.ChannelState;
-                            tempChannel = _channel;
+                    if (isNeedToReBuild)
+                    {
+                        //重建Channel
+                        Start(exceptionHandler);
+
+                        //重建后，重新初始化状态
+                        state = this.ChannelState;
+                        tempChannel = _channel;
+                        
+                        if (state == ChannelState.Shutdown)
+                        {
+                            throw new CommonException(exceptionCode: 2, exceptionDesc: "Channel状态为ShutDown");
                         }
                     }
                 }
                 #endregion
-
-
-                if (state == ChannelState.Shutdown)
-                {
-                    throw new CommonException(exceptionCode:2,exceptionDesc:"Channel状态为ShutDown");
-                }
-
-
+                
                 channelAction(tempChannel);
 
                 /*
