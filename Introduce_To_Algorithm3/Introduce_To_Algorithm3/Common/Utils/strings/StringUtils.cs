@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Quartz.Impl.Triggers;
@@ -66,6 +67,31 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
 
         #endregion
 
+
+        #region byte与x2
+
+        /// <summary>
+        /// 转换为两位16进制小写字符串
+        /// </summary>
+        /// <param name="byteIn"></param>
+        /// <returns></returns>
+        public static string FromByte(byte byteIn)
+        {
+            //x2小写 X2大写  CultureInfo加不加都可以
+            return byteIn.ToString("x2"/*,CultureInfo.CurrentCulture*/);
+        }
+
+        /// <summary>
+        /// 将x2或者X2格式字符串转换为byte
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static byte ToByte(string str)
+        {
+            return Convert.ToByte(str,16);
+        }
+
+        #endregion
 
         /// <summary>
         /// format
