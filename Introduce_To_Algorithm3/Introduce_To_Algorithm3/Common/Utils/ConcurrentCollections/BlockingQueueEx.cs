@@ -11,7 +11,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 {
     /// <summary>
     /// 阻塞队列
-    /// 
+    /// BlockingQueueEx ex = new BlockingQueueEx(..)//创建完已经启动
+    /// ex.Stop()//停止
     /// </summary>
     public class BlockingQueueEx<T> where T : class
     {
