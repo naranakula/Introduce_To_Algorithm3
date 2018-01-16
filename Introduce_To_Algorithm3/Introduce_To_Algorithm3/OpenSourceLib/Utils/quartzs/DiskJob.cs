@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -67,6 +68,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                     if (usedPercent > MaxPercentDiskCanUse)
                     {
+                        NLogHelper.Warn($"{driveInfo.Name}盘使用超过{(usedPercent*100).ToString("F1",CultureInfo.CurrentCulture)}%");
                         ErrorReason = $"{driveInfo.Name}盘剩余空间不足,建议清理";
                         ErrorCode = 1;
                     }
@@ -179,4 +181,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
 
     }
+
+
+
 }

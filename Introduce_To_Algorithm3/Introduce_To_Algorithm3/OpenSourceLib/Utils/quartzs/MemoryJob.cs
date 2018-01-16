@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +51,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 if (worksetInMb > MaxMemoryCanUseInMb)
                 {
+                    NLogHelper.Warn($"进程{currentProcess.ProcessName}占用内存较大,约{worksetInMb.ToString("F1",CultureInfo.CurrentCulture)}Mb");
                     ErrorCode = 1;
                     ErrorReason = $"进程{currentProcess.ProcessName}占用内存较大,建议检查或者重启改程序";
                 }
@@ -161,4 +163,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
 
     }
+
+
 }

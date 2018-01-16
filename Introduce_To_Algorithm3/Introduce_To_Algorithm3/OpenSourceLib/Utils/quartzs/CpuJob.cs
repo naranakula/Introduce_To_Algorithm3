@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,7 +23,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// cpu性能计数器
         /// </summary>
-        private static volatile PerformanceCounter cpuCounter = null;
+        private static volatile PerformanceCounter _cpuCounter = null;
 
 
 
@@ -44,11 +45,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 lock (_locker)
                 {
 
-                    if (cpuCounter == null)
+                    if (_cpuCounter == null)
                     {
-                        cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+                        _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
                     }
-                    curCpuCounter = cpuCounter;
+                    curCpuCounter = _cpuCounter;
                 }
 
 
@@ -59,7 +60,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     return;
                 }
 
-                //计算当前cpu使用的百分比 0-100的浮点数
+                
                 const int sampleCount = 5;
                 const int sleepMilliseconds = 137;
                 double cpuUsed = 0;
@@ -72,6 +73,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                         Thread.Sleep(sleepMilliseconds);
                         continue;
                     }
+                    //计算当前cpu使用的百分比 0-100的浮点数
                     cpuUsed += curCpuCounter.NextValue();
                     Thread.Sleep(sleepMilliseconds);
                 }
@@ -80,6 +82,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 if (cpuUsed > MaxPercentCpuCanUse)
                 {
+                    NLogHelper.Warn($"cpu使用超过{cpuUsed.ToString("F1", CultureInfo.CurrentCulture)}%");
                     ErrorCode = 1;
                     ErrorReason = $"该机器占用cpu较大,需人工检查";
                 }
@@ -185,4 +188,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         #endregion
 
     }
+
+
 }
