@@ -142,7 +142,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
             //后台线程
             _thread.IsBackground = true;
-
+            _thread.Priority = ThreadPriority.Normal;
             _thread.Start();
         }
 

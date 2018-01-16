@@ -95,7 +95,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 foreach (DriveInfo item in DriveInfo.GetDrives())
                 {
-                    if (StringUtils.EqualsEx(dirInfo.Root.Name, item.Name))
+                    if (StringUtils.EqualsEx(dirInfo.Root.Name, item.RootDirectory.Name))
                     {
                         //查找logs所在的磁盘
                         driveInfo = item;

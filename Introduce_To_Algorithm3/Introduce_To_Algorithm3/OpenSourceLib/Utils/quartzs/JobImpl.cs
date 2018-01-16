@@ -39,9 +39,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 _isRunning = true;
             }
 
-            string jobName = GetType().Name;
+            string jobName = "";
             try
             {
+                jobName = GetType().Name;
+
                 NLogHelper.Info($"开始执行任务{jobName}");
 
                 //调用实际的任务
@@ -82,9 +84,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             Console.WriteLine("创建一个job实例");
         }
 
+        #endregion
+
+
 
         #region 辅助属性
-        
+
         /// <summary>
         /// 锁
         /// </summary>
@@ -97,7 +102,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
         #endregion
 
-        #endregion
 
     }
 }

@@ -1,31 +1,31 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Introduce_To_Algorithm3.Common.Utils;
 using Quartz;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 {
-
     /// <summary>
-    /// 获取CPU状态
-    /// 建议执行周期每3-5分钟
+    /// 监控当前进程占用的内存，如果超过指定内存，则对外提供异常信息
+    /// 可每5分钟左右执行一次
     /// </summary>
-    public class CpuJob:IJob
+    public class MemoryJob:IJob
     {
 
+
+        #region IJob实现
+
         /// <summary>
-        /// cpu性能计数器
+        /// 注：该方法将定期按时执行，
+        /// 意味着如果下一个周期到来，而上一次执行未完成，该方法开启一个新线程执行
+        /// 
+        /// 在方法内部使用try/catch捕获所有异常
         /// </summary>
-        private static volatile PerformanceCounter cpuCounter = null;
-
-
-
+        /// <param name="context"></param>
         public void Execute(IJobExecutionContext context)
         {
             lock (_locker)
@@ -37,51 +37,21 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 _isRunning = true;
             }
 
-            string jobName = "";
+            string jobName = string.Empty;
             try
             {
-                PerformanceCounter curCpuCounter = null;
-                lock (_locker)
-                {
-
-                    if (cpuCounter == null)
-                    {
-                        cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                    }
-                    curCpuCounter = cpuCounter;
-                }
-
-
                 jobName = GetType().Name;
+                
+                //获取当前进程
+                Process currentProcess = Process.GetCurrentProcess();
+                //win98或win me不支持 获取当前进程分配的物理内存
+                long workset64 = currentProcess.WorkingSet64;
+                double worksetInMb = workset64 / 1024.0 / 1024.0;
 
-                if (curCpuCounter == null)
-                {
-                    return;
-                }
-
-                //计算当前cpu使用的百分比 0-100的浮点数
-                const int sampleCount = 5;
-                const int sleepMilliseconds = 137;
-                double cpuUsed = 0;
-                for (int i = 0; i < sampleCount+1; i++)
-                {
-                    if (i == 0)
-                    {
-                        //第一次不统计
-                        curCpuCounter.NextValue();
-                        Thread.Sleep(sleepMilliseconds);
-                        continue;
-                    }
-                    cpuUsed += curCpuCounter.NextValue();
-                    Thread.Sleep(sleepMilliseconds);
-                }
-
-                cpuUsed = cpuUsed / sampleCount;
-
-                if (cpuUsed > MaxPercentCpuCanUse)
+                if (worksetInMb > MaxMemoryCanUseInMb)
                 {
                     ErrorCode = 1;
-                    ErrorReason = $"该机器占用cpu较大,需人工检查";
+                    ErrorReason = $"进程{currentProcess.ProcessName}占用内存较大,建议检查或者重启改程序";
                 }
                 else
                 {
@@ -103,13 +73,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         }
 
 
+
+        #endregion
+
+
+
         #region 辅助属性
-        
 
         /// <summary>
-        /// 当前进程所在机器最大可以使用的cpu比例  (0,100)之间的整数
+        /// 当前进程最大允许使用的内存数量
+        /// 单位MB
         /// </summary>
-        private static readonly int MaxPercentCpuCanUse = ConfigUtils.GetInteger("MaxPercentDiskCanUse", 93);
+        private static readonly int MaxMemoryCanUseInMb = ConfigUtils.GetInteger("MaxMemoryCanUseInMb", 1024);
 
         #region 对外暴露数据
 
@@ -121,7 +96,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 错误码，0表示正常,其它表示错误
         /// </summary>
-        private static int _errorCode = 0;
+        private static int _errorCode=0;
 
         /// <summary>
         /// 错误码，0表示正常,其它表示错误
@@ -183,6 +158,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         private static bool _isRunning = false;
 
         #endregion
+
 
     }
 }

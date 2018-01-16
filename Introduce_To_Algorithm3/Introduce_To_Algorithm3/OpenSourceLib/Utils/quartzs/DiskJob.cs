@@ -1,31 +1,31 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.Common.Utils.strings;
 using Quartz;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 {
-
     /// <summary>
-    /// 获取CPU状态
-    /// 建议执行周期每3-5分钟
+    /// 监控当前程序所在的硬盘，如果硬盘剩余空间小于一定比例报警
+    /// 可每5分钟左右执行一次
     /// </summary>
-    public class CpuJob:IJob
+    public class DiskJob:IJob
     {
 
+        #region IJob实现
+
         /// <summary>
-        /// cpu性能计数器
+        /// 注：该方法将定期按时执行，
+        /// 意味着如果下一个周期到来，而上一次执行未完成，该方法开启一个新线程执行
+        /// 
+        /// 在方法内部使用try/catch捕获所有异常
         /// </summary>
-        private static volatile PerformanceCounter cpuCounter = null;
-
-
-
+        /// <param name="context"></param>
         public void Execute(IJobExecutionContext context)
         {
             lock (_locker)
@@ -37,57 +37,46 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 _isRunning = true;
             }
 
-            string jobName = "";
+            string jobName = string.Empty;
             try
             {
-                PerformanceCounter curCpuCounter = null;
-                lock (_locker)
-                {
-
-                    if (cpuCounter == null)
-                    {
-                        cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                    }
-                    curCpuCounter = cpuCounter;
-                }
-
-
                 jobName = GetType().Name;
 
-                if (curCpuCounter == null)
-                {
-                    return;
-                }
+                DriveInfo driveInfo = null;
+                //获取当前目录
+                DirectoryInfo curDir = new DirectoryInfo(Directory.GetCurrentDirectory());
 
-                //计算当前cpu使用的百分比 0-100的浮点数
-                const int sampleCount = 5;
-                const int sleepMilliseconds = 137;
-                double cpuUsed = 0;
-                for (int i = 0; i < sampleCount+1; i++)
+                foreach (DriveInfo item in DriveInfo.GetDrives())
                 {
-                    if (i == 0)
+                    if (StringUtils.EqualsEx(curDir.Root.Name, item.RootDirectory.Name))
                     {
-                        //第一次不统计
-                        curCpuCounter.NextValue();
-                        Thread.Sleep(sleepMilliseconds);
-                        continue;
+                        //查找所在的磁盘
+                        driveInfo = item;
+                        break;
                     }
-                    cpuUsed += curCpuCounter.NextValue();
-                    Thread.Sleep(sleepMilliseconds);
                 }
 
-                cpuUsed = cpuUsed / sampleCount;
-
-                if (cpuUsed > MaxPercentCpuCanUse)
+                if (driveInfo == null)
                 {
-                    ErrorCode = 1;
-                    ErrorReason = $"该机器占用cpu较大,需人工检查";
+                    ErrorReason = "";
+                    ErrorCode = 0;
                 }
                 else
                 {
-                    ErrorCode = 0;
-                    ErrorReason = string.Empty;
+                    double usedPercent =(driveInfo.TotalSize - driveInfo.AvailableFreeSpace)*1.0 / driveInfo.TotalSize;
+
+                    if (usedPercent > MaxPercentDiskCanUse)
+                    {
+                        ErrorReason = $"{driveInfo.Name}盘剩余空间不足,建议清理";
+                        ErrorCode = 1;
+                    }
+                    else
+                    {
+                        ErrorReason = "";
+                        ErrorCode = 0;
+                    }
                 }
+
             }
             catch (Exception ex)
             {
@@ -103,13 +92,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         }
 
 
+
+        #endregion
+
+
+
         #region 辅助属性
-        
 
         /// <summary>
-        /// 当前进程所在机器最大可以使用的cpu比例  (0,100)之间的整数
+        /// 当前进程所在磁盘最大可以使用的比例  (0,1)之间的数
         /// </summary>
-        private static readonly int MaxPercentCpuCanUse = ConfigUtils.GetInteger("MaxPercentDiskCanUse", 93);
+        private static readonly double MaxPercentDiskCanUse = ConfigUtils.GetDouble("MaxPercentDiskCanUse", 0.85);
 
         #region 对外暴露数据
 
@@ -183,6 +176,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         private static bool _isRunning = false;
 
         #endregion
+
 
     }
 }
