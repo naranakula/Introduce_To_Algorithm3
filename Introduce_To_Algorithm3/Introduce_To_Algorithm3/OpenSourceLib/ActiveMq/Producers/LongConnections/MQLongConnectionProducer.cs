@@ -51,7 +51,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
         /// <summary>
         /// 消息最大容量, 当超过该容量消息将被丢弃
         /// </summary>
-        private const int MaxQueueCapacity = 2048;
+        private const int MaxQueueCapacity = 4096;
 
         /// <summary>
         /// 表示连接

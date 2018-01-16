@@ -82,7 +82,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <summary>
         /// 队列中消息的最大数量，超过该数量，之前的消息将被丢弃
         /// </summary>
-        private readonly int _maxNumDataInQueue = 2048;
+        private readonly int _maxNumDataInQueue;
 
         /// <summary>
         /// 构造函数  构造完即开启处理线程
@@ -90,7 +90,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <param name="dataHandler">数据处理</param>
         /// <param name="exceptionHandler">数据处理异常后的处理</param>
         /// <param name="maxNumberDataInQueue">队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100</param>
-        public BlockingQueueEx(Action<T> dataHandler = null, Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 2048)
+        public BlockingQueueEx(Action<T> dataHandler = null, Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096)
         {
 
             lock (_locker)

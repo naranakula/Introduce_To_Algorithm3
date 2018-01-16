@@ -35,7 +35,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
         /// <summary>
         /// 队列中允许最大的数量的消息
         /// </summary>
-        private const int MaxNumberDataInQueue = 2048;
+        private const int MaxNumberDataInQueue = 4096;
 
         /// <summary>
         /// 添加到消息队列
