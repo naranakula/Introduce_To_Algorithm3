@@ -202,7 +202,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     //已经人为停止，不需要重建
                     if (_isStop)
                     {
-                        throw new CommonException(exceptionCode:1,exceptionDesc:"channel已经被停止");
+                        throw new CommonException(errorCode:1,errorReason:"channel已经被停止");
                     }
                     
                     //是否需要重建
@@ -230,12 +230,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
                         if (state == ChannelState.Shutdown)
                         {
-                            throw new CommonException(exceptionCode: 2, exceptionDesc: "Channel状态为ShutDown");
+                            throw new CommonException(errorCode: 2, errorReason: "Channel状态为ShutDown");
                         }
                     }
                     else
                     {
-                        throw new CommonException(exceptionCode: 2, exceptionDesc: "Channel状态为ShutDown");
+                        throw new CommonException(errorCode: 2, errorReason: "Channel状态为ShutDown");
                     }
                 }
                 #endregion

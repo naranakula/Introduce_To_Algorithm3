@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Introduce_To_Algorithm3.Models
 {
+
+
     /// <summary>
     /// 通用异常
     /// </summary>
@@ -14,17 +16,17 @@ namespace Introduce_To_Algorithm3.Models
         /// <summary>
         /// 异常编码
         /// </summary>
-        public int ExceptionCode { get; private set; }
+        public int ErrorCode { get; private set; }
 
         /// <summary>
         /// 异常描述
         /// </summary>
-        public string ExceptionDesc { get; private set; }
+        public string ErrorReason { get; private set; }
 
         /// <summary>
         /// 内部异常
         /// </summary>
-        public Exception TheInnerException { get; private set; }
+        public Exception TheInnerException { get; set; }
 
         #region 构造函数
 
@@ -33,20 +35,20 @@ namespace Introduce_To_Algorithm3.Models
         /// </summary>
         public CommonException()
         {
-            ExceptionCode = 0;
-            ExceptionDesc = string.Empty;
+            ErrorCode = 0;
+            ErrorReason = string.Empty;
             TheInnerException = null;
         }
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="exceptionCode">异常编码</param>
-        /// <param name="exceptionDesc">异常描述</param>
-        public CommonException(int exceptionCode, string exceptionDesc)
+        /// <param name="errorCode">异常编码</param>
+        /// <param name="errorReason">异常原因</param>
+        public CommonException(int errorCode, string errorReason):base($"errorCode={errorCode},errorReason={errorReason}")//s=null $"s"=空字符串
         {
-            ExceptionCode = exceptionCode;
-            ExceptionDesc = exceptionDesc;
+            ErrorCode = errorCode;
+            ErrorReason = errorReason;
         }
 
         /// <summary>
@@ -57,23 +59,24 @@ namespace Introduce_To_Algorithm3.Models
         /// <param name="innerException">内部异常</param>
         public CommonException(int exceptionCode, string exceptionDesc,Exception innerException)
         {
-            ExceptionCode = exceptionCode;
-            ExceptionDesc = exceptionDesc;
+            ErrorCode = exceptionCode;
+            ErrorReason = exceptionDesc;
             TheInnerException = innerException;
         }
 
 
         #endregion
-
-
+        
         /// <summary>
         /// 覆盖ToString
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            string desc = ExceptionDesc ?? string.Empty;
-            return $"code={ExceptionCode},desc={desc}";
+            string reason = ErrorReason ?? string.Empty;
+            return $"error code={ErrorCode},error reason={reason}";
         }
     }
+
+
 }
