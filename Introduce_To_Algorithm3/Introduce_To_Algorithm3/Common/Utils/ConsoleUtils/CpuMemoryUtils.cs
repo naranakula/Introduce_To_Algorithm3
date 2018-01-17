@@ -16,6 +16,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         #region 内存相关
         /// <summary>
         /// 获取系统内存信息
+        /// 该函数只能获取一个内存条信息
+        /// 建议使用GlobalMemoryStatusEx
         /// </summary>
         /// <param name="meminfo"></param>
         [DllImport("kernel32")]
