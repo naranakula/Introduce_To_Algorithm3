@@ -206,17 +206,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 return true;
             }
 
-            for (int i = 0; i < 2; i++)
+            try
             {
-                try
-                {
-                    _server.ShutdownAsync().Wait(7543);
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    exceptionHandler?.Invoke(ex);
-                }
+                _server.ShutdownAsync().Wait(9543);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                exceptionHandler?.Invoke(ex);
             }
 
             _server = null;

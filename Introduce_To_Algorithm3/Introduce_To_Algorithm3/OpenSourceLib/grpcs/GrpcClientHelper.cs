@@ -421,21 +421,16 @@ Every channel creates it's own TCP connection
             {
                 if (channel != null)
                 {
-                    for (int i = 0; i < 2; i++)
+                    try
                     {
-                        try
-                        {
-                            channel.ShutdownAsync().Wait(9000);
-                            //channel.ShutdownAsync().Wait();
-                            //安全关闭退出
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-                            NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
-                        }
+                        channel.ShutdownAsync().Wait(9000);
+                        //channel.ShutdownAsync().Wait();
+                        //安全关闭退出
                     }
-
+                    catch (Exception ex)
+                    {
+                        NLogHelper.Error($"关闭Channel失败:{ex}");
+                    }
                     //channel = null;
                 }
             }
@@ -532,19 +527,15 @@ Every channel creates it's own TCP connection
             {
                 if (channel != null)
                 {
-                    for (int i = 0; i < 2; i++)
+                    try
                     {
-                        try
-                        {
-                            channel.ShutdownAsync().Wait(9000);
-                            //channel.ShutdownAsync().Wait();
-                            //安全关闭退出
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-                            NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
-                        }
+                        channel.ShutdownAsync().Wait(9000);
+                        //channel.ShutdownAsync().Wait();
+                        //安全关闭退出
+                    }
+                    catch (Exception ex)
+                    {
+                        NLogHelper.Error($"关闭Channel失败:{ex}");
                     }
 
                     //channel = null;
@@ -647,19 +638,31 @@ Every channel creates it's own TCP connection
             {
                 if (channel != null)
                 {
-                    for (int i = 0; i < 2; i++)
+                    //for (int i = 0; i < 2; i++)
+                    //{
+                    //    try
+                    //    {
+                    //        channel.ShutdownAsync().Wait(9000);
+                    //        //channel.ShutdownAsync().Wait();
+                    //        //安全关闭退出
+                    //        break;
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
+                    //    }
+                    //}
+
+                    try
                     {
-                        try
-                        {
-                            channel.ShutdownAsync().Wait(9000);
-                            //channel.ShutdownAsync().Wait();
-                            //安全关闭退出
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-                            NLogHelper.Error($"第{i + 1}次关闭Channel失败:{ex}");
-                        }
+                        //没有必要多次关闭
+                        channel.ShutdownAsync().Wait(9000);
+                        //channel.ShutdownAsync().Wait();
+                        //安全关闭退出
+                    }
+                    catch (Exception ex)
+                    {
+                        NLogHelper.Error($"关闭Channel失败:{ex}");
                     }
 
                     //channel = null;
