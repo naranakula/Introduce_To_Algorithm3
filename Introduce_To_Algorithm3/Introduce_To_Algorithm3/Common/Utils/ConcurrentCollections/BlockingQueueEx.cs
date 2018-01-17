@@ -85,19 +85,26 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private readonly int _maxNumDataInQueue;
 
         /// <summary>
+        /// 是否需要多线程性能优化
+        /// </summary>
+        private readonly bool _isNeedOptimize;
+
+        /// <summary>
         /// 构造函数  构造完即开启处理线程
         /// </summary>
         /// <param name="dataHandler">数据处理</param>
         /// <param name="exceptionHandler">数据处理异常后的处理</param>
         /// <param name="maxNumberDataInQueue">队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100</param>
-        public BlockingQueueEx(Action<T> dataHandler = null, Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096)
+        /// <param name="isNeedOptimize">是否需要多线程优化消息处理,通常不需要,使用优化是非常危险的行为</param>
+        public BlockingQueueEx(Action<T> dataHandler = null, Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096,bool isNeedOptimize = false)
         {
 
             lock (_locker)
             {
-                _isRunning = true;
+                this._isRunning = true;
                 this._dataHandler = dataHandler;
                 this._exceptionHandler = exceptionHandler;
+                this._isNeedOptimize = isNeedOptimize;
 
                 //队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100
                 if (maxNumberDataInQueue < 100)
@@ -130,7 +137,26 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                     {
                         if (_blockingQueue.TryTake(out item, 513))
                         {
-                            dataHandlerInThread?.Invoke(item);
+                            if (_isNeedOptimize)
+                            {
+                                //需要优化性能
+                                T tempItem = item;
+                                Task.Factory.StartNew(() =>
+                                {
+                                    try
+                                    {
+                                        dataHandlerInThread?.Invoke(tempItem);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        exceptionHandlerInThread?.Invoke(ex);
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                dataHandlerInThread?.Invoke(item);
+                            }
                         }
                     }
                     catch (Exception ex)

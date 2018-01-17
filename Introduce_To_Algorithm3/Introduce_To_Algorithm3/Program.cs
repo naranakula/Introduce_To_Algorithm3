@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Caching;
 using System.Threading;
+using System.Threading.Tasks;
 using com.cmlu.services;
 using Introduce_To_Algorithm3.OpenSourceLib.grpcs;
 using Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos;
@@ -38,6 +39,7 @@ namespace Introduce_To_Algorithm3
             NLogHelper.Warn("Warn");
             NLogHelper.Error("Error");
             NLogHelper.Fatal("Fatal");
+            Console.ReadLine();
         }
     }
 }

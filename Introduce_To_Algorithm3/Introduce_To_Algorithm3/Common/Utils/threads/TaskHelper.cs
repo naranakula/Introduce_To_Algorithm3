@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
+    /// <summary>
+    /// Task.wait(9000)
+    /// 如果task在wait时间内9000ms内不能完成,返回false,后面可以继续执行，但task线程本身仍在执行,不会被停止(已测试)
+    /// </summary>
     public static class TaskHelper
     {
         /*
@@ -78,6 +82,21 @@ namespace Introduce_To_Algorithm3.Common.Utils
         public static Task Start(Action<Object> action, object state)
         {
             Task task = Task.Factory.StartNew(action, state);
+            return task;
+        }
+
+        /// <summary>
+        /// 开始一个任务，并传入一个参数
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="state"></param>
+        /// <param name="waitMilliseconds"></param>
+        /// <returns></returns>
+        public static Task StartWithWait(Action<Object> action, object state,int waitMilliseconds = 9000)
+        {
+            Task task = Task.Factory.StartNew(action, state);
+            //如果task在wait时间内9000ms内不能完成,返回false,后面可以继续执行，但task线程本身仍在执行,不会被停止(已测试)
+            bool isComplete = task.Wait(9000);
             return task;
         }
 
