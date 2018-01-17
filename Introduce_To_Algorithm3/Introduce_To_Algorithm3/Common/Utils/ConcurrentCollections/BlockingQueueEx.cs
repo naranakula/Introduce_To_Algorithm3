@@ -135,7 +135,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 {
                     try
                     {
-                        if (_blockingQueue.TryTake(out item, 513))
+                        if (_blockingQueue.TryTake(out item, 419))
                         {
                             if (_isNeedOptimize)
                             {
