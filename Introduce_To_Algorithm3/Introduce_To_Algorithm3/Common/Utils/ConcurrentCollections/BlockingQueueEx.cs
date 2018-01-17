@@ -109,6 +109,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                     this._maxNumDataInQueue = maxNumberDataInQueue;
                 }
             }
+
+
             _thread = new Thread(() =>
             {
                 T item = null;
@@ -143,6 +145,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             //后台线程
             _thread.IsBackground = true;
             _thread.Priority = ThreadPriority.Normal;
+
             _thread.Start();
         }
 
@@ -170,38 +173,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                     T delT = null;
                     //TryTake立刻返回
                     //If the collection is empty, this method immediately returns false.
-                    if (_blockingQueue.TryTake(out delT))
+
+                    for (int i = 0; i < 7; i++)
                     {
-                        abandonAction?.Invoke(delT);
+                        if (_blockingQueue.TryTake(out delT))
+                        {
+                            abandonAction?.Invoke(delT);
+                        }
                     }
-                    if (_blockingQueue.TryTake(out delT))
-                    {
-                        abandonAction?.Invoke(delT);
-                    }
-                    if (_blockingQueue.TryTake(out delT))
-                    {
-                        abandonAction?.Invoke(delT);
-                    }
-                    if (_blockingQueue.TryTake(out delT))
-                    {
-                        abandonAction?.Invoke(delT);
-                    }
-                    if (_blockingQueue.TryTake(out delT))
-                    {
-                        abandonAction?.Invoke(delT);
-                    }
-                    if (_blockingQueue.TryTake(out delT))
-                    {
-                        abandonAction?.Invoke(delT);
-                    }
-                    if (_blockingQueue.TryTake(out delT))
-                    {
-                        abandonAction?.Invoke(delT);
-                    }
-                    if (_blockingQueue.TryTake(out delT))
-                    {
-                        abandonAction?.Invoke(delT);
-                    }
+                    
                 }
                 #endregion
 
