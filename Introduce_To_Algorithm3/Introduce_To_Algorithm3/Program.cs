@@ -39,7 +39,6 @@ namespace Introduce_To_Algorithm3
             NLogHelper.Warn("Warn");
             NLogHelper.Error("Error");
             NLogHelper.Fatal("Fatal");
-            Console.ReadLine();
         }
     }
 }
