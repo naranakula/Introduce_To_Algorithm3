@@ -70,6 +70,21 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private readonly Action<T> _dataHandler = null;
 
         /// <summary>
+        /// 数据列表处理
+        /// </summary>
+        private readonly Action<List<T>> _dataListHandler = null;
+
+        /// <summary>
+        /// 列表处理的阀值
+        /// </summary>
+        private const int ThresholdCanBeListHandled = 16;
+
+        /// <summary>
+        /// 是否启用列表处理
+        /// </summary>
+        private readonly bool _enableListHandler;
+
+        /// <summary>
         /// 异常处理
         /// </summary>
         private readonly Action<Exception> _exceptionHandler = null;
@@ -92,11 +107,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <summary>
         /// 构造函数  构造完即开启处理线程
         /// </summary>
-        /// <param name="dataHandler">数据处理</param>
+        /// <param name="dataHandler">单个数据处理</param>
+        /// <param name="dataListHandler">如果数据较多，列表处理</param>
+        /// <param name="enableListHandler">是否启用列表处理</param>
         /// <param name="exceptionHandler">数据处理异常后的处理</param>
         /// <param name="maxNumberDataInQueue">队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100</param>
         /// <param name="isNeedOptimize">是否需要多线程优化消息处理,通常不需要,使用优化是非常危险的行为</param>
-        public BlockingQueueEx(Action<T> dataHandler = null, Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096,bool isNeedOptimize = false)
+        public BlockingQueueEx(Action<T> dataHandler = null,Action<List<T>> dataListHandler = null,bool enableListHandler=true,Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096,bool isNeedOptimize = false)
         {
 
             lock (_locker)
@@ -105,6 +122,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 this._dataHandler = dataHandler;
                 this._exceptionHandler = exceptionHandler;
                 this._isNeedOptimize = isNeedOptimize;
+                this._dataListHandler = dataListHandler;
+                this._enableListHandler = enableListHandler;
 
                 //队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100
                 if (maxNumberDataInQueue < 100)
@@ -123,11 +142,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 T item = null;
                 Action<T> dataHandlerInThread = null;
                 Action<Exception> exceptionHandlerInThread = null;
+                Action<List<T>> dataListHandlerInThread = null;
+                bool enableListHandlerInThread = false;
 
                 lock (_locker)
                 {
                     dataHandlerInThread = this._dataHandler;
                     exceptionHandlerInThread = this._exceptionHandler;
+                    dataListHandlerInThread = this._dataListHandler;
+                    enableListHandlerInThread = this._enableListHandler;
                 }
 
 
@@ -135,28 +158,120 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 {
                     try
                     {
-                        if (_blockingQueue.TryTake(out item, 419))
+                        if (enableListHandlerInThread)
                         {
-                            if (_isNeedOptimize)
+
+                            //当前队列数据量
+                            int currentCount = _blockingQueue.Count;
+
+                            if (currentCount < ThresholdCanBeListHandled)
                             {
-                                //需要优化性能
-                                T tempItem = item;
-                                Task.Factory.StartNew(() =>
+                                #region 单个处理  不需要list处理
+
+                                if (_blockingQueue.TryTake(out item, 419))
                                 {
-                                    try
+                                    if (_isNeedOptimize)
                                     {
-                                        dataHandlerInThread?.Invoke(tempItem);
+                                        //需要优化性能
+                                        T tempItem = item;
+                                        Task.Factory.StartNew(() =>
+                                        {
+                                            try
+                                            {
+                                                dataHandlerInThread?.Invoke(tempItem);
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                exceptionHandlerInThread?.Invoke(ex);
+                                            }
+                                        });
                                     }
-                                    catch (Exception ex)
+                                    else
                                     {
-                                        exceptionHandlerInThread?.Invoke(ex);
+                                        dataHandlerInThread?.Invoke(item);
                                     }
-                                });
+                                }
+
+                                #endregion
                             }
                             else
                             {
-                                dataHandlerInThread?.Invoke(item);
+                                #region 数据较多,列表处理
+
+                                //单次处理的数据量
+                                int dataListSize = ThresholdCanBeListHandled;
+                                if (currentCount > ThresholdCanBeListHandled * 2)
+                                {
+                                    dataListSize = ThresholdCanBeListHandled * 2;
+                                }
+
+                                List<T> dataList = new List<T>(dataListSize);
+                                for (int i = 0; i < dataListSize; i++)
+                                {
+                                    if (_blockingQueue.TryTake(out item))
+                                    {
+                                        //有数据立刻返回
+                                        dataList.Add(item);
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                if (isNeedOptimize)
+                                {
+                                    //需要优化性能
+                                    Task.Factory.StartNew(() =>
+                                    {
+                                        try
+                                        {
+                                            dataListHandlerInThread?.Invoke(dataList);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            exceptionHandlerInThread?.Invoke(ex);
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    dataListHandlerInThread?.Invoke(dataList);
+                                }
+
+                                #endregion
                             }
+                        }
+                        else
+                        {
+
+                            #region 单个处理  不需要list处理
+
+                            if (_blockingQueue.TryTake(out item, 419))
+                            {
+                                if (_isNeedOptimize)
+                                {
+                                    //需要优化性能
+                                    T tempItem = item;
+                                    Task.Factory.StartNew(() =>
+                                    {
+                                        try
+                                        {
+                                            dataHandlerInThread?.Invoke(tempItem);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            exceptionHandlerInThread?.Invoke(ex);
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    dataHandlerInThread?.Invoke(item);
+                                }
+                            }
+
+                            #endregion
                         }
                     }
                     catch (Exception ex)
