@@ -54,13 +54,13 @@ namespace Introduce_To_Algorithm3.Models
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="exceptionCode">异常编码</param>
-        /// <param name="exceptionDesc">异常描述</param>
+        /// <param name="errorCode">异常编码</param>
+        /// <param name="errorReason">异常描述</param>
         /// <param name="innerException">内部异常</param>
-        public CommonException(int exceptionCode, string exceptionDesc,Exception innerException)
+        public CommonException(int errorCode, string errorReason,Exception innerException) : base($"errorCode={errorCode},errorReason={errorReason}")//s=null $"s"=空字符串
         {
-            ErrorCode = exceptionCode;
-            ErrorReason = exceptionDesc;
+            ErrorCode = errorCode;
+            ErrorReason = errorReason;
             TheInnerException = innerException;
         }
 
