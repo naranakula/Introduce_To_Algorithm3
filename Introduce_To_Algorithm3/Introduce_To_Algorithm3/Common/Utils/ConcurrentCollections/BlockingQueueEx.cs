@@ -14,7 +14,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
     /// BlockingQueueEx ex = new BlockingQueueEx(..)//创建完已经启动
     /// ex.Stop()//停止
     /// </summary>
-    public class BlockingQueueEx<T> where T : class
+    public class BlockingQueueEx<T>:IDisposable where T : class
     {
         /// <summary>
         /// 底层是ConcurrentQueue
@@ -386,9 +386,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             //}
         }
 
-
-
-
+        /// <summary>
+        /// Dispose接口
+        /// </summary>
+        public void Dispose()
+        {
+            Stop();
+        }
     }
 
 }
