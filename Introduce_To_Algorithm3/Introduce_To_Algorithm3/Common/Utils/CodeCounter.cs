@@ -27,7 +27,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             int count = 0;
             foreach (FileInfo fi in fis)
             {
-                using (StreamReader sr = fi.OpenText())
+                using (StreamReader sr = new StreamReader(fi.FullName,Encoding.UTF8))
                 {
                     while (sr.ReadLine() != null)
                     {
@@ -37,6 +37,53 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
 
             return count;
+        }
+
+        /// <summary>
+        /// 将代码中的注释去掉
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="pattern"></param>
+        /// <param name="encodingStr"></param>
+        public static void RemoveComments(string dir,String pattern="*.cs",string encodingStr = "utf-8")
+        {
+            Encoding encoding = Encoding.GetEncoding(encodingStr);
+            DirectoryInfo dirInfo = new DirectoryInfo(dir);
+            if (!dirInfo.Exists)
+            {
+                return;
+            }
+
+            //获取所有文件
+            FileInfo[] fileInfos = dirInfo.GetFiles(pattern, SearchOption.AllDirectories);
+
+            foreach(FileInfo fileItem in fileInfos)
+            {
+                StringBuilder sb = new StringBuilder();
+                using(StreamReader reader = new StreamReader(fileItem.FullName, encoding))
+                {
+                    string str = null;
+                    while((str = reader.ReadLine()) != null)
+                    {
+                        string strTrim = str.Trim();
+                        if (strTrim.StartsWith(@"//") && !strTrim.Contains(@"/*") && !strTrim.Contains("*/"))
+                        {
+                            //注释行
+                            continue;
+                        }
+                        else
+                        {
+                            sb.AppendLine(str);
+                        }
+                    }
+                }
+
+                using(StreamWriter writer = new StreamWriter(fileItem.FullName, append: false, encoding: encoding))
+                {
+                    writer.WriteLine(sb.ToString());
+                }
+            }
+
         }
     }
 }

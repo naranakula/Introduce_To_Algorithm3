@@ -96,13 +96,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 限流运行action方法，返回是否运行action
         /// </summary>
-        /// <param name="action"></param>
+        /// <param name="action">action为null，什么也不做,只返回是否需要运行action</param>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
         public bool Run(Action action,Action<Exception> exceptionHandler = null)
         {
 
             bool canRunAction = false;//是否可以调用Action
+
             #region token bucket算法
             lock (_locker)
             {

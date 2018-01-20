@@ -75,9 +75,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private readonly Action<List<T>> _dataListHandler = null;
 
         /// <summary>
-        /// 列表处理的阀值
+        /// 列表处理的阀值,当队列长度>=该值时,允许启用列表处理
         /// </summary>
-        private const int ThresholdCanBeListHandled = 16;
+        private const int ThresholdCanBeListHandled = 8;
 
         /// <summary>
         /// 是否启用列表处理
@@ -122,6 +122,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 this._exceptionHandler = exceptionHandler;
                 this._isNeedOptimize = isNeedOptimize;
                 this._dataListHandler = dataListHandler;
+                //列表处理函数不为null,启用列表处理
                 this._enableListHandler = dataListHandler != null;
 
                 //队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100
@@ -153,10 +154,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 }
 
 
-                while (IsRunning)
+                while (_isRunning)
                 {
                     try
                     {
+                        #region 数据处理
+
                         if (enableListHandlerInThread)
                         {
 
@@ -199,10 +202,19 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
                                 //单次处理的数据量
                                 int dataListSize = ThresholdCanBeListHandled;
+
                                 if (currentCount > ThresholdCanBeListHandled * 2)
                                 {
                                     dataListSize = ThresholdCanBeListHandled * 2;
                                 }
+
+                                //最大单次处理的批次
+                                const int maxBatchSize = 31;
+                                if (currentCount > maxBatchSize)
+                                {
+                                    dataListSize = maxBatchSize;
+                                }
+
 
                                 List<T> dataList = new List<T>(dataListSize);
                                 for (int i = 0; i < dataListSize; i++)
@@ -272,6 +284,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
                             #endregion
                         }
+
+                        #endregion
                     }
                     catch (Exception ex)
                     {
@@ -314,11 +328,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                     //TryTake立刻返回
                     //If the collection is empty, this method immediately returns false.
 
-                    for (int i = 0; i < 7; i++)
+                    for (int i = 0; i < 5; i++)
                     {
                         if (_blockingQueue.TryTake(out delT))
                         {
                             abandonAction?.Invoke(delT);
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                     
