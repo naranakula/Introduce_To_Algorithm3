@@ -66,9 +66,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     while((str = reader.ReadLine()) != null)
                     {
                         string strTrim = str.Trim();
-                        if (strTrim.StartsWith(@"//") && !strTrim.Contains(@"/*") && !strTrim.Contains("*/"))
+                        if (strTrim.StartsWith(@"//") && !strTrim.Contains(@"/*") && !strTrim.Contains(@"*/"))
                         {
                             //注释行
+                            //目标是使别人难以读懂,并没有移除全部所有的注释
                             continue;
                         }
                         else
@@ -80,7 +81,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
                 using(StreamWriter writer = new StreamWriter(fileItem.FullName, append: false, encoding: encoding))
                 {
-                    writer.WriteLine(sb.ToString());
+                    writer.Write(sb.ToString());
                 }
             }
 
