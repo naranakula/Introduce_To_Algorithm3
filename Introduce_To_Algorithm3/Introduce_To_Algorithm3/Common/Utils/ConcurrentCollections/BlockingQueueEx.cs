@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Introduce_To_Algorithm3.OpenSourceLib.Utils;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 {
@@ -80,6 +80,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private const int ThresholdCanBeListHandled = 8;
 
         /// <summary>
+        /// 最大允许的单次处理批次数量
+        /// </summary>
+        private readonly int _maxBatchSize;
+
+        /// <summary>
         /// 是否启用列表处理
         /// </summary>
         private readonly bool _enableListHandler;
@@ -112,7 +117,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <param name="exceptionHandler">数据处理异常后的处理</param>
         /// <param name="maxNumberDataInQueue">队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100</param>
         /// <param name="isNeedOptimize">是否需要多线程优化消息处理,通常不需要,使用优化是非常危险的行为</param>
-        public BlockingQueueEx(Action<T> dataHandler = null,Action<List<T>> dataListHandler = null,Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096,bool isNeedOptimize = false)
+        /// <param name="maxBatchSize">最大允许的单次处理批次数量</param>
+        public BlockingQueueEx(Action<T> dataHandler = null,Action<List<T>> dataListHandler = null,Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096,bool isNeedOptimize = false,int maxBatchSize = 47)
         {
 
             lock (_locker)
@@ -124,6 +130,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 this._dataListHandler = dataListHandler;
                 //列表处理函数不为null,启用列表处理
                 this._enableListHandler = dataListHandler != null;
+                this._maxBatchSize = maxBatchSize>ThresholdCanBeListHandled?maxBatchSize:ThresholdCanBeListHandled;
 
                 //队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100
                 if (maxNumberDataInQueue < 100)
@@ -144,6 +151,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 Action<Exception> exceptionHandlerInThread = null;
                 Action<List<T>> dataListHandlerInThread = null;
                 bool enableListHandlerInThread = false;
+                int maxBatchSizeInThread = ThresholdCanBeListHandled;
 
                 lock (_locker)
                 {
@@ -151,6 +159,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                     exceptionHandlerInThread = this._exceptionHandler;
                     dataListHandlerInThread = this._dataListHandler;
                     enableListHandlerInThread = this._enableListHandler;
+                    maxBatchSizeInThread = this._maxBatchSize;
                 }
 
 
@@ -209,10 +218,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                                 }
 
                                 //最大单次处理的批次
-                                const int maxBatchSize = 31;
-                                if (currentCount > maxBatchSize)
+                                if (currentCount > maxBatchSizeInThread)
                                 {
-                                    dataListSize = maxBatchSize;
+                                    dataListSize = maxBatchSizeInThread;
                                 }
 
 
