@@ -112,7 +112,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 当前进程所在机器最大可以使用的cpu比例  (0,100)之间的整数
         /// </summary>
-        private static readonly int MaxPercentCpuCanUse = ConfigUtils.GetInteger("MaxPercentDiskCanUse", 93);
+        private static readonly int MaxPercentCpuCanUse = ConfigUtils.GetInteger("MaxPercentCpuCanUse", 93);
 
         #region 对外暴露数据
 
