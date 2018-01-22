@@ -69,7 +69,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     if (usedPercent > MaxPercentDiskCanUse)
                     {
                         NLogHelper.Warn($"{driveInfo.Name}盘使用超过{(usedPercent*100).ToString("F1",CultureInfo.CurrentCulture)}%");
-                        ErrorReason = $"{driveInfo.Name}盘剩余空间较紧张,建议及时清理";
+                        ErrorReason = $"{driveInfo.Name}盘剩余空间较紧张,建议及时处理";
                         ErrorCode = 1;
                     }
                     else
