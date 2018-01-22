@@ -82,7 +82,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 if (cpuUsed > MaxPercentCpuCanUse)
                 {
-                    NLogHelper.Warn($"cpu使用超过{cpuUsed.ToString("F1", CultureInfo.CurrentCulture)}%");
+                    NLogHelper.Warn($"cpu使用较大,约{cpuUsed.ToString("F1", CultureInfo.CurrentCulture)}%");
                     ErrorCode = 1;
                     ErrorReason = $"该机器占用cpu较大,需人工检查";
                 }
