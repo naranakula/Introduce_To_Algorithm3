@@ -16,6 +16,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
     /// <summary>
     /// 获取CPU状态
     /// 建议执行周期每3-5分钟
+    /// 不要使用，在探索更好的方式
     /// </summary>
     public class CpuJob:IJob
     {
@@ -62,19 +63,21 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 
                 const int sampleCount = 5;
-                const int sleepMilliseconds = 1037;//至少应该为1s，否则将会读到相同的数据
+                const int sleepMilliseconds = 1057;//至少应该为1s，否则将会读到相同的数据
                 double cpuUsed = 0;
+                double itemValue = 0;
                 for (int i = 0; i < sampleCount+1; i++)
                 {
                     if (i == 0)
                     {
                         //第一次不统计
-                        curCpuCounter.NextValue();
+                        itemValue = curCpuCounter.NextValue();
                         Thread.Sleep(sleepMilliseconds);
                         continue;
                     }
                     //计算当前cpu使用的百分比 0-100的浮点数
-                    cpuUsed += curCpuCounter.NextValue();
+                    itemValue = curCpuCounter.NextValue();
+                    cpuUsed += itemValue;
                     Thread.Sleep(sleepMilliseconds);
                 }
 
