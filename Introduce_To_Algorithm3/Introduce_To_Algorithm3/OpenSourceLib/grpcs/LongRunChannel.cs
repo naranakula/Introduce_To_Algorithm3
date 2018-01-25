@@ -151,9 +151,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             try
             {
                 //内部停止
-                InnerStop();
-
                 //如果已经启动则停止
+                InnerStop();
+                
+                //经测试如果服务器不存在也能启动成功，此时channel state是Idle
                 _channel = new Channel(_serverIp,_serverPort,ChannelCredentials.Insecure,GrpcOptions);
                 return true;
             }
