@@ -701,6 +701,7 @@
     <Compile Include="MachineLearning\ReadMe.cs" />
     <Compile Include="Models\CommonException.cs" />
     <Compile Include="Models\OperationResult.cs" />
+    <Compile Include="OpenSourceLib\ActiveMq\Consumers\CommonMessage.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQConsumer.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQMessageHandler.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQMonitorTimer.cs" />

@@ -198,48 +198,96 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
 
 
 
-                //MAP消息
-                //IMapMessage mapMessage = session.CreateMapMessage();//MAP消息
-                //字节消息
-                //IBytesMessage byteMsg = session.CreateBytesMessage(new byte[] { });//字节消息
-                ITextMessage txtMsg = message as ITextMessage;
-                //避免多次调用txtMsg.Text，虽然没什么错
-                if (txtMsg == null /*|| string.IsNullOrWhiteSpace(txtMsg.Text)*/)
+                ////MAP消息
+                ////IMapMessage mapMessage = session.CreateMapMessage();//MAP消息
+                ////字节消息
+                ////IBytesMessage byteMsg = session.CreateBytesMessage(new byte[] { });//字节消息
+                //ITextMessage txtMsg = message as ITextMessage;
+                ////避免多次调用txtMsg.Text，虽然没什么错
+                //if (txtMsg == null /*|| string.IsNullOrWhiteSpace(txtMsg.Text)*/)
+                //{
+                //    NLogHelper.Warn("不是ITextMessage,消息类型=" + message.GetType());
+                //    return;
+                //}
+
+                ////建议原样保存消息
+                //string msg = StringUtils.TrimEx(txtMsg.Text);//txtMsg.Text.Trim();
+
+                //if (string.IsNullOrEmpty(msg))
+                //{
+                //    NLogHelper.Warn("接收到Empty String");
+                //    return;
+                //}
+
+                //NLogHelper.Info("接收到消息：" + msg);
+
+
+                ////建议使用ByteMessage,结合ProtoBuffer使用
+                //IBytesMessage byteMsg = message as IBytesMessage;
+                //if (byteMsg == null)
+                //{
+                //    return;
+                //}
+                ////避免多次调用byteMsg.Content,访问Content导致流读完
+                //byte[] byteArr = byteMsg.Content;//访问Content导致流读完
+                ////此时可以对数据操作
+
+
+                if(message is ITextMessage)
                 {
-                    NLogHelper.Warn("不是ITextMessage,消息类型=" + message.GetType());
-                    return;
+                    ITextMessage txtMessage = message as ITextMessage;
+
+                    string text = txtMessage.Text;
+
+                    if (string.IsNullOrWhiteSpace(text))
+                    {
+                        NLogHelper.Warn("接收到Empty string");
+                        return;
+                    }
+
+                    NLogHelper.Trace($"接收到消息:{text}");
+                    CommonMessage commonMsg = new CommonMessage()
+                    {
+                        CreateTime = DateTime.Now,
+                        MessageType = CommonMessageType.Text,
+                        TextMessage = text
+                    };
+                    MQMessageHandler.AddToQueue(commonMsg);
+                }
+                else if(message is IBytesMessage)
+                {
+                    IBytesMessage bytesMessage = message as IBytesMessage;
+                    //避免多次调用byteMsg.Content,访问Content导致流读完
+                    byte[] bytes = bytesMessage.Content;
+                    if(bytes == null || bytes.Length == 0)
+                    {
+                        NLogHelper.Warn("接收到empty bytes");
+                        return;
+                    }
+
+                    NLogHelper.Trace($"接收到BytesMessage消息");
+                    CommonMessage commonMsg = new CommonMessage()
+                    {
+                        CreateTime = DateTime.Now,
+                        MessageType = CommonMessageType.Bytes,
+                        BytesMessage = bytes
+                    };
+                    MQMessageHandler.AddToQueue(commonMsg);
+                }
+                else
+                {
+                    NLogHelper.Warn($"未处理消息类型{message.GetType()}");
                 }
 
-                //建议原样保存消息
-                string msg = StringUtils.TrimEx(txtMsg.Text);//txtMsg.Text.Trim();
-
-                if (string.IsNullOrEmpty(msg))
-                {
-                    NLogHelper.Warn("接收到Empty String");
-                    return;
-                }
-
-                NLogHelper.Info("接收到消息：" + msg);
-
-
-                //建议使用ByteMessage,结合ProtoBuffer使用
-                IBytesMessage byteMsg = message as IBytesMessage;
-                if (byteMsg == null)
-                {
-                    return;
-                }
-                //避免多次调用byteMsg.Content,访问Content导致流读完
-                byte[] byteArr = byteMsg.Content;//访问Content导致流读完
-                //此时可以对数据操作
               
                 #endregion
 
                
-                #region 开始处理消息
+                //#region 开始处理消息
 
-                //注：经测试该函数是在前一个回调完成之后执行的,即回调是单线程执行的,需要自己实现多线程
-                MQMessageHandler.AddToQueue(msg);
-                #endregion
+                ////注：经测试该函数是在前一个回调完成之后执行的,即回调是单线程执行的,需要自己实现多线程
+                //MQMessageHandler.AddToQueue(msg);
+                //#endregion
 
             }
             catch (Exception ex)
