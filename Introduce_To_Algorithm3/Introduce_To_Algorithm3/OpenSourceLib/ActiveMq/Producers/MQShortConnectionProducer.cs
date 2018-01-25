@@ -39,6 +39,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         /// <param name="msg"></param>
         public static void SendQueueMessage(string msg, Action<Exception> exceptionHandler = null)
         {
+            if (string.IsNullOrEmpty(msg))
+            {
+                return;
+            }
+
             try
             {
                 using (var connection = factory.CreateConnection())
@@ -86,6 +91,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         /// <param name="msg"></param>
         public static void SendTopicMessage(string msg, Action<Exception> exceptionHandler = null)
         {
+            if (string.IsNullOrEmpty(msg))
+            {
+                return;
+            }
+
             try
             {
                 using (var connection = factory.CreateConnection())
@@ -133,6 +143,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         /// <param name="msg"></param>
         public static void SendQueueMessage(byte[] msg, Action<Exception> exceptionHandler = null)
         {
+            if (msg == null || msg.Length == 0)
+            {
+                return;
+            }
+
             try
             {
                 using (var connection = factory.CreateConnection())
@@ -180,6 +195,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
         /// <param name="msg"></param>
         public static void SendTopicMessage(byte[] msg, Action<Exception> exceptionHandler = null)
         {
+            if (msg == null || msg.Length == 0)
+            {
+                return;
+            }
+
             try
             {
                 using (var connection = factory.CreateConnection())
