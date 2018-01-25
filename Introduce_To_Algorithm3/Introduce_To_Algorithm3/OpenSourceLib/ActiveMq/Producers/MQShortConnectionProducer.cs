@@ -125,6 +125,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers
 
         }
 
+
+        #region 批量发送
+
+        #endregion
+
     }
 
 }

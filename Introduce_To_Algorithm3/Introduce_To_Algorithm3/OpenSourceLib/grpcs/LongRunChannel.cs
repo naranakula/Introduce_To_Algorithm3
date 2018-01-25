@@ -32,9 +32,25 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         private readonly string _serverIp;
 
         /// <summary>
+        /// 服务器IP
+        /// </summary>
+        public string ServerIp
+        {
+            get { return _serverIp; }
+        }
+
+        /// <summary>
         /// 服务器端口
         /// </summary>
         private readonly int _serverPort;
+
+        /// <summary>
+        /// 服务器端口
+        /// </summary>
+        public int ServerPort
+        {
+            get { return _serverPort; }
+        }
 
         /// <summary>
         /// 锁
@@ -65,7 +81,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 如果Channel进入ShutDown状态，重建Channel的最小时间间隔 毫秒
         /// </summary>
-        private const int MinReEstablishChannelTimeIntervalInMilliseconds = 5113;
+        private const int MinReEstablishChannelTimeIntervalInMilliseconds = 2117;
 
         /// <summary>
         /// 上一次重建Channel时间
@@ -90,7 +106,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <param name="serverPort"></param>
         public LongRunChannel(string serverIp, int serverPort)
         {
-            this._serverIp = serverIp;
+            if (string.IsNullOrWhiteSpace(serverIp))
+            {
+                throw new ArgumentException("server ip can't be empty");
+            }
+
+            this._serverIp = serverIp.Trim();
             this._serverPort = serverPort;
             this._isStop = false;
         }
