@@ -42,23 +42,26 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             try
             {
                 jobName = GetType().Name;
-                
-                //获取当前进程
-                Process currentProcess = Process.GetCurrentProcess();
-                //win98或win me不支持 获取当前进程分配的物理内存
-                long workset64 = currentProcess.WorkingSet64;
-                double worksetInMb = workset64 / 1024.0 / 1024.0;
 
-                if (worksetInMb > MaxMemoryCanUseInMb)
+                //获取当前进程 dispose不会关闭程序，但是会释放资源
+                using (Process currentProcess = Process.GetCurrentProcess())
                 {
-                    NLogHelper.Warn($"进程{currentProcess.ProcessName}占用内存较大,约{worksetInMb.ToString("F1",CultureInfo.CurrentCulture)}Mb");
-                    ErrorCode = 1;
-                    ErrorReason = $"进程{currentProcess.ProcessName}占用内存较大,建议检查或者重启该程序";
-                }
-                else
-                {
-                    ErrorCode = 0;
-                    ErrorReason = string.Empty;
+                    //win98或win me不支持 获取当前进程分配的物理内存
+                    long workset64 = currentProcess.WorkingSet64;
+                    double worksetInMb = workset64 / 1024.0 / 1024.0;
+
+                    if (worksetInMb > MaxMemoryCanUseInMb)
+                    {
+                        NLogHelper.Warn(
+                            $"进程{currentProcess.ProcessName}占用内存较大,约{worksetInMb.ToString("F1", CultureInfo.CurrentCulture)}Mb");
+                        ErrorCode = 1;
+                        ErrorReason = $"进程{currentProcess.ProcessName}占用内存较大,建议检查或者重启该程序";
+                    }
+                    else
+                    {
+                        ErrorCode = 0;
+                        ErrorReason = string.Empty;
+                    }
                 }
             }
             catch (Exception ex)
