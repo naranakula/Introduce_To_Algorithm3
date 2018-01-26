@@ -205,6 +205,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
         /// <summary>
         /// 基于channel的多线程安全和自动重连
+        /// 调用成功返回true，发生异常返回false
         /// </summary>
         /// <param name="channelAction"></param>
         /// <param name="exceptionHandler"></param>
