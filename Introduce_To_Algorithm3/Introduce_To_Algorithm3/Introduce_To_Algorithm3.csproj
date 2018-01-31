@@ -898,6 +898,7 @@
     <None Include="OpenSourceLib\Consuls\Consul.docx" />
     <None Include="OpenSourceLib\grpcs\examples\exs\compile.bat" />
     <None Include="OpenSourceLib\grpcs\examples\exs\test.proto" />
+    <None Include="OpenSourceLib\grpcs\lb\FaceService.proto" />
     <None Include="OpenSourceLib\grpcs\lb\HealthCheckService.proto" />
     <None Include="OpenSourceLib\grpcs\lb\MonitorService.proto" />
     <None Include="OpenSourceLib\grpcs\lb\RegisterService.proto" />
@@ -932,6 +933,8 @@
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Docs\NetWorkComms.Net文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Packages\NetworkCommsDotNet_v3.0.3_ALv2.zip" />
     <None Include="OpenSourceLib\RabbitMq\Rabbitmq.docx" />
+    <None Include="OpenSourceLib\Redis_\Redis-x64-3.0.504.zip" />
+    <None Include="OpenSourceLib\Redis_\Redis-x64-3.2.100的配置好的单机版redis.windows.conf" />
     <None Include="OpenSourceLib\Redis_\Redis文档.docx" />
     <None Include="OpenSourceLib\Utils\Nlog.docx" />
     <None Include="packages.config">

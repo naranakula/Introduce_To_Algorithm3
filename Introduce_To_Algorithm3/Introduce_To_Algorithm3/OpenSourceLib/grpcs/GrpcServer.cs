@@ -32,6 +32,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         private readonly int _serverPort;
 
         /// <summary>
+        /// 服务器监听端口
+        /// </summary>
+        public int ServerPort
+        {
+            get { return _serverPort; }
+        }
+
+
+        /// <summary>
         /// 底层服务
         /// </summary>
         private volatile Server _server = null;

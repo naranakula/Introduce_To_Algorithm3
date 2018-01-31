@@ -1,0 +1,37 @@
+﻿syntax = "proto3";
+
+//用于定义人脸识别的接口
+package com.common.cmlu.services;
+
+
+//生成C#时的包名  会覆盖默认的包名
+option csharp_namespace = "com.common.cmlu.services";
+
+//定义人脸识别接口
+service FaceService{
+	//人脸比对
+	//具体实现参见:https://github.com/ageitgey/face_recognition/blob/master/examples/face_distance.py
+	rpc CompareFace(CompareFaceRequest) returns(CompareFaceResponse){}
+}
+
+//请求
+message CompareFaceRequest{
+	string command = 1;//请求的命令
+	bytes face_image1 = 2;//图片1
+	bytes face_image2 = 3;//图片2
+}
+
+//响应
+message CompareFaceResponse{
+	int32 result_code = 1;//结果码  尽量使用大于等于0的数，0表示正常，其它表示错误
+	string result_desc = 2;//结果描述
+	double face_distance = 3;//只有在result_code为0时，有意义；表示图片的相似程度，数值越小，表示越相近；  一般认为小于等于0.6是匹配的
+}
+
+
+
+
+
+
+
+

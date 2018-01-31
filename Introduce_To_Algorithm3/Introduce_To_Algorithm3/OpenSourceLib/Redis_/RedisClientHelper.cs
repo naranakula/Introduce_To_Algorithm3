@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using NPOI.HSSF.Record.Aggregates.Chart;
 using StackExchange.Redis;
 
@@ -12,6 +13,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Redis_
     /// Redis是开源内存data structure store，可以作为db\cache\message broker
     /// 在使用Redis之前考虑下CacheHelper，减少系统复杂性
     /// Redis>memcached
+    /// 
+    /// 使用实例
+    /// RedisClientHelper client = new RedisClientHelper();
+    /// client.start()
+    /// 
+    /// 中间调用
+    /// 
+    /// 
+    /// client.stop()
+    /// 
     /// </summary>
     public class RedisClientHelper
     {
@@ -42,7 +53,7 @@ Microsoft open tech group支持win64版本地址:https://github.com/MicrosoftArc
         /// </summary>
         private readonly object locker = new object();
 
-
+        #region 启动关闭
 
         /*
          * Configuration配置使用,分割，配置项也使用,分割，name=value格式,没有=表示server
@@ -83,8 +94,8 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
 
         /// <summary>
         /// 启动连接
-        /// 合适的配置   localhost:6379,connectRetry=3,connectTimeout=5000,keepAlive=60
-        /// 含义：在connect时重试次数,connect超时5s,keepAlive 60s发送消息检查连接
+        /// 合适的配置   localhost:6379,connectRetry=3,connectTimeout=5000,keepAlive=53
+        /// 含义：在connect时重试次数,connect超时5s,keepAlive 53s发送消息检查连接
         /// </summary>
         /// <param name="configuration">配置，逗号分割  server1:6379,server2:6379</param>
         /// <param name="exceptionHandler"></param>
@@ -105,28 +116,123 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
                 //重试时间间隔从4000ms增长到20000ms
                 options.ReconnectRetryPolicy = new ExponentialRetry(4000,16000);
                 redisClient = ConnectionMultiplexer.Connect(options);
-
-                //连接失败
-                //redisClient.ConnectionFailed
-                //连接恢复
-                //redisClient.ConnectionRestored
-
+                
+                //redis配置变化
+                redisClient.ConfigurationChanged += RedisClientOnConfigurationChanged;
+                //redis连接失败
+                redisClient.ConnectionFailed += RedisClientOnConnectionFailed;
+                //redis连接恢复
+                redisClient.ConnectionRestored += RedisClientOnConnectionRestored;
+                //a server replied with error message
+                redisClient.ErrorMessage += RedisClientOnErrorMessage;
+                //内部错误
+                redisClient.InternalError += RedisClientOnInternalError;
+                
 
                 return true;
             }
             catch (Exception e)
             {
+                redisClient = null;
                 exceptionHandler?.Invoke(e);
                 return false;
             }
         }
+        
+        /// <summary>
+        /// 关闭
+        /// </summary>
+        /// <param name="exceptionHandler"></param>
+        public void Stop(Action<Exception> exceptionHandler = null)
+        {
+            if (redisClient != null)
+            {
+                try
+                {
+                    redisClient.Dispose();
+                }
+                catch (Exception e)
+                {
+                    exceptionHandler?.Invoke(e);
+                }
+                lock (locker)
+                {
+                    redisClient = null;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Redis事件通知
+
+        /// <summary>
+        /// 内部错误
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="internalErrorEventArgs"></param>
+        private void RedisClientOnInternalError(object sender, InternalErrorEventArgs internalErrorEventArgs)
+        {
+            NLogHelper.Error($"redis client internal error:{internalErrorEventArgs.Exception}");
+        }
+
+        /// <summary>
+        /// a server replied with error message
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="redisErrorEventArgs"></param>
+        private void RedisClientOnErrorMessage(object sender, RedisErrorEventArgs redisErrorEventArgs)
+        {
+            NLogHelper.Error($"redis server出错:"+redisErrorEventArgs.Message);
+        }
+
+        /// <summary>
+        /// 连接恢复
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="connectionFailedEventArgs"></param>
+        private void RedisClientOnConnectionRestored(object sender, ConnectionFailedEventArgs connectionFailedEventArgs)
+        {
+            NLogHelper.Info($"redis连接恢复");
+        }
+
+        /// <summary>
+        /// 连接失败
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="connectionFailedEventArgs"></param>
+        private void RedisClientOnConnectionFailed(object sender, ConnectionFailedEventArgs connectionFailedEventArgs)
+        {
+            NLogHelper.Error($"redis连接断开:"+connectionFailedEventArgs.Exception);
+        }
+
+        /// <summary>
+        /// redis配置变化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="endPointEventArgs"></param>
+        private void RedisClientOnConfigurationChanged(object sender, EndPointEventArgs endPointEventArgs)
+        {
+            //
+            NLogHelper.Warn($"redis ConfigurationChanged");
+        }
 
 
-        public bool Visit(Action<IDatabase> action, Action<Exception> exceptionHandler = null)
+        #endregion
+
+        #region 通用任务
+
+        /// <summary>
+        /// 通用的redis任务
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public bool SafeAction(Action<IDatabase> action, Action<Exception> exceptionHandler = null)
         {
             try
             {
-                int databaseNumber = 0;
+                const int databaseNumber = 0;
                 //IDatabase是廉价对象，不需要缓存使用
                 IDatabase db = redisClient.GetDatabase(databaseNumber);
 
@@ -141,6 +247,8 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
                 return false;
             }
         }
+
+        #endregion
 
         #region IDatabase操作
 
@@ -162,7 +270,8 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
         }
 
         //Redis中string是binary的。 string和byte[]均可作为key和value  
-        //RedisKey可以隐式的与string和byte[]进行转换 key和value不能为null
+        //RedisKey可以隐式的与string和byte[]进行转换(TO AND FROM) key和value不能为null
+        //RedisValue也可以隐式的与string和byte[]进行转换(TO AND FROM) RedisValue可以是基本类型如整数
 
         #region 设置超时，检测存在，删除
 
@@ -194,7 +303,7 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
         }
 
         /// <summary>
-        /// PERSIST key
+        /// PERSIST key 使key永不过期
         /// Time complexity: O(1)
         /// 1 if the timeout was removed. 0 if key does not exist or does not have an associated timeout.
         /// </summary>
@@ -265,13 +374,14 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
 
         /// <summary>
         /// 测试连接
+        /// 返回(测试是否成功，ping时间）
         /// </summary>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
         public Tuple<bool, TimeSpan?> TestConnect(Action<Exception> exceptionHandler =null)
         {
             Tuple<bool, TimeSpan?> result = null;
-            Visit(db =>
+            SafeAction(db =>
             {
                TimeSpan ts = db.Ping();
                result = new Tuple<bool, TimeSpan?>(true,ts);
@@ -285,14 +395,27 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
 
         #endregion
 
+        #region 事务
 
+        /*
+         * redis事务transaction提供如下保证:
+         * 1、事务中所有的命令顺序执行， It can never happen that a request issued by another client is served in the middle of the execution of a Redis transaction. 
+         * 2、原子性 either all of the commands or none are processed
+         * 
+         */
 
-        #region String
+        #endregion
+
+        #region String 这里指redis string,最大512m,可以是C#的string和byte[]
+
+        //在redis中,string最大可以512M
 
         /// <summary>
         /// SET key value [EX seconds] [PX milliseconds] [NX|XX]
         /// time: O(1)
         /// 设置key为value，如果key已经存在则覆盖，并且超时时间也覆盖
+        /// edis Strings are binary safe, this means that a Redis string can contain any kind of data, for instance a JPEG image or a serialized protobuffer object.
+        ///  A String value can be at max 512 Megabytes in length.
         /// </summary>
         /// <param name="db"></param>
         /// <param name="key"></param>
@@ -348,6 +471,8 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
 
 
         #endregion
+
+        //超时是在整个list\hash\set上的，而不是某一项上
 
         #region List  list是double linked list
 
@@ -677,30 +802,6 @@ writeBuffer={int}	WriteBuffer	4096	Size of the output buffer
         #endregion
 
         #endregion
-
-
-        /// <summary>
-        /// 关闭
-        /// </summary>
-        /// <param name="exceptionHandler"></param>
-        public void Stop(Action<Exception> exceptionHandler = null)
-        {
-            if (redisClient != null)
-            {
-                try
-                {
-                    redisClient.Dispose();
-                }
-                catch (Exception e)
-                {
-                    exceptionHandler?.Invoke(e);
-                }
-                lock (locker)
-                {
-                    redisClient = null;
-                }
-            }
-        }
 
 
     }
