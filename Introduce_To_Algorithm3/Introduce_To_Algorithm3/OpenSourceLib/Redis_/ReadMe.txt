@@ -55,15 +55,14 @@ Redis key是binary safe string的，可以是任意binary序列。
 该string类型最长可以512M.建议只使用string作为key。
 
 
-redis is an open source, high performance, key-value stor. values can be strings, hashes, lists, sets and sorted sets.
+redis is an open soce, high performance, key-value stor. values can be strings, hashes, lists, sets and sorted sets.
 
 
 
 
-
-
-
-
+https://github.com/CodisLabs/codis   Proxy based Redis cluster solution supporting pipeline and scaling dynamically
+https://github.com/twitter/twemproxy A fast, light-weight proxy for memcached and redis
+https://github.com/uglide/RedisDesktopManager Cross-platform GUI management tool for Redis
 
 
 

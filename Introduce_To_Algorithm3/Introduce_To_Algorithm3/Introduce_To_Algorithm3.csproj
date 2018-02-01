@@ -832,6 +832,7 @@
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.pdb" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.xml" />
     <Content Include="OpenSourceLib\Redis_\ReadMe.txt" />
+    <Content Include="OpenSourceLib\Redis_\redis-desktop-manager-0.8.8.384.exe" />
     <Content Include="OpenSourceLib\Utils\ReadMe.txt" />
     <Content Include="OpenSourceLib\ZooKeepers\zookeeper.txt" />
     <Content Include="Readme.txt" />
