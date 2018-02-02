@@ -64,6 +64,27 @@ https://github.com/CodisLabs/codis   Proxy based Redis cluster solution supporti
 https://github.com/twitter/twemproxy A fast, light-weight proxy for memcached and redis
 https://github.com/uglide/RedisDesktopManager Cross-platform GUI management tool for Redis
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+master-slave replication (主从复制)
+
+主从复制运行slave server to be exact copies of master server. 
+The slave will automatically reconnect to the master every time the link breaks, and will attempt to be an exact copy of it regardless of what happens to the master.
+主从模式的工作机制:
+	1、master和slave连接良好, master实时发送命令到slave来保持同步
+	2、当连接断开，slave重连，并且partial resynchronization. it means that it will try to just obtain the part of the stream of commands it missed during the disconnection.
+	3、When a partial resynchronization is not possible, the slave will ask for a full resynchronization.
+
+Redis使用asynchronous replication.
+a master can have multiple slaves.
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 
