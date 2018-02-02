@@ -24,6 +24,7 @@ zip解压后可以安装为服务，也可以独立运行:
 	
 	3、独立运行
 		redis-server.exe redis.windows.conf
+		如果启动出错，可以尝试只绑定规定地址如127.0.0.1
 
 
 redis.windows.conf配置(以Redis-x64-3.2.100为例)
