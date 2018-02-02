@@ -722,6 +722,7 @@
     <Compile Include="OpenSourceLib\grpcs\examples\GreeterServer.cs" />
     <Compile Include="OpenSourceLib\grpcs\GrpcClientHelper.cs" />
     <Compile Include="OpenSourceLib\grpcs\GrpcServer.cs" />
+    <Compile Include="OpenSourceLib\grpcs\lb\generated\CommonMessage.cs" />
     <Compile Include="OpenSourceLib\grpcs\LongRunChannel.cs" />
     <Compile Include="OpenSourceLib\grpcs\protos\PbHelper.cs" />
     <Compile Include="OpenSourceLib\grpcs\protos\removables\Addressbook.cs" />
@@ -899,6 +900,7 @@
     <None Include="OpenSourceLib\Consuls\Consul.docx" />
     <None Include="OpenSourceLib\grpcs\examples\exs\compile.bat" />
     <None Include="OpenSourceLib\grpcs\examples\exs\test.proto" />
+    <None Include="OpenSourceLib\grpcs\lb\CommonMessage.proto" />
     <None Include="OpenSourceLib\grpcs\lb\FaceService.proto" />
     <None Include="OpenSourceLib\grpcs\lb\HealthCheckService.proto" />
     <None Include="OpenSourceLib\grpcs\lb\MonitorService.proto" />
