@@ -104,6 +104,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 
                 //通过工厂构建连接
                 //connection = (Connection)factory.CreateConnection();
+                //如果使用了failover, CreateConnection如果连接不上将会阻塞
                 connection = factory.CreateConnection();
 
                 //默认是不支持事务，自动确认的
