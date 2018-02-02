@@ -33,7 +33,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 锁
         /// </summary>
-        private static readonly object locker = new object();
+        private static readonly object Locker = new object();
 
         /// <summary>
         /// 缓存实例
@@ -42,14 +42,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             get
             {
-                lock (locker)
+                lock (Locker)
                 {
                     return _cache;
                 }
             }
             private set
             {
-                lock (locker)
+                lock (Locker)
                 {
                     _cache = value;
                 }
@@ -64,7 +64,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             try
             {
-                lock (locker)
+                lock (Locker)
                 {
                     if (_cache == null)
                     {
