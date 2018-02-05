@@ -222,6 +222,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 #region ShutDown重新建立连接
                 if (state == ChannelState.Shutdown)
                 {
+                    //理论上start之后不会进入该状态
                     //已经人为停止，不需要重建
                     if (_isStop)
                     {
