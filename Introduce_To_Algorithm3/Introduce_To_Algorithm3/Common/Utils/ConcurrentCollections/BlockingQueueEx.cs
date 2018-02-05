@@ -152,6 +152,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 Action<List<T>> dataListHandlerInThread = null;
                 bool enableListHandlerInThread = false;
                 int maxBatchSizeInThread = ThresholdCanBeListHandled;
+                bool isNeedOptimizeInThread = false;//是否需要多线程优化处理，一般不需要
 
                 lock (_locker)
                 {
@@ -160,6 +161,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                     dataListHandlerInThread = this._dataListHandler;
                     enableListHandlerInThread = this._enableListHandler;
                     maxBatchSizeInThread = this._maxBatchSize;
+                    isNeedOptimizeInThread = this._isNeedOptimize;
                 }
 
 
@@ -181,7 +183,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
                                 if (_blockingQueue.TryTake(out item, 419))
                                 {
-                                    if (_isNeedOptimize)
+                                    if (isNeedOptimizeInThread)
                                     {
                                         //需要优化性能
                                         T tempItem = item;
@@ -238,7 +240,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                                     }
                                 }
 
-                                if (isNeedOptimize)
+                                if (isNeedOptimizeInThread)
                                 {
                                     //需要优化性能
                                     Task.Factory.StartNew(() =>
@@ -268,7 +270,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
                             if (_blockingQueue.TryTake(out item, 419))
                             {
-                                if (_isNeedOptimize)
+                                if (isNeedOptimizeInThread)
                                 {
                                     //需要优化性能
                                     T tempItem = item;
@@ -314,6 +316,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
         /// <summary>
         /// 添加一个数据项
+        /// 本方法是多线程安全的
         /// </summary>
         /// <param name="item">要处理的数据项，如果为null，则什么也不做</param>
         /// <param name="exceptionHandler">异常处理</param>
