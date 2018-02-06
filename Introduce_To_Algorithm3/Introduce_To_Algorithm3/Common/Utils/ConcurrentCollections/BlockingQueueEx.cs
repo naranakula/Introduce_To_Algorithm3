@@ -118,7 +118,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <param name="maxNumberDataInQueue">队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100</param>
         /// <param name="isNeedOptimize">是否需要多线程优化消息处理,通常不需要,使用优化是非常危险的行为</param>
         /// <param name="maxBatchSize">最大允许的单次处理批次数量</param>
-        public BlockingQueueEx(Action<T> dataHandler = null,Action<List<T>> dataListHandler = null,Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096,bool isNeedOptimize = false,int maxBatchSize = 47)
+        public BlockingQueueEx(Action<T> dataHandler = null,Action<List<T>> dataListHandler = null,Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096,bool isNeedOptimize = false,int maxBatchSize = 29)
         {
 
             lock (_locker)

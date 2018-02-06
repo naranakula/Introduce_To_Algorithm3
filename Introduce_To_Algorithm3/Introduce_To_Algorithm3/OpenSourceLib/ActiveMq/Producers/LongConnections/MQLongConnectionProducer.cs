@@ -309,30 +309,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                 #region 丢弃超出容量的消息
                 if (MsgQueue.Count > MaxQueueCapacity)
                 {
-                    if (MsgQueue.TryTake(out msgItem))
+                    for (int i = 0; i < 5; i++)
                     {
-                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                        if (MsgQueue.TryTake(out msgItem))
+                        {
+                            NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
-                    if (MsgQueue.TryTake(out msgItem))
-                    {
-                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    }
-                    if (MsgQueue.TryTake(out msgItem))
-                    {
-                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    }
-                    if (MsgQueue.TryTake(out msgItem))
-                    {
-                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    }
-                    if (MsgQueue.TryTake(out msgItem))
-                    {
-                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    }
-                    if (MsgQueue.TryTake(out msgItem))
-                    {
-                        NLogHelper.Error($"消息{msgItem?.Message}被丢弃");
-                    }
+                    
                 }
                 #endregion
 
@@ -378,12 +366,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq.Producers.LongConnectio
                         if (!_isAlive)
                         {
                             //mq连接不活
-                            Thread.Sleep(10);
+                            Thread.Sleep(19);
                             continue;
                         }
 
                         MessageItem msg = null;
-                        if (MsgQueue.TryTake(out msg, 513))
+                        if (MsgQueue.TryTake(out msg, 373))
                         {
                             if (msg != null && !String.IsNullOrEmpty(msg.Message))
                             {
