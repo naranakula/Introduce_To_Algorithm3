@@ -23,15 +23,15 @@ namespace com.common.cmlu.messages {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChNDb21tb25NZXNzYWdlLnByb3RvEhhjb20uY29tbW9uLmNtbHUubWVzc2Fn",
-            "ZXMijAEKDUNvbW1vbk1lc3NhZ2USCgoCaWQYASABKAkSFAoMbWVzc2FnZV90",
-            "eXBlGAIgASgJEhcKD21lc3NhZ2Vfc3VidHlwZRgDIAEoCRIUCgx0ZXh0X2Nv",
-            "bnRlbnQYBCABKAkSFQoNYnl0ZXNfY29udGVudBgFIAEoDBITCgtjcmVhdGVf",
-            "dGltZRgGIAEoCUIbqgIYY29tLmNvbW1vbi5jbWx1Lm1lc3NhZ2VzYgZwcm90",
-            "bzM="));
+            "ZXMinQEKDUNvbW1vbk1lc3NhZ2USCgoCaWQYASABKAkSFAoMbWVzc2FnZV90",
+            "eXBlGAIgASgJEhcKD21lc3NhZ2Vfc3VidHlwZRgDIAEoCRIPCgdpc190ZXh0",
+            "GAQgASgIEhQKDHRleHRfY29udGVudBgFIAEoCRIVCg1ieXRlc19jb250ZW50",
+            "GAYgASgMEhMKC2NyZWF0ZV90aW1lGAcgASgJQhuqAhhjb20uY29tbW9uLmNt",
+            "bHUubWVzc2FnZXNiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::com.common.cmlu.messages.CommonMessage), global::com.common.cmlu.messages.CommonMessage.Parser, new[]{ "Id", "MessageType", "MessageSubtype", "TextContent", "BytesContent", "CreateTime" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::com.common.cmlu.messages.CommonMessage), global::com.common.cmlu.messages.CommonMessage.Parser, new[]{ "Id", "MessageType", "MessageSubtype", "IsText", "TextContent", "BytesContent", "CreateTime" }, null, null, null)
           }));
     }
     #endregion
@@ -68,6 +68,7 @@ namespace com.common.cmlu.messages {
       id_ = other.id_;
       messageType_ = other.messageType_;
       messageSubtype_ = other.messageSubtype_;
+      isText_ = other.isText_;
       textContent_ = other.textContent_;
       bytesContent_ = other.bytesContent_;
       createTime_ = other.createTime_;
@@ -120,8 +121,22 @@ namespace com.common.cmlu.messages {
       }
     }
 
+    /// <summary>Field number for the "is_text" field.</summary>
+    public const int IsTextFieldNumber = 4;
+    private bool isText_;
+    /// <summary>
+    ///真表示消息内容为文本格式 假表示消息内容为bytes格式
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsText {
+      get { return isText_; }
+      set {
+        isText_ = value;
+      }
+    }
+
     /// <summary>Field number for the "text_content" field.</summary>
-    public const int TextContentFieldNumber = 4;
+    public const int TextContentFieldNumber = 5;
     private string textContent_ = "";
     /// <summary>
     ///文本格式 的 消息内容
@@ -135,7 +150,7 @@ namespace com.common.cmlu.messages {
     }
 
     /// <summary>Field number for the "bytes_content" field.</summary>
-    public const int BytesContentFieldNumber = 5;
+    public const int BytesContentFieldNumber = 6;
     private pb::ByteString bytesContent_ = pb::ByteString.Empty;
     /// <summary>
     ///bytes数组格式的消息内容
@@ -149,7 +164,7 @@ namespace com.common.cmlu.messages {
     }
 
     /// <summary>Field number for the "create_time" field.</summary>
-    public const int CreateTimeFieldNumber = 6;
+    public const int CreateTimeFieldNumber = 7;
     private string createTime_ = "";
     /// <summary>
     ///消息创建时间 格式yyyyMMddHHmmss
@@ -178,6 +193,7 @@ namespace com.common.cmlu.messages {
       if (Id != other.Id) return false;
       if (MessageType != other.MessageType) return false;
       if (MessageSubtype != other.MessageSubtype) return false;
+      if (IsText != other.IsText) return false;
       if (TextContent != other.TextContent) return false;
       if (BytesContent != other.BytesContent) return false;
       if (CreateTime != other.CreateTime) return false;
@@ -190,6 +206,7 @@ namespace com.common.cmlu.messages {
       if (Id.Length != 0) hash ^= Id.GetHashCode();
       if (MessageType.Length != 0) hash ^= MessageType.GetHashCode();
       if (MessageSubtype.Length != 0) hash ^= MessageSubtype.GetHashCode();
+      if (IsText != false) hash ^= IsText.GetHashCode();
       if (TextContent.Length != 0) hash ^= TextContent.GetHashCode();
       if (BytesContent.Length != 0) hash ^= BytesContent.GetHashCode();
       if (CreateTime.Length != 0) hash ^= CreateTime.GetHashCode();
@@ -215,16 +232,20 @@ namespace com.common.cmlu.messages {
         output.WriteRawTag(26);
         output.WriteString(MessageSubtype);
       }
+      if (IsText != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(IsText);
+      }
       if (TextContent.Length != 0) {
-        output.WriteRawTag(34);
+        output.WriteRawTag(42);
         output.WriteString(TextContent);
       }
       if (BytesContent.Length != 0) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(50);
         output.WriteBytes(BytesContent);
       }
       if (CreateTime.Length != 0) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(58);
         output.WriteString(CreateTime);
       }
     }
@@ -240,6 +261,9 @@ namespace com.common.cmlu.messages {
       }
       if (MessageSubtype.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(MessageSubtype);
+      }
+      if (IsText != false) {
+        size += 1 + 1;
       }
       if (TextContent.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(TextContent);
@@ -266,6 +290,9 @@ namespace com.common.cmlu.messages {
       }
       if (other.MessageSubtype.Length != 0) {
         MessageSubtype = other.MessageSubtype;
+      }
+      if (other.IsText != false) {
+        IsText = other.IsText;
       }
       if (other.TextContent.Length != 0) {
         TextContent = other.TextContent;
@@ -298,15 +325,19 @@ namespace com.common.cmlu.messages {
             MessageSubtype = input.ReadString();
             break;
           }
-          case 34: {
-            TextContent = input.ReadString();
+          case 32: {
+            IsText = input.ReadBool();
             break;
           }
           case 42: {
-            BytesContent = input.ReadBytes();
+            TextContent = input.ReadString();
             break;
           }
           case 50: {
+            BytesContent = input.ReadBytes();
+            break;
+          }
+          case 58: {
             CreateTime = input.ReadString();
             break;
           }

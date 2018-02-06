@@ -14,9 +14,10 @@ message CommonMessage{
 	string id=1;//消息Id
 	string message_type=2;//消息类型
 	string message_subtype=3;//消息子类型  消息类型和消息子类型唯一确定消息是文本消息还是字节消息，以及消息的具体格式
-	string text_content=4;//文本格式 的 消息内容
-	bytes bytes_content=5;//bytes数组格式的消息内容
-	string create_time=6;//消息创建时间 格式yyyyMMddHHmmss
+	bool is_text = 4;//真表示消息内容为文本格式 假表示消息内容为bytes格式
+	string text_content=5;//文本格式 的 消息内容
+	bytes bytes_content=6;//bytes数组格式的消息内容
+	string create_time=7;//消息创建时间 格式yyyyMMddHHmmss
 }
 
 
