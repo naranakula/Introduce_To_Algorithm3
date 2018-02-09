@@ -209,6 +209,33 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             }
         }
 
+        /// <summary>
+        /// 安全的使用EfDbContext执行通用任务,并返回一个值
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="exceptionHanlder">异常处理</param>
+        public static T FuncSafe<T>(Func<SqliteCodeFirstContext, T> func, Func<Exception,T> exceptionHanlder = null)
+        {
+            try
+            {
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    return func(context);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHanlder != null)
+                {
+                    return exceptionHanlder(ex);
+                }
+                else
+                {
+                    return default(T);
+                }
+            }
+        }
+
         #endregion
 
         #region 键值对相关 经过测试

@@ -426,6 +426,33 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         }
 
         /// <summary>
+        /// 安全的使用EfDbContext执行通用任务,并返回一个值
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="exceptionHanlder">异常处理</param>
+        public static T FuncSafe<T>(Func<EfDbContext, T> func, Func<Exception,T> exceptionHanlder = null)
+        {
+            try
+            {
+                using (EfDbContext context = new EfDbContext())
+                {
+                    return func(context);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHanlder != null)
+                {
+                    return exceptionHanlder(ex);
+                }
+                else
+                {
+                    return default(T);
+                }
+            }
+        }
+
+        /// <summary>
         /// 使用EfDbContext执行通用任务
         /// 带有事务
         /// 尽量使用隐式事务

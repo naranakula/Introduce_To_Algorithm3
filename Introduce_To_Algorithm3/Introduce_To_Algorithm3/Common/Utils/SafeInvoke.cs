@@ -109,6 +109,35 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 安全调用 调用失败，返回default(TR)
         /// </summary>
         /// <param name="func"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <param name="finallyHandler"></param>
+        public static TR Safe<TR>(this Func<TR> func, Func<Exception,TR> exceptionHandler = null, Action finallyHandler = null)
+        {
+            try
+            {
+                return func();
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    return exceptionHandler(ex);
+                }
+                else
+                {
+                    return default(TR);
+                }
+            }
+            finally
+            {
+                finallyHandler?.Invoke();
+            }
+        }
+
+        /// <summary>
+        /// 安全调用 调用失败，返回default(TR)
+        /// </summary>
+        /// <param name="func"></param>
         /// <param name="obj"></param>
         /// <param name="exceptionHandler"></param>
         public static TR Safe<TR,TP>(this Func<TP,TR> func,TP obj, Action<Exception> exceptionHandler = null)
@@ -124,6 +153,31 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     exceptionHandler(ex);
                 }
                 return default(TR);
+            }
+        }
+
+        /// <summary>
+        /// 安全调用 调用失败，返回default(TR)
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="obj"></param>
+        /// <param name="exceptionHandler"></param>
+        public static TR Safe<TR, TP>(this Func<TP, TR> func, TP obj, Func<Exception,TR> exceptionHandler = null)
+        {
+            try
+            {
+                return func(obj);
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    return exceptionHandler(ex);
+                }
+                else
+                {
+                    return default(TR);
+                }
             }
         }
 
