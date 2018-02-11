@@ -16,6 +16,90 @@ namespace Com.Utility.Commons
     /// </summary>
     public class SerializeHelper
     {
+
+        /// <summary>
+        /// 将对象T序列化到文件destFile
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="destFile"></param>
+        public static void SerializeToFile<T>(T obj, string destFile) where T : class
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Encoding = Encoding.UTF8;
+            settings.Indent = true;
+            using (StreamWriter streamWriter = new StreamWriter(destFile, false, Encoding.UTF8))
+            {
+                using (XmlWriter xmlWriter = XmlWriter.Create(streamWriter, settings))
+                {
+                    serializer.Serialize(xmlWriter, obj, ns);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// 将对象T序列化,并返回字符串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        public static string SerializeToString<T>(T obj) where T : class
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Encoding = Encoding.UTF8;
+            settings.Indent = true;
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (XmlWriter writer = XmlWriter.Create(memoryStream, settings))
+                {
+                    serializer.Serialize(writer, obj, ns);
+                }
+                return Encoding.UTF8.GetString(memoryStream.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// 从文件中反序列化
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static T DeserializeFromFile<T>(string filePath) where T : class
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            using (StreamReader reader = new StreamReader(filePath, Encoding.UTF8))
+            {
+                return (T)serializer.Deserialize(reader);
+            }
+        }
+
+
+        /// <summary>
+        /// 从字符串中反序列化
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="xmlString"></param>
+        /// <returns></returns>
+        public static T DeserializeFromString<T>(string xmlString) where T : class
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+            using (MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlString)))
+            {
+                using (StreamReader reader = new StreamReader(memoryStream, Encoding.UTF8))
+                {
+                    return (T)serializer.Deserialize(reader);
+                }
+            }
+        }
+
         /// <summary>
         /// 将对象转换为xml
         /// </summary>

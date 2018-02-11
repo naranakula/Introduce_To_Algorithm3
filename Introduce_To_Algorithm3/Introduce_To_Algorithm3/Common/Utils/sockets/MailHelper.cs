@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Net.Mail;
+using Introduce_To_Algorithm3.Models;
 
 namespace Com.Utility.Commons
 {
@@ -102,11 +103,93 @@ namespace Com.Utility.Commons
             }
             else
             {
-                //系统默认是100000ms
+                //系统默认是100000ms 100s
                 smtpClient.Timeout = timeout;
                 smtpClient.Send(mailMessage);
             }
         }
+
+
+        /// <summary>
+        /// 使用的是smtp，同步发送一封邮件
+        /// </summary>
+        /// <param name="from">发件人</param>
+        /// <param name="password">发件人密码</param>
+        /// <param name="toList">收件人列表</param>
+        /// <param name="ccList">抄送列表</param>
+        /// <param name="subject">邮件主题</param>
+        /// <param name="body">邮件内容</param>
+        /// <param name="smtpHost"></param>
+        /// <param name="smtpPort"></param>
+        /// <param name="enableSsl"></param>
+        /// <param name="timeout">超时时间，单位毫秒</param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static bool SendMail(string from, string password, IList<string> toList, string subject, string body, string smtpHost, int smtpPort, IList<string> ccList = null, bool enableSsl = false, int timeout = 30000, Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                if (toList == null || toList.Count == 0)
+                {
+                    throw new CommonException(errorCode: 1, errorReason: "没有收件人列表");
+                }
+
+                using (MailMessage mailMessage = new MailMessage())
+                {
+                    //设置发件人地址
+                    mailMessage.From = new MailAddress(from);
+                    //设置收件人列表
+                    foreach (var item in toList)
+                    {
+                        mailMessage.To.Add(new MailAddress(item));
+                    }
+
+                    //设置普通抄送列表
+                    if (ccList != null)
+                    {
+                        foreach (var item in ccList)
+                        {
+                            mailMessage.CC.Add(new MailAddress(item));
+                        }
+                    }
+
+                    mailMessage.SubjectEncoding = Encoding.UTF8;
+                    //设置邮件主题
+                    mailMessage.Subject = subject ?? string.Empty;
+
+                    mailMessage.BodyEncoding = Encoding.UTF8;
+                    //是否html
+                    mailMessage.IsBodyHtml = false;
+                    //邮件正文
+                    mailMessage.Body = body ?? string.Empty;
+                    mailMessage.Priority = MailPriority.Normal;
+
+                    //邮件客户端
+                    using (SmtpClient smtpClient = new SmtpClient())
+                    {
+                        smtpClient.Host = smtpHost;
+                        smtpClient.Port = smtpPort;
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.Credentials = new NetworkCredential(from, password);
+                        smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtpClient.EnableSsl = enableSsl;
+                        smtpClient.Timeout = timeout;
+                        smtpClient.Send(mailMessage);
+                    }
+
+
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
+        }
+
+
     }
 
     /// <summary>
