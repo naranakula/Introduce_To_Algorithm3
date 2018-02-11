@@ -2083,6 +2083,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 如果不配置，默认Byte[]->[varbinary](max) NULL,,Boolean->bit
         /// </summary>
         public byte[] BytesExample { get; set; }
+
+        /// <summary>
+        /// 预留字段
+        /// </summary>
+        public string ReservedField { get; set; }
     }
 
     /// <summary>
@@ -2099,6 +2104,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             //字符串常用配置
             Property(t => t.Name).IsOptional().HasMaxLength(128).IsUnicode().IsVariableLength();
 
+            //预留字段，每张表都应该预留字段
+            Property(t => t.ReservedField).IsOptional().HasMaxLength(null).IsUnicode().IsVariableLength();
             
             //如果不加下面的配置，将是[BytesExample] [varbinary](max) NULL,  添加之后是[BytesExample] [varbinary](2048) NULL,
             Property(t => t.BytesExample).IsOptional().HasMaxLength(2048);
