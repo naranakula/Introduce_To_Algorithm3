@@ -11,7 +11,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// <summary>
     /// 安全调用
     /// </summary>
-    public static class SafeInvoke
+    public static class SafeInvokeUtils
     {
         /// <summary>
         /// 安全调用

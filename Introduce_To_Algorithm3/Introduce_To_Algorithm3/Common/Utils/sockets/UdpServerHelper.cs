@@ -144,7 +144,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                 return;
             }
 
-            SafeInvoke.Safe(_udpClient.Close);
+            SafeInvokeUtils.Safe(_udpClient.Close);
         }
     }
 }
