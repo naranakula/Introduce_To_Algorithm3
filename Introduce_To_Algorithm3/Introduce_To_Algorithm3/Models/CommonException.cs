@@ -14,7 +14,7 @@ namespace Introduce_To_Algorithm3.Models
     public class CommonException:Exception
     {
         /// <summary>
-        /// 异常编码
+        /// 异常编码 一般情况下，0表示正常，其它表示异常
         /// </summary>
         public int ErrorCode { get; private set; }
 

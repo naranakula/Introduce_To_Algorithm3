@@ -142,7 +142,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 启动channel
         /// 经测试即使服务器不存在，仍然可以Start成功，new Channel只是创建channel，并没有实际上连接服务器
-        /// 
+        /// 经测试如果服务器不存在也能启动成功，此时channel state是Idle，此时网络并没有实际连接
         /// </summary>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
@@ -181,8 +181,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 {
                     exceptionHandler?.Invoke(ex);
                 }
-
-                _channel = null;
+                finally
+                {
+                    _channel = null;
+                }
             }
         }
 
@@ -193,7 +195,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         public void Stop(int millisecondsTimeout = 9000, Action<Exception> exceptionHandler = null)
         {
             InnerStop(millisecondsTimeout,exceptionHandler);
-
+            //经过考虑，放在InnerStop后面更合适
             _isStop = true;
         }
 
@@ -212,17 +214,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <returns></returns>
         public bool SafeInvoke(Action<Channel> channelAction, Action<Exception> exceptionHandler = null)
         {
-            Channel tempChannel = _channel;
-
+            
             try
             {
+                Channel tempChannel = _channel;
+
                 //获取通道状态
                 ChannelState state = this.ChannelState;
 
                 #region ShutDown重新建立连接
                 if (state == ChannelState.Shutdown)
                 {
-                    //理论上start之后不会进入该状态
+                    //按照grpc文档，理论上start之后永远不会进入该状态
                     //已经人为停止，不需要重建
                     if (_isStop)
                     {
@@ -252,13 +255,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                         state = this.ChannelState;
                         tempChannel = _channel;
 
+                        //failfast
                         if (state == ChannelState.Shutdown)
                         {
-                            throw new CommonException(errorCode: 2, errorReason: "Channel状态为ShutDown");
+                            throw new CommonException(errorCode: 3, errorReason: "Channel重建后，状态仍为ShutDown");
                         }
                     }
                     else
                     {
+                        //failfast
                         throw new CommonException(errorCode: 2, errorReason: "Channel状态为ShutDown");
                     }
                 }
@@ -267,6 +272,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 channelAction(tempChannel);
 
                 /*
+                 * 代码示例
                  //构建client, 客户端不需要关闭
                  var client = new Greeter.GreeterClient(channel);
                  //客户端调用时指定deadline,如果不指定表示不超时
