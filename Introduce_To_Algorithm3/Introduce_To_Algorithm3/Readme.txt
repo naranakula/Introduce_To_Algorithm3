@@ -53,6 +53,7 @@ i18n //smart internationalization for asp.net
 //中间件
 ActiveMq
 RocketMq (阿里的MQ)
+Nanomsg
 Ngnix
 Grpc
 Kafka
