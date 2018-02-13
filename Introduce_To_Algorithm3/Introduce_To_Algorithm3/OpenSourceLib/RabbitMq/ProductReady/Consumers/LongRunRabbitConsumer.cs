@@ -113,7 +113,8 @@ Publisher application id
         // There are four building blocks you really care about in AMQP: virtual hosts, exchanges, queues and bindings. A virtual host holds a bundle of exchanges, queues and bindings.
         //Why would you want multiple virtual hosts? Easy. A username in RabbitMQ grants you access to a virtual host…in its entirety. So the only way to keep group A from accessing group B’s exchanges/queues/bindings/etc. is to create a virtual host for A and one for B. 
         //Virtualhost是虚拟主机,类似于命名空间
-        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "guest", Password = "guest", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.14", Port = 5672, AutomaticRecoveryEnabled = true/*自动重连*/, NetworkRecoveryInterval = TimeSpan.FromMilliseconds(4753)/*自动重连的时间间隔默认5s*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值*/};
+        //Rabbitmq的默认用户guest/guest，具有管理员权限 //guest拥有管理员权限，但只能本地访问,已测试
+        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = true/*自动重连*/, NetworkRecoveryInterval = TimeSpan.FromMilliseconds(4753)/*自动重连的时间间隔默认5s*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值*/,RequestedHeartbeat = ConnectionFactory.DefaultHeartbeat/*心跳检测，默认是60s*/};
 
         /// <summary>
         /// 锁
@@ -191,7 +192,19 @@ Publisher application id
 
                 _connection = SFactory.CreateConnection();
                 //定义连接事件
+                //连接阻塞的回调
                 _connection.ConnectionBlocked += ConnectionOnConnectionBlocked;
+                //连接未阻塞的回调
+                _connection.ConnectionUnblocked += ConnectionOnConnectionUnblocked;
+                //连接回调异常
+                _connection.CallbackException += ConnectionOnCallbackException;
+                //连接恢复错误
+                _connection.ConnectionRecoveryError += ConnectionOnConnectionRecoveryError;
+                //连接恢复成功
+                _connection.RecoverySucceeded += ConnectionOnRecoverySucceeded;
+                //连接关闭
+                _connection.ConnectionShutdown += ConnectionOnConnectionShutdown;
+
 
                 //创建多路复用的channel
                 _channel = _connection.CreateModel();
@@ -255,6 +268,7 @@ Publisher application id
                 return false;
             }
         }
+        
 
         #region 消息接收事件
 
@@ -284,8 +298,58 @@ Publisher application id
 
         #region 连接事件回调
 
+        /// <summary>
+        /// 连接阻塞
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="connectionBlockedEventArgs"></param>
         private static void ConnectionOnConnectionBlocked(object sender, ConnectionBlockedEventArgs connectionBlockedEventArgs)
         {
+        }
+
+        /// <summary>
+        /// 连接关闭
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="shutdownEventArgs"></param>
+        private static void ConnectionOnConnectionShutdown(object sender, ShutdownEventArgs shutdownEventArgs)
+        {
+        }
+
+        /// <summary>
+        /// 连接恢复成功
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private static void ConnectionOnRecoverySucceeded(object sender, EventArgs eventArgs)
+        {
+
+        }
+
+        /// <summary>
+        /// 连接恢复失败
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="connectionRecoveryErrorEventArgs"></param>
+        private static void ConnectionOnConnectionRecoveryError(object sender, ConnectionRecoveryErrorEventArgs connectionRecoveryErrorEventArgs)
+        {
+        }
+        /// <summary>
+        /// 连接回调错误
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="callbackExceptionEventArgs"></param>
+        private static void ConnectionOnCallbackException(object sender, CallbackExceptionEventArgs callbackExceptionEventArgs)
+        {
+        }
+        /// <summary>
+        /// 连接畅通
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private static void ConnectionOnConnectionUnblocked(object sender, EventArgs eventArgs)
+        {
+
         }
 
         #endregion
