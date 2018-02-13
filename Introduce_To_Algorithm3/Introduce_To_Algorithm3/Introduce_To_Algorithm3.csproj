@@ -751,6 +751,8 @@
     <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsServer.cs" />
     <Compile Include="OpenSourceLib\Ninject\NinjectHelper.cs" />
     <Compile Include="OpenSourceLib\NPOIs\NPOIHelper.cs" />
+    <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Consumers\LongRunRabbitConsumer.cs" />
+    <Compile Include="OpenSourceLib\RabbitMq\ProductReady\ShortConnectionProducer.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />
     <Compile Include="OpenSourceLib\Redis_\RedisClientHelper.cs" />
@@ -866,7 +868,7 @@
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="Common\Utils\Commons\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
-    <Folder Include="OpenSourceLib\RabbitMq\ProductReady\" />
+    <Folder Include="OpenSourceLib\RabbitMq\ProductReady\Producers\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
     <Folder Include="OpenSourceLib\TopSelfs\" />
   </ItemGroup>
