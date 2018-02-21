@@ -27,10 +27,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
          * 
          * 队列：多个发送者，多个消费者，每个消息只能被消费一次
          * 主题: 多个发送者，多个消费者，每个消息都会被每个消费者消费一次
-         * The default exchange is a direct exchange with no name (empty string) pre-declared by the broker. It has one special property that makes it very useful for simple applications: every queue that is created is automatically bound to it with a routing key which is the same as the queue name.
+         * 
          * RabbitMQ只能发送byte[]
          * 
-         * 
+         * The default exchange is a direct exchange with no name (empty string) pre-declared by the broker. It has one special property that makes it very useful for simple applications: every queue that is created is automatically bound to it with a routing key which is the same as the queue name.
          * 
          */
 
