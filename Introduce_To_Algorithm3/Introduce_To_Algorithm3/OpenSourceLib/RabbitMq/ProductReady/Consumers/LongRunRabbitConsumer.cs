@@ -27,7 +27,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
          * 
          * 队列：多个发送者，多个消费者，每个消息只能被消费一次
          * 主题: 多个发送者，多个消费者，每个消息都会被每个消费者消费一次
-         * 
+         * The default exchange is a direct exchange with no name (empty string) pre-declared by the broker. It has one special property that makes it very useful for simple applications: every queue that is created is automatically bound to it with a routing key which is the same as the queue name.
          * RabbitMQ只能发送byte[]
          * 
          * 
@@ -114,7 +114,7 @@ Publisher application id
         //Why would you want multiple virtual hosts? Easy. A username in RabbitMQ grants you access to a virtual host…in its entirety. So the only way to keep group A from accessing group B’s exchanges/queues/bindings/etc. is to create a virtual host for A and one for B. 
         //Virtualhost是虚拟主机,类似于命名空间
         //Rabbitmq的默认用户guest/guest，具有管理员权限 //guest拥有管理员权限，但只能本地访问,已测试
-        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = true/*自动重连*/, NetworkRecoveryInterval = TimeSpan.FromMilliseconds(4753)/*自动重连的时间间隔默认5s*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值*/,RequestedHeartbeat = ConnectionFactory.DefaultHeartbeat/*心跳检测，默认是60s*/};
+        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = true/*自动重连*/, NetworkRecoveryInterval = TimeSpan.FromMilliseconds(5753)/*自动重连的时间间隔默认5s*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值*/,RequestedHeartbeat = ConnectionFactory.DefaultHeartbeat/*心跳检测，默认是60s*/};
 
         /// <summary>
         /// 锁
@@ -124,23 +124,19 @@ Publisher application id
         /// <summary>
         /// 连接 多线程安全
         /// 表示一个TCP连接
+        /// Each IConnection instance is, in the current implementation, backed by a single background thread that reads from the socket and dispatches the resulting events to the application
         /// </summary>
         private static volatile IConnection _connection = null;
 
         /// <summary>
         /// Common AMQP model, the union of the functionality 
         /// 一个tcp连接下的多路复用通道
+        /// 不是多线程安全的，多线程使用必须加锁
         /// </summary>
         private static volatile IModel _channel = null;
 
         #region Exchange类型
-
-
-        /// <summary>
-        /// 默认mq创建的Direct类型的Exchange的名字
-        /// </summary>
-        public const string DefaultDirectExchangeName = "";
-
+        
 
         /// <summary>
         /// Direct exchange 类型
@@ -168,14 +164,21 @@ Publisher application id
         private static readonly bool _isQueue = true;
 
         /// <summary>
-        /// 当是队列时，使用的队列名称
+        /// 当是Direct类型的Exchange时，使用的队列名称 不要使用""，因为它是默认的，并且每个队列自动绑定到它""上 非""不自动绑定
         /// </summary>
-        private static readonly string _queueName = ConfigUtils.GetString("QueueName");
+        private static readonly string _usedDirectQueueName = ConfigUtils.GetString("UsedDirectQueueName");
+        
 
         /// <summary>
-        /// 当使用fanout时，使用的Exchange的名字
+        /// 消费者使用的Exchange的名字
         /// </summary>
-        private static readonly string _fanoutExchangeName = ConfigUtils.GetString("TopicExchangeName");
+        private static readonly string _usedExchangeName = ConfigUtils.GetString("UsedExchangeName");
+
+        /// <summary>
+        /// 使用的RoutingKey
+        /// </summary>
+        private static readonly string _usedRoutingKeyName = ConfigUtils.GetString("UsedRoutingKey");
+
 
         #endregion
 
@@ -211,12 +214,24 @@ Publisher application id
 
                 if (_isQueue)
                 {
+                    // 1、创建exchange
+                    //使用direct
+                    //exchange:exchange的名字，//type:exchange的类型
+                    //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
+                    //autoDelete - true if the server should delete the exchange when it is no longer in use
+                    //arguments - other properties (construction arguments) for the exchange
+                    _channel.ExchangeDeclare(exchange: _usedExchangeName, type: ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
+
                     //队列
                     //queue:队列名 
                     //durable:true if we are declaring a durable queue (the 队列 will survive a server restart) 当mq重启后队列是否仍然存在
                     //exclusive:排他性，如果为true,表示队列只能被当前连接使用，连接关闭队列自动消失
                     //autoDelete:当已经没有消费者时，服务器是否可以删除该队列,true if the server should delete the queue when it is no longer in use。
-                    _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false,arguments: null);
+                   //队列创建时会默认绑定到default的direct的""的exchange
+                    _channel.QueueDeclare(queue: _usedDirectQueueName, durable: true, exclusive: false, autoDelete: false,arguments: null);
+
+                    //建立queue和exchange的绑定
+                    _channel.QueueBind(queue: _usedDirectQueueName, exchange: _usedExchangeName, routingKey: _usedRoutingKeyName, arguments: null);
 
                     //prefetchSize - maximum amount of content (measured in octets) that the server will deliver, 0 if unlimited
                     //prefetchCount - maximum number of messages that the server will deliver, 0 if unlimited
@@ -229,7 +244,19 @@ Publisher application id
                     EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
                     consumer.Received += ConsumerOnReceived;
                     //自动应答
-                    _channel.BasicConsume(queue:_queueName, autoAck:true, consumer:consumer);
+                    _channel.BasicConsume(queue:_usedDirectQueueName, autoAck:true, consumer:consumer);
+
+
+                    //同步调用
+                    //BasicGetResult getResult = _channel.BasicGet(queue:_usedDirectQueueName, autoAck: true);
+                    //if(getResult == null)
+                    //{
+                    //    //没有消息
+                    //}
+                    //else
+                    //{
+                    //    byte[] bodys = getResult.Body;
+                    //}
                 }
                 else
                 {
@@ -239,7 +266,7 @@ Publisher application id
                     //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
                     //autoDelete - true if the server should delete the exchange when it is no longer in use
                     //arguments - other properties (construction arguments) for the exchange
-                    _channel.ExchangeDeclare(exchange:_fanoutExchangeName,type:FanoutExchangeTypeName,durable:true,autoDelete:false,arguments:null);
+                    _channel.ExchangeDeclare(exchange:_usedExchangeName,type:ExchangeType.Fanout,durable:true,autoDelete:false,arguments:null);
 
                     //2、创建queue
                     //由MQ服务器创建一个amp.开头的(如amq.gen-JzTY20BRgKO-HjmUJj0wLg)非持久、排他、自动删除的队列
@@ -251,7 +278,7 @@ Publisher application id
                     //fanout的routingkey不起作用，将会被忽略
                     //使用指定的Routingkey将指定的queue绑定到指定的exchange上
                     //如果关心多种消息，一个channel可以创建多个bind，可以使用相同的队列名(一个队列关心多个routingKey)
-                    _channel.QueueBind(queue:tempQueueName,exchange:_fanoutExchangeName,routingKey:"",arguments:null);
+                    _channel.QueueBind(queue:tempQueueName,exchange:_usedExchangeName,routingKey:"",arguments:null);
 
                     //定义消息接收事件
                     EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);

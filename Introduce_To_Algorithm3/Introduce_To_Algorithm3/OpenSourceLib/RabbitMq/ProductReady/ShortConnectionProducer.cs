@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.Common.Utils;
 using RabbitMQ.Client;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
@@ -29,12 +30,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
         //Virtualhost是虚拟主机,类似于命名空间
         //guest拥有管理员权限，但只能本地访问,已测试
         private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = false/*不自动重连*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值*/};
-        
-        /// <summary>
-        /// 默认mq创建的Direct类型的Exchange的名字
-        /// </summary>
-        public const string DefaultDirectExchangeName = "";
 
+        /// <summary>
+        /// 当是Direct类型的Exchange时，使用的队列名称
+        /// </summary>
+        private static readonly string _usedDirectQueueName = ConfigUtils.GetString("UsedDirectQueueName");
+
+
+        /// <summary>
+        /// 消费者使用的Exchange的名字
+        /// </summary>
+        private static readonly string _usedExchangeName = ConfigUtils.GetString("UsedExchangeName");
+
+        
         /// <summary>
         /// Direct Exchange类型
         /// </summary>
@@ -62,6 +70,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
                 {
                     using (var channel = connection.CreateModel())
                     {
+                        // 1、创建exchange
+                        //使用direct
+                        //exchange:exchange的名字，//type:exchange的类型
+                        //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
+                        //autoDelete - true if the server should delete the exchange when it is no longer in use
+                        //arguments - other properties (construction arguments) for the exchange
+                        channel.ExchangeDeclare(exchange: _usedExchangeName, type: ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
+
                         //queue:队列名 
                         //durable:true if we are declaring a durable 队列 (the 队列 will survive a server restart) 当mq重启后队列是否仍然存在
                         //exclusive:排他性，如果为true,表示队列只能被当前连接使用，连接关闭队列自动消失
@@ -82,7 +98,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
 
                         //Direct Exchange将会把消息发送到和routingkey一样的队列中
                         //使用指定的routing key发送到指定的exchange
-                        channel.BasicPublish(exchange: DefaultDirectExchangeName, routingKey: queueName, basicProperties: properties, body: messageBytes);
+                        channel.BasicPublish(exchange: _usedExchangeName, routingKey: queueName, basicProperties: properties, body: messageBytes);
                     }
                 }
 
@@ -124,7 +140,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
                         IBasicProperties properties = channel.CreateBasicProperties();
                         //定义消息的持久性
                         properties.Persistent = false;
-                        //properties.Expiration
+
+                        //设置单个消息的过期时间单位毫秒
+                        properties.Expiration = "7200000";//两个小时
+
 
                         //当fanout类型，routingKey不起作用，将被忽略
                         //使用指定的routing key发送到指定的exchange
