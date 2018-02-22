@@ -702,6 +702,7 @@
     <Compile Include="HPSocket\HPServer.cs" />
     <Compile Include="MachineLearning\ReadMe.cs" />
     <Compile Include="Models\CommonException.cs" />
+    <Compile Include="Models\CommonResult.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\CommonMessage.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQConsumer.cs" />

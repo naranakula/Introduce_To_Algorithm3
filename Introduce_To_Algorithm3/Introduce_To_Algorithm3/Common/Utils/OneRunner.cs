@@ -25,7 +25,7 @@ namespace Common
         /// 每个程序使用不同的id
         /// 建议在配置文件中配置
         /// </summary>
-        private static readonly string APP_ID = ConfigUtils.GetString("AppId");//@"dd771b7a02e746b388ffad5adf202fc5";//ConfigUtils.GetString("AppId");
+        private static readonly string APP_ID = ConfigUtils.GetString("AppId", "dd771b7a02e746b388ffad5adf202fc5");//@"dd771b7a02e746b388ffad5adf202fc5";//ConfigUtils.GetString("AppId");
 
         /// <summary>
         /// 用于测试单实例的Mutex
@@ -37,27 +37,38 @@ namespace Common
         /// 此方法只能程序运行时调用一次
         /// </summary>
         /// <returns></returns>
-        public static bool IsAlreadyRun()
+        public static bool IsAlreadyRun(Action<Exception> exceptionHandler = null)
         {
-            if (OneRunMutex != null)
+            
+            try
             {
-                throw new ArgumentException("这个方法仅能调用一次");
+                if (OneRunMutex != null)
+                {
+                    throw new ArgumentException("这个方法仅能调用一次");
+                }
+
+                bool createdNew = false;
+                //注意退出时释放Mutex
+                OneRunMutex = new Mutex(true, APP_ID, out createdNew);
+
+                if (!createdNew)
+                {
+                    //已经运行了一个实例
+                    //此时不需要释放Mutex，因为你没有拥有锁
+                    return true;
+                }
+                else
+                {
+                    //第一次运行，程序退出前释放锁，实际上不释放也没关系，因为退出程序会自动释放所有资源  包括锁
+                    return false;
+                }
             }
-
-            bool createdNew = false;
-            //注意退出时释放Mutex
-            OneRunMutex = new Mutex(true, APP_ID, out createdNew);
-
-            if (!createdNew)
+            catch (Exception ex)
             {
-                //已经运行了一个实例
-                //此时不需要释放Mutex，因为你没有拥有锁
+                exceptionHandler?.Invoke(ex);
+
+                //从严格判断的角度上讲，发生异常判读为已经启动
                 return true;
-            }
-            else
-            {
-                //第一次运行，程序退出前释放锁，实际上不释放也没关系，因为退出程序会自动释放所有资源  包括锁
-                return false;
             }
         }
 

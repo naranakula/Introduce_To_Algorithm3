@@ -35,9 +35,6 @@ namespace Introduce_To_Algorithm3.Models
         /// </summary>
         public CommonException()
         {
-            ErrorCode = 0;
-            ErrorReason = string.Empty;
-            TheInnerException = null;
         }
 
         /// <summary>
