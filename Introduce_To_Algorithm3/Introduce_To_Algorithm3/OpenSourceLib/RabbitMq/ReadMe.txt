@@ -8,4 +8,74 @@ IBM MQ>RabbitMQ>Apache Kafka>ActiveMQ
 
 
 
+RabbitMQ Cluster
+	All data/state required for the operation of a RabbitMQ broker is replicated across all nodes. An exception to this are message queues, which by default reside on one node, but they are visible and reachable from all nodes
+	RabbitMQ各节点保存一份数据，除了queue以外的数据。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
