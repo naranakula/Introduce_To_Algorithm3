@@ -39,6 +39,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
 
         /// <summary>
         /// 消费者使用的Exchange的名字
+        /// 尽量不要使用默认的""
         /// </summary>
         private static readonly string _usedExchangeName = ConfigUtils.GetString("UsedExchangeName");
 
@@ -68,6 +69,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
             {
                 using (var connection = SFactory.CreateConnection())
                 {
+                    //connection代表一个Tcp连接，多线程安全，应该重用
                     using (var channel = connection.CreateModel())
                     {
                         // 1、创建exchange
@@ -134,7 +136,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
                         //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
                         //autoDelete - true if the server should delete the exchange when it is no longer in use
                         //arguments - other properties (construction arguments) for the exchange
-                        channel.ExchangeDeclare(exchange: exchangeName, type: FanoutExchangeTypeName, durable: true, autoDelete: false, arguments: null);
+                        channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Fanout, durable: true, autoDelete: false, arguments: null);
 
 
                         IBasicProperties properties = channel.CreateBasicProperties();

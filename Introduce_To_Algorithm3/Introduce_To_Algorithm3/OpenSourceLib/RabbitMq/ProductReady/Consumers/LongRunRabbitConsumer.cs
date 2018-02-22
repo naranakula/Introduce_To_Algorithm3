@@ -13,6 +13,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
 
     /// <summary>
     /// RabbitMQ的长连接消费者
+    /// 
+    /// 使用方式
+    /// LongRunRabbitConsumer.StartConsumer()
+    /// ..............
+    /// 
+    /// 
+    /// LongRunRabbitConsumer.StopConsumer()
+    /// RMQMessageHandler.Stop();
+    /// 
     /// </summary>
     public static class LongRunRabbitConsumer
     {
@@ -114,7 +123,7 @@ Publisher application id
         //Why would you want multiple virtual hosts? Easy. A username in RabbitMQ grants you access to a virtual host…in its entirety. So the only way to keep group A from accessing group B’s exchanges/queues/bindings/etc. is to create a virtual host for A and one for B. 
         //Virtualhost是虚拟主机,类似于命名空间
         //Rabbitmq的默认用户guest/guest，具有管理员权限 //guest拥有管理员权限，但只能本地访问,已测试
-        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = true/*自动重连*/, NetworkRecoveryInterval = TimeSpan.FromMilliseconds(5753)/*自动重连的时间间隔默认5s*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值*/,RequestedHeartbeat = ConnectionFactory.DefaultHeartbeat/*心跳检测，默认是60s*/};
+        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = true/*自动重连*/, NetworkRecoveryInterval = TimeSpan.FromMilliseconds(5753)/*自动重连的时间间隔默认5s*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值,30s*/,RequestedHeartbeat = ConnectionFactory.DefaultHeartbeat/*心跳检测，默认是60s*/};
 
         /// <summary>
         /// 锁
@@ -135,8 +144,26 @@ Publisher application id
         /// </summary>
         private static volatile IModel _channel = null;
 
+        /// <summary>
+        /// 是否存活
+        /// </summary>
+        private static volatile bool _isAlive = false;
+
+        /// <summary>
+        /// 是否底层MQ存活
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsAlive()
+        {
+            lock (SLocker)
+            {
+                return _isAlive;
+            }
+        }
+
         #region Exchange类型
         
+        //使用类ExchangeType
 
         /// <summary>
         /// Direct exchange 类型
@@ -160,6 +187,7 @@ Publisher application id
 
         /// <summary>
         /// true表示使用queue,false表示使用主题
+        /// 类似于ActiveMQ的抽象，实际上RabbitMQ只有队列
         /// </summary>
         private static readonly bool _isQueue = true;
 
@@ -194,6 +222,7 @@ Publisher application id
                 StopConsumer();
 
                 _connection = SFactory.CreateConnection();
+
                 //定义连接事件
                 //连接阻塞的回调
                 _connection.ConnectionBlocked += ConnectionOnConnectionBlocked;
@@ -243,6 +272,7 @@ Publisher application id
                     //定义消息接收事件
                     EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
                     consumer.Received += ConsumerOnReceived;
+
                     //自动应答
                     _channel.BasicConsume(queue:_usedDirectQueueName, autoAck:true, consumer:consumer);
 
@@ -283,14 +313,25 @@ Publisher application id
                     //定义消息接收事件
                     EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
                     consumer.Received += ConsumerOnReceived;
+
                     //自动应答
                     _channel.BasicConsume(queue: tempQueueName, autoAck: true, consumer: consumer);
+                }
+
+                lock (SLocker)
+                {
+                    _isAlive = true;
                 }
 
                 return true;
             }
             catch (Exception e)
             {
+
+                lock (SLocker)
+                {
+                    _isAlive = false;
+                }
                 exceptionHandler?.Invoke(e);
                 return false;
             }
@@ -310,9 +351,23 @@ Publisher application id
             try
             {
                 //获取消息
-                byte[] body = args.Body;
+                byte[] body = args?.Body;
 
 
+                if (body == null || body.Length == 0)
+                {
+                    NLogHelper.Warn($"接收到空消息");
+                    return;
+                }
+
+                RMqMessage msg = new RMqMessage()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ContentBytes = body,
+                    CreateTime =  DateTime.Now
+                };
+
+                RMqMessageHandler.Add(msg);
             }
             catch (Exception e)
             {
@@ -332,6 +387,7 @@ Publisher application id
         /// <param name="connectionBlockedEventArgs"></param>
         private static void ConnectionOnConnectionBlocked(object sender, ConnectionBlockedEventArgs connectionBlockedEventArgs)
         {
+            NLogHelper.Warn($"OnConnectionBlocked:{connectionBlockedEventArgs?.Reason}");
         }
 
         /// <summary>
@@ -341,6 +397,13 @@ Publisher application id
         /// <param name="shutdownEventArgs"></param>
         private static void ConnectionOnConnectionShutdown(object sender, ShutdownEventArgs shutdownEventArgs)
         {
+
+            lock (SLocker)
+            {
+                _isAlive = false;
+            }
+
+            NLogHelper.Warn($"OnConnectionShutdown");
         }
 
         /// <summary>
@@ -351,6 +414,11 @@ Publisher application id
         private static void ConnectionOnRecoverySucceeded(object sender, EventArgs eventArgs)
         {
 
+            lock (SLocker)
+            {
+                _isAlive = true;
+            }
+            NLogHelper.Warn($"OnRecoverySucceeded");
         }
 
         /// <summary>
@@ -360,6 +428,13 @@ Publisher application id
         /// <param name="connectionRecoveryErrorEventArgs"></param>
         private static void ConnectionOnConnectionRecoveryError(object sender, ConnectionRecoveryErrorEventArgs connectionRecoveryErrorEventArgs)
         {
+
+            lock (SLocker)
+            {
+                _isAlive = false;
+            }
+
+            NLogHelper.Warn($"OnConnectionRecoveryError:{connectionRecoveryErrorEventArgs?.Exception}");
         }
         /// <summary>
         /// 连接回调错误
@@ -368,6 +443,7 @@ Publisher application id
         /// <param name="callbackExceptionEventArgs"></param>
         private static void ConnectionOnCallbackException(object sender, CallbackExceptionEventArgs callbackExceptionEventArgs)
         {
+            NLogHelper.Warn($"OnCallbackException:{callbackExceptionEventArgs?.Exception}");
         }
         /// <summary>
         /// 连接畅通
@@ -376,7 +452,7 @@ Publisher application id
         /// <param name="eventArgs"></param>
         private static void ConnectionOnConnectionUnblocked(object sender, EventArgs eventArgs)
         {
-
+            NLogHelper.Warn($"OnConnectionUnblocked");
         }
 
         #endregion
