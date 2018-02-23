@@ -821,6 +821,7 @@
     <Content Include="OpenSourceLib\grpcs\examples\exs\windows_x86\protoc.exe" />
     <Content Include="OpenSourceLib\grpcs\protos\ReadMe.txt" />
     <Content Include="OpenSourceLib\grpcs\protos\windows_x86\protoc.exe" />
+    <Content Include="OpenSourceLib\grpcs\ssl.txt" />
     <Content Include="OpenSourceLib\NetMqs\ReadMe.txt" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.dll" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.pdb" />
