@@ -35,7 +35,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
             try
             {
-                string regName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+                const string regName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
                 registry = Registry.LocalMachine.OpenSubKey(regName, true);//打开写权限
                 if (registry == null)
                 {
@@ -53,6 +53,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 }
                 else
                 {
+                    //删除该值
                     registry.DeleteValue(keyName,false);
                     //registry.SetValue(keyName, false);
                 }
@@ -63,10 +64,6 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 if (exceptionHandler != null)
                 {
                     exceptionHandler(ex);
-                }
-                else
-                {
-                    Log4netHelper.Error("添加注册表失败：" + ex);
                 }
                 return false;
             }
@@ -84,10 +81,19 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// </summary>
         /// <param name="keyName">要设置的注册表键, 可以为程序建一个guid</param>
         /// <param name="isAutoStartup">true,设置自动启动，false,取消设置自动启动</param>
+        /// <param name="exceptionHandler"></param>
         public static bool SetStartup(string keyName,  bool isAutoStartup=true,Action<Exception> exceptionHandler=null)
         {
-            string appToRun = Process.GetCurrentProcess().MainModule.FileName;
-            return SetStartup(keyName,appToRun,isAutoStartup,exceptionHandler);
+            try
+            {
+                string appToRun = Process.GetCurrentProcess().MainModule.FileName;
+                return SetStartup(keyName, appToRun, isAutoStartup, exceptionHandler);
+            }
+            catch (Exception ex)
+            {
+                exceptionHandler?.Invoke(ex);
+                return false;
+            }
         }
 
 
