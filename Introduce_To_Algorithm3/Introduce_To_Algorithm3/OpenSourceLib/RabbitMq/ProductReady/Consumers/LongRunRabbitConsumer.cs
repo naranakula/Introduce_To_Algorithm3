@@ -210,6 +210,8 @@ Publisher application id
 
         #endregion
 
+        #region 启动Consumer
+
         /// <summary>
         /// 开启消费者
         /// </summary>
@@ -322,12 +324,11 @@ Publisher application id
                 {
                     _isAlive = true;
                 }
-
+                NLogHelper.Info($"启动mq完成");
                 return true;
             }
             catch (Exception e)
             {
-
                 lock (SLocker)
                 {
                     _isAlive = false;
@@ -336,7 +337,8 @@ Publisher application id
                 return false;
             }
         }
-        
+
+        #endregion
 
         #region 消息接收事件
 
@@ -457,6 +459,9 @@ Publisher application id
 
         #endregion
 
+
+        #region 停止Consumer
+
         /// <summary>
         /// 停止消费者
         /// </summary>
@@ -490,7 +495,7 @@ Publisher application id
 
         }
 
-
+        #endregion
 
     }
 }

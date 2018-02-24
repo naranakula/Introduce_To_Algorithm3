@@ -129,4 +129,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
             RMqMessageHandler.Stop();
         }
     }
+
+
 }

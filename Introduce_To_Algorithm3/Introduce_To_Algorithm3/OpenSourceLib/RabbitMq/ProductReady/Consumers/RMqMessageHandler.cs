@@ -88,4 +88,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
             _blockingQueue.Stop();
         }
     }
+
+
 }
