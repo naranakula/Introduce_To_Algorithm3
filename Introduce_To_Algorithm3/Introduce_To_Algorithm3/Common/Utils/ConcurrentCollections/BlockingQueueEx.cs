@@ -67,7 +67,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <summary>
         /// 数据处理
         /// </summary>
-        private readonly Action<T> _dataHandler = null;
+        private readonly Action<T> _singleDataHandler = null;
 
         /// <summary>
         /// 数据列表处理
@@ -112,19 +112,19 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <summary>
         /// 构造函数  构造完即开启处理线程
         /// </summary>
-        /// <param name="dataHandler">单个数据处理</param>
+        /// <param name="singleDataHandler">单个数据处理</param>
         /// <param name="dataListHandler">如果数据较多，列表处理，如果为null，则不启用列表处理</param>
         /// <param name="exceptionHandler">数据处理异常后的处理</param>
         /// <param name="maxNumberDataInQueue">队列中消息的最大数量，超过该数量，之前的消息将被丢弃 最小是100,如果小于100,将会赋值为100</param>
         /// <param name="isNeedOptimize">是否需要多线程优化消息处理,通常不需要,使用优化是非常危险的行为</param>
         /// <param name="maxBatchSize">最大允许的单次处理批次数量</param>
-        public BlockingQueueEx(Action<T> dataHandler = null,Action<List<T>> dataListHandler = null,Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096,bool isNeedOptimize = false,int maxBatchSize = 29)
+        public BlockingQueueEx(Action<T> singleDataHandler = null,Action<List<T>> dataListHandler = null,Action<Exception> exceptionHandler = null, int maxNumberDataInQueue = 4096,bool isNeedOptimize = false,int maxBatchSize = 29)
         {
 
             lock (_locker)
             {
                 this._isRunning = true;
-                this._dataHandler = dataHandler;
+                this._singleDataHandler = singleDataHandler;
                 this._exceptionHandler = exceptionHandler;
                 this._isNeedOptimize = isNeedOptimize;
                 this._dataListHandler = dataListHandler;
@@ -156,7 +156,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
                 lock (_locker)
                 {
-                    dataHandlerInThread = this._dataHandler;
+                    dataHandlerInThread = this._singleDataHandler;
                     exceptionHandlerInThread = this._exceptionHandler;
                     dataListHandlerInThread = this._dataListHandler;
                     enableListHandlerInThread = this._enableListHandler;
