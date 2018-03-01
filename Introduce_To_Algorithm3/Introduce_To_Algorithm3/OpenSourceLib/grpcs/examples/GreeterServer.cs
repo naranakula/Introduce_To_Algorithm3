@@ -182,7 +182,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             Server server = new Server(options)
             {
                 //可以注册多个service
-                Services = { Greeter.BindService(new GreeterServiceImpl()).Intercept(new GreeterInterceptor()), },
+                Services = { Greeter.BindService(new GreeterServiceImpl()).Intercept(new GreeterInterceptor())/*拦截*/, },
                 //可以注册多个端口
                 //0.0.0.0监听在本机的所有IP地址
                 Ports = { new ServerPort(IPAddress.Any.ToString()/*0.0.0.0*/, Port, ServerCredentials.Insecure/*没有安全验证*/) },

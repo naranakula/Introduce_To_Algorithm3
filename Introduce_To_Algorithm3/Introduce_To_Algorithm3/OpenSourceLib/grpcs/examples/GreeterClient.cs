@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core.Interceptors;
+using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
 {
@@ -27,7 +28,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             GrpcClientHelper.SafeInvoke("127.0.0.1", 50051, channel2 =>
             {
                 //拦截器
-                CallInvoker callInvoker = channel2.Intercept(new ClientInterceptor());
+                CallInvoker callInvoker = channel2.Intercept(new CommonClientInterceptor((str) =>
+                    {
+                        NLogHelper.Info($"调用{str}");
+                    },
+                    (str, b, ex, timeSpan) =>
+                    {
+                        NLogHelper.Info($"调用{str}{(b?"成功":$"失败:{ex}")},耗时:{timeSpan}");
+                    }));
                 Greeter.GreeterClient client2 = new Greeter.GreeterClient(callInvoker);
                 var respone = client.SayHello(new Request());
                 respone = client2.SayHello(new Request());

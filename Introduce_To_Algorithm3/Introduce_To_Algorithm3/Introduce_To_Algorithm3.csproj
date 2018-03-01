@@ -721,6 +721,8 @@
     <Compile Include="OpenSourceLib\Excel\AsposeHelper.cs" />
     <Compile Include="OpenSourceLib\FTP\EdtFtpHelper.cs" />
     <Compile Include="OpenSourceLib\FTP\FluentFtpHelper.cs" />
+    <Compile Include="OpenSourceLib\grpcs\CommonClientInterceptor.cs" />
+    <Compile Include="OpenSourceLib\grpcs\CommonServerInterceptor.cs" />
     <Compile Include="OpenSourceLib\grpcs\examples\exs\Greeter2\TestGrpc.cs" />
     <Compile Include="OpenSourceLib\grpcs\examples\exs\Greeter\Test.cs" />
     <Compile Include="OpenSourceLib\grpcs\examples\GreeterClient.cs" />
