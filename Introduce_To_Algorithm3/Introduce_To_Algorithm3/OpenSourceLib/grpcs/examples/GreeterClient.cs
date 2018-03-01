@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Grpc.Core.Interceptors;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
 {
@@ -20,7 +21,26 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             //var channelCredentials = new SslCredentials(File.ReadAllText("roots.pem"));
             Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
             var client = new Greeter.GreeterClient(channel);
-            
+
+            #region 拦截器
+
+            GrpcClientHelper.SafeInvoke("127.0.0.1", 50051, channel2 =>
+            {
+                //拦截器
+                CallInvoker callInvoker = channel2.Intercept(new ClientInterceptor());
+                Greeter.GreeterClient client2 = new Greeter.GreeterClient(callInvoker);
+                var respone = client.SayHello(new Request());
+                respone = client2.SayHello(new Request());
+                respone = client2.SayHello(new Request());
+                respone = client2.SayHello(new Request());
+                respone = client2.SayHello(new Request());
+                Console.WriteLine(respone.Response_);
+            });
+
+
+            #endregion
+
+
             #region Unary RPC
 
             for (int i = 0; i < 10; i++)

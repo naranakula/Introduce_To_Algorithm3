@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using System.Net;
 using System.Threading;
+using Grpc.Core.Interceptors;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
 {
@@ -181,13 +182,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             Server server = new Server(options)
             {
                 //可以注册多个service
-                Services = { Greeter.BindService(new GreeterServiceImpl()), },
+                Services = { Greeter.BindService(new GreeterServiceImpl()).Intercept(new GreeterInterceptor()), },
                 //可以注册多个端口
                 //0.0.0.0监听在本机的所有IP地址
                 Ports = { new ServerPort(IPAddress.Any.ToString()/*0.0.0.0*/, Port, ServerCredentials.Insecure/*没有安全验证*/) },
                 
             };
-            
             //启动后后面的代码继续执行
             server.Start();
 
@@ -198,6 +198,39 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
 
             //关闭服务
             server.ShutdownAsync().Wait(8000);
+        }
+    }
+
+
+
+    /// <summary>
+    /// 服务器端拦截
+    /// </summary>
+    public class GreeterInterceptor : Interceptor
+    {
+
+        public override Task<TResponse> UnaryServerHandler<TRequest, TResponse>(TRequest request, ServerCallContext context, UnaryServerMethod<TRequest, TResponse> continuation)
+        {
+            Console.WriteLine("UnaryServerHandler interceptor");
+            return continuation(request, context);
+        }
+
+        public override Task<TResponse> ClientStreamingServerHandler<TRequest, TResponse>(IAsyncStreamReader<TRequest> requestStream, ServerCallContext context, ClientStreamingServerMethod<TRequest, TResponse> continuation)
+        {
+            Console.WriteLine("interceptor");
+            return continuation(requestStream, context);
+        }
+
+        public override Task ServerStreamingServerHandler<TRequest, TResponse>(TRequest request, IServerStreamWriter<TResponse> responseStream, ServerCallContext context, ServerStreamingServerMethod<TRequest, TResponse> continuation)
+        {
+            Console.WriteLine("interceptor");
+            return continuation(request, responseStream, context);
+        }
+
+        public override Task DuplexStreamingServerHandler<TRequest, TResponse>(IAsyncStreamReader<TRequest> requestStream, IServerStreamWriter<TResponse> responseStream, ServerCallContext context, DuplexStreamingServerMethod<TRequest, TResponse> continuation)
+        {
+            Console.WriteLine("interceptor");
+            return continuation(requestStream, responseStream, context);
         }
     }
 
