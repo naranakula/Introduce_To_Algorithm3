@@ -85,7 +85,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private readonly int _maxBatchSize;
 
         /// <summary>
-        /// 是否启用列表处理
+        /// 是否启用列表处理 根据是否提供列表处理函数判断
         /// </summary>
         private readonly bool _enableListHandler;
 
