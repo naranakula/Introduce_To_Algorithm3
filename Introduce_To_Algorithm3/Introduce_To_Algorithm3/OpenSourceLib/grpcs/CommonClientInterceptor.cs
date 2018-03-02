@@ -10,7 +10,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 {
     /// <summary>
     /// 通用的Grpc客户端拦截器
-    /// 
+    /// Interceptor是抽象类，提供了默认实现，只需要覆盖想要实现的方法即可
     /// </summary>
     public class CommonClientInterceptor:Interceptor
     {

@@ -563,6 +563,7 @@
     <Compile Include="Common\Utils\CallCounter.cs" />
     <Compile Include="Common\Utils\ClipboardHelper.cs" />
     <Compile Include="Common\Utils\CollectionUtils.cs" />
+    <Compile Include="Common\Utils\ConcurrentCollections\AsyncActionUtils.cs" />
     <Compile Include="Common\Utils\ConcurrentCollections\BlockingQueueEx.cs" />
     <Compile Include="Common\Utils\ConcurrentCollections\ConcurrentRbTree.cs" />
     <Compile Include="Common\Utils\CryptoHelper.cs" />
@@ -776,6 +777,7 @@
     <Compile Include="OpenSourceLib\Utils\Log4netQueueHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\MailKitHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\MySqlHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\NLogAsyncHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\NLogHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\OracleHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\PclCryptoHelper.cs" />

@@ -11,6 +11,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
     /// <summary>
     /// 服务器拦截器
+    /// Interceptor是抽象类，提供了默认实现，只需要覆盖想要实现的方法即可
     /// </summary>
     public class CommonServerInterceptor:Interceptor
     {
