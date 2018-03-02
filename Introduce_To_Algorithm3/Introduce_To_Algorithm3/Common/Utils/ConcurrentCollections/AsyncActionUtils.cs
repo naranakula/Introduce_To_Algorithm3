@@ -35,6 +35,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             SBlockingQueueEx.Add(new Tuple<Action<object>, object>(obj=> { action?.Invoke(); },null));
         }
 
+        /// <summary>
+        /// 停止
+        /// </summary>
+        public static void Stop()
+        {
+            SBlockingQueueEx.Stop();
+        }
+
+
 
         /// <summary>
         /// 单个消息处理
