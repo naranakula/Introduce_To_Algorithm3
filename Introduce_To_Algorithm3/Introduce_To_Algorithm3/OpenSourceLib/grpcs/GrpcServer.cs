@@ -48,8 +48,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
         /// <summary>
         /// 构造函数
+        /// 服务实现抛出异常不会挂掉服务器，客户端捕获如下异常信息:Status(StatusCode=Unknown, Detail="Exception was thrown by handler.")
         /// </summary>
-        /// <param name="services">服务定义 如:（单个） Greeter.BindService(new GreeterServiceImpl())</param>
+        /// <param name="services">服务定义 如:（单个） Greeter.BindService(new GreeterServiceImpl())  //服务实现抛出异常不会挂掉服务器，客户端捕获如下异常信息:Status(StatusCode=Unknown, Detail="Exception was thrown by handler.")</param>
         /// <param name="serverPort"></param>
         public GrpcServer(List<ServerServiceDefinition> services,int serverPort)
         {
@@ -168,6 +169,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //添加多个服务
                 foreach (var serviceItem in _serviceList)
                 {
+                    //服务实现抛出异常不会挂掉服务器，客户端捕获如下异常信息:Status(StatusCode=Unknown, Detail="Exception was thrown by handler.")
                     _server.Services.Add(serviceItem);
                 }
 
