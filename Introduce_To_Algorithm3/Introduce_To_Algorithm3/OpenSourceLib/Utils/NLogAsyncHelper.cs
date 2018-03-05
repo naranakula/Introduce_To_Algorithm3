@@ -10,6 +10,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
     /// <summary>
     /// Nlog异步辅助类
+    /// 这个没有什么用，Nlog.config可以指定异步，
+    /// targets async="true" 该配置项表示
+    ///   async配置项代表了xsi:type="AsyncWrapper overflowAction="Discard" queueLimit="10000" batchSize="100" timeToSleepBetweenBatches="50"
     /// </summary>
     public static class NLogAsyncHelper
     {

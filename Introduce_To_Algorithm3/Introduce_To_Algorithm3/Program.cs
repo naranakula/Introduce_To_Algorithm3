@@ -34,14 +34,13 @@ namespace Introduce_To_Algorithm3
             //红黑树
             SortedDictionary<string,string> rbTree = new SortedDictionary<string, string>();
             DirectoryHold.ResetCurrentDir();
-            NLogAsyncHelper.Info(GuidUtils.GetGuid());
-            NLogAsyncHelper.Trace("Trace");
-            NLogAsyncHelper.Debug("Debug");
-            NLogAsyncHelper.Info("Info");
-            NLogAsyncHelper.Warn("Warn");
-            NLogAsyncHelper.Error("Error");
-            NLogAsyncHelper.Fatal("Fatal");
-            Thread.Sleep(1);
+            NLogHelper.Info(GuidUtils.GetGuid());
+            NLogHelper.Trace("Trace");
+            NLogHelper.Debug("Debug");
+            NLogHelper.Info("Info");
+            NLogHelper.Warn("Warn");
+            NLogHelper.Error("Error");
+            NLogHelper.Fatal("Fatal");
         }
     }
     
