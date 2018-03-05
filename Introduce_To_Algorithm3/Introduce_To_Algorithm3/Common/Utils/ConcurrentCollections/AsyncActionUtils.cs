@@ -43,6 +43,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             SBlockingQueueEx.Stop();
         }
 
+        /// <summary>
+        /// 启动实际上什么也没有做，如果不调用该方法，将延迟初始化静态变量
+        /// 初始化静态变量
+        /// </summary>
+        public static void Start()
+        {
+            
+        }
+
 
 
         /// <summary>
