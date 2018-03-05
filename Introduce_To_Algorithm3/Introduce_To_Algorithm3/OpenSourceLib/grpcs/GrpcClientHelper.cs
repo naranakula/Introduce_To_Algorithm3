@@ -375,7 +375,7 @@ Every channel creates it's own TCP connection
                     var client = new Greeter.GreeterClient(channel);
                     //客户端调用时指定deadline,如果不指定表示不超时
                     //调用client,可以重用channel,多次调用方法
-                    //deadLine必须使用UTC时间
+                    //deadLine必须使用UTC时间 Always set a deadline.
                     var reply = client.SayHello(new Request() {Request_ = "Hello"},
                         deadline: DateTime.UtcNow.AddSeconds(timeoutSeconds));
                     *
