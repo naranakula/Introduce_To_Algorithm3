@@ -81,19 +81,19 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         private class ActionTuple
         {
             /// <summary>
-            /// 锁
+            /// 锁 实际上锁是非必要的，因为readonly保证了多线程安全
             /// </summary>
-            private readonly object _locker = new object();
+            //private readonly object _locker = new object();
 
             /// <summary>
-            /// action回调
+            /// action回调  readonly保证了多线程安全
             /// </summary>
-            private volatile Action<object> _action = null;
+            private readonly Action<object> _action = null;
 
             /// <summary>
-            /// 参数
+            /// 参数 readonly保证了多线程安全
             /// </summary>
-            private volatile object _parameter = null;
+            private readonly object _parameter = null;
 
             /// <summary>
             /// action 回调
@@ -102,10 +102,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             {
                 get
                 {
-                    lock (_locker)
-                    {
-                        return _action;
-                    }
+                    return _action;
                 }
             }
 
@@ -116,10 +113,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             {
                 get
                 {
-                    lock (_locker)
-                    {
-                        return _parameter;
-                    }
+                    return _parameter;
                 }
             }
 
