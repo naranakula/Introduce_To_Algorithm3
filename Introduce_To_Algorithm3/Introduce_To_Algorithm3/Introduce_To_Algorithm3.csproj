@@ -757,11 +757,14 @@
     <Compile Include="OpenSourceLib\NetWorkCommsDotNets\Sources\NetworkCommsServer.cs" />
     <Compile Include="OpenSourceLib\Ninject\NinjectHelper.cs" />
     <Compile Include="OpenSourceLib\NPOIs\NPOIHelper.cs" />
+    <Compile Include="OpenSourceLib\RabbitMq\ProductReady\ClusterSupport\Consumers\LongRunClusterSupportConsumer.cs" />
+    <Compile Include="OpenSourceLib\RabbitMq\ProductReady\ClusterSupport\Producers\LongRunClusterSupportProducer.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Consumers\LongRunRabbitConsumer.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Consumers\RMqMessage.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Consumers\RMqMessageHandler.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Consumers\RMqMonitorTimer.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Producers\LongRunRabbitProducer.cs" />
+    <Compile Include="OpenSourceLib\RabbitMq\ProductReady\ShortConnectionClusterSupportProducer.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\ShortConnectionProducer.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\RabbitMqProducer.cs" />
     <Compile Include="OpenSourceLib\RecyclableMS\RecyclableMSUtils.cs" />

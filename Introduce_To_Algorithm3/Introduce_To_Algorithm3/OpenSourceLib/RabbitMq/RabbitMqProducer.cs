@@ -30,6 +30,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
             var factory = new ConnectionFactory(){HostName = "localhost"};
             using (var connection = factory.CreateConnection())
             {
+                //建议根据实际情况自己实现客户端选举
+                //connection.IsOpen
+                //连接集群
+                //factory.CreateConnection(new List<string>() {"", ""});
+                //建议断线时自己写选择逻辑
                 //Connection抽象socket连接
                 using (var channel = connection.CreateModel())
                 {
