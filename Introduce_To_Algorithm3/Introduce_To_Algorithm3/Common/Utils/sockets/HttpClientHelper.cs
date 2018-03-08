@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,15 +17,16 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
         /// <summary>
         /// 默认的超时时间 单位秒
         /// </summary>
-        public const int DefaultTimeoutInSeconds = 10;
+        public const int DefaultTimeoutInSeconds = 7;
 
         /*
          * basic http auth:
-         * 1、每次请求加上用户名密码 用户名:密码用冒号隔开
-         * 2、使用base64转换
+         * 1、每次请求加上用户名密码 用户名:密码用冒号隔开 
+         * 2、使用utf-8转换为字节
+         * 2、使用base64转换字符串
          * 3、添加http头 Authorization: The authorization method and a space (e.g. "Basic ") is then prepended to the encoded string.
-
-         * 
+          Authorization:Basic base64
+         * Authorization: Basic QWxhZGRpbjpPcGVuU2VzYW1l
          */
 
 
@@ -67,7 +69,45 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
             }
         }
 
+        /// <summary>
+        /// get获取字符串
+        /// </summary>
+        /// <param name="requestUrl">请求的地址</param>
+        /// <param name="encoding">解析响应使用的编码</param>
+        /// <param name="headerDict">http头内容，如果为null，使用默认的http头，否则将会设置http头，如果指定的http头已经存在，则覆盖而不是append</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <returns>如果异常返回null，否则返回响应包体内容</returns>
+        public static string GetString(string requestUrl, Encoding encoding,
+            Dictionary<string, string> headerDict = null, Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.Timeout = new TimeSpan(0, 0, DefaultTimeoutInSeconds);
 
+
+                    #region 处理http头
+                    HandleHttpHeader(client, headerDict);
+                    #endregion
+
+                    using (var stream = client.GetStreamAsync(requestUrl).Result)
+                    {
+                        using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                        {
+                            return reader.ReadToEnd();
+                        }
+                    }
+                }
+                
+
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return null;
+            }
+        }
 
         #endregion
 
