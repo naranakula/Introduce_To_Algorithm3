@@ -643,6 +643,7 @@
     <Compile Include="Common\Utils\OneRunAtSameTime.cs" />
     <Compile Include="Common\Utils\SafeInvokeUtils.cs" />
     <Compile Include="Common\Utils\Serial\SerialPortUtils.cs" />
+    <Compile Include="Common\Utils\sockets\HttpClientHelper.cs" />
     <Compile Include="Common\Utils\sockets\Iocps\AsyncUserToken.cs" />
     <Compile Include="Common\Utils\sockets\Iocps\BufferManager.cs" />
     <Compile Include="Common\Utils\sockets\Iocps\Server.cs" />
