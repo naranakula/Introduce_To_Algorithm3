@@ -27,6 +27,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
          * 3、添加http头 Authorization: The authorization method and a space (e.g. "Basic ") is then prepended to the encoded string.
           Authorization:Basic base64
          * Authorization: Basic QWxhZGRpbjpPcGVuU2VzYW1l
+         * 
+         *  Dictionary<string,string> dict = new Dictionary<string, string>();
+         *  dict.Add("Accept", "application/json");
+            dict.Add("Accept-Charset","utf-8");
+            string userNameAndPwd = StringUtils.ToBase64String(Encoding.UTF8.GetBytes("admin:admin"));
+            dict.Add("Authorization", $"Basic {userNameAndPwd}");
+            
+         * 
          */
 
 
@@ -91,11 +99,20 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                     HandleHttpHeader(client, headerDict);
                     #endregion
 
-                    using (var stream = client.GetStreamAsync(requestUrl).Result)
+                    //using (var stream = client.GetStreamAsync(requestUrl).Result)
+                    //{
+                    //    using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                    //    {
+                    //        return reader.ReadToEnd();
+                    //    }
+                    //}
+
+                    using (HttpResponseMessage response = client.GetAsync(requestUrl).Result)
                     {
-                        using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                        using (HttpContent content = response.Content)
                         {
-                            return reader.ReadToEnd();
+                            byte[] byteArr = content.ReadAsByteArrayAsync().Result;
+                            return Encoding.UTF8.GetString(byteArr);
                         }
                     }
                 }
