@@ -8,6 +8,9 @@ using RabbitMQ.Client;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
 {
+    /// <summary>
+    /// 短链接Producer
+    /// </summary>
     public class ShortConnectionProducer
     {
         /*
@@ -29,7 +32,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
         //Why would you want multiple virtual hosts? Easy. A username in RabbitMQ grants you access to a virtual host…in its entirety. So the only way to keep group A from accessing group B’s exchanges/queues/bindings/etc. is to create a virtual host for A and one for B. 
         //Virtualhost是虚拟主机,类似于命名空间
         //guest拥有管理员权限，但只能本地访问,已测试
-        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = false/*不自动重连*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值*/};
+        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.15", Port = 5672, AutomaticRecoveryEnabled = false/*不自动重连*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值*/};
 
         /// <summary>
         /// 当是Direct类型的Exchange时，使用的队列名称

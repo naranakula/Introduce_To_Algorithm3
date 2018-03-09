@@ -123,7 +123,8 @@ Publisher application id
         //Why would you want multiple virtual hosts? Easy. A username in RabbitMQ grants you access to a virtual host…in its entirety. So the only way to keep group A from accessing group B’s exchanges/queues/bindings/etc. is to create a virtual host for A and one for B. 
         //Virtualhost是虚拟主机,类似于命名空间
         //Rabbitmq的默认用户guest/guest，具有管理员权限 //guest拥有管理员权限，但只能本地访问,已测试
-        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = true/*自动重连*/, NetworkRecoveryInterval = TimeSpan.FromMilliseconds(5753)/*自动重连的时间间隔默认5s*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值,30s*/,RequestedHeartbeat = ConnectionFactory.DefaultHeartbeat/*心跳检测，默认是60s*/};
+        //即使AutomaticRecoveryEnable为true，CreateConnection超时仍会抛出异常，与activemq不同
+        private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = true/*自动重连，指的是自动重连，为true时CreateConnectin仍会抛出异常*/, NetworkRecoveryInterval = TimeSpan.FromMilliseconds(5753)/*自动重连的时间间隔默认5s*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值,30s*/,RequestedHeartbeat = ConnectionFactory.DefaultHeartbeat/*心跳检测，默认是60s*/};
 
         /// <summary>
         /// 锁
@@ -253,6 +254,12 @@ Publisher application id
                     //arguments - other properties (construction arguments) for the exchange
                     _channel.ExchangeDeclare(exchange: _usedExchangeName, type: ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
 
+                    //定义创建队列时的参数
+                    Dictionary<string, object> dictArgs = new Dictionary<string, object>();
+                    //限制队列的最大长度，超过该长度将从队列头丢弃
+                    dictArgs.Add("x-max-length",9000);
+
+
                     //队列
                     //queue:队列名 
                     //durable:true if we are declaring a durable queue (the 队列 will survive a server restart) 当mq重启后队列是否仍然存在
@@ -269,7 +276,7 @@ Publisher application id
                     //global - true if the settings should be applied to the entire channel rather than each consumer
                     //每次取一个消息，消息大小不限制
                     //注释掉该行，将会使用Robbin轮盘分配，使用下面这行，只有空闲的Consumer接收消息
-                    //_channel.BasicQos(prefetchSize:0,prefetchCount:1,global:false);
+                    _channel.BasicQos(prefetchSize:0,prefetchCount:5,global:false);
                     
                     //定义消息接收事件
                     EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
@@ -311,6 +318,9 @@ Publisher application id
                     //使用指定的Routingkey将指定的queue绑定到指定的exchange上
                     //如果关心多种消息，一个channel可以创建多个bind，可以使用相同的队列名(一个队列关心多个routingKey)
                     _channel.QueueBind(queue:tempQueueName,exchange:_usedExchangeName,routingKey:"",arguments:null);
+
+                    //预取3条消息
+                    _channel.BasicQos(prefetchSize: 0, prefetchCount: 5, global: false);
 
                     //定义消息接收事件
                     EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);

@@ -37,6 +37,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// </summary>
         private readonly Action _actionCallback=null;
 
+        /// <summary>
+        /// 异常处理
+        /// </summary>
+        private readonly Action<Exception> _exceptionHandler = null;
+
         #endregion
 
         /// <summary>
@@ -47,9 +52,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// <param name="dueTime">指定第一次开始执行前的等待时间，单位毫秒，0表示立刻开始执行</param>
         /// <param name="period">指定执行的时间周期，单位毫秒</param>
         /// <param name="state"> An object containing information to be used by the callback method, or null.</param>
-        public OneRunTimerEx(Action actionCallback,int dueTime = 0, int period = 1000, object state =null)
+        /// <param name="exceptionHandler">异常处理</param>
+        public OneRunTimerEx(Action actionCallback,int dueTime = 0, int period = 1000, object state =null,Action<Exception> exceptionHandler = null)
         {
             this._actionCallback = actionCallback;
+            this._exceptionHandler = exceptionHandler;
             //实际上初始化完成后，回调已经开始执行
             _timer = new Timer(new TimerCallback(TimerCallback), state, dueTime, period);
         }
@@ -82,7 +89,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
             }
             catch (Exception ex)
             {
-                NLogHelper.Error("定时器回调函数发生异常：" + ex);
+                _exceptionHandler?.Invoke(ex);
             }
             finally
             {
