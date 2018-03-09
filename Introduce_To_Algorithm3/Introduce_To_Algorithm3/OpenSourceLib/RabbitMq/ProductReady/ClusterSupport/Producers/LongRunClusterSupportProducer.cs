@@ -14,8 +14,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
     /// <summary>
     /// 支持集群的长连接生产者
     /// 基本思想:
-    /// 随机选择一个节点，如果该节点挂了，重新选择下一个节点
+    /// 初始时随机选择一个节点，如果该节点挂了，重新选择下一个节点发送
     /// 使用定时器来监控哪个节点挂了
+    /// 
+    /// 因为在集群中exchange是全局的，所以没有任何问题
     /// </summary>
     public class LongRunClusterSupportProducer:IDisposable
     {
@@ -48,7 +50,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
         private readonly string _exchangeType;
 
         /// <summary>
-        /// 当前是否的rmq配置
+        /// 当前使用的rmq配置索引
         /// </summary>
         private volatile int _currentUsedRmqIndex = 0;
 
@@ -418,11 +420,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
         #endregion
 
         #region IDispose接口
-
+        
         /// <summary>
-        /// 停止
+        /// Dispose接口
         /// </summary>
-        private void Stop()
+        public void Dispose()
         {
             if (_oneRunTimer != null)
             {
@@ -431,14 +433,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
             }
 
             StopMq();
-        }
-
-        /// <summary>
-        /// Dispose接口
-        /// </summary>
-        public void Dispose()
-        {
-            Stop();
         }
 
         #endregion

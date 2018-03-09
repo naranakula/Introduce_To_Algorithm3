@@ -5,6 +5,8 @@ Message size is limited to 2GB
 队列的个数没有限制
 
 
+队列x-max-length参数可以指定队列的深度
+
 
 缺点是客户端是.net4.5.1的  nuget官方客户端:RabbitMQ.Client
 
