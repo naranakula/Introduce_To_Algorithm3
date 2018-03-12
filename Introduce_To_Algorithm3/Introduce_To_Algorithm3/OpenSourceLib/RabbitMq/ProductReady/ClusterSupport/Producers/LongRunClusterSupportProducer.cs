@@ -35,7 +35,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
         private readonly object _locker = new object();
 
         /// <summary>
-        /// 是否需要创建exchange
+        /// 是否需要创建exchange 一般通过management Ui创建，而不是通过代码创建
         /// </summary>
         private readonly bool _needToCreateExchange;
 
@@ -97,7 +97,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
         /// <param name="rmqList">rmq转发的列表</param>
         /// <param name="createExchange">是否创建Exchange</param>
         /// <param name="exchangeName">exchange的名字</param>
-        /// <param name="exchangeType">exchange的类型</param>
+        /// <param name="exchangeType">exchange的类型，只有需要创建exchange时才有用</param>
         /// <param name="mqChangeCallBack">mq切换时的回调，第一个参数是旧的mq，第二个参数是新的mq</param>
         public LongRunClusterSupportProducer(List<RabbitMqConfig> rmqList, bool createExchange, string exchangeName, string exchangeType = ExchangeType.Direct, Action<RabbitMqConfig, RabbitMqConfig> mqChangeCallBack = null)
         {
@@ -133,7 +133,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
         {
 
             //获取当前mq的配置
-            RabbitMqConfig mqConfig = null;
 
             try
             {
@@ -142,15 +141,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
                     throw new Exception("消息内容为空");
                 }
 
-                //获取当前mq的配置
-                mqConfig = GetCurrentUsedRmq();
-                string mqConfigStr = mqConfig.ToString();
-
+              
                 #region 判断是否需要创建exchange
+
+                //mq配置
+                string mqConfigStr = "";
                 //判断是否需要创建exchange
                 bool needCreateExchange = this._needToCreateExchange;
                 if (needCreateExchange)
                 {
+                    //获取当前mq的配置
+                    var mqConfig = GetCurrentUsedRmq();
+                    mqConfigStr = mqConfig.ToString();
+
                     bool alreadyCreated = false;
                     if (_exchangeCreatedDict.TryGetValue(mqConfigStr, out alreadyCreated) && alreadyCreated)
                     {

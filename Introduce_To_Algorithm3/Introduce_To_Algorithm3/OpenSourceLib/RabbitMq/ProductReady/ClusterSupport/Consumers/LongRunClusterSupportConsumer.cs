@@ -407,9 +407,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
                 {
                     usedQueueName = this._queueName;
                     isTempQueue = false;
-                    bool alreadyCreated = false;
                     if (needCreateQueue)
                     {
+                        var alreadyCreated = false;
                         if (_queueCreateDict.TryGetValue(mqConfigStr, out alreadyCreated) && alreadyCreated)
                         {
                             needCreateQueue = false;
