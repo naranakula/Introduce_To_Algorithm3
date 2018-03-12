@@ -108,6 +108,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
         /// </summary>
         private const int MaxQueueLength = 9999;
 
+
+        /// <summary>
+        /// mq切换事件回调 第一个参数是旧的mq，第二个参数是新的mq
+        /// </summary>
+        private readonly Action<RabbitMqConfig, RabbitMqConfig> _mqChangeCallback = null;
+
+
         #endregion
 
 
@@ -123,8 +130,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
         /// <param name="createQueue">是否需要创建队列</param>
         /// <param name="queueName">队列名称，如果为空或者null表示必须创建临时队列，忽略createQueue参数</param>
         /// <param name="queueExchangeBindingKey">如果需要创建队列则需要创建binding，否则不需要创建binding  队列exchange的binding</param>
+        /// <param name="mqChangeCallBack"></param>
         public LongRunClusterSupportConsumer(List<RabbitMqConfig> rmqList, bool createExhange, string exchangeName,
-            string exchangType, bool createQueue, string queueName, string queueExchangeBindingKey)
+            string exchangType, bool createQueue, string queueName, string queueExchangeBindingKey, Action<RabbitMqConfig, RabbitMqConfig> mqChangeCallBack = null)
         {
             if (rmqList == null || rmqList.Count == 0)
             {
@@ -139,6 +147,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
             this._needToCreateQueue = createQueue;
             this._queueName = StringUtils.TrimEx(queueName);
             this._queueExchangeBinding = queueExchangeBindingKey;
+            this._mqChangeCallback = mqChangeCallBack;
 
             //定义定时器
             _oneRunTimer = new OneRunTimerEx(OneRunTimerCallBack, dueTime: 1000, period: 19711, state: null, exceptionHandler: OneRunTimerExceptionHandler);
@@ -590,7 +599,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.ClusterSup
                         });
 
                         //mq切机
-                        //_mqChangeCallback?.Invoke(oldConfig, newConfig);
+                        _mqChangeCallback?.Invoke(oldConfig, newConfig);
                     }
                 }
             }
