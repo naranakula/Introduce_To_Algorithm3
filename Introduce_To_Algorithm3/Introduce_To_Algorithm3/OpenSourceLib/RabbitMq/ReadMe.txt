@@ -66,6 +66,12 @@ RabbitMQ Cluster
 
 
 修改rabbitmq配置文件，需重启程序
+the persistence layer 有两个组件:queue index和message store. queue index maintain where message is in a queue along with whether it has been delivered and acknowledged.
+message store is a key-value store for messages.Messages (the body, and any properties and / or headers) can either be stored directly in the queue index, or written to the message store.
+
+
+
+		
 
 
 
