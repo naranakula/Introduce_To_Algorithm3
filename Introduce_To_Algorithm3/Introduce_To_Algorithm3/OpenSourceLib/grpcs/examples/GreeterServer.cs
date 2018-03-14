@@ -44,7 +44,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             Console.WriteLine(request.Request_);
 
             //服务实现抛出异常不会挂掉服务器，客户端捕获如下异常信息:Status(StatusCode=Unknown, Detail="Exception was thrown by handler.")
-            throw new Exception("test error");
 
             return Task.FromResult(new Response() {Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss")});
 

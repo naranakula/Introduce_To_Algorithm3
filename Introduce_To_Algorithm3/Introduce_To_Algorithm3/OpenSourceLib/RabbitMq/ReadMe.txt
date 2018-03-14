@@ -65,7 +65,7 @@ RabbitMQ Cluster
 
 
 
-
+修改rabbitmq配置文件，需重启程序
 
 
 

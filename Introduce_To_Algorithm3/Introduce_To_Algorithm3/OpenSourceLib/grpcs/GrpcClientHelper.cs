@@ -326,6 +326,8 @@ Every channel creates it's own TCP connection
         /// 创建channel是expensive operation compared to invoking a remote call.
         /// channel is an abstraction of long-lived connections to remote server. more client objects can reuse the same channel.（来自官方文档）
         /// channel应该尽可能的重用(channel提供了自动重连和线程安全[已确认])
+        /// 当客户端先于服务器启动，当服务器启动后，客户端仍然能够连接服务器 (已测试)
+        /// 当服务器中间挂掉，服务器重新上线后，客户端仍然能够连接服务器  (已测试)
         /// 关于自动重连参见文档:
         /// https://github.com/grpc/grpc/blob/master/doc/connection-backoff.md
         /// 关于线程安全参见文档:
