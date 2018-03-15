@@ -11,6 +11,7 @@ namespace Introduce_To_Algorithm3.Models
     /// <summary>
     /// 通用异常
     /// </summary>
+    [Serializable]
     public class CommonException:Exception
     {
         /// <summary>
