@@ -67,7 +67,59 @@ RabbitMQ Cluster
 
 修改rabbitmq配置文件，需重启程序
 the persistence layer 有两个组件:queue index和message store. queue index maintain where message is in a queue along with whether it has been delivered and acknowledged.
-message store is a key-value store for messages.Messages (the body, and any properties and / or headers) can either be stored directly in the queue index, or written to the message store.
+message store is a key-value store for messages.Messages (the body, and any properties and / or 
+headers) can either be stored directly in the queue index, or written to the message store.
+
+
+Mirrored queue: 每个mirrored queue有一个master和一个或多个mirror组成，the oldest mirror to be promoted to new master if the old master disappear.发送到master queue的消息在所有的mirror中复制一份，消费者仍然是从master消费消息(不管消费者连接的是哪一个节点)，当master中消息被消费时，同时所有的mirror也移除该消息。
+
+
+
+rabbitmq alarms:
+	1、默认使用超过系统内存40%，生产者将被阻塞，建议0.6(60%)  vm_memory_high_watermark 
+	2、disk_free_limit默认是50M，当硬盘空间少于50m时将阻塞生产者，建议生产环境至少10G（通常至少1.1倍内存）
+	3、When running RabbitMQ in a cluster, the memory and disk alarms are cluster-wide; if one node goes over the limit then all nodes will block connections.
+	4、
+
+
+内存硬盘rabbitmq.config配置项
+vm_memory_high_watermark.relative = 0.4
+disk_free_limit.absolute = 1GB
+
+配置文件文档
+http://www.rabbitmq.com/configure.html#configuration-file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
