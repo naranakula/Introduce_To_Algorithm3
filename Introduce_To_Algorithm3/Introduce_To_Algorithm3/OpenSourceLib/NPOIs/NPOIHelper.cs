@@ -136,7 +136,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NPOIs
             }
             finally
             {
-                workbook?.Dispose();
+                workbook?.Close();
             }
         }
 
@@ -212,7 +212,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NPOIs
                             break;
                         }
 
-                        rowData.Add(cell.StringCellValue);
+                        rowData.Add(cell.ToString());
                         cellIndex++;
                     }
 
@@ -231,7 +231,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.NPOIs
 
                 if (workbook != null)
                 {
-                    workbook.Dispose();
+                    //workbook.Dispose();//该方法会抛异常
+                    workbook.Close();
                 }
             }
         }
