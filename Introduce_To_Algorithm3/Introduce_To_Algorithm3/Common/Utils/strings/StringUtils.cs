@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Quartz.Impl.Triggers;
+using TinyPinyin.Core;
+using ToolGood.Words;
 
 namespace Introduce_To_Algorithm3.Common.Utils.strings
 {
@@ -361,7 +363,44 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
             return list.Any(item => EqualsEx(item, s));
         }
 
-        
+
+        #endregion
+
+        #region 第三方
+
+        #region  nuget TinyPinyin.Core  .net4.5不能用
+
+        /// <summary>
+        /// 生成的拼音不包含声调，均为大写
+        /// 中国 - ZHONGGUO
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
+        public static string GetPinyin(string text, string separator = ",")
+        {
+            return PinyinHelper.GetPinyin(text,separator);
+        }
+
+        #endregion
+
+
+        #region  nuget ToolGood.Words敏感词过滤  https://github.com/toolgood/ToolGood.Words
+
+        /// <summary>
+        /// WordsHelper.GetPinYin("我爱中国");//WoAiZhongGuo
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string GetPinYin2(string text)
+        {
+            return WordsHelper.GetPinYin(text);
+        }
+
+        #endregion
+
+
+
         #endregion
 
         #region UnCommon

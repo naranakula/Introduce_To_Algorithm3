@@ -22,6 +22,7 @@ using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2;
+using Introduce_To_Algorithm3.Common.Utils.strings;
 using Introduce_To_Algorithm3.OpenSourceLib.AutoMapper;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs;
 
@@ -31,6 +32,7 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
+            NLogHelper.Info(StringUtils.GetPinYin2("次旺仁增"));
             //红黑树
             SortedDictionary<string,string> rbTree = new SortedDictionary<string, string>();
             DirectoryHold.ResetCurrentDir();
