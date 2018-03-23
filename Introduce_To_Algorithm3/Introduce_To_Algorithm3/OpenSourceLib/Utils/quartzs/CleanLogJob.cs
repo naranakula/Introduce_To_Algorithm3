@@ -19,7 +19,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
     /// 0 17 4 * * ?     每天4点17分执行
     /// 0 17 4 1 * ?     每月1号4点17分执行  建议使用这个
     /// </summary>
-    public class CleanLogJob:IJob
+    public class CleanLogJob : IJob
     {
         #region 回调Job
         /// <summary>
@@ -61,7 +61,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             }
             catch (Exception ex)
             {
-                NLogHelper.Error("清理日志失败:"+ex);
+                NLogHelper.Error("清理日志失败:" + ex);
             }
             finally
             {
@@ -76,7 +76,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 清理日志
         /// </summary>
         public void CleanLog(string logDirToClean)
-        {            
+        {
             NLogHelper.Info("开始清理日志");
             DirectoryInfo dirInfo = new DirectoryInfo(logDirToClean);
             if (!dirInfo.Exists)
@@ -110,20 +110,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDaysWhenAvailableLimit, 0, 0, 0));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //ignore
                 NLogHelper.Warn($"根据硬盘当前容量判断过期时间失败:{ex}");
             }
             #endregion
 
-            
-            NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss",CultureInfo.CurrentCulture)}之前的{dirInfo.FullName}目录的日志");
+
+            NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss", CultureInfo.CurrentCulture)}之前的{dirInfo.FullName}目录的日志");
 
             //清理文件
             try
             {
-                int delCount = CleanFiles(logDirToClean, SearchPatternArr, expireTime, currentDepth:0);
+                int delCount = CleanFiles(logDirToClean, SearchPatternArr, expireTime, currentDepth: 0);
                 NLogHelper.Info($"共删除{delCount}个文件");
             }
             catch (Exception ex)
@@ -134,14 +134,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             try
             {
                 //清理空目录
-                int delCount = CleanEmptyDirectory(logDirToClean,  currentDepth:0);
+                int delCount = CleanEmptyDirectory(logDirToClean, currentDepth: 0);
                 NLogHelper.Info($"共删除{delCount}个目录");
             }
             catch (Exception ex)
             {
                 NLogHelper.Warn($"清理空目录失败:{ex}");
             }
-            
+
 
             NLogHelper.Info($"清理日志完成");
         }
@@ -159,7 +159,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="expireTime">文件过期时间</param>
         /// <param name="currentDepth">当前递归深度</param>
         /// <returns>返回删除文件的个数</returns>
-        private int CleanFiles(string topDir, string[] fileSearchPatternArr, DateTime expireTime,int currentDepth)
+        private int CleanFiles(string topDir, string[] fileSearchPatternArr, DateTime expireTime, int currentDepth)
         {
             if (currentDepth > MaxRecursiveDepth)
             {
@@ -178,7 +178,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
             //If you choose AllDirectories and the directory structure contains a link that creates a loop, the search operation enters an infinite loop.
             //FileInfo[] fileInfos = dirInfo.GetFiles(fileSearchPattern, SearchOption.AllDirectories);
-            
+
             HashSet<string> fileInfos = new HashSet<string>();
             foreach (string searchPatternItem in fileSearchPatternArr)
             {
@@ -191,21 +191,20 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             //删除过期文件
             foreach (string fileName in fileInfos)
             {
-
-                FileInfo fileInfo = new FileInfo(fileName);
-                //文件过期
-                if (fileInfo.Exists && fileInfo.LastWriteTime < expireTime)
+                try
                 {
-                    try
+                    FileInfo fileInfo = new FileInfo(fileName);
+                    //文件过期
+                    if (fileInfo.Exists && fileInfo.LastWriteTime < expireTime)
                     {
                         fileInfo.Delete();
                         delCount++;
                         NLogHelper.Trace("删除文件:" + fileInfo.FullName);
                     }
-                    catch (Exception ex)
-                    {
-                        NLogHelper.Warn($"删除文件{fileInfo.FullName}失败:{ex}");
-                    }
+                }
+                catch (Exception ex)
+                {
+                    NLogHelper.Warn($"删除文件{fileName}失败:{ex}");
                 }
             }
 
@@ -213,7 +212,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             DirectoryInfo[] subDirs = dirInfo.GetDirectories();//返回当前目录的子目录。如果没有子目录，则此方法返回一个空数组。 此方法不是递归的。
             foreach (var subDir in subDirs)
             {
-                delCount += CleanFiles(subDir.FullName,fileSearchPatternArr,expireTime,currentDepth+1);
+                delCount += CleanFiles(subDir.FullName, fileSearchPatternArr, expireTime, currentDepth + 1);
             }
 
             return delCount;
@@ -225,7 +224,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="topDir">顶级目录</param>
         /// <param name="currentDepth">当前递归深度</param>
         /// <returns>删除目录的个数</returns>
-        private int CleanEmptyDirectory(string topDir,  int currentDepth)
+        private int CleanEmptyDirectory(string topDir, int currentDepth)
         {
             if (currentDepth > MaxRecursiveDepth)
             {
@@ -275,11 +274,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     }
                 }
             }
-            
+
             //递归子目录
             foreach (var subDir in nonEmptyDirList)
             {
-                delCount += CleanEmptyDirectory(subDir.FullName,currentDepth+1);
+                delCount += CleanEmptyDirectory(subDir.FullName, currentDepth + 1);
             }
 
             return delCount;
@@ -312,7 +311,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 避免每次递归创建
         /// </summary>
-        private static readonly string[] SearchPatternArr = new string[]{"*.log"};//FilePattern.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim()).ToArray();
+        private static readonly string[] SearchPatternArr = new string[] { "*.log" };//FilePattern.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim()).ToArray();
 
         /// <summary>
         /// 硬盘空间极限可用值。
