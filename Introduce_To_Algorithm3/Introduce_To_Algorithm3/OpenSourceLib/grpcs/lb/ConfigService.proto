@@ -1,0 +1,40 @@
+﻿syntax = "proto3";
+
+//服务器端实现，客户端调用用来获取配置
+//默认的包名
+package com.common.cmlu.services;
+
+//生成C#时的包名  会覆盖默认的包名
+option csharp_namespace = "com.common.cmlu.services";
+
+
+//定义获取配置接口
+service ConfigService{
+	//获取配置信息
+	rpc GetConfig(GetConfigRequest) returns(GetConfigResponse){}
+}
+
+
+//请求
+message GetConfigRequest{
+	string command = 1;//请求的命令
+	string command_parameter = 2;//命令参数
+}
+
+
+
+//响应
+message GetConfigResponse{
+	int32 result_code =1; //结果码 >=0 0表示成功
+	string result_desc = 2;//结果描述
+	repeated .com.common.cmlu.services.ConfigItem ConfigList = 3;//配置项
+}
+
+//单个配置项
+message ConfigItem{
+	string config_key = 1;
+	string config_value = 2;
+}
+
+
+
