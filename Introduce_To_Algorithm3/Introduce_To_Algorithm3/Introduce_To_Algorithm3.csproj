@@ -834,6 +834,7 @@
     <Content Include="localconfig.xml" />
     <Content Include="OpenSourceLib\grpcs\examples\exs\windows_x86\grpc_csharp_plugin.exe" />
     <Content Include="OpenSourceLib\grpcs\examples\exs\windows_x86\protoc.exe" />
+    <Content Include="OpenSourceLib\grpcs\Grpc_Error_Catch.png" />
     <Content Include="OpenSourceLib\grpcs\protos\ReadMe.txt" />
     <Content Include="OpenSourceLib\grpcs\protos\windows_x86\protoc.exe" />
     <Content Include="OpenSourceLib\grpcs\ssl.txt" />
