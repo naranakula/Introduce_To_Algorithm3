@@ -967,6 +967,7 @@
     <None Include="OpenSourceLib\NetMqs\Docs\NetMq文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Docs\NetWorkComms.Net文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Packages\NetworkCommsDotNet_v3.0.3_ALv2.zip" />
+    <None Include="OpenSourceLib\RabbitMq\rabbitmq.conf" />
     <None Include="OpenSourceLib\RabbitMq\Rabbitmq.docx" />
     <None Include="OpenSourceLib\Redis_\Redis-x64-3.0.504.zip" />
     <None Include="OpenSourceLib\Redis_\Redis-x64-3.2.100的配置好的单机版redis.windows.conf" />

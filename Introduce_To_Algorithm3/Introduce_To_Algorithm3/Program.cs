@@ -32,7 +32,6 @@ namespace Introduce_To_Algorithm3
     {
         public static void Main(string[] args)
         {
-            NLogHelper.Info(StringUtils.GetPinYin2("次旺仁增"));
             //红黑树
             SortedDictionary<string,string> rbTree = new SortedDictionary<string, string>();
             DirectoryHold.ResetCurrentDir();

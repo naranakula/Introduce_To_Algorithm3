@@ -83,14 +83,15 @@ rabbitmq alarms:
 
 
 内存硬盘rabbitmq.config配置项
-vm_memory_high_watermark.relative = 0.4
-disk_free_limit.absolute = 1GB
+vm_memory_high_watermark.relative = 0.55
+disk_free_limit.absolute = 8GB
 
 配置文件文档
 http://www.rabbitmq.com/configure.html#configuration-file
 
 
-
+*:代表一个单词
+#:代表0或者多个单词
 
 
 
