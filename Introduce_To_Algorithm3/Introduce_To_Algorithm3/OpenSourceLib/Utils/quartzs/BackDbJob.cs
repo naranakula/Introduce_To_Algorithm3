@@ -42,7 +42,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 string dbName = EfDbContext.DbName;
 
                 //要备份的数据库名
-                string dbBackName = dbName + "_" + DateTime.Now.ToString("yyyy-MM-dd")+".bak";
+                string dbBackName = dbName + "_" + DateTime.Now.ToString("yyyyMMdd")+".bak";
                 //数据库全路径
                 string dbFullPath = Path.Combine(BackUpDir, dbBackName);
 
@@ -61,7 +61,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             }
             catch (Exception ex)
             {
-                Log4netHelper.Error("备份数据库失败：" + ex);
+                Log4netHelper.Error("备份数据库失败:" + ex);
             }
             finally
             {
