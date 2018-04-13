@@ -56,7 +56,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <summary>
         /// 连接字符串
         /// </summary>
-        private const string ConnectionStr = "name=SqliteConStr";
+        public const string ConnectionStr = "name=SqliteConStr";
 
         /// <summary>
         /// 构造函数
@@ -65,6 +65,8 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         {
 
         }
+        
+
 
         #region 定义DbSet表
 

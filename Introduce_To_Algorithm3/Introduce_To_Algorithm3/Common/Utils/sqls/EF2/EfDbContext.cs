@@ -46,7 +46,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString格式
         /// </summary>
-        private const string _nameOrConnectionString = "name=SqlSeverConnString";
+        public const string _nameOrConnectionString = "name=SqlSeverConnString";
 
         /// <summary>
         /// 锁
@@ -138,6 +138,35 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 必须是共有的，因为DbIniter需要
         /// </summary>
         public EfDbContext() : base(_nameOrConnectionString)
+        {
+            //改为false，之后延迟加载及时为true也不起作用，除非显示的Include
+            //Include是显式加载，即使ProxyCreationEnabled = false和LazyLoadingEnabled = false，仍然会起作用
+            //this.Configuration.ProxyCreationEnabled = false;//默认是true的
+            //延迟加载导航属性
+            this.Configuration.LazyLoadingEnabled = false;//默认是true的
+
+            #region 设置命令超时时间  默认是30s
+            //方式1
+            IObjectContextAdapter objectContext = (this as IObjectContextAdapter);
+            //超时时间单位秒
+            objectContext.ObjectContext.CommandTimeout = 120;
+
+            //方式2 超时时间单位秒 可以放到ActionSafe里
+            this.Database.CommandTimeout = 120;
+
+            #endregion
+
+        }
+
+
+        /// <summary>
+        /// 给定字符串用作将连接到的数据库的名称或连接字符串
+        /// name=ConnString格式
+        /// //设置为保护或者私有的，是希望通过通用的action或Func实例化
+        /// 必须是共有的，因为DbIniter需要
+        /// 如果两个数据库，最好两个EfDbContext,即使他们完全相同
+        /// </summary>
+        public EfDbContext(string nameOrConnectionString) : base(nameOrConnectionString)
         {
             //改为false，之后延迟加载及时为true也不起作用，除非显示的Include
             //Include是显式加载，即使ProxyCreationEnabled = false和LazyLoadingEnabled = false，仍然会起作用
