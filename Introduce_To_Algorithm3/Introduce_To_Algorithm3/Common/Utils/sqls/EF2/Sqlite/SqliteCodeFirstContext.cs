@@ -80,6 +80,11 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         public DbSet<DictItem> DictItems { get; set; }
 
+        /// <summary>
+        /// 缓存项
+        /// </summary>
+        public DbSet<CacheItem> CacheItems { get; set; }
+
         #endregion
 
         /// <summary>
@@ -101,6 +106,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             modelBuilder.Configurations.Add(new KvPairMap());
             //添加字典表映射
             modelBuilder.Configurations.Add(new DictItemMap());
+            modelBuilder.Configurations.Add(new CacheItemMap());
             modelBuilder.Configurations.Add(new BaseEntityMap());
         }
 
@@ -395,8 +401,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         }
 
         #endregion
-
-
+        
         #region 字典表相关  键和类型共同确认一个数据项
 
         /// <summary>
@@ -426,7 +431,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
                 string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
                 using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
                 {
-                    //即使在某些多线程同时写的极端情况，有可能创建多条记录
+                    //即使在某些多线程同时写的极端情况，也不可能创建多条记录
                     DictItem oldDictItem = context.DictItems.FirstOrDefault(r => r.DictKey == normalizedKey && r.DictType == normalizedType);
                     if (oldDictItem == null)
                     {
@@ -593,6 +598,217 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         #endregion
 
+        #region Cache相关 键和类型确认一个cache
+
+        /// <summary>
+        /// 如果添加或者修改成功返回数据项，
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expireTime"></param>
+        /// <param name="type"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static CacheItem AddOrUpdateCacheItem(string key, string value,DateTime expireTime, string type = "",
+            Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            {
+                //键或者值为null或空白，则什么也不做
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    //即使在某些多线程同时写的极端情况，也不可能创建多条记录
+                    CacheItem cacheItem = context.CacheItems.FirstOrDefault(r => r.CacheKey == normalizedKey && r.CacheType == normalizedType);
+
+                    if (cacheItem == null)
+                    {
+                        cacheItem = new CacheItem();
+                        cacheItem.CacheKey = normalizedKey;
+                        cacheItem.CacheType = normalizedType;
+                        cacheItem.CreateTime = cacheItem.UpdateTime = DateTime.Now;
+                        cacheItem.ExpireTime = expireTime;
+                        cacheItem.CacheValue = value;
+                        context.CacheItems.Add(cacheItem);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        bool valueChanged = cacheItem.CacheValue != value;
+                        bool expireTimeChanged = cacheItem.ExpireTime != expireTime;
+
+                        if (valueChanged)
+                        {
+                            cacheItem.CacheValue = value;
+                        }
+
+                        if (expireTimeChanged)
+                        {
+                            cacheItem.ExpireTime = expireTime;
+                        }
+
+                        if (valueChanged || expireTimeChanged)
+                        {
+                            cacheItem.UpdateTime = DateTime.Now;
+                            context.SaveChanges();
+                        }
+
+                       
+                    }
+                    return cacheItem;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return null;
+            }
+        }
+
+
+
+        /// <summary>
+        /// 如果键为null或空白，直接返回null
+        /// 如果键和类型对应的数据不存在，返回null
+        /// 键和类型共同确认一个数据项
+        /// 返回时，键和类型会被归一化处理
+        /// 键和类型在数据库中是按小写存的
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <param name="type">数据项类型 忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        public static CacheItem GetCacheItem(string key, string type = "", Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    //即使在某些多线程同时写的极端情况，可能会创建多条记录
+                    CacheItem result = context.CacheItems.FirstOrDefault(r => r.CacheKey == normalizedKey && r.CacheType == normalizedType);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return null;
+            }
+
+        }
+
+        /// <summary>
+        /// 根据类型获取CacheItem表,如果异常，返回null
+        /// </summary>
+        /// <param name="exceptionHandler">异常处理</param>
+        /// <param name="type">字典表类型 忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        public static List<CacheItem> GetCacheItemsByType(string type = "", Action<Exception> exceptionHandler = null)
+        {
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    //即使在某些多线程同时写的极端情况，有组合主键保证，不可能会创建多条记录
+                    var result = context.CacheItems.Where(r => r.CacheType == normalizedType).ToList();
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+                return null;
+            }
+
+        }
+
+        /// <summary>
+        /// 删除键和类型关联的数据项，并返回
+        /// 如果键为null或空白，直接返回null
+        /// 如果键对应的数据不存在，返回null
+        /// 键和类型共同确认一个数据项
+        /// 返回时，键和类型会被归一化处理
+        /// 键和类型在数据库中是按小写存的
+        /// </summary>
+        /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
+        /// <param name="type">类型</param>
+        /// <param name="exceptionHandler">异常处理</param>
+        public static CacheItem DeleteCacheItem(string key, string type = "", Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return null;
+            }
+
+            try
+            {
+                //键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现)
+                //在数据库中全部保存了小写
+                string normalizedKey = key.Trim().ToLower();
+                string normalizedType = type == null ? string.Empty : type.Trim().ToLower();
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    //即使在某些多线程同时写的极端情况，也不可能会创建多条记录
+                    CacheItem result = context.CacheItems.FirstOrDefault(r => r.CacheKey == normalizedKey && r.CacheType == normalizedType);
+                    if (result != null)
+                    {
+                        context.CacheItems.Remove(result);
+                        context.SaveChanges();
+                    }
+
+                    return result;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+
+
+                return null;
+            }
+
+        }
+
+
+        #endregion
+
+
+
     }
 
 
@@ -738,6 +954,77 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
     }
 
     #endregion
+
+
+    #region CacheItem 缓存项  在字典表上加上了过期时间
+
+    /// <summary>
+    /// Cache项
+    /// </summary>
+    public class CacheItem
+    {
+        /// <summary>
+        /// 键 方法保证不为空或null
+        /// SQLite变长记录，字段不需要指定长度。
+        /// 长度不要超过128
+        /// </summary>
+        public string CacheKey { get; set; }
+
+
+        /// <summary>
+        /// cache类型，默认为空，表示不分类型
+        /// 长度不要超过128
+        /// </summary>
+        public string CacheType { get; set; }
+
+
+        /// <summary>
+        /// 值 方法保证不为空或null
+        /// SQLite变长记录，字段不需要指定长度
+        /// </summary>
+        public string CacheValue { get; set; }
+
+        /// <summary>
+        /// Cache的过期时间
+        /// </summary>
+        public DateTime ExpireTime { get; set; }
+
+
+        /// <summary>
+        /// 更新时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime UpdateTime { get; set; }
+
+        /// <summary>
+        /// 首次 创建时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+    /// <summary>
+    /// 数据库表映射
+    /// </summary>
+    public class CacheItemMap : EntityTypeConfiguration<CacheItem>
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public CacheItemMap()
+        {
+            ToTable("CacheItem").HasKey(p => new { p.CacheKey, p.CacheType });
+
+            /*
+             CREATE TABLE "CacheItem" ([CacheKey] nvarchar (128) NOT NULL, [CacheType] nvarchar (128) NOT NULL, [CacheValue] nvarchar, [ExpireTime] datetime NOT NULL, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(CacheKey, CacheType))
+             
+             */
+        }
+    }
+
+
+    #endregion
+
 
     #region 样例 供写代码时查看使用
 
