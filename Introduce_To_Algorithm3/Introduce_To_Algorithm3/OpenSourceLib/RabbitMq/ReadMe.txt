@@ -96,6 +96,10 @@ http://www.rabbitmq.com/configure.html#configuration-file
 
 
 
+消息的routingkey设计规范
+1、对应普通的发送消息  m.消息类型.消息动作  如  m.flight.add     m.flight.delete
+2、对应响应消息   r.目标队列名.消息类型.消息动作  消息动作部分可选  如  r.destqueue.flight
+3、routing key最好在消息体中有所体现，方便转发
 
 
 
@@ -120,11 +124,6 @@ http://www.rabbitmq.com/configure.html#configuration-file
 
 
 
-
-
-
-
-		
 
 
 

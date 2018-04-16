@@ -75,7 +75,7 @@ namespace Common
         /// <summary>
         /// 通用的已经运行一个实例的执行动作
         /// </summary>
-        public static void GeneralAlreadyRunAction(Action<Exception> exceptionHandler)
+        public static void GeneralAlreadyRunAction(Action<Exception> exceptionHandler = null)
         {
             try
             {
