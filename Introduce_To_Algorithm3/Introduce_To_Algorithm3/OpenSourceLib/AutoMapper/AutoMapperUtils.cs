@@ -33,11 +33,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
                     //经测试，所有的类型转换必须先CreateMap，即使是从A到A的转换  从A到B和从B到A是两个转换
                     cfg.CreateMap<A, B>();
                     //默认是MemberList.Destination，表示Check that all destination members are mapped 所有目标成员都必须映射
-                    //MemberList.None表示不检查
+                    //MemberList.None表示不检查  MemberList.Source表示所有的源被影射，默认时MemberList.Destination
                     //A是源类型,B是目标类型
                     //PreserveReferences()是默认的配置
                     //MapFrom和ResolveUsing的区别是MapFrom内部有Nullcheck（可忽略的性能区别）,除此之外没有任何区别 ResolveUsing可以定制的代码更多
-                    var imap = cfg.CreateMap<A, B>(MemberList.Destination).PreserveReferences().ForMember(b=>b.a,opt=>opt.MapFrom(a=>a.a/*对某些字段进行定制的转换*/)).ForMember(a=>a.a,opt=>opt.ResolveUsing(a=>a.a/*对某些字段进行定制转换*/)).ForMember(b=>b.a,opt=>opt.Ignore()/*对某些字段不转换*/);
+                    var imap = cfg.CreateMap<A, B>(MemberList.None).PreserveReferences().ForMember(b=>b.a,opt=>opt.MapFrom(a=>a.a/*对某些字段进行定制的转换*/)).ForMember(a=>a.a,opt=>opt.ResolveUsing(a=>a.a/*对某些字段进行定制转换*/)).ForMember(b=>b.a,opt=>opt.Ignore()/*对某些字段不转换*/);
 
                     
                     #region 循环引用
