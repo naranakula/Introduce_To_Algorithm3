@@ -27,12 +27,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
             //createmap的顺序是不重要的
             try
             {
+                //1、配置
                 Mapper.Initialize(cfg =>
                 {
                     #region 初始化代码
                     //经测试，所有的类型转换必须先CreateMap，即使是从A到A的转换  从A到B和从B到A是两个转换
                     cfg.CreateMap<A, B>();
-                    //默认是MemberList.Destination，表示Check that all destination members are mapped 所有目标成员都必须映射
+                    //默认是MemberList.Destination，表示Check that all destination members are mapped 所有目标成员都必须映射 如果违反，Mapper.Map<Source, Target>(src);不会抛出异常   Mapper.Configuration.AssertConfigurationIsValid();会抛出异常
                     //MemberList.None表示不检查  MemberList.Source表示所有的源被影射，默认时MemberList.Destination
                     //A是源类型,B是目标类型
                     //PreserveReferences()是默认的配置
@@ -52,6 +53,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
                     #endregion
                 });
 
+                //2、检测配置
+                //用来判断配置是否可用，如果不可用抛出异常
+                Mapper.Configuration.AssertConfigurationIsValid();
                 return true;
             }
             catch (Exception e)
@@ -75,6 +79,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.AutoMapper
             {
                 return default(Target);
             }
+            
             return Mapper.Map<Source, Target>(src);
         }
 
