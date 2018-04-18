@@ -11,6 +11,7 @@ namespace Introduce_To_Algorithm3.Models
     /// 操作结果类
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [Obsolete]
     public class OperationResult<T>
     {
         /// <summary>

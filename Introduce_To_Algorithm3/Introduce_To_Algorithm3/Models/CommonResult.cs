@@ -30,6 +30,23 @@ namespace Introduce_To_Algorithm3.Models
             this.Result = result;
         }
 
+
+        public CommonResult(int resultCode, T result, Exception exception)
+        {
+            this.ResultCode = resultCode;
+            this.Result = result;
+            this.ResultException = exception;
+        }
+
+        public CommonResult(int resultCode, T result, Exception exception,string description)
+        {
+            this.ResultCode = resultCode;
+            this.Result = result;
+            this.ResultException = exception;
+            this.ResultDesc = description;
+        }
+
+
         #endregion
 
         /// <summary>
