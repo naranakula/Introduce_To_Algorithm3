@@ -40,6 +40,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
             //不要调用基类的方法，基类仅仅抛出异常
             //base.SayHello(request, context);
 
+            //建议采用这种方案，至少不会线程爆炸
+            Thread.Sleep(8000);
 
             Console.WriteLine(request.Request_);
 
@@ -48,7 +50,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.examples
 
             return Task.FromResult(new Response() {Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss")});
 
-
+            //不采用Task.Factory.StartNew有可能线程爆炸，实际上Task底层是线程池也不会爆炸
+            //return Task.Factory.StartNew(() =>
+            //{
+            //    Thread.Sleep(8000);
+            //    return new Response()
+            //    {
+            //        Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss")
+            //    };
+            //});
             //return Task.Factory.StartNew(()=> {
             //    return new Response() { Response_ = "Hello at " + DateTime.Now.ToString("yyyyMMdd HH:mm:ss") };
             //});
