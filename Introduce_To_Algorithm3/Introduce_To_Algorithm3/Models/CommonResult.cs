@@ -20,7 +20,7 @@ namespace Introduce_To_Algorithm3.Models
 
         public CommonResult()
         {
-            
+            this.ResultCode = 0;
         }
 
 
@@ -85,6 +85,29 @@ namespace Introduce_To_Algorithm3.Models
                 return $"ResultCode={ResultCode},ResultDesc={ResultDesc}";
             }
         }
+
+
+        /// <summary>
+        /// 是否是成功的结果  0表示成功  其它表示失败
+        /// </summary>
+        /// <returns></returns>
+        public bool IsSuccess()
+        {
+            return ResultCode == 0;
+        }
+
+        /// <summary>
+        /// 返回成功结果
+        /// </summary>
+        /// <returns></returns>
+        public static int GetSuccessCode()
+        {
+            return 0;
+        }
+
+
+
+
     }
 
 
