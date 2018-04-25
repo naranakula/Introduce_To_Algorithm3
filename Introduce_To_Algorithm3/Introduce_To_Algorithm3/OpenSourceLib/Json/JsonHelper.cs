@@ -66,7 +66,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
         /// <param name="format">None表示不缩进，更紧凑，Indented表示缩进，更好看</param>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
-        public static string ToJson(Object obj,Action<Exception>  exceptionHandler=null,Formatting format = Formatting.Indented)
+        public static string ToJson(Object obj, Formatting format = Formatting.Indented, Action < Exception>  exceptionHandler=null)
         {
 
             try
