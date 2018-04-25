@@ -35,7 +35,7 @@ namespace Introduce_To_Algorithm3
             //红黑树
             SortedDictionary<string,string> rbTree = new SortedDictionary<string, string>();
             DirectoryHold.ResetCurrentDir();
-            NLogHelper.Info(GuidUtils.GetGuid2());
+            NLogHelper.Info(GuidUtils.GetGuid32());
             NLogHelper.Trace("Trace");
             NLogHelper.Debug("Debug");
             NLogHelper.Info("Info");

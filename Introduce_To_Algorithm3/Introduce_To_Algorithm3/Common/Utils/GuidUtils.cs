@@ -16,7 +16,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         /// </summary>
         /// <returns></returns>
-        public static string GetGuid()
+        public static string GetGuid36()
         {
             return Guid.NewGuid().ToString();
         }
@@ -26,9 +26,22 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         /// </summary>
         /// <returns></returns>
-        public static string GetGuid2()
+        public static string GetGuid32()
         {
             return Guid.NewGuid().ToString("N");
         }
+
+        /// <summary>
+        /// 转换为guid，支持36位和32位 支持大小写 已测试
+        /// </summary>
+        /// <param name="guidStr"></param>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public static bool TryParse(string guidStr,out Guid guid)
+        {
+            return Guid.TryParse(guidStr, out guid);
+        }
+
+
     }
 }

@@ -49,6 +49,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 if (File.Exists(dbFullPath))
                 {
                     //已经存在
+                    NLogHelper.Warn($"数据库备份{dbFullPath}已经存在,本次备份放弃");
+                    //已经存在
                     return;
                 }
 
