@@ -145,6 +145,89 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
                 return string.Equals(s1.Trim(), s2.Trim(), StringComparison.CurrentCulture);
             }
         }
+
+        /// <summary>
+        /// 比较byte数组
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <param name="isNullEqualsEmpty"></param>
+        /// <returns></returns>
+        public static bool EqualsEx(byte[] b1,byte[] b2,bool isNullEqualsEmpty = true)
+        {
+            if(b1==null && b2 == null)
+            {
+                return true;
+            }
+
+
+            if(b1==null)
+            {
+                if (isNullEqualsEmpty)
+                {
+                    if (b2.Length == 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            if (b2 == null)
+            {
+                if (isNullEqualsEmpty)
+                {
+                    if(b1.Length == 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            //b1和b2 不为null
+
+            if(b1.Length != b2.Length)
+            {
+                return false;
+            }
+
+            //同一引用做性能优化
+            if(b1 == b2)
+            {
+                return true;
+            }
+
+            int length = b1.Length;
+            //长度相同
+            for(int i = 0; i < length; i++)
+            {
+                if(b1[i] != b2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+
+
+        }
+
+
         
         /// <summary>
         /// 截短字符串
@@ -161,6 +244,17 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
 
             return s.Trim();
         }
+
+        /// <summary>
+        /// 数组为null或者为空
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty(byte[] b)
+        {
+            return b == null || b.Length == 0;
+        }
+
 
         /// <summary>
         /// 判断字符串s是以start开始的，如果start是null或空白，直接返回true
