@@ -468,7 +468,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
                     else
                     {
                         //即使键值对没有变化，不更新
-                        if (!StringUtils.Equals(result.Value, value))
+                        if (!StringUtils.EqualsEx(result.Value, value))
                         {
                             result.Value = value;
                             result.UpdateTime = DateTime.Now;
