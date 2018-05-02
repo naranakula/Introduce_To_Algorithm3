@@ -858,6 +858,7 @@
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.dll" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.pdb" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\SharpZipLibCompressor.xml" />
+    <Content Include="OpenSourceLib\Nginxs\ReadMe.txt" />
     <Content Include="OpenSourceLib\RabbitMq\ReadMe.txt" />
     <Content Include="OpenSourceLib\Redis_\ReadMe.txt" />
     <Content Include="OpenSourceLib\Redis_\redis-desktop-manager-0.8.8.384.exe" />
@@ -967,6 +968,8 @@
     <None Include="OpenSourceLib\NetMqs\Docs\NetMq文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Docs\NetWorkComms.Net文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Packages\NetworkCommsDotNet_v3.0.3_ALv2.zip" />
+    <None Include="OpenSourceLib\Nginxs\nginx.conf" />
+    <None Include="OpenSourceLib\Nginxs\Nginx.docx" />
     <None Include="OpenSourceLib\RabbitMq\rabbitmq.conf" />
     <None Include="OpenSourceLib\RabbitMq\Rabbitmq.docx" />
     <None Include="OpenSourceLib\Redis_\Redis-x64-3.0.504.zip" />
