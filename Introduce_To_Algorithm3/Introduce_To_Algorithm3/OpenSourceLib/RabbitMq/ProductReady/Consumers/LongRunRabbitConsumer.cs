@@ -362,6 +362,8 @@ Publisher application id
 
             try
             {
+                //消息属性
+                IBasicProperties properties = args.BasicProperties;
                 //获取消息
                 byte[] body = args?.Body;
 

@@ -99,7 +99,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
                         properties.Persistent = true;
 
                         //设置单个消息的过期时间单位毫秒
-                        properties.Expiration = "7200000";//两个小时
+                        properties.Expiration = "10800000";//三个小时
+
+                        //消息属性可以用，但尽量在消息体本身包含所有信息
+
+
 
                         //Direct Exchange将会把消息发送到和routingkey一样的队列中
                         //使用指定的routing key发送到指定的exchange
