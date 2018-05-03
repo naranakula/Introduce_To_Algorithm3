@@ -59,7 +59,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.FTP
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <param name="serverPort"></param>
-        public EdtFtpHelper(string ftpIp, string userName, string password,int serverPort)
+        public EdtFtpHelper(string ftpIp, string userName, string password,int serverPort=21)
         {
             _serverIp = ftpIp;
             _userName = userName;
