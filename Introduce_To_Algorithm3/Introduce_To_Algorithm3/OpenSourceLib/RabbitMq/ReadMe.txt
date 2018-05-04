@@ -103,6 +103,25 @@ http://www.rabbitmq.com/configure.html#configuration-file
 
 
 
+发送者将消息和Routing key发送到Exchange,Exchange比较Routing key和Binding key将消息放到队列，
+消费者从队列消费消息
+队列和Exchange可以建立多个binding key，一个队列可以Binding到多个Exchange
+
+
+
+Exchange  --  The Component of the message broker that routes messages to queues 
+Queue  --   Where to store message
+Routing Key -- 生产者将消息发送到Exchange时需要指定Routing key,用来定义消息的的路由规则
+Binding Ket  --  将queue和Exchange关联起来 A binding link queue to exchange, tell exchange to route message to which queue
+
+
+Exchange Type有fanout、direct、topic、headers
+fanout将发送到Exchange的消息路由到binding的queue中,忽略binding key
+direct将消息路由到binding key和routing key完全一样的queue中
+topic 将routing key定义为.分割的字符串,binding key中可以存在*和# *匹配一个单词  #匹配0个或者多个单词
+headers不依赖于routing key和binding key的配置规则来路由消息，而是根据headers属性匹配
+
+
 
 
 

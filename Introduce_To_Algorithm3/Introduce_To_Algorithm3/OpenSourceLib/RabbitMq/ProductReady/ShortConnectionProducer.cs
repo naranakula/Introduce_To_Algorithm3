@@ -98,10 +98,25 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
                         //定义消息的持久性
                         properties.Persistent = true;
 
-                        //设置单个消息的过期时间单位毫秒
+                        //设置单个消息的过期时间单位毫秒  队列本身有一个过期时间
                         properties.Expiration = "10800000";//三个小时
 
                         //消息属性可以用，但尽量在消息体本身包含所有信息
+                        var contentType = properties.ContentType;//指定如何翻译message body
+                        var contentEncoding = properties.ContentEncoding;//message body的编码或者是否压缩
+                        var messageId = properties.MessageId;//消息id，用来唯一标志一个消息
+                        var correlationId = properties.CorrelationId;//关联Id，用来rpc
+                        var timestamp = properties.Timestamp;//消息发送时间
+                        var appId = properties.AppId;//应用程序Id
+                        var userId = properties.UserId;//用户Id
+                        var type = properties.Type;//消息类型
+                        var replyTo = properties.ReplyTo;//消息返回的地址
+                        var headers = properties.Headers;//自定义消息头
+                        var priority = properties.Priority; //消息优先级
+                        var clusterId = properties.ClusterId;//集群id;
+
+
+
 
 
 

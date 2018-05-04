@@ -276,7 +276,8 @@ Publisher application id
                     //global - true if the settings should be applied to the entire channel rather than each consumer
                     //每次取一个消息，消息大小不限制
                     //注释掉该行，将会使用Robbin轮盘分配，使用下面这行，只有空闲的Consumer接收消息
-                    _channel.BasicQos(prefetchSize:0,prefetchCount:5,global:false);
+                    //我们设置prefetchCount=1，则Queue每次给每个消费者发送一条消息；消费者处理完这条消息后Queue会再给该消费者发送一条消息。
+                    _channel.BasicQos(prefetchSize:0,prefetchCount:3,global:false);
                     
                     //定义消息接收事件
                     EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
@@ -320,7 +321,7 @@ Publisher application id
                     _channel.QueueBind(queue:tempQueueName,exchange:_usedExchangeName,routingKey:"",arguments:null);
 
                     //预取3条消息
-                    _channel.BasicQos(prefetchSize: 0, prefetchCount: 5, global: false);
+                    _channel.BasicQos(prefetchSize: 0, prefetchCount: 3, global: false);
 
                     //定义消息接收事件
                     EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
