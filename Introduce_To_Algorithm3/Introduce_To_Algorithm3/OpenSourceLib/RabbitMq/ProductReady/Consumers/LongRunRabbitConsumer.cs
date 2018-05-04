@@ -397,6 +397,8 @@ Publisher application id
 
         /// <summary>
         /// 连接阻塞
+        /// 
+        /// 被限流
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="connectionBlockedEventArgs"></param>
@@ -462,6 +464,7 @@ Publisher application id
         }
         /// <summary>
         /// 连接畅通
+        /// 限流恢复
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>

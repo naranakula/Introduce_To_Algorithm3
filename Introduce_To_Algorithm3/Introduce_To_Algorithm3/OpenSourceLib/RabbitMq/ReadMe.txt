@@ -123,6 +123,43 @@ headers不依赖于routing key和binding key的配置规则来路由消息，而
 
 
 
+HA queue (mirrored queue)  暂时不用
+	默认queue存在于集群的一个节点上(队列创建时使用的节点),Exchange和binding存在于所有的节点。
+	mirrored queue包含一个master和一个或者多个mirror, 所有的操作是在master节点上,然后传递给所有的mirrors.
+	messages会复制到mirrors中,消息消费后从master和mirrors删除,
+	Consumers are connected to the master regardless of which node they connect to
+	消费者可以连接到任何一个node，
+	If the node that hosts queue master fails, the oldest mirror will be promoted to the new master as long as it synchronised.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
