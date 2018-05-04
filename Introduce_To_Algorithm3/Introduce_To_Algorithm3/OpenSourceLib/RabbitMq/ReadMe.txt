@@ -33,6 +33,8 @@ RabbitMQ Cluster
 			change permission
 			add or remove cluster node
 
+	集群是在低延迟环境中使用,在广域网/高延迟环境使用Shovel或者Federation
+
 
 	一般集群中disk node有两个。当ram node重启时，从预先配置的disk node上下载cluster metadata.ram node 需要知道所有的disk node.
 	the only metadata RAM nodes store to disk are the addresses of disk nodes in the cluster
