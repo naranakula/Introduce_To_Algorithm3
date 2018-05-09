@@ -425,9 +425,14 @@ Every channel creates it's own TCP connection
                 {
                     try
                     {
-                        channel.ShutdownAsync().Wait(9000);
+                        bool result = channel.ShutdownAsync().Wait(9000);
                         //channel.ShutdownAsync().Wait();
                         //安全关闭退出
+                        if (result == false)
+                        {
+                            NLogHelper.Warn($"channel没有及时关闭");
+                        }
+
                     }
                     catch (Exception ex)
                     {
