@@ -48,6 +48,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                     if (_cpuCounter == null)
                     {
+                        //好像只能读到一个核的cpu
                         _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
                     }
                     curCpuCounter = _cpuCounter;
