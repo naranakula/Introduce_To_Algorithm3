@@ -63,7 +63,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 
                 const int sampleCount = 5;
-                const int sleepMilliseconds = 1057;//至少应该为1s，否则将会读到相同的数据
+                const int sleepMilliseconds = 1057;//至少应该为1s，否则有可能会读到相同的数据
                 double cpuUsed = 0;
                 double itemValue = 0;
                 for (int i = 0; i < sampleCount+1; i++)
