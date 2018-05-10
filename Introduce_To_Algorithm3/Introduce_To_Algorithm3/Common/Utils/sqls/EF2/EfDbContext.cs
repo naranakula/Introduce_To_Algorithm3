@@ -37,6 +37,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// 1   主键尽量使用 string\long,不要使用guid
     /// 2   迁移只能新增字段,将现有string字段增长,新增表,新增关系(其它操作不允许)
     /// 
+    /// 
+    /// 每个表都应该有三个字段:
+    ///         string Id             主键
+    ///         DateTime UpdateTime   数据最近一次更新时间  创建时等于创建时间
+    ///         DateTime CreateTime   数据创建时间 
+    /// 
     /// </summary>
     public class EfDbContext : DbContext
     {

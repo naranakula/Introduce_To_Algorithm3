@@ -33,6 +33,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
     /// limit 返回数据项的数量
     /// https://www.sqlite.org/
     /// http://system.data.sqlite.org
+    ///     
+    /// 每个表都应该有三个字段:
+    ///         string Id             主键
+    ///         DateTime UpdateTime   数据最近一次更新时间  创建时等于创建时间
+    ///         DateTime CreateTime   数据创建时间 
+    /// 
     /// </summary>
     public class SqliteCodeFirstContext:DbContext
     {

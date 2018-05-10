@@ -13,6 +13,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// <summary>
     /// 需要先创建用户
     /// 用户有默认的表空间，所有Code First创建的表都在该表空间中
+    /// 
+    /// 每个表都应该有三个字段:
+    ///         string Id             主键
+    ///         DateTime UpdateTime   数据最近一次更新时间  创建时等于创建时间
+    ///         DateTime CreateTime   数据创建时间 
+    /// 
+    /// 
     /// </summary>
     public class OracleDbContext:DbContext
     {

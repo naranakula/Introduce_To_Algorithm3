@@ -16,13 +16,18 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     /// http://dev.mysql.com/doc/connector-net/en/connector-net-introduction.html
     /// 除Sql Server外，MySql Sqlite尽量使用long或者int类型作为主键
     /// 
-//    /// Set the new DbConfiguration class for MySql. This step is optional but highly recommended, since it adds all the dependency resolvers for MySql classes. This can be done in three ways建议使用第三种:
-//	Adding the DbConfigurationTypeAttribute on the context class:
-//	1 [DbConfigurationType(typeof(MySqlEFConfiguration))]
-//	2 Calling DbConfiguration.SetConfiguration(new MySqlEFConfiguration()) at the application startup.
-//	3 Set the DbConfiguration type in the configuration file: 建议使用第三种
-//<entityFramework codeConfigurationType="MySql.Data.Entity.MySqlEFConfiguration, MySql.Data.Entity.EF6">
-
+    //    /// Set the new DbConfiguration class for MySql. This step is optional but highly recommended, since it adds all the dependency resolvers for MySql classes. This can be done in three ways建议使用第三种:
+    //	Adding the DbConfigurationTypeAttribute on the context class:
+    //	1 [DbConfigurationType(typeof(MySqlEFConfiguration))]
+    //	2 Calling DbConfiguration.SetConfiguration(new MySqlEFConfiguration()) at the application startup.
+    //	3 Set the DbConfiguration type in the configuration file: 建议使用第三种
+    //<entityFramework codeConfigurationType="MySql.Data.Entity.MySqlEFConfiguration, MySql.Data.Entity.EF6">
+    /// 
+    /// 每个表都应该有三个字段:
+    ///         string Id             主键
+    ///         DateTime UpdateTime   数据最近一次更新时间  创建时等于创建时间
+    ///         DateTime CreateTime   数据创建时间 
+    /// 
     /// </summary>
     [DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class MySqlDbContext:DbContext
