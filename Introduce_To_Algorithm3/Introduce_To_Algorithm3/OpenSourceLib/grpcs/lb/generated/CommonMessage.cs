@@ -23,15 +23,16 @@ namespace com.common.cmlu.messages {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChNDb21tb25NZXNzYWdlLnByb3RvEhhjb20uY29tbW9uLmNtbHUubWVzc2Fn",
-            "ZXMinQEKDUNvbW1vbk1lc3NhZ2USCgoCaWQYASABKAkSFAoMbWVzc2FnZV90",
+            "ZXMizgEKDUNvbW1vbk1lc3NhZ2USCgoCaWQYASABKAkSFAoMbWVzc2FnZV90",
             "eXBlGAIgASgJEhcKD21lc3NhZ2Vfc3VidHlwZRgDIAEoCRIPCgdpc190ZXh0",
             "GAQgASgIEhQKDHRleHRfY29udGVudBgFIAEoCRIVCg1ieXRlc19jb250ZW50",
-            "GAYgASgMEhMKC2NyZWF0ZV90aW1lGAcgASgJQhuqAhhjb20uY29tbW9uLmNt",
-            "bHUubWVzc2FnZXNiBnByb3RvMw=="));
+            "GAYgASgMEhoKEmNvbnRlbnRfc3RhbXBfdGltZRgHIAEoCRITCgtjcmVhdGVf",
+            "dGltZRgIIAEoCRITCgtyb3V0aW5nX2tleRgJIAEoCUIbqgIYY29tLmNvbW1v",
+            "bi5jbWx1Lm1lc3NhZ2VzYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::com.common.cmlu.messages.CommonMessage), global::com.common.cmlu.messages.CommonMessage.Parser, new[]{ "Id", "MessageType", "MessageSubtype", "IsText", "TextContent", "BytesContent", "CreateTime" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::com.common.cmlu.messages.CommonMessage), global::com.common.cmlu.messages.CommonMessage.Parser, new[]{ "Id", "MessageType", "MessageSubtype", "IsText", "TextContent", "BytesContent", "ContentStampTime", "CreateTime", "RoutingKey" }, null, null, null)
           }));
     }
     #endregion
@@ -71,7 +72,9 @@ namespace com.common.cmlu.messages {
       isText_ = other.isText_;
       textContent_ = other.textContent_;
       bytesContent_ = other.bytesContent_;
+      contentStampTime_ = other.contentStampTime_;
       createTime_ = other.createTime_;
+      routingKey_ = other.routingKey_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -83,7 +86,7 @@ namespace com.common.cmlu.messages {
     public const int IdFieldNumber = 1;
     private string id_ = "";
     /// <summary>
-    ///消息Id
+    ///消息Id  唯一标志一条消息
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Id {
@@ -111,7 +114,7 @@ namespace com.common.cmlu.messages {
     public const int MessageSubtypeFieldNumber = 3;
     private string messageSubtype_ = "";
     /// <summary>
-    ///消息子类型  消息类型和消息子类型唯一确定消息是文本消息还是字节消息，以及消息的具体格式
+    ///消息子类型  消息类型和消息子类型唯一确定消息的具体格式
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string MessageSubtype {
@@ -139,7 +142,7 @@ namespace com.common.cmlu.messages {
     public const int TextContentFieldNumber = 5;
     private string textContent_ = "";
     /// <summary>
-    ///文本格式 的 消息内容
+    ///当is_text为true时的文本格式 的 消息内容
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string TextContent {
@@ -153,7 +156,7 @@ namespace com.common.cmlu.messages {
     public const int BytesContentFieldNumber = 6;
     private pb::ByteString bytesContent_ = pb::ByteString.Empty;
     /// <summary>
-    ///bytes数组格式的消息内容
+    ///当is_text为false时的bytes数组格式的消息内容
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pb::ByteString BytesContent {
@@ -163,17 +166,45 @@ namespace com.common.cmlu.messages {
       }
     }
 
+    /// <summary>Field number for the "content_stamp_time" field.</summary>
+    public const int ContentStampTimeFieldNumber = 7;
+    private string contentStampTime_ = "";
+    /// <summary>
+    ///消息内容的印章时间  表示消息内容最近一次的更新时间  为空表示没有该时间 否则格式为yyyyMMddHHmmssfff
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string ContentStampTime {
+      get { return contentStampTime_; }
+      set {
+        contentStampTime_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "create_time" field.</summary>
-    public const int CreateTimeFieldNumber = 7;
+    public const int CreateTimeFieldNumber = 8;
     private string createTime_ = "";
     /// <summary>
-    ///消息创建时间 格式yyyyMMddHHmmss
+    ///消息创建时间 采用所在机器的时间和时区 格式yyyyMMddHHmmss
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string CreateTime {
       get { return createTime_; }
       set {
         createTime_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "routing_key" field.</summary>
+    public const int RoutingKeyFieldNumber = 9;
+    private string routingKey_ = "";
+    /// <summary>
+    ///消息的routing key
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string RoutingKey {
+      get { return routingKey_; }
+      set {
+        routingKey_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -196,7 +227,9 @@ namespace com.common.cmlu.messages {
       if (IsText != other.IsText) return false;
       if (TextContent != other.TextContent) return false;
       if (BytesContent != other.BytesContent) return false;
+      if (ContentStampTime != other.ContentStampTime) return false;
       if (CreateTime != other.CreateTime) return false;
+      if (RoutingKey != other.RoutingKey) return false;
       return true;
     }
 
@@ -209,7 +242,9 @@ namespace com.common.cmlu.messages {
       if (IsText != false) hash ^= IsText.GetHashCode();
       if (TextContent.Length != 0) hash ^= TextContent.GetHashCode();
       if (BytesContent.Length != 0) hash ^= BytesContent.GetHashCode();
+      if (ContentStampTime.Length != 0) hash ^= ContentStampTime.GetHashCode();
       if (CreateTime.Length != 0) hash ^= CreateTime.GetHashCode();
+      if (RoutingKey.Length != 0) hash ^= RoutingKey.GetHashCode();
       return hash;
     }
 
@@ -244,9 +279,17 @@ namespace com.common.cmlu.messages {
         output.WriteRawTag(50);
         output.WriteBytes(BytesContent);
       }
-      if (CreateTime.Length != 0) {
+      if (ContentStampTime.Length != 0) {
         output.WriteRawTag(58);
+        output.WriteString(ContentStampTime);
+      }
+      if (CreateTime.Length != 0) {
+        output.WriteRawTag(66);
         output.WriteString(CreateTime);
+      }
+      if (RoutingKey.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(RoutingKey);
       }
     }
 
@@ -271,8 +314,14 @@ namespace com.common.cmlu.messages {
       if (BytesContent.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(BytesContent);
       }
+      if (ContentStampTime.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ContentStampTime);
+      }
       if (CreateTime.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(CreateTime);
+      }
+      if (RoutingKey.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RoutingKey);
       }
       return size;
     }
@@ -300,8 +349,14 @@ namespace com.common.cmlu.messages {
       if (other.BytesContent.Length != 0) {
         BytesContent = other.BytesContent;
       }
+      if (other.ContentStampTime.Length != 0) {
+        ContentStampTime = other.ContentStampTime;
+      }
       if (other.CreateTime.Length != 0) {
         CreateTime = other.CreateTime;
+      }
+      if (other.RoutingKey.Length != 0) {
+        RoutingKey = other.RoutingKey;
       }
     }
 
@@ -338,7 +393,15 @@ namespace com.common.cmlu.messages {
             break;
           }
           case 58: {
+            ContentStampTime = input.ReadString();
+            break;
+          }
+          case 66: {
             CreateTime = input.ReadString();
+            break;
+          }
+          case 74: {
+            RoutingKey = input.ReadString();
             break;
           }
         }

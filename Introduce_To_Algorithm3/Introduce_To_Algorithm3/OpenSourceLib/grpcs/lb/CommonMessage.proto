@@ -17,8 +17,9 @@ message CommonMessage{
 	bool is_text = 4;//真表示消息内容为文本格式 假表示消息内容为bytes格式
 	string text_content=5;//当is_text为true时的文本格式 的 消息内容
 	bytes bytes_content=6;//当is_text为false时的bytes数组格式的消息内容
-	string create_time=7;//消息创建时间 采用所在机器的时间和时区 格式yyyyMMddHHmmss
-	string routing_key=8;//消息的routing key
+	string content_stamp_time=7;//消息内容的印章时间  表示消息内容最近一次的更新时间  为空表示没有该时间 否则格式为yyyyMMddHHmmssfff
+	string create_time=8;//消息创建时间 采用所在机器的时间和时区 格式yyyyMMddHHmmss
+	string routing_key=9;//消息的routing key
 }
 
 
