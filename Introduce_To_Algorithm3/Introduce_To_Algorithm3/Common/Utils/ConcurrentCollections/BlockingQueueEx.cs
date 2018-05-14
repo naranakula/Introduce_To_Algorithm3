@@ -397,7 +397,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
                 if ((DateTime.Now - now).TotalSeconds > 1)
                 {
-                    NLogHelper.Warn($"存在约{UnHandleCount}条数据未处理完成");
+                    NLogHelper.Warn($"BlockingQueue存在约{UnHandleCount}条数据未处理完成");
                     break;
                 }
             }
