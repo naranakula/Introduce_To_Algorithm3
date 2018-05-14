@@ -67,6 +67,26 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         /// <summary>
+        /// 转换为本地时间
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DateTime ToLocalTime(DateTime dt)
+        {
+            return dt.ToLocalTime();
+        }
+
+        /// <summary>
+        /// 转换为Utc时间
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DateTime ToUtcTime(DateTime dt)
+        {
+            return dt.ToUniversalTime();
+        }
+
+        /// <summary>
         /// 获取本地时区
         /// </summary>
         /// <returns></returns>
