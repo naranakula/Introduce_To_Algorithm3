@@ -41,7 +41,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 上一次注水时间
         /// </summary>
-        private DateTime? _lastAppendTime;
+        private DateTime _lastAppendTime = DateTime.MinValue;
 
         #region 静态实例
 
@@ -105,11 +105,23 @@ namespace Introduce_To_Algorithm3.Common.Utils
             bool canRunAction = false;//是否可以调用Action
 
             #region token bucket算法
+
+
+            DateTime now = DateTime.Now;
+
             lock (_locker)
             {
-                DateTime now = DateTime.Now;
+
+                double diffTotalMilliseconds = (now - _lastAppendTime).TotalMilliseconds;
+
                 //注水
-                if(_lastAppendTime==null || (now - _lastAppendTime.Value).TotalMilliseconds > _estimatePeriodInMillisecond)
+
+                if (diffTotalMilliseconds < -1000)
+                {
+                    //避免调整系统时间，引起的bug
+                    _lastAppendTime = now;
+                }
+                else if (diffTotalMilliseconds > _estimatePeriodInMillisecond)
                 {
                     //需要注水
                     _lastAppendTime = now;

@@ -61,7 +61,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
                         //long 可以认为不会溢出
                         _recentCount++;
 
-                        if ((now - _lastAssessTime).TotalMilliseconds > AssessTimeInMillisecond)
+                        //避免调整系统时间引起的bug
+                        double diffTotalMs = (now - _lastAssessTime).TotalMilliseconds;
+
+                        if (diffTotalMs < -1000)
+                        {
+                            _lastAssessTime = now;
+                        }
+                        else if (diffTotalMs > AssessTimeInMillisecond)
                         {
                             //重置当前次数
                             _lastAssessTime = now;
@@ -85,7 +92,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     //long 可以认为不会溢出
                     _recentCount++;
 
-                    if ((now - _lastAssessTime).TotalMilliseconds > AssessTimeInMillisecond)
+                    //避免调整系统时间引起的bug
+                    double diffTotalMs = (now - _lastAssessTime).TotalMilliseconds;
+
+                    if (diffTotalMs < -1000)
+                    {
+                        _lastAssessTime = now;
+                    }
+                    else if (diffTotalMs > AssessTimeInMillisecond)
                     {
                         //重置当前次数
                         _lastAssessTime = now;
