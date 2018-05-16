@@ -64,17 +64,17 @@ namespace Introduce_To_Algorithm3.Common.Utils
                         //避免调整系统时间引起的bug
                         double diffTotalMs = (now - _lastAssessTime).TotalMilliseconds;
 
-                        if (diffTotalMs < -1000)
-                        {
-                            _lastAssessTime = now;
-                        }
-                        else if (diffTotalMs > AssessTimeInMillisecond)
+                        if (diffTotalMs > AssessTimeInMillisecond)
                         {
                             //重置当前次数
                             _lastAssessTime = now;
                             //将recent赋给prev，并将recent设为0
                             _previousCount = _recentCount;
                             _recentCount = 0;
+                        }
+                        else if (diffTotalMs < -1000)
+                        {
+                            _lastAssessTime = now;
                         }
 
                         //避免溢出
@@ -95,17 +95,17 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     //避免调整系统时间引起的bug
                     double diffTotalMs = (now - _lastAssessTime).TotalMilliseconds;
 
-                    if (diffTotalMs < -1000)
-                    {
-                        _lastAssessTime = now;
-                    }
-                    else if (diffTotalMs > AssessTimeInMillisecond)
+                    if (diffTotalMs > AssessTimeInMillisecond)
                     {
                         //重置当前次数
                         _lastAssessTime = now;
                         //将recent赋给prev，并将recent设为0
                         _previousCount = _recentCount;
                         _recentCount = 0;
+                    }
+                    else if (diffTotalMs < -1000)
+                    {
+                        _lastAssessTime = now;
                     }
 
                     //避免溢出

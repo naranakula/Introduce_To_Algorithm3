@@ -115,13 +115,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 double diffTotalMilliseconds = (now - _lastAppendTime).TotalMilliseconds;
 
                 //注水
-
-                if (diffTotalMilliseconds < -1000)
-                {
-                    //避免调整系统时间，引起的bug
-                    _lastAppendTime = now;
-                }
-                else if (diffTotalMilliseconds > _estimatePeriodInMillisecond)
+                if (diffTotalMilliseconds > _estimatePeriodInMillisecond)
                 {
                     //需要注水
                     _lastAppendTime = now;
@@ -132,6 +126,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
                         curCount = _bucketLimit;
                     }
                     _curBucketCount = curCount;
+                }
+                else if (diffTotalMilliseconds < -1000)
+                {
+                    //避免调整系统时间，引起的bug
+                    _lastAppendTime = now;
                 }
 
                 //检测是否可以调用action
