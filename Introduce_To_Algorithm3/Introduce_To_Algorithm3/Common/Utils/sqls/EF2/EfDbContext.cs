@@ -3272,6 +3272,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public byte[] BytesExample { get; set; }
 
         /// <summary>
+        /// Create时为0,每次update加1
+        /// </summary>
+        public long Version { get; set; }
+
+        /// <summary>
         /// 预留字段
         /// </summary>
         public string ReservedField { get; set; }

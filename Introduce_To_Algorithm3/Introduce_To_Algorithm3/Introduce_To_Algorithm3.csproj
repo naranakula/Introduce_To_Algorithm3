@@ -668,6 +668,7 @@
     <Compile Include="Common\Utils\sockets\UdpClientHelper.cs" />
     <Compile Include="Common\Utils\sockets\UdpServerHelper.cs" />
     <Compile Include="Common\Utils\SpeechHelper.cs" />
+    <Compile Include="Common\Utils\sqls\CommonEfEntity.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
     <Compile Include="Common\Utils\sqls\EF2\EfDbContext.cs" />
     <Compile Include="Common\Utils\sqls\EF2\MySqlDbContext.cs" />
