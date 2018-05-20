@@ -1377,7 +1377,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 插入键值对，如果对应的键已经存在则更新，否则新增记录
-        /// 键或者值为null或空白，则什么也不做
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// 键在数据库中是按小写存的
         /// 返回新增或者修改的数据项，如果失败，返回null
         /// </summary>
@@ -1386,9 +1386,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <param name="exceptionHandler">异常处理</param>
         public static KvPair AddOrUpdateKvPair(string key, string value, Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -1413,7 +1413,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                     }
                     else
                     {
-                        //即使键值对没有变化，不更新
+                        //如果键值对没有变化，不更新
                         if (result.Value != value)
                         {
                             result.Value = value;
@@ -1534,7 +1534,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 插入键值对，如果对应的键已经存在则更新，否则新增记录
-        /// 键或者值为null或空白，则什么也不做
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// 键在数据库中是按小写存的
         /// 返回新增或者修改的数据项，如果失败，返回null
         /// </summary>
@@ -1543,9 +1543,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <param name="exceptionHandler">异常处理</param>
         public static KvBytesPair AddOrUpdateKvBytesPair(string key, byte[] value, Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || value == null || value.Length == 0)
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -1694,7 +1694,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 添加字典表
-        /// 
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// 键和类型共同确认一个值
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
@@ -1705,9 +1705,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public static DictItem AddOrUpdateDictItem(string key, string value, string type = "",
             Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -1890,7 +1890,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 添加字典表
-        /// 
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// 键和类型共同确认一个值
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
@@ -1901,9 +1901,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public static DictBytesItem AddOrUpdateDictBytesItem(string key, byte[] value, string type = "",
             Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || value == null || value.Length == 0)
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -2092,6 +2092,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 如果添加或者修改成功返回数据项，
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -2102,9 +2103,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public static CacheItem AddOrUpdateCacheItem(string key, string value, DateTime expireTime, string type = "",
             Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -2300,6 +2301,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 如果添加或者修改成功返回数据项，
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -2310,9 +2312,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         public static CacheBytesItem AddOrUpdateCacheBytesItem(string key, byte[] value, DateTime expireTime, string type = "",
             Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || value == null || value.Length == 0)
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 

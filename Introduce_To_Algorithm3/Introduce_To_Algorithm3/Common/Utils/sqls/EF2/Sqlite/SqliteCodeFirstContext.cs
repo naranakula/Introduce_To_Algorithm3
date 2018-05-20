@@ -290,7 +290,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         /// <summary>
         /// 插入键值对，如果对应的键已经存在则更新，否则新增记录
-        /// 键或者值为null或空白，则什么也不做(存在更新为null或者空白的情况,需要删除,更新是什么也不做的)
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// 键在数据库中是按小写存的
         /// 注：即使在某些多线程同时写的极端情况，有唯一键保证，不会创建多条记录
         /// 当发生UNIQUE约束冲突，先存在的，导致冲突的行在更改或插入发生冲突的行之前被删除。这样，更改和插入总是被执行。命令照常执行且不返回错误信息。(经过测试)
@@ -301,9 +301,9 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <returns>返回新增或修改数据项，如果没有返回null</returns>
         public static KvPair AddOrUpdateKvPair(string key, string value,Action<Exception> exceptionHandler =  null)
         {
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -447,7 +447,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         /// <summary>
         /// 插入键值对，如果对应的键已经存在则更新，否则新增记录
-        /// 键或者值为null或空白，则什么也不做
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// 键在数据库中是按小写存的
         /// 注：即使在某些多线程同时写的极端情况，有唯一键保证，不会创建多条记录
         /// 当发生UNIQUE约束冲突，先存在的，导致冲突的行在更改或插入发生冲突的行之前被删除。这样，更改和插入总是被执行。命令照常执行且不返回错误信息。(经过测试)
@@ -458,9 +458,9 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// <returns>返回新增或修改数据项，如果没有返回null</returns>
         public static KvBytesPair AddOrUpdateKvBytesPair(string key, byte[] value, Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || value==null || value.Length==0)
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -608,7 +608,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         /// <summary>
         /// 添加字典表
-        /// 
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// 键和类型共同确认一个值
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
@@ -619,9 +619,9 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         public static DictItem AddOrUpdateDictItem(string key, string value, string type = "",
             Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -802,7 +802,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         /// <summary>
         /// 添加字典表
-        /// 
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// 键和类型共同确认一个值
         /// </summary>
         /// <param name="key">键 ,键忽略大小写，忽略前后空白(注sqlite本身是区分大小写的，本功能有C#代码实现，在数据库中全部保存了小写)</param>
@@ -813,9 +813,9 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         public static DictBytesItem AddOrUpdateDictBytesItem(string key, byte[] value, string type = "",
             Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || value ==null || value.Length==0)
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -1000,6 +1000,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         /// <summary>
         /// 如果添加或者修改成功返回数据项，
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -1010,9 +1011,9 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         public static CacheItem AddOrUpdateCacheItem(string key, string value,DateTime expireTime, string type = "",
             Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(key))
             {
-                //键或者值为null或空白，则什么也不做
+                //键为null或空白，则什么也不做
                 return null;
             }
 
@@ -1213,6 +1214,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         /// <summary>
         /// 如果添加或者修改成功返回数据项，
+        /// 键为null或空白，则什么也不做 值为null或者空白仍然添加或者更新
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -1223,7 +1225,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         public static CacheBytesItem AddOrUpdateCacheBytesItem(string key, byte[] value, DateTime expireTime, string type = "",
             Action<Exception> exceptionHandler = null)
         {
-            if (string.IsNullOrWhiteSpace(key) || value==null || value.Length == 0)
+            if (string.IsNullOrWhiteSpace(key))
             {
                 //键或者值为null或空白，则什么也不做
                 return null;
