@@ -21,6 +21,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls
 
         /// <summary>
         /// 数据版本号, Create时为0,每次update加1
+        /// 
+        /// 极端情况下可能存在脏读脏写问题
         /// </summary>
         public long Version { get; set; }
 
