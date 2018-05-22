@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Introduce_To_Algorithm3.Common.Utils.ConsoleUtils
 {
@@ -9,7 +10,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConsoleUtils
         /// </summary>
         /// <returns>调用成功，返回true</returns>
         [DllImport("kernel32.dll")]
-        public static extern bool FreeConsole();
+        private static extern bool FreeConsole();
 
         /// <summary>
         /// 为调用进程分配一个新的控制台。
@@ -18,6 +19,43 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConsoleUtils
         /// </summary>
         /// <returns>调用成功，返回true</returns>
         [DllImport("kernel32.dll")]
-        public static extern bool AllocConsole();
+        private static extern bool AllocConsole();
+
+
+        /// <summary>
+        /// 分配控制台
+        /// </summary>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static bool SafeAllocConsole(Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                return AllocConsole();
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 释放控制台
+        /// </summary>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static bool SafeFreeConsole(Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                return FreeConsole();
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
+        }
     }
 }
