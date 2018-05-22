@@ -138,11 +138,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
 
             if (ignoreCase)
             {
-                return String.Equals(s1.Trim(), s2.Trim(), StringComparison.CurrentCultureIgnoreCase);
+                return String.Equals(s1.Trim(), s2.Trim(), StringComparison.InvariantCultureIgnoreCase);
             }
             else
             {
-                return string.Equals(s1.Trim(), s2.Trim(), StringComparison.CurrentCulture);
+                return string.Equals(s1.Trim(), s2.Trim(), StringComparison.InvariantCulture);
             }
         }
 
