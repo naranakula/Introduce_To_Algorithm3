@@ -332,9 +332,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
             //建议使用显式的定义，而不是通过反射
             //设置所有的表定义映射
+            modelBuilder.Configurations.Add(new ListItemMap());
             modelBuilder.Configurations.Add(new KvPairMap());
             modelBuilder.Configurations.Add(new DictItemMap());
             modelBuilder.Configurations.Add(new CacheItemMap());
+
+
+            modelBuilder.Configurations.Add(new ListBytesItemMap());
             modelBuilder.Configurations.Add(new KvBytesPairMap());
             modelBuilder.Configurations.Add(new DictBytesItemMap());
             modelBuilder.Configurations.Add(new CacheBytesItemMap());
@@ -411,6 +415,16 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 缓存项
         /// </summary>
         public DbSet<CacheBytesItem> CacheBytesItems { get; set; }
+
+        /// <summary>
+        /// 列表项
+        /// </summary>
+        public DbSet<ListItem> ListItems { get; set; }
+
+        /// <summary>
+        /// 列表项
+        /// </summary>
+        public DbSet<ListBytesItem> ListBytesItems { get; set; }
 
 
         /// <summary>
@@ -1371,6 +1385,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
+
+        #region List 列表
+
+        //比较简单不加了
+
+
+        #endregion
 
 
         #region 键值对相关   经过测试
@@ -2553,6 +2574,107 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     #endregion
 
 
+
+
+    #region ItemList  模拟List
+
+    /// <summary>
+    /// 模拟list
+    /// </summary>
+    public class ListItem
+    {
+        /// <summary>
+        /// Item
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 数据项
+        /// </summary>
+        public string Item { get; set; }
+
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+    /// <summary>
+    /// 映射
+    /// </summary>
+    public class ListItemMap : EntityTypeConfiguration<ListItem>
+    {
+        public ListItemMap()
+        {
+            ToTable(nameof(ListItem)).HasKey(p => p.Id);
+            //变长 nvarchar(128)
+            Property(x => x.Id)
+                .IsRequired()
+                .IsUnicode()
+                .HasMaxLength(128)
+                .IsVariableLength()
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            //nvarchar(max)
+            Property(x => x.Item)
+                .IsOptional()
+                .IsUnicode()
+                .HasMaxLength(null)
+                .IsVariableLength();
+        }
+    }
+
+
+    /// <summary>
+    /// 模拟list
+    /// </summary>
+    public class ListBytesItem
+    {
+        /// <summary>
+        /// Item
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 数据项
+        /// </summary>
+        public byte[] Item { get; set; }
+
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+    /// <summary>
+    /// 数据库映射
+    /// </summary>
+    public class ListBytesItemMap : EntityTypeConfiguration<ListBytesItem>
+    {
+        public ListBytesItemMap()
+        {
+            ToTable(nameof(ListBytesItem)).HasKey(p => p.Id);
+            //变长 nvarchar(128)
+            Property(x => x.Id)
+                .IsRequired()
+                .IsUnicode()
+                .HasMaxLength(128)
+                .IsVariableLength()
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            //[varbinary](max) NULL
+            Property(x => x.Item)
+                .IsOptional()
+                .HasMaxLength(null)
+                .IsVariableLength();
+        }
+    }
+
+
+
+    #endregion
 
 
     #region 键值对相关  经过测试

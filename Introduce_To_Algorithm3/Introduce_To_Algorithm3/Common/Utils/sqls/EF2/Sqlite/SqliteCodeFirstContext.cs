@@ -107,6 +107,18 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         public DbSet<CacheBytesItem> CacheBytesItems { get; set; }
 
+
+
+        /// <summary>
+        /// 列表项
+        /// </summary>
+        public DbSet<ListItem> ListItems { get; set; }
+
+        /// <summary>
+        /// 列表项
+        /// </summary>
+        public DbSet<ListBytesItem> ListBytesItems { get; set; }
+
         #endregion
 
         /// <summary>
@@ -124,15 +136,18 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             Database.SetInitializer(sqliteInitializer);
 
             //设置所有的表定义映射
+            modelBuilder.Configurations.Add(new ListItemMap());
             //添加KVPair对表
             modelBuilder.Configurations.Add(new KvPairMap());
             //添加字典表映射
             modelBuilder.Configurations.Add(new DictItemMap());
             modelBuilder.Configurations.Add(new CacheItemMap());
 
+            modelBuilder.Configurations.Add(new ListBytesItemMap());
             modelBuilder.Configurations.Add(new KvBytesPairMap());
             modelBuilder.Configurations.Add(new DictBytesItemMap());
             modelBuilder.Configurations.Add(new CacheBytesItemMap());
+
 
 
             modelBuilder.Configurations.Add(new BaseEntityMap());
@@ -285,6 +300,14 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         }
 
         #endregion
+
+        #region List 列表
+
+        //比较简单不加了
+
+
+        #endregion
+
 
         #region 键值对相关 经过测试
 
@@ -1429,6 +1452,76 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
 
     }
+
+
+    #region ItemList  模拟List
+
+
+    public class ListItem
+    {
+        /// <summary>
+        /// Item
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 数据项
+        /// </summary>
+        public string Item { get; set; }
+
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+    /// <summary>
+    /// 映射
+    /// </summary>
+    public class ListItemMap : EntityTypeConfiguration<ListItem>
+    {
+        public ListItemMap()
+        {
+            ToTable(nameof(ListItem)).HasKey(p => p.Id);
+        }
+    }
+
+
+
+    public class ListBytesItem
+    {
+        /// <summary>
+        /// Item
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 数据项
+        /// </summary>
+        public byte[] Item { get; set; }
+
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+    /// <summary>
+    /// 数据库映射
+    /// </summary>
+    public class ListBytesItemMap : EntityTypeConfiguration<ListBytesItem>
+    {
+        public ListBytesItemMap()
+        {
+            ToTable(nameof(ListBytesItem)).HasKey(p => p.Id);
+        }
+    }
+
+
+
+    #endregion
 
 
     #region 键值对表，字符串为键，可使用json或者xml为值 经过测试
