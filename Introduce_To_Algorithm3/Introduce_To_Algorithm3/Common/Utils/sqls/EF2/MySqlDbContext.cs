@@ -31,6 +31,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     ///         DateTime CreateTime   数据创建时间 
     /// 
     /// </summary>
+    /// DbConfiguration指定了provider
     [DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class MySqlDbContext:DbContext
     {
@@ -62,8 +63,20 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         public MySqlDbContext() : base(_nameOrConnectionString)
         {
-
+            //禁用延迟加载
+            this.Configuration.LazyLoadingEnabled = false;//默认是true的
         }
+
+        /// <summary>
+        /// 直接传递连接字符串
+        /// </summary>
+        /// <param name="nameOrConnectionString"></param>
+        public MySqlDbContext(string nameOrConnectionString) : base(nameOrConnectionString)
+        {
+            //禁用延迟加载
+            this.Configuration.LazyLoadingEnabled = false;//默认是true的
+        }
+
         #endregion
 
 
@@ -136,6 +149,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         {
             base.OnModelCreating(modelBuilder);
 
+            
+
             //ToDo:
             //modelBuilder.Configurations.Add(new UserMessageMap());
             //设置所有的表定义映射
@@ -156,7 +171,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
-        #region 通用法法
+        #region 通用方法
 
 
         /// <summary>
@@ -234,6 +249,40 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
                 return default(T);
             }
+        }
+
+        #endregion
+
+
+        #region 测试动态连接字符串
+
+        /// <summary>
+        /// 该代码正常运行
+        /// 
+        /// 默认ef的provider是sqlserver,通过注释[DbConfigurationType(typeof(MySqlEFConfiguration))]来改变
+        /// </summary>
+        public static void TestDynamicConnectionString()
+        {
+
+            string conStr = @"Server=127.0.0.1;Port=3306;Database=test{0}db;Uid=root;Pwd=root;Pooling=True;Max Pool Size=15;CharSet=utf8;Keepalive=16;";
+
+
+            for (int i = 0; i < 8; i++)
+            {
+                string conStrTemp = string.Format(conStr, i);
+
+                using (MySqlDbContext context = new MySqlDbContext(conStrTemp))
+                {
+                    context.ListItems.Add(new Common.Utils.sqls.EF2.CommonDbModels.ListItem()
+                    {
+                        Id = GuidUtils.GetGuid32(),
+                        Item = i.ToString(),
+                        CreateTime = DateTime.Now
+                    });
+                    context.SaveChanges();
+                }
+            }
+
         }
 
         #endregion

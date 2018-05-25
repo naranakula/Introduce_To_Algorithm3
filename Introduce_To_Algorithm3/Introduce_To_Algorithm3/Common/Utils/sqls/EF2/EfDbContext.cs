@@ -53,8 +53,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <summary>
         /// 给定字符串用作将连接到的数据库的名称或连接字符串
         /// name=ConnString格式
+        /// 
+        /// 如果是连接字符串，使用如下格式
+        /// provider=System.Data.SqlClient;provider connection string="Data Source=.;Initial Catalog=AdventureWorks;Integrated Security=True"
         /// </summary>
         public const string _nameOrConnectionString = "name=SqlSeverConnString";
+
+        //直接传递连接字符串
+        //public const string ConstNameOrConnectionString = @"Server=192.168.163.12,1433;Database=TestDb;User Id=sa;Password=system2000,.;Pooling=True;Max Pool Size=31;MultipleActiveResultSets=True;";
 
         /// <summary>
         /// 锁
@@ -199,13 +205,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             this.Configuration.LazyLoadingEnabled = false;//默认是true的
 
             #region 设置命令超时时间  默认是30s
-            //方式1
-            IObjectContextAdapter objectContext = (this as IObjectContextAdapter);
-            //超时时间单位秒
-            objectContext.ObjectContext.CommandTimeout = 120;
+            ////方式1
+            //IObjectContextAdapter objectContext = (this as IObjectContextAdapter);
+            ////超时时间单位秒
+            //objectContext.ObjectContext.CommandTimeout = 120;
 
-            //方式2 超时时间单位秒 可以放到ActionSafe里
-            this.Database.CommandTimeout = 120;
+            ////方式2 超时时间单位秒 可以放到ActionSafe里
+            //this.Database.CommandTimeout = 120;
 
             #endregion
 
