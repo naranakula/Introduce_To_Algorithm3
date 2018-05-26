@@ -702,6 +702,9 @@
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\KvPair.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\ListBytesItem.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\ListItem.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\DbConfigurations\MsEfConfiguration.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\DbConfigurations\OracleEfConfiguration.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\DbConfigurations\SQLiteConfiguration.cs" />
     <Compile Include="Common\Utils\sqls\EF2\EfDbContext.cs" />
     <Compile Include="Common\Utils\sqls\EF2\MySqlDbContext.cs" />
     <Compile Include="Common\Utils\sqls\EF2\OracleDbContext.cs" />
