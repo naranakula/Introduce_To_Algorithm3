@@ -66,12 +66,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 避免每次创建options
         /// </summary>
-        private static readonly List<ChannelOption> GrpcOptions = new List<ChannelOption>(capacity: 3)
+        private static readonly List<ChannelOption> GrpcOptions = new List<ChannelOption>(capacity: 4)
         {
             ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
             new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
             new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
-            //new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
+            new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
             new ChannelOption(ChannelOptions.MaxConcurrentStreams,63),//单个连接最大允许的并发流
         };
 
@@ -81,7 +81,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 如果Channel进入ShutDown状态，重建Channel的最小时间间隔 毫秒
         /// </summary>
-        private const int MinReEstablishChannelTimeIntervalInMilliseconds = 2117;
+        private const int MinReEstablishChannelTimeIntervalInMilliseconds =3217;
 
         /// <summary>
         /// 上一次重建Channel时间
@@ -156,6 +156,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 
                 //经测试如果服务器不存在也能启动成功，此时channel state是Idle，此时网络并没有实际连接
                 _channel = new Channel(_serverIp,_serverPort,ChannelCredentials.Insecure,GrpcOptions);
+                _isStop = false;
                 return true;
             }
             catch (Exception ex)
