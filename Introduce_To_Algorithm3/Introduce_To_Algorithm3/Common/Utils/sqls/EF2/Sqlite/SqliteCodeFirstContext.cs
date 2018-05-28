@@ -229,7 +229,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         /// <param name="action">数据库操作</param>
         /// <param name="exceptionHanlder">异常处理</param>
-        public static void ActionSafe(Action<SqliteCodeFirstContext> action,Action<Exception> exceptionHanlder = null)
+        public static bool ActionSafe(Action<SqliteCodeFirstContext> action,Action<Exception> exceptionHanlder = null)
         {
             try
             {
@@ -237,6 +237,8 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
                 {
                     action(context);
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -244,6 +246,8 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
                 {
                     exceptionHanlder(ex);
                 }
+
+                return false;
             }
         }
 
