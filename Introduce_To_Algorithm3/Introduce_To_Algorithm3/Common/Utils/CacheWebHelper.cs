@@ -20,6 +20,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="expireSeconds">过多少秒后过期</param>
+        /// <param name="exceptionHandler">异常处理</param>
         public static bool Insert(string key, object value, int expireSeconds,Action<Exception> exceptionHandler = null)
         {
             try
