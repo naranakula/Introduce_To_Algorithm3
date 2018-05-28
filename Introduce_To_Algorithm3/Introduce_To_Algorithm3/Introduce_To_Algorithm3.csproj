@@ -587,6 +587,7 @@
     <Compile Include="Common\Utils\AsyncAwaitHelper.cs" />
     <Compile Include="Common\Utils\CacheHelper.cs" />
     <Compile Include="Common\Utils\CacheItem.cs" />
+    <Compile Include="Common\Utils\CacheWebHelper.cs" />
     <Compile Include="Common\Utils\CallCounter.cs" />
     <Compile Include="Common\Utils\ClipboardHelper.cs" />
     <Compile Include="Common\Utils\CollectionUtils.cs" />

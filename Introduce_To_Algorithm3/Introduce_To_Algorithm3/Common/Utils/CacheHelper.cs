@@ -106,7 +106,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 CacheItemPolicy policy = new CacheItemPolicy();
                 policy.Priority = CacheItemPriority.Default;
-                policy.AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(expireSeconds);
+                policy.AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(expireSeconds);
                 Cache.Set(cacheKey, value, policy);
                 return true;
             }
@@ -134,7 +134,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 CacheItemPolicy policy = new CacheItemPolicy();
                 policy.Priority = CacheItemPriority.Default;
-                policy.AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(expireSeconds);
+                policy.AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(expireSeconds);
                 //true if insertion succeeded, or false if there is an already an entry in the Cache that has the same key as key.
                 return Cache.Add(cacheKey, value, policy);
             }
