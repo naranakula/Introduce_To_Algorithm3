@@ -18,11 +18,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbMaps
         public ListItemMap()
         {
             ToTable(nameof(ListItem)).HasKey(p => p.Id);
-            //变长 nvarchar(128)
+            //变长 nvarchar(36)
             Property(x => x.Id)
                 .IsRequired()
                 .IsUnicode()
-                .HasMaxLength(128)
+                .HasMaxLength(36)
                 .IsVariableLength()
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
