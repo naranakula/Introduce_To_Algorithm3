@@ -358,6 +358,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             modelBuilder.Configurations.Add(new DictBytesItemMap());
             modelBuilder.Configurations.Add(new CacheBytesItemMap());
 
+            modelBuilder.Configurations.Add(new LogItemMap());
+
+
             modelBuilder.Configurations.Add(new CommonEfEntityMap());
 
             modelBuilder.Configurations.Add(new BaseEntityMap());
@@ -442,6 +445,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 列表项
         /// </summary>
         public DbSet<ListBytesItem> ListBytesItems { get; set; }
+
+        /// <summary>
+        /// 日志类型
+        /// </summary>
+        public DbSet<LogItem> LogItems { get; set; }
 
         /// <summary>
         /// 通用ef entity
@@ -3017,3 +3025,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     #endregion
 
 }
+
+
+
+

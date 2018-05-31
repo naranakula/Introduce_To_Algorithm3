@@ -696,6 +696,7 @@
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\KvPairMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\ListBytesItemMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\ListItemMap.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\LogItemMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\CacheBytesItem.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\CacheItem.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\DictBytesItem.cs" />
@@ -704,6 +705,7 @@
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\KvPair.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\ListBytesItem.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\ListItem.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\LogItem.cs" />
     <Compile Include="Common\Utils\sqls\EF2\DbConfigurations\MsEfConfiguration.cs" />
     <Compile Include="Common\Utils\sqls\EF2\DbConfigurations\OracleEfConfiguration.cs" />
     <Compile Include="Common\Utils\sqls\EF2\DbConfigurations\SQLiteConfiguration.cs" />
@@ -756,6 +758,7 @@
     <Compile Include="Models\CommonConstants.cs" />
     <Compile Include="Models\CommonException.cs" />
     <Compile Include="Models\CommonResult.cs" />
+    <Compile Include="Models\LogType.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\CommonMessage.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQConsumer.cs" />

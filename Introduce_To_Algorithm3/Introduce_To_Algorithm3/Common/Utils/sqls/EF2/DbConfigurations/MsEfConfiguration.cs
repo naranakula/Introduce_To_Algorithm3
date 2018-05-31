@@ -13,12 +13,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.DbConfigurations
     /// DbConfiguration的主要作用是在不使用配置文件的情况下注册Provider
     ///  The config file takes precedence over code-based configuration. 
     /// </summary>
-    public class MsEfConfiguration:DbConfiguration
+    public class MsEfConfiguration : DbConfiguration
     {
         public MsEfConfiguration()
         {
             //设置Provider
-            SetProviderServices(SqlProviderServices.ProviderInvariantName,SqlProviderServices.Instance);
+            SetProviderServices(SqlProviderServices.ProviderInvariantName, SqlProviderServices.Instance);
 
             //设置默认的连接工厂
             SetDefaultConnectionFactory(new SqlConnectionFactory());

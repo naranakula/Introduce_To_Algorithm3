@@ -33,8 +33,11 @@ namespace Introduce_To_Algorithm3.Models
         public static readonly string MainTitle = ConfigUtils.GetString("MainTitle");
 
 
+        
+
+
+
     }
-
-
+    
 
 }

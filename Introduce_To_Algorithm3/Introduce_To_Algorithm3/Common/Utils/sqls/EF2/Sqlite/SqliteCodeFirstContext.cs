@@ -8,6 +8,7 @@ using SQLite.CodeFirst;
 using System.Data.SQLite;
 using System.Data;
 using Introduce_To_Algorithm3.Common.Utils.strings;
+using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.DbConfigurations;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
 {
@@ -40,6 +41,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
     ///         DateTime CreateTime   数据创建时间 
     /// 
     /// </summary>
+    [DbConfigurationType(typeof(SQLiteConfiguration))]
     public class SqliteCodeFirstContext:DbContext
     {
 
@@ -119,6 +121,11 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         public DbSet<ListBytesItem> ListBytesItems { get; set; }
 
+        /// <summary>
+        /// 日志项
+        /// </summary>
+        public DbSet<LogItem> LogItems { get; set; }
+
         #endregion
 
         /// <summary>
@@ -131,8 +138,8 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
             //设置初始化器，不像EfDbContext，这个不需要单独的Init函数
             //使用最新版的EF6.1.3，EF6.0不行
-            var sqliteInitializer = new SqliteCreateDatabaseIfNotExists<SqliteCodeFirstContext>(modelBuilder);
-            //var sqliteInitializer = new SqliteDropCreateDatabaseWhenModelChanges<SqliteCodeFirstContext>(modelBuilder);
+            //var sqliteInitializer = new SqliteCreateDatabaseIfNotExists<SqliteCodeFirstContext>(modelBuilder);
+            var sqliteInitializer = new SqliteDropCreateDatabaseWhenModelChanges<SqliteCodeFirstContext>(modelBuilder);
             Database.SetInitializer(sqliteInitializer);
 
             //设置所有的表定义映射
@@ -147,6 +154,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             modelBuilder.Configurations.Add(new KvBytesPairMap());
             modelBuilder.Configurations.Add(new DictBytesItemMap());
             modelBuilder.Configurations.Add(new CacheBytesItemMap());
+            modelBuilder.Configurations.Add(new LogItemMap());
 
 
 
@@ -1488,6 +1496,13 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         public ListItemMap()
         {
             ToTable(nameof(ListItem)).HasKey(p => p.Id);
+            //变长 nvarchar(36)
+            Property(x => x.Id)
+                .IsRequired()
+                .IsUnicode()
+                .HasMaxLength(36)
+                .IsVariableLength()
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
         }
     }
 
@@ -1520,6 +1535,13 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         public ListBytesItemMap()
         {
             ToTable(nameof(ListBytesItem)).HasKey(p => p.Id);
+            //变长 nvarchar(36)
+            Property(x => x.Id)
+                .IsRequired()
+                .IsUnicode()
+                .HasMaxLength(36)
+                .IsVariableLength()
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
         }
     }
 
@@ -1575,7 +1597,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         public KvPairMap()
         {
-            ToTable("KvPair").HasKey(p => p.Key);
+            ToTable(nameof(KvPair)).HasKey(p => p.Key);
             //CREATE TABLE "KvPair" ([Key] nvarchar (128) NOT NULL, [Value] nvarchar, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(Key))
 
             //自增主键
@@ -1715,7 +1737,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         public DictItemMap()
         {
-            ToTable("DictItem").HasKey(p => new {p.DictKey,p.DictType});
+            ToTable(nameof(DictItem)).HasKey(p => new {p.DictKey,p.DictType});
 
             //CREATE TABLE "DictItem" ([DictKey] nvarchar (128) NOT NULL, [DictType] nvarchar (128) NOT NULL, [DictValue] nvarchar, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(DictKey, DictType))
 
@@ -1868,7 +1890,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         public CacheItemMap()
         {
-            ToTable("CacheItem").HasKey(p => new { p.CacheKey, p.CacheType });
+            ToTable(nameof(CacheItem)).HasKey(p => new { p.CacheKey, p.CacheType });
 
             /*
              CREATE TABLE "CacheItem" ([CacheKey] nvarchar (128) NOT NULL, [CacheType] nvarchar (128) NOT NULL, [CacheValue] nvarchar, [ExpireTime] datetime NOT NULL, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(CacheKey, CacheType))
@@ -1944,6 +1966,60 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
     }
 
 
+
+    #endregion
+
+
+    #region 日志
+
+    /// <summary>
+    /// 日志项
+    /// </summary>
+    public class LogItem
+    {
+        /// <summary>
+        /// 日志Id
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 日志类型
+        /// </summary>
+        public string LogType { get; set; }
+
+        /// <summary>
+        /// 日志内容
+        /// </summary>
+        public string LogContent { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+
+    /// <summary>
+    /// 数据库表映射
+    /// </summary>
+    public class LogItemMap : EntityTypeConfiguration<LogItem>
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public LogItemMap()
+        {
+            ToTable(nameof(LogItem)).HasKey(p => p.Id);
+            //变长 nvarchar(36)
+            Property(x => x.Id)
+                .IsRequired()
+                .IsUnicode()
+                .HasMaxLength(36)
+                .IsVariableLength()
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+        }
+    }
 
     #endregion
 
