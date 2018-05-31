@@ -29,6 +29,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     ///         string Id             主键
     ///         DateTime UpdateTime   数据最近一次更新时间  创建时等于创建时间
     ///         DateTime CreateTime   数据创建时间 
+    /// Mysql管理利器:Navicat for MySql
     /// 
     /// </summary>
     /// DbConfiguration指定了provider
