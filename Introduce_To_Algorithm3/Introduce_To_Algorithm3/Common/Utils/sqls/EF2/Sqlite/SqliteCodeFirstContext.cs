@@ -41,7 +41,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
     ///         DateTime CreateTime   数据创建时间 
     /// 
     /// </summary>
-    [DbConfigurationType(typeof(SQLiteConfiguration))]
+    //[DbConfigurationType(typeof(SQLiteConfiguration))]
     public class SqliteCodeFirstContext:DbContext
     {
 
