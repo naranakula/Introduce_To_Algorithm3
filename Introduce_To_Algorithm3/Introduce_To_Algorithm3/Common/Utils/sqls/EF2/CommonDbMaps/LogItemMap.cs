@@ -32,6 +32,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbMaps
                 .HasMaxLength(32)
                 .IsVariableLength();
 
+            //变长 nvarchar(128)
+            Property(x => x.LogFrom)
+                .IsOptional()
+                .IsUnicode()
+                .HasMaxLength(128)
+                .IsVariableLength();
+
             //nvarchar(max)
             Property(x => x.LogContent)
                 .IsOptional()

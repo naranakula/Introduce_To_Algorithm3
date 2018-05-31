@@ -1988,6 +1988,11 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         public string LogType { get; set; }
 
         /// <summary>
+        /// 日志来源  如来自哪台机器或者哪个ip
+        /// </summary>
+        public string LogFrom { get; set; }
+
+        /// <summary>
         /// 日志内容
         /// </summary>
         public string LogContent { get; set; }

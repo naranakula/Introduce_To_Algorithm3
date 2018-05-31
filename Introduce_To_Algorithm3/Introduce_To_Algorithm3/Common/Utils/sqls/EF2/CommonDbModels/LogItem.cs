@@ -22,6 +22,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbModels
         /// </summary>
         public string LogType { get; set; }
 
+
+        /// <summary>
+        /// 日志来源  如来自哪台机器或者哪个ip
+        /// </summary>
+        public string LogFrom { get; set; }
+
+
         /// <summary>
         /// 日志内容
         /// </summary>
