@@ -23,6 +23,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbModels;
 using Introduce_To_Algorithm3.Common.Utils.strings;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbMaps;
+using Introduce_To_Algorithm3.Models;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 {
@@ -2557,6 +2558,53 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
 
         #endregion
+
+
+        #region 日志相关
+
+        /// <summary>
+        /// 添加日志
+        /// </summary>
+        /// <param name="logType"></param>
+        /// <param name="logContent"></param>
+        /// <param name="logSource"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static bool AddLog(LogType logType, string logContent, string logSource = "", Action<Exception> exceptionHandler = null)
+        {
+            if (String.IsNullOrWhiteSpace(logContent))
+            {
+                return true;
+            }
+
+            try
+            {
+
+
+                using (EfDbContext context = new EfDbContext())
+                {
+                    LogItem logItem = new LogItem();
+                    logItem.Id = GuidUtils.GetGuid32();
+                    logItem.LogType = logType.ToString();
+                    logItem.LogSource = logSource ?? string.Empty;
+                    logItem.LogContent = logContent;
+                    logItem.CreateTime = DateTime.Now;
+
+                    context.LogItems.Add(logItem);
+                    context.SaveChanges();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                exceptionHandler?.Invoke(ex);
+                return false;
+            }
+        }
+
+        #endregion
+
+
 
 
 
