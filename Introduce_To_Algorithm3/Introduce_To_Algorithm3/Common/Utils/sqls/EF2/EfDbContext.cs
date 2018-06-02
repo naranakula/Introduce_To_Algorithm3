@@ -2585,7 +2585,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
                 {
                     LogItem logItem = new LogItem();
                     logItem.Id = GuidUtils.GetGuid32();
-                    logItem.LogType = logType.ToString();
+                    logItem.LogType = logType.ToString().ToLower();
                     logItem.LogSource = logSource ?? string.Empty;
                     logItem.LogContent = logContent;
                     logItem.CreateTime = DateTime.Now;

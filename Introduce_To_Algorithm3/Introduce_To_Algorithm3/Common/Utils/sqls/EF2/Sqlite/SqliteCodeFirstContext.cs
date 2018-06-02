@@ -1487,7 +1487,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
                 {
                     LogItem logItem = new LogItem();
                     logItem.Id = GuidUtils.GetGuid32();
-                    logItem.LogType = logType.ToString();
+                    logItem.LogType = logType.ToString().ToLower();
                     logItem.LogSource = logSource ?? string.Empty;
                     logItem.LogContent = logContent;
                     logItem.CreateTime = DateTime.Now;
