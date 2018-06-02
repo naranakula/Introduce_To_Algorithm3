@@ -25,15 +25,15 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbMaps
                 .IsVariableLength()
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
-            //变长 nvarchar(32)
+            //变长 nvarchar(64)
             Property(x => x.LogType)
                 .IsOptional()
                 .IsUnicode()
-                .HasMaxLength(32)
+                .HasMaxLength(64)
                 .IsVariableLength();
 
             //变长 nvarchar(128)
-            Property(x => x.LogFrom)
+            Property(x => x.LogSource)
                 .IsOptional()
                 .IsUnicode()
                 .HasMaxLength(128)
