@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Introduce_To_Algorithm3.Common.Utils.files;
+using Introduce_To_Algorithm3.Common.Utils.strings;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using Microsoft.Win32;
 
@@ -23,12 +24,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
     {
 
         #region  开机启动
+
         /// <summary>
         /// 设置应用程序自动开机运行
         /// </summary>
         /// <param name="keyName">要设置的注册表键</param>
         /// <param name="appToRun">开机运行的命令，可以带启动参数</param>
         /// <param name="isAutoStartup">true,设置自动启动，false,取消设置自动启动</param>
+        /// <param name="exceptionHandler"></param>
         public static bool SetStartup(string keyName, string appToRun, bool isAutoStartup=true,Action<Exception> exceptionHandler=null)
         {
             RegistryKey registry = null;
@@ -49,7 +52,13 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
                 if (isAutoStartup)
                 {
-                    registry.SetValue(keyName, appToRun);
+                    object valObj = registry.GetValue(keyName);
+
+                    if (valObj == null || !StringUtils.EqualsEx(appToRun,valObj.ToString()))
+                    {
+                        registry.SetValue(keyName, appToRun);
+                    }
+
                 }
                 else
                 {
