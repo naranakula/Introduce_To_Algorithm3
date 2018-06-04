@@ -30,7 +30,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.threads
         /// <summary>
         /// 是否回调在运行
         /// </summary>
-        private bool _isRunning = false;
+        private volatile bool _isRunning = false;
         
         /// <summary>
         /// 底层的回调
