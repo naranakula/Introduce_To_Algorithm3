@@ -80,7 +80,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 if (registry != null)
                 {
-                    registry.Close();
+                    try
+                    {
+                        registry.Close();
+                    }
+                    catch { }
                 }
             }
         }
