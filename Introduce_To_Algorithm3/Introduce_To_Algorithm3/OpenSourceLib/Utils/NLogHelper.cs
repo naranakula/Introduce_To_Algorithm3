@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections;
+using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite;
+using Introduce_To_Algorithm3.Common.Utils.strings;
+using Introduce_To_Algorithm3.Models;
 using NLog;
+using Logger = NLog.Logger;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
@@ -27,6 +33,38 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 使用不同name的logger，根据名称记录不同的日志：如邮件，数据库日志
         /// </summary>
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// 数据库日志，支持error和fatal
+        /// </summary>
+        private static readonly BlockingQueueEx<CommonModel> _blockingQueueEx = new BlockingQueueEx<CommonModel>(singleDataHandler: item
+            =>
+        {
+            if (item == null || item.CommonModelObject == null)
+            {
+                return;
+            }
+
+            #region 日志
+
+            if (StringUtils.EqualsEx(CommonModelType.LogType, item.CommonModelType))
+            {
+                var logItem = item.CommonModelObject as LogItem;
+                if (logItem == null)
+                {
+                    return;
+                }
+
+                SqliteCodeFirstContext.ActionSafe(context =>
+                {
+                    context.LogItems.Add(logItem);
+                    context.SaveChanges();
+                });
+            }
+
+            #endregion
+        });
+
         
         ///// <summary>
         ///// 静态构造函数
@@ -142,6 +180,14 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             try
             {
                 _logger.Error(message);
+
+                LogItem item = new LogItem(){Id = GuidUtils.GetGuid32(),LogSource = "",LogType = "error",CreateTime = DateTime.Now,LogContent = message};
+                CommonModel model = new CommonModel()
+                {
+                    CommonModelObject = item,
+                    CommonModelType = CommonModelType.LogType
+                };
+                _blockingQueueEx.Add(model);
             }
             catch (Exception)
             {
@@ -162,12 +208,43 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             try
             {
                 _logger.Fatal(message);
+
+                LogItem item = new LogItem() { Id = GuidUtils.GetGuid32(), LogSource = "", LogType = "fatal", CreateTime = DateTime.Now, LogContent = message };
+                CommonModel model = new CommonModel()
+                {
+                    CommonModelObject = item,
+                    CommonModelType = CommonModelType.LogType
+                };
+                _blockingQueueEx.Add(model);
             }
             catch (Exception)
             {
 
             }
         }
+
+
+        #region 队列相关
+
+
+        /// <summary>
+        /// 添加处理消息
+        /// </summary>
+        /// <param name="model"></param>
+        public static void AddMessage(CommonModel model)
+        {
+            _blockingQueueEx.Add(model);
+        }
+
+        /// <summary>
+        /// 停止
+        /// </summary>
+        public static void Stop()
+        {
+            _blockingQueueEx.Stop();
+        }
+
+        #endregion
 
         #region 各级别日志是否可用
 

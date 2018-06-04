@@ -46,6 +46,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
 
                 #region 其它清理工作
 
+                //清理sqlite中央日志
                 #endregion
 
                 #region 清理日志文件工作

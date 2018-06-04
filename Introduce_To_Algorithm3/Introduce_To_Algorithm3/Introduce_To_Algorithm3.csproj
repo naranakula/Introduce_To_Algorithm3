@@ -757,6 +757,7 @@
     <Compile Include="MachineLearning\ReadMe.cs" />
     <Compile Include="Models\CommonConstants.cs" />
     <Compile Include="Models\CommonException.cs" />
+    <Compile Include="Models\CommonModel.cs" />
     <Compile Include="Models\CommonResult.cs" />
     <Compile Include="Models\LogType.cs" />
     <Compile Include="Models\OperationResult.cs" />
@@ -957,6 +958,9 @@
     <None Include="Common\Utils\sqls\EF2\Sqlite\SQLite.NET.chm" />
     <None Include="Common\Utils\sqls\EF2\Sqlite\sqlitestudio-3.1.1.zip" />
     <None Include="Common\Utils\sqls\EF\EF.docx" />
+    <None Include="config.properties">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="HPSocket\ReadMe.docx" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>

@@ -246,6 +246,22 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
         }
 
         /// <summary>
+        /// 归一化 去除前后空白 转小写
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string Normalize(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return "";
+            }
+
+            return s.Trim().ToLower();
+        }
+
+
+        /// <summary>
         /// 数组为null或者为空
         /// </summary>
         /// <param name="b"></param>

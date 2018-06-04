@@ -587,5 +587,96 @@ namespace Introduce_To_Algorithm3.Common.Utils
         #endregion
         #endregion
 
+
+        #region 加载properties文件
+
+        /// <summary>
+        /// 底层数据存储
+        /// </summary>
+        private static readonly ConcurrentDictionary<string,string> _propertiesDict = new ConcurrentDictionary<string, string>();
+
+
+        /// <summary>
+        /// 加载properties
+        /// </summary>
+        /// <param name="propertiesFile">文件采用utf8编码</param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static bool LoadProperties(string propertiesFile = "config.properties", Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(propertiesFile) || !File.Exists(propertiesFile))
+                {
+                    throw new Exception($"未找到{propertiesFile}文件");
+                }
+
+                //This method attempts to automatically detect the encoding of a file based on the presence of byte order marks. Encoding formats UTF-8 and UTF-32 (both big-endian and little-endian) can be detected. 支持UTF8无bom
+                string[] lines = File.ReadAllLines(propertiesFile);
+
+                //清空dict  清空会在add之前的短暂时间内没有数据  不清空有可能多数据
+                //暂不清空
+                //_propertiesDict.Clear();
+
+                foreach (string item in lines)
+                {
+                    string temp = StringUtils.TrimEx(item);
+                    if (string.IsNullOrWhiteSpace(temp))
+                    {
+                        continue;
+                    }
+
+                    if (temp.StartsWith("#"))
+                    {
+                        continue;
+                    }
+
+                    string[] array = temp.Split(new char[]{'='}, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (array.Length != 2)
+                    {
+                        continue;
+                    }
+
+                    //key的大小写无所谓
+                    string key = StringUtils.TrimEx(array[0]).ToLower();
+                    string val = StringUtils.TrimEx(array[1]);
+                    _propertiesDict.AddOrUpdate(key, val, (k, oldv) => val);
+                }
+
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// 获取properties的值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="defaultValueIfNotExist"></param>
+        /// <returns></returns>
+        public static string GetPropertiesString(string key, string defaultValueIfNotExist = "")
+        {
+            string returnValue = "";
+            string normalKey = StringUtils.TrimEx(key).ToLower();
+            if (_propertiesDict.TryGetValue(normalKey, out returnValue))
+            {
+                return returnValue;
+            }
+            else
+            {
+                return defaultValueIfNotExist;
+            }
+        }
+
+        #endregion
+
     }
 }
