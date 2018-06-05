@@ -7,9 +7,11 @@ using System.Linq;
 using SQLite.CodeFirst;
 using System.Data.SQLite;
 using System.Data;
+using System.Data.Common;
 using Introduce_To_Algorithm3.Common.Utils.strings;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.DbConfigurations;
 using Introduce_To_Algorithm3.Models;
+using NLog.Internal;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
 {
@@ -67,6 +69,37 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// 连接字符串
         /// </summary>
         public const string ConnectionStr = "name=SqliteConStr";
+
+        /// <summary>
+        /// 底层连接字符串
+        /// </summary>
+        private static volatile string _connString = "";
+
+
+        public static String TrueConnectionString
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_connString))
+                {
+                    return _connString;
+                }
+
+                try
+                {
+                    string conName = ConnectionStr.Split(new char[] {'='}, StringSplitOptions.RemoveEmptyEntries)[1];
+
+                    _connString = System.Configuration.ConfigurationManager.ConnectionStrings[conName].ConnectionString;
+                    return _connString;
+                }
+                catch 
+                {
+                    _connString = "";
+                    return "";
+                }
+            }
+        }
+
 
         /// <summary>
         /// 构造函数
@@ -177,34 +210,91 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         #region 原生SQL调用
 
         /// <summary>
-        /// ExecuteSqlCommnad method is useful in sending non-query commands to the database, such as the Insert, Update or Delete command. 
+        /// 执行sql语句, 返回受影响的行数
+        /// CREATE TABLE IF NOT EXISTS [Person] (
+        /// [Id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+        /// [Name] TEXT  NULL,
+        /// [CreateTime] DATE  NULL
+        /// )
+        /// CREATE TABLE [Person] (
+        /// [Id] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+        /// [Name] NVARCHAR(50)  NULL,
+        /// [CreateTime] DATE  NULL
+        /// );
+        /// 
+        /// If the database file doesn't exist, the default behaviour is to create a new file. 
+        /// 当你Open时，如果数据库不存在，则创建一个
         /// </summary>
-        /// <param name="sql">UPDATE dbo.Posts SET Rating = 5 WHERE Author = @p0  使用@po表示参数</param>
-        /// <param name="parameters">SQLiteParameter parameter = new SQLiteParameter("@p0", DbType.DateTime);parameter.Value = DateTime.Now;</param>
-        /// <param name="exceptionHandler">异常处理</param>
-        /// <returns>影响的行数 , -1表示命令执行失败</returns>
-        public static int ExecuteSqlCommand(string sql,Action<Exception> exceptionHandler, params SQLiteParameter[] parameters)
+        /// <param name="connString"></param>
+        /// <param name="sql"></param>
+        public static int ExecNonQuery(string sql)
         {
-            try
+            using (DbConnection conn = new SQLiteConnection(TrueConnectionString))
             {
-                using (SqliteCodeFirstContext dbContext = new SqliteCodeFirstContext())
+                conn.Open();
+                using (DbCommand command = conn.CreateCommand())
                 {
-                    if (parameters == null || parameters.Length == 0)
-                    {
-                        return dbContext.Database.ExecuteSqlCommand(sql);
-                    }
-                    else
-                    {
-                        return dbContext.Database.ExecuteSqlCommand(sql, parameters);
-                    }
+                    command.CommandText = sql;
+                    command.CommandType = CommandType.Text;
+                    return command.ExecuteNonQuery();
                 }
             }
-            catch(Exception ex)
+        }
+
+        /// <summary>
+        /// 执行查询
+        /// </summary>
+        /// <param name="connString"></param>
+        /// <param name="sql"></param>
+        /// <param name="commandType"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static int ExecNonQuery( string sql, CommandType commandType, params SQLiteParameter[] parameters)
+        {
+            using (DbConnection conn = new SQLiteConnection(TrueConnectionString))
             {
-                exceptionHandler?.Invoke(ex);
-                return -1;
+                conn.Open();
+                using (DbCommand command = conn.CreateCommand())
+                {
+                    command.CommandText = sql;
+                    command.CommandType = commandType;
+                    if (parameters != null)
+                    {
+                        command.Parameters.Clear();
+                        foreach (SQLiteParameter sqLiteParameter in parameters)
+                        {
+                            command.Parameters.Add(sqLiteParameter);
+                        }
+                    }
+                    return command.ExecuteNonQuery();
+                }
             }
         }
+
+        /// <summary>
+        /// 执行sqlCommand
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+
+        public static int ExecuteSqlCommand(string sql, params SQLiteParameter[] parameters)
+        {
+            using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+            {
+                if (parameters == null || parameters.Length == 0)
+                {
+                    return context.Database.ExecuteSqlCommand(sql);
+                }
+                else
+                {
+                    return context.Database.ExecuteSqlCommand(sql,parameters);
+                }
+            }
+        }
+
+
+
         #endregion
 
         #region  通用任务

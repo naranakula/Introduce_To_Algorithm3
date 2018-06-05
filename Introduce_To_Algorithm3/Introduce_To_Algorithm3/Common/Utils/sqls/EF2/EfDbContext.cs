@@ -1012,7 +1012,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// <param name="commandType">要执行的查询类型（存储过程、SQL文本） </param>
         /// <param name="parameters">参数数组 参数使用@名称表示 前面加@表示参数 </param>
         /// <returns> </returns>
-        public static int ExecuteRawNonQuery(string sql, CommandType commandType, SqlParameter[] parameters)
+        public static int ExecuteRawNonQuery(string sql, CommandType commandType, params SqlParameter[] parameters)
         {
             int count = 0;
             using (SqlConnection connection = new SqlConnection(TrueConnectionString))

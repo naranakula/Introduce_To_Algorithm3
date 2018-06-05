@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Introduce_To_Algorithm3.Common.Utils;
+using Introduce_To_Algorithm3.Common.Utils.sqls.EF2;
+using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite;
 using Introduce_To_Algorithm3.Common.Utils.strings;
 using Quartz;
 
@@ -47,6 +51,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 #region 其它清理工作
 
                 //清理sqlite中央日志
+
+                CleanSqliteDb(expireTime);
+
                 #endregion
 
                 #region 清理日志文件工作
@@ -70,6 +77,27 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 {
                     _isRunning = false;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expireTime"></param>
+        public static  void CleanSqliteDb(DateTime expireTime)
+        {
+            try
+            {
+                const string delSql = "delete from LogItem where CreateTime<@CreateTime";
+
+                SQLiteParameter parameter = new SQLiteParameter("@CreateTime");
+                parameter.Value = expireTime;
+                
+                SqliteCodeFirstContext.ExecuteSqlCommand(delSql, parameter);
+            }
+            catch (Exception e)
+            {
+                NLogHelper.Error($"清理sqlite失败:{e}");
             }
         }
 

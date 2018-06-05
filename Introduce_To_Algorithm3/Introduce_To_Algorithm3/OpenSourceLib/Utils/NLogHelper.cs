@@ -130,7 +130,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 记录Info信息
         /// </summary>
         /// <param name="message"></param>
-        public static void Info(string message)
+        /// <param name="isEnableDbLog"></param>
+        public static void Info(string message, bool isEnableDbLog = false)
         {
             if (string.IsNullOrEmpty(message))
             {
@@ -139,6 +140,24 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             try
             {
                 _logger.Info(message);
+
+                if (isEnableDbLog)
+                {
+                    LogItem item = new LogItem()
+                    {
+                        Id = GuidUtils.GetGuid32(),
+                        LogSource = "",
+                        LogType = "info",
+                        CreateTime = DateTime.Now,
+                        LogContent = message
+                    };
+                    CommonModel model = new CommonModel()
+                    {
+                        CommonModelObject = item,
+                        CommonModelType = CommonModelType.LogType
+                    };
+                    _blockingQueueEx.Add(model);
+                }
             }
             catch (Exception)
             {
@@ -149,7 +168,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 记录Warn日志
         /// </summary>
         /// <param name="message"></param>
-        public static void Warn(string message)
+        /// <param name="isEnableDbLog"></param>
+        public static void Warn(string message, bool isEnableDbLog = false)
         {
             if (string.IsNullOrEmpty(message))
             {
@@ -158,6 +178,24 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             try
             {
                 _logger.Warn(message);
+
+                if (isEnableDbLog)
+                {
+                    LogItem item = new LogItem()
+                    {
+                        Id = GuidUtils.GetGuid32(),
+                        LogSource = "",
+                        LogType = "warn",
+                        CreateTime = DateTime.Now,
+                        LogContent = message
+                    };
+                    CommonModel model = new CommonModel()
+                    {
+                        CommonModelObject = item,
+                        CommonModelType = CommonModelType.LogType
+                    };
+                    _blockingQueueEx.Add(model);
+                }
             }
             catch (Exception)
             {
@@ -171,7 +209,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 记录Error日志
         /// </summary>
         /// <param name="message"></param>
-        public static void Error(string message)
+        /// <param name="isEnableDbLog"></param>
+        public static void Error(string message, bool isEnableDbLog = false)
         {
             if (string.IsNullOrEmpty(message))
             {
@@ -181,13 +220,23 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 _logger.Error(message);
 
-                LogItem item = new LogItem(){Id = GuidUtils.GetGuid32(),LogSource = "",LogType = "error",CreateTime = DateTime.Now,LogContent = message};
-                CommonModel model = new CommonModel()
+                if (isEnableDbLog)
                 {
-                    CommonModelObject = item,
-                    CommonModelType = CommonModelType.LogType
-                };
-                _blockingQueueEx.Add(model);
+                    LogItem item = new LogItem()
+                    {
+                        Id = GuidUtils.GetGuid32(),
+                        LogSource = "",
+                        LogType = "error",
+                        CreateTime = DateTime.Now,
+                        LogContent = message
+                    };
+                    CommonModel model = new CommonModel()
+                    {
+                        CommonModelObject = item,
+                        CommonModelType = CommonModelType.LogType
+                    };
+                    _blockingQueueEx.Add(model);
+                }
             }
             catch (Exception)
             {
@@ -199,7 +248,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 记录Fetal日志
         /// </summary>
         /// <param name="message"></param>
-        public static void Fatal(string message)
+        /// <param name="isEnableDbLog"></param>
+        public static void Fatal(string message,bool isEnableDbLog = false)
         {
             if (string.IsNullOrEmpty(message))
             {
@@ -209,13 +259,23 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 _logger.Fatal(message);
 
-                LogItem item = new LogItem() { Id = GuidUtils.GetGuid32(), LogSource = "", LogType = "fatal", CreateTime = DateTime.Now, LogContent = message };
-                CommonModel model = new CommonModel()
+                if (isEnableDbLog)
                 {
-                    CommonModelObject = item,
-                    CommonModelType = CommonModelType.LogType
-                };
-                _blockingQueueEx.Add(model);
+                    LogItem item = new LogItem()
+                    {
+                        Id = GuidUtils.GetGuid32(),
+                        LogSource = "",
+                        LogType = "fatal",
+                        CreateTime = DateTime.Now,
+                        LogContent = message
+                    };
+                    CommonModel model = new CommonModel()
+                    {
+                        CommonModelObject = item,
+                        CommonModelType = CommonModelType.LogType
+                    };
+                    _blockingQueueEx.Add(model);
+                }
             }
             catch (Exception)
             {
