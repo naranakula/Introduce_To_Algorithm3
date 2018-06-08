@@ -366,6 +366,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
             modelBuilder.Configurations.Add(new BaseEntityMap());
 
+            modelBuilder.Configurations.Add(new ConfigItemMap());
+
             //modelBuilder.Configurations.Add(new PersonMap());
             //modelBuilder.Configurations.Add(new PhoneMap());
             //modelBuilder.Entity<Phone>().HasRequired(s => s.Person).WithMany(s => s.Phones).HasForeignKey(s => s.PersonId).WillCascadeOnDelete(true);
@@ -456,6 +458,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// 通用ef entity
         /// </summary>
         public DbSet<CommonEfEntity> CommonEfEntities { get; set; }
+        
+
+        /// <summary>
+        /// 配置项
+        /// </summary>
+        public DbSet<ConfigItem> ConfigItems { get; set; }
 
 
         /// <summary>
