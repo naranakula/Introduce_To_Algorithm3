@@ -690,6 +690,7 @@
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\CacheBytesItemMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\CacheItemMap.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\ConfigItemMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\DictBytesItemMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\DictItemMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\KvBytesPairMap.cs" />
@@ -699,6 +700,7 @@
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\LogItemMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\CacheBytesItem.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\CacheItem.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\ConfigItem.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\DictBytesItem.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\DictItem.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbModels\KvBytesPair.cs" />
