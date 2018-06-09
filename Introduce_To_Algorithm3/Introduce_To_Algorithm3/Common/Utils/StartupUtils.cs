@@ -62,9 +62,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
                 }
                 else
                 {
-                    //删除该值
-                    registry.DeleteValue(keyName,false);
-                    //registry.SetValue(keyName, false);
+                    object valObj = registry.GetValue(keyName);
+                    if (valObj != null)
+                    {
+                        //删除该值
+                        registry.DeleteValue(keyName, false);
+                    }
                 }
                 return true;
             }

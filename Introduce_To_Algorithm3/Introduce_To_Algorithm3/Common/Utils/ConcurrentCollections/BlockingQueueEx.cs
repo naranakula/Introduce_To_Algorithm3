@@ -392,12 +392,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             DateTime now = DateTime.Now;
 
             int i = 0;
+            const int sleepMs = 7;//休眠时间毫秒
             while (UnHandleCount > 0)
             {
-                Thread.Sleep(7);
+                Thread.Sleep(sleepMs);
 
                 i++;
-                if ((DateTime.Now - now).TotalSeconds > 1.01 || i>500)
+                if ((DateTime.Now - now).TotalSeconds > 1.03 || i*sleepMs>2000)
                 {
                     NLogHelper.Warn($"BlockingQueue存在约{UnHandleCount}条数据未处理完成");
                     break;
