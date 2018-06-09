@@ -22,17 +22,19 @@ namespace cmlu.examples.pbs {
     static PersonReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgxwZXJzb24ucHJvdG8iwwEKBlBlcnNvbhIMCgRuYW1lGAEgASgJEgoKAmlk",
-            "GAIgASgFEg0KBWVtYWlsGAMgASgJEiMKBnBob25lcxgEIAMoCzITLlBlcnNv",
-            "bi5QaG9uZU51bWJlcho+CgtQaG9uZU51bWJlchIOCgZudW1iZXIYASABKAkS",
-            "HwoEdHlwZRgCIAEoDjIRLlBlcnNvbi5QaG9uZVR5cGUiKwoJUGhvbmVUeXBl",
-            "EgoKBk1PQklMRRAAEggKBEhPTUUQARIICgRXT1JLEAIiLQoESmFjaxIMCgRu",
-            "YW1lGAEgASgJEhcKBnBlcnNvbhgCIAEoCzIHLlBlcnNvbkIUqgIRY21sdS5l",
-            "eGFtcGxlcy5wYnNiBnByb3RvMw=="));
+            "CgxwZXJzb24ucHJvdG8aH2dvb2dsZS9wcm90b2J1Zi90aW1lc3RhbXAucHJv",
+            "dG8i9AEKBlBlcnNvbhIMCgRuYW1lGAEgASgJEgoKAmlkGAIgASgFEg0KBWVt",
+            "YWlsGAMgASgJEi8KC2NyZWF0ZV90aW1lGAQgASgLMhouZ29vZ2xlLnByb3Rv",
+            "YnVmLlRpbWVzdGFtcBIjCgZwaG9uZXMYBSADKAsyEy5QZXJzb24uUGhvbmVO",
+            "dW1iZXIaPgoLUGhvbmVOdW1iZXISDgoGbnVtYmVyGAEgASgJEh8KBHR5cGUY",
+            "AiABKA4yES5QZXJzb24uUGhvbmVUeXBlIisKCVBob25lVHlwZRIKCgZNT0JJ",
+            "TEUQABIICgRIT01FEAESCAoEV09SSxACIi0KBEphY2sSDAoEbmFtZRgBIAEo",
+            "CRIXCgZwZXJzb24YAiABKAsyBy5QZXJzb25CFKoCEWNtbHUuZXhhbXBsZXMu",
+            "cGJzYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::cmlu.examples.pbs.Person), global::cmlu.examples.pbs.Person.Parser, new[]{ "Name", "Id", "Email", "Phones" }, null, new[]{ typeof(global::cmlu.examples.pbs.Person.Types.PhoneType) }, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::cmlu.examples.pbs.Person.Types.PhoneNumber), global::cmlu.examples.pbs.Person.Types.PhoneNumber.Parser, new[]{ "Number", "Type" }, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::cmlu.examples.pbs.Person), global::cmlu.examples.pbs.Person.Parser, new[]{ "Name", "Id", "Email", "CreateTime", "Phones" }, null, new[]{ typeof(global::cmlu.examples.pbs.Person.Types.PhoneType) }, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::cmlu.examples.pbs.Person.Types.PhoneNumber), global::cmlu.examples.pbs.Person.Types.PhoneNumber.Parser, new[]{ "Number", "Type" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::cmlu.examples.pbs.Jack), global::cmlu.examples.pbs.Jack.Parser, new[]{ "Name", "Person" }, null, null, null)
           }));
     }
@@ -67,6 +69,7 @@ namespace cmlu.examples.pbs {
       name_ = other.name_;
       id_ = other.id_;
       email_ = other.email_;
+      CreateTime = other.createTime_ != null ? other.CreateTime.Clone() : null;
       phones_ = other.phones_.Clone();
     }
 
@@ -111,10 +114,21 @@ namespace cmlu.examples.pbs {
       }
     }
 
+    /// <summary>Field number for the "create_time" field.</summary>
+    public const int CreateTimeFieldNumber = 4;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp createTime_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp CreateTime {
+      get { return createTime_; }
+      set {
+        createTime_ = value;
+      }
+    }
+
     /// <summary>Field number for the "phones" field.</summary>
-    public const int PhonesFieldNumber = 4;
+    public const int PhonesFieldNumber = 5;
     private static readonly pb::FieldCodec<global::cmlu.examples.pbs.Person.Types.PhoneNumber> _repeated_phones_codec
-        = pb::FieldCodec.ForMessage(34, global::cmlu.examples.pbs.Person.Types.PhoneNumber.Parser);
+        = pb::FieldCodec.ForMessage(42, global::cmlu.examples.pbs.Person.Types.PhoneNumber.Parser);
     private readonly pbc::RepeatedField<global::cmlu.examples.pbs.Person.Types.PhoneNumber> phones_ = new pbc::RepeatedField<global::cmlu.examples.pbs.Person.Types.PhoneNumber>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::cmlu.examples.pbs.Person.Types.PhoneNumber> Phones {
@@ -137,6 +151,7 @@ namespace cmlu.examples.pbs {
       if (Name != other.Name) return false;
       if (Id != other.Id) return false;
       if (Email != other.Email) return false;
+      if (!object.Equals(CreateTime, other.CreateTime)) return false;
       if(!phones_.Equals(other.phones_)) return false;
       return true;
     }
@@ -147,6 +162,7 @@ namespace cmlu.examples.pbs {
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (Id != 0) hash ^= Id.GetHashCode();
       if (Email.Length != 0) hash ^= Email.GetHashCode();
+      if (createTime_ != null) hash ^= CreateTime.GetHashCode();
       hash ^= phones_.GetHashCode();
       return hash;
     }
@@ -170,6 +186,10 @@ namespace cmlu.examples.pbs {
         output.WriteRawTag(26);
         output.WriteString(Email);
       }
+      if (createTime_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(CreateTime);
+      }
       phones_.WriteTo(output, _repeated_phones_codec);
     }
 
@@ -184,6 +204,9 @@ namespace cmlu.examples.pbs {
       }
       if (Email.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Email);
+      }
+      if (createTime_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreateTime);
       }
       size += phones_.CalculateSize(_repeated_phones_codec);
       return size;
@@ -202,6 +225,12 @@ namespace cmlu.examples.pbs {
       }
       if (other.Email.Length != 0) {
         Email = other.Email;
+      }
+      if (other.createTime_ != null) {
+        if (createTime_ == null) {
+          createTime_ = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        CreateTime.MergeFrom(other.CreateTime);
       }
       phones_.Add(other.phones_);
     }
@@ -227,6 +256,13 @@ namespace cmlu.examples.pbs {
             break;
           }
           case 34: {
+            if (createTime_ == null) {
+              createTime_ = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(createTime_);
+            break;
+          }
+          case 42: {
             phones_.AddEntriesFrom(input, _repeated_phones_codec);
             break;
           }

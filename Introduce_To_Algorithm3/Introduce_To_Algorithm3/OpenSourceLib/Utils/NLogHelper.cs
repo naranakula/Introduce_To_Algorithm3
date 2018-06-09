@@ -32,12 +32,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 实际使用中在对应的类中创建一个_logger，这样就可以使用${callsite}了
         /// 使用不同name的logger，根据名称记录不同的日志：如邮件，数据库日志
         /// </summary>
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Slogger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// 数据库日志，支持error和fatal
         /// </summary>
-        private static readonly BlockingQueueEx<CommonModel> _blockingQueueEx = new BlockingQueueEx<CommonModel>(singleDataHandler: item
+        private static readonly BlockingQueueEx<CommonModel> SblockingQueueEx = new BlockingQueueEx<CommonModel>(singleDataHandler: item
             =>
         {
             if (item == null || item.CommonModelObject == null)
@@ -97,7 +97,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             }
             try
             {
-                _logger.Trace(message);
+                Slogger.Trace(message);
             }
             catch (Exception)
             {
@@ -117,7 +117,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             }
             try
             {
-                _logger.Debug(message);
+                Slogger.Debug(message);
             }
             catch (Exception)
             {
@@ -139,7 +139,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             }
             try
             {
-                _logger.Info(message);
+                Slogger.Info(message);
 
                 if (isEnableDbLog)
                 {
@@ -156,7 +156,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                         CommonModelObject = item,
                         CommonModelType = CommonModelType.LogType
                     };
-                    _blockingQueueEx.Add(model);
+                    SblockingQueueEx.Add(model);
                 }
             }
             catch (Exception)
@@ -177,7 +177,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             }
             try
             {
-                _logger.Warn(message);
+                Slogger.Warn(message);
 
                 if (isEnableDbLog)
                 {
@@ -194,7 +194,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                         CommonModelObject = item,
                         CommonModelType = CommonModelType.LogType
                     };
-                    _blockingQueueEx.Add(model);
+                    SblockingQueueEx.Add(model);
                 }
             }
             catch (Exception)
@@ -218,7 +218,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             }
             try
             {
-                _logger.Error(message);
+                Slogger.Error(message);
 
                 if (isEnableDbLog)
                 {
@@ -235,7 +235,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                         CommonModelObject = item,
                         CommonModelType = CommonModelType.LogType
                     };
-                    _blockingQueueEx.Add(model);
+                    SblockingQueueEx.Add(model);
                 }
             }
             catch (Exception)
@@ -257,7 +257,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             }
             try
             {
-                _logger.Fatal(message);
+                Slogger.Fatal(message);
 
                 if (isEnableDbLog)
                 {
@@ -274,7 +274,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                         CommonModelObject = item,
                         CommonModelType = CommonModelType.LogType
                     };
-                    _blockingQueueEx.Add(model);
+                    SblockingQueueEx.Add(model);
                 }
             }
             catch (Exception)
@@ -293,7 +293,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <param name="model"></param>
         public static void AddMessage(CommonModel model)
         {
-            _blockingQueueEx.Add(model);
+            SblockingQueueEx.Add(model);
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// </summary>
         public static void Stop()
         {
-            _blockingQueueEx.Stop();
+            SblockingQueueEx.Stop();
         }
 
         #endregion
@@ -317,7 +317,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 try
                 {
-                    return _logger.IsTraceEnabled;
+                    return Slogger.IsTraceEnabled;
                 }
                 catch (Exception)
                 {
@@ -335,7 +335,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 try
                 {
-                    return _logger.IsDebugEnabled;
+                    return Slogger.IsDebugEnabled;
                 }
                 catch (Exception)
                 {
@@ -353,7 +353,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 try
                 {
-                    return _logger.IsInfoEnabled;
+                    return Slogger.IsInfoEnabled;
                 }
                 catch (Exception)
                 {
@@ -371,7 +371,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 try
                 {
-                    return _logger.IsWarnEnabled;
+                    return Slogger.IsWarnEnabled;
                 }
                 catch (Exception)
                 {
@@ -389,7 +389,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 try
                 {
-                    return _logger.IsErrorEnabled;
+                    return Slogger.IsErrorEnabled;
                 }
                 catch (Exception)
                 {
@@ -407,7 +407,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
             {
                 try
                 {
-                    return _logger.IsFatalEnabled;
+                    return Slogger.IsFatalEnabled;
                 }
                 catch (Exception)
                 {

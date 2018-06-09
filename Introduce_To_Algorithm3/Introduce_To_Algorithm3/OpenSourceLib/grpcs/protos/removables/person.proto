@@ -4,10 +4,13 @@
 option csharp_namespace = "cmlu.examples.pbs";
 // [END csharp_declaration]
 
+import "google/protobuf/timestamp.proto";
+
 message Person {
   string name = 1;
   int32 id = 2;  // Unique ID number for this person.
   string email = 3;
+  google.protobuf.Timestamp create_time=4; 
 
   enum PhoneType {
     MOBILE = 0;
@@ -20,7 +23,7 @@ message Person {
     PhoneType type = 2;
   }
 
-  repeated PhoneNumber phones = 4;
+  repeated PhoneNumber phones = 5;
 }
 
 message Jack{

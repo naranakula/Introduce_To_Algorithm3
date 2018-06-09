@@ -391,11 +391,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         {
             DateTime now = DateTime.Now;
 
+            int i = 0;
             while (UnHandleCount > 0)
             {
-                Thread.Sleep(3);
+                Thread.Sleep(7);
 
-                if ((DateTime.Now - now).TotalSeconds > 1)
+                i++;
+                if ((DateTime.Now - now).TotalSeconds > 1.01 || i>500)
                 {
                     NLogHelper.Warn($"BlockingQueue存在约{UnHandleCount}条数据未处理完成");
                     break;

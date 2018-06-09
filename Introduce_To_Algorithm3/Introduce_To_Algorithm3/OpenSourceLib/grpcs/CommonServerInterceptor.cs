@@ -112,7 +112,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 }
                 catch { }
 
-                throw ex;
+                throw;
             }
         }
 

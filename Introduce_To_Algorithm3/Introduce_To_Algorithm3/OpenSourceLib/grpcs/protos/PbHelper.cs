@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using cmlu.examples.pbs;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
 {
@@ -20,6 +21,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
             Jack jack = new Jack();
             if (jack.Person == null)
             {
+                //将会进入
                 //对于C#默认的组合field是null
                 Console.WriteLine("default value for combined message field is null");
             }
@@ -27,7 +29,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
             //ToString()是用于测试的代码，很慢
             //{}
             string str = jack.ToString();
-            #region 将对象序列化
             Person person = new Person();
             person.Id = 1;
             person.Email = "";
@@ -39,7 +40,29 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
             person.Phones.Add(new Person.Types.PhoneNumber { Number = "555-1212" });
             //{ "name": "jack", "id": 1, "phones": [ { "number": "555-1212" } ] }
             str = person.ToString();
+
+            #region TimeStamp
+
+            //传入的参数必须是Utc时间
+            person.CreateTime = Timestamp.FromDateTime(DateTime.UtcNow);
+
+            //返回的时间一定是utc时间
+            DateTime createTime = person.CreateTime.ToDateTime();
+
+            //{ "name": "jack", "id": 1, "createTime": "2018-06-09T01:31:37.489723400Z", "phones": [ { "number": "555-1212" } ] }
+            str = person.ToString();
+
+
+            //Google.Protobuf.WellKnownTypes.Timestamp有两部分组成:1、自 UTC time since Unix epoch 1970-01-01T00:00:00Z.的秒数  2、Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.
+
+
+            #endregion
+
+
+            #region 将对象序列化
+
             byte[] bytes = null;
+            //方式1
             using (MemoryStream stream = new MemoryStream())
             {
                 //写入流中
@@ -48,8 +71,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
             }
 
             //转换为字节
+            //方式2
             byte[] byte2 = person.ToByteArray();
             //转换为字节
+            //方式3
             ByteString byteString = person.ToByteString();
             byte2 = byteString.ToByteArray();
             #endregion
@@ -65,10 +90,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs.protos
 
             var descriptor = Person.Descriptor;
 
+            string tab = "\t";
             foreach (var field in descriptor.Fields.InDeclarationOrder())
             {
+
                 //获取类的字段，并从实例获取字段值
-                Console.WriteLine($"{field.FieldNumber}{field.Name}{field.Accessor.GetValue(person)}");
+                Console.WriteLine($"{field.FieldNumber}{tab}{field.Name}{tab}{field.Accessor.GetValue(person)}");
             }
             
             #endregion

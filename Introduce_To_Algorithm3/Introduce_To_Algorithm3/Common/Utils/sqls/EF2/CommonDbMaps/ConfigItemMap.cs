@@ -34,7 +34,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbMaps
 
 
             //nvarchar(128)
-            Property(t => t.ConfigFor).IsRequired().IsUnicode().HasMaxLength(128).IsVariableLength();
+            Property(t => t.ConfigFor).IsOptional().IsUnicode().HasMaxLength(128).IsVariableLength();
 
 
             //nvarchar(max)
