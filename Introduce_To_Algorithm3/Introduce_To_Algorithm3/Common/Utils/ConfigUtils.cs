@@ -631,7 +631,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                         continue;
                     }
 
-                    string[] array = temp.Split(new char[]{'='}, 2, StringSplitOptions.RemoveEmptyEntries);
+                    string[] array = temp.Split(new char[]{'='}, StringSplitOptions.RemoveEmptyEntries);
 
                     if (array.Length != 2)
                     {
@@ -659,8 +659,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <summary>
         /// 获取properties的值
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="defaultValueIfNotExist"></param>
+        /// <param name="key">键不区分大小写</param>
+        /// <param name="defaultValueIfNotExist">如果查找不到的默认值</param>
         /// <returns></returns>
         public static string GetPropertiesString(string key, string defaultValueIfNotExist = "")
         {
