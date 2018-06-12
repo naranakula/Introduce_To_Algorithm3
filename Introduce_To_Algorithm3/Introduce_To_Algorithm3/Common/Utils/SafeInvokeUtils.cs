@@ -24,7 +24,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             try
             {
-                action();
+
+                action?.Invoke();
 
                 return true;
             }
@@ -45,7 +46,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 if (finallyHandler != null)
                 {
-                    finallyHandler();
+                    try
+                    {
+                        finallyHandler();
+                    }
+                    catch { }
                 }
             }
         }
