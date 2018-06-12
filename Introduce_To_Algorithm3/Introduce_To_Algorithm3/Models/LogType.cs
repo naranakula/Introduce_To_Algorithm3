@@ -17,5 +17,6 @@ namespace Introduce_To_Algorithm3.Models
         Warn,
         Error,
         Fatal,
+        Secret
     }
 }

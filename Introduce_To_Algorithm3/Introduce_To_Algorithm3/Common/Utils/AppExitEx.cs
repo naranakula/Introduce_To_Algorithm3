@@ -73,7 +73,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 if (exceptionHandler != null)
                 {
-                    exceptionHandler(ex);
+                    try
+                    {
+                        exceptionHandler(ex);
+                    }
+                    catch { }
                 }
                 else
                 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,6 +56,17 @@ namespace Introduce_To_Algorithm3.Common.Utils
             
 
             return outList;
+        }
+
+
+        /// <summary>
+        /// 判断集合是否为空
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        public static bool IsCollectionEmtpy(ICollection collection)
+        {
+            return collection == null || collection.Count == 0;
         }
 
         /// <summary>
