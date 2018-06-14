@@ -641,6 +641,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     //key的大小写无所谓
                     string key = StringUtils.TrimEx(array[0]).ToLower();
                     string val = StringUtils.TrimEx(array[1]);
+                    //如果存在则更新，后面的值优先
                     _propertiesDict.AddOrUpdate(key, val, (k, oldv) => val);
                 }
 
