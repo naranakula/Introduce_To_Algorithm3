@@ -596,6 +596,16 @@ namespace Introduce_To_Algorithm3.Common.Utils
         private static readonly ConcurrentDictionary<string,string> _propertiesDict = new ConcurrentDictionary<string, string>();
 
 
+
+        /// <summary>
+        /// 获取底层的Properties数据存储
+        /// </summary>
+        public static ConcurrentDictionary<string, string> PropertiesConcurrentDict
+        {
+            get { return _propertiesDict; }
+        }
+
+
         /// <summary>
         /// 加载properties
         /// </summary>
