@@ -23,7 +23,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite
     /// <provider invariantName="System.Data.SQLite" type="System.Data.SQLite.EF6.SQLiteProviderServices, System.Data.SQLite.EF6" />
     /// <provider invariantName="System.Data.SQLite.EF6" type="System.Data.SQLite.EF6.SQLiteProviderServices, System.Data.SQLite.EF6" />
     /// 
-    /// 该组件也依赖于System.Data.SQLite，但是Nuget中没有体现。经测试可以使用。
+    /// SQLite.CodeFirst组件也依赖于System.Data.SQLite，但是Nuget中没有体现。经测试可以使用。
     /// 有下列初始化方式：
     /// SqliteCreateDatabaseIfNotExists
     /// SqliteDropCreateDatabaseAlways

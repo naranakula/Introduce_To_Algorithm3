@@ -14,6 +14,11 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
     /// </summary>
     public static class StringUtils
     {
+        #region 常量
+
+        public const string Tab = "\t";
+
+        #endregion
 
         #region 常用
 
@@ -96,6 +101,27 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
         #endregion
 
         /// <summary>
+        /// 是否为null或者""
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty(string s)
+        {
+            return string.IsNullOrEmpty(s);
+        }
+
+        /// <summary>
+        /// 是否为null或者空白
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool IsNullOrWhiteSpace(string s)
+        {
+            return string.IsNullOrWhiteSpace(s);
+        }
+
+
+        /// <summary>
         /// format
         /// </summary>
         /// <param name="s"></param>
@@ -125,6 +151,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
         /// <returns></returns>
         public static bool EqualsEx(string s1, string s2, bool ignoreCase = true)
         {
+            #region 这段代码不是必选的 是为了性能优化
+            if (s1 == s2)
+            {
+                return true;
+            }
+            #endregion
+
             if (string.IsNullOrWhiteSpace(s1) && string.IsNullOrWhiteSpace(s2))
             {
                 return true;
