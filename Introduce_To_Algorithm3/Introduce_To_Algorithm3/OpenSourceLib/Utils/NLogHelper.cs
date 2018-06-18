@@ -47,7 +47,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
             #region 日志
 
-            if (StringUtils.EqualsEx(CommonModelType.LogType, item.CommonModelType))
+            if (StringUtils.EqualsEx(CommonModelType.LogType, item.CommonModelTypeStr))
             {
                 var logItem = item.CommonModelObject as LogItem;
                 if (logItem == null)
@@ -154,7 +154,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                     CommonModel model = new CommonModel()
                     {
                         CommonModelObject = item,
-                        CommonModelType = CommonModelType.LogType
+                        CommonModelTypeStr = CommonModelType.LogType
                     };
                     SblockingQueueEx.Add(model);
                 }
@@ -192,7 +192,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                     CommonModel model = new CommonModel()
                     {
                         CommonModelObject = item,
-                        CommonModelType = CommonModelType.LogType
+                        CommonModelTypeStr = CommonModelType.LogType
                     };
                     SblockingQueueEx.Add(model);
                 }
@@ -233,7 +233,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                     CommonModel model = new CommonModel()
                     {
                         CommonModelObject = item,
-                        CommonModelType = CommonModelType.LogType
+                        CommonModelTypeStr = CommonModelType.LogType
                     };
                     SblockingQueueEx.Add(model);
                 }
@@ -272,7 +272,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                     CommonModel model = new CommonModel()
                     {
                         CommonModelObject = item,
-                        CommonModelType = CommonModelType.LogType
+                        CommonModelTypeStr = CommonModelType.LogType
                     };
                     SblockingQueueEx.Add(model);
                 }

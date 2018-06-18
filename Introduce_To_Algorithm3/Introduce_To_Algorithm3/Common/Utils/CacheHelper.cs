@@ -27,7 +27,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 默认的限制缓存800M，总内存限制的扫描间隔2分钟
         /// 只有一个实例可以不用Dispose，频繁的创建MemoryCache实例需要dispose
         /// </summary>
-        private static volatile MemoryCache _cache = null;// MemoryCache.Default;
+        private static volatile MemoryCache _cache = MemoryCache.Default;
 
 
         /// <summary>

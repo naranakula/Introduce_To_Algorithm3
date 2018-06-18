@@ -11,17 +11,56 @@ namespace Introduce_To_Algorithm3.Models
     /// </summary>
     public class CommonModel
     {
+        private string _commonModelTypeStr;
+        private object _commonModelObject;
+
+        /// <summary>
+        /// locker
+        /// </summary>
+        private readonly object _locker = new object();
+
         /// <summary>
         /// 模型类型
         /// </summary>
-        public string CommonModelType { get; set; }
+        public string CommonModelTypeStr
+        {
+            get
+            {
+                lock (_locker)
+                {
+                    return _commonModelTypeStr;
+                }
+            }
+            set
+            {
+                lock (_locker)
+                {
+                    _commonModelTypeStr = value;
+                }
+            }
+        }
 
 
         /// <summary>
         /// 模型对象
         /// </summary>
-        public object CommonModelObject { get; set; }
-
+        public object CommonModelObject
+        {
+            get
+            {
+                lock (_locker)
+                {
+                    return _commonModelObject;
+                }
+            }
+            set
+            {
+                lock (_locker)
+                {
+                    _commonModelObject = value;
+                }
+            }
+        }
     }
 
     /// <summary>
