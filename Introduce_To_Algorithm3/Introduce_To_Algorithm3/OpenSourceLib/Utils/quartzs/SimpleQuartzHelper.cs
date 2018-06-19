@@ -179,8 +179,8 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
                 return trigger;
             }
         }
-        
-        
+
+
         /// <summary>
         /// 创建CronTrigger
         /// trigger将定期按时执行，
@@ -210,6 +210,7 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
         /// 0 0/5 * * * ?   表示每5分钟执行一次
         /// 0 0 4 5 * ?     每月5日 4 点执行
         /// 0 0 4 ? * 1     每个星期天4点执行
+        /// 23 23 3 9 1,5 ? 每年1月5月9日执行一次
         /// </summary>
         /// <param name="triggerName">triggerName,必须唯一</param>
         /// <param name="offsetMilliSeconds">trigger起始执行的时间,以毫秒为单位</param>
