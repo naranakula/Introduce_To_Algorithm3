@@ -764,6 +764,7 @@
     <Compile Include="Models\CommonException.cs" />
     <Compile Include="Models\CommonModel.cs" />
     <Compile Include="Models\CommonResult.cs" />
+    <Compile Include="Models\ConcurrentSet.cs" />
     <Compile Include="Models\LogType.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\CommonMessage.cs" />
