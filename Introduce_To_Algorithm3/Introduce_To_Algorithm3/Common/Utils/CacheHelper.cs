@@ -98,15 +98,15 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <typeparam name="T"></typeparam>
         /// <param name="cacheKey"></param>
         /// <param name="value"></param>
-        /// <param name="expireSeconds">过多少秒后过期，指的是Set之后多长时间过期</param>
+        /// <param name="expireMilliSeconds">过多少毫秒后过期，指的是Set之后多长时间过期</param>
         /// <param name="exceptionHandler"></param>
-        public static bool Set<T>(string cacheKey, T value,int expireSeconds,Action<Exception> exceptionHandler = null)
+        public static bool Set<T>(string cacheKey, T value,int expireMilliSeconds,Action<Exception> exceptionHandler = null)
         {
             try
             {
                 CacheItemPolicy policy = new CacheItemPolicy();
                 policy.Priority = CacheItemPriority.Default;
-                policy.AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(expireSeconds);
+                policy.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMilliseconds(expireMilliSeconds);
                 Cache.Set(cacheKey, value, policy);
                 return true;
             }
@@ -125,16 +125,16 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// <typeparam name="T"></typeparam>
         /// <param name="cacheKey"></param>
         /// <param name="value"></param>
-        /// <param name="expireSeconds">过多少秒后过期,指的是Add之后多长时间过期</param>
+        /// <param name="expireMilliSeconds">过多少秒后过期,指的是Add之后多长时间过期</param>
         /// <param name="exceptionHandler"></param>
         /// <returns>true if insertion succeeded, or false if there is an already an entry in the Cache that has the same key as key.</returns>
-        public static bool Add<T>(string cacheKey, T value, int expireSeconds,Action<Exception> exceptionHandler = null)
+        public static bool Add<T>(string cacheKey, T value, int expireMilliSeconds,Action<Exception> exceptionHandler = null)
         {
             try
             {
                 CacheItemPolicy policy = new CacheItemPolicy();
                 policy.Priority = CacheItemPriority.Default;
-                policy.AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(expireSeconds);
+                policy.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMilliseconds(expireMilliSeconds);
                 //true if insertion succeeded, or false if there is an already an entry in the Cache that has the same key as key.
                 return Cache.Add(cacheKey, value, policy);
             }

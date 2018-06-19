@@ -20,19 +20,20 @@ service RegisterService{
 
 //注册请求
 message RegisterRequest{
-		string command = 1;//请求命令 默认是注册 exit表示登出
-		string service_type = 2;//服务类型 同一类型对外推荐一个地址
-		string service_ip = 3;//暴露的服务IP
-		int32 service_port = 4;//暴露的服务端口 (服务ip和端口唯一标志一个服务)
-		int32 millisecond_to_live = 5;//服务可以保证至少的存活时间
-		int64 busy_weight = 6;//服务的忙碌程度,数值越大表示越忙碌
+		string command = 1;//请求命令 默认空值或者register是注册 exit表示取消注册  命令不区分大小写
+		string service_name = 2;//服务名称  服务名称必须唯一表示一个服务，服务名称不区分大小写但不能为空  客户端将根据服务名称获取提供服务的服务器列表
+		int32 millisecond_to_live = 3;//服务可以保证至少的存活时间 单位毫秒  大于0 
+		int32 busy_weight = 4;//服务的忙碌程度,数值越大表示越忙碌 数值大于等于0
+		string service_ip = 5;//暴露的服务IP
+		int32 service_port = 6;//暴露的服务端口 (服务ip和端口唯一标志一个服务)
+		string service_reserve_field = 7;//服务预留字段  其含义有具体服务定义
 }
 
 
 //注册响应
 message RegisterResponse{
 		int32 result_code = 1;//结果码,大于等于0,0表示成功
-		string result_desc = 2;//结果描述
+		string result_desc = 2;//结果描述  当result_code不为0时，用于表述为什么不成功
 }
 
 

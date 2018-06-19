@@ -947,6 +947,7 @@
     <Folder Include="Common\LinearProgramming\" />
     <Folder Include="Common\NumberTheory\" />
     <Folder Include="Common\Utils\Commons\" />
+    <Folder Include="OpenSourceLib\grpcs\lb\GeneratedRegisterService\" />
     <Folder Include="OpenSourceLib\HttpLib\" />
     <Folder Include="OpenSourceLib\SmartThreadPool\" />
     <Folder Include="OpenSourceLib\TopSelfs\" />
