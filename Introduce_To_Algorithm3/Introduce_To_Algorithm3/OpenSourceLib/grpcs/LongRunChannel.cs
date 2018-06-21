@@ -93,6 +93,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// </summary>
         private volatile bool _isStop = false;
 
+        /// <summary>
+        /// 连续grpc
+        /// </summary>
+        private volatile int _continuousGrpcError = 0;
+
+        /// <summary>
+        /// 最大连续错误次数
+        /// </summary>
+        private const int MaxConrinuousGrpcErrorCount = 31;
         #endregion
 
         #endregion
@@ -127,6 +136,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         {
             get
             {
+                //grpc错误次数超出限制,重建grpc channel
+                if (_continuousGrpcError > MaxConrinuousGrpcErrorCount)
+                {
+                    return ChannelState.Shutdown;
+                }
+
                 Channel tempChannel = _channel;
                 if (tempChannel == null)
                 {
@@ -157,6 +172,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //经测试如果服务器不存在也能启动成功，此时channel state是Idle，此时网络并没有实际连接
                 _channel = new Channel(_serverIp,_serverPort,ChannelCredentials.Insecure,GrpcOptions);
                 _isStop = false;
+                _continuousGrpcError = 0;
                 return true;
             }
             catch (Exception ex)
@@ -215,7 +231,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <returns></returns>
         public bool SafeInvoke(Action<Channel> channelAction, Action<Exception> exceptionHandler = null)
         {
-            
+
             try
             {
                 Channel tempChannel = _channel;
@@ -224,15 +240,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 ChannelState state = this.ChannelState;
 
                 #region ShutDown重新建立连接
+
                 if (state == ChannelState.Shutdown)
                 {
                     //按照grpc文档，理论上start之后永远不会进入该状态
                     //已经人为停止，不需要重建
                     if (_isStop)
                     {
-                        throw new CommonException(errorCode:1,errorReason:"channel已经被停止");
+                        throw new CommonException(errorCode: 1, errorReason: "channel已经被停止");
                     }
-                    
+
                     //是否需要重建
                     bool isNeedToReBuild = false;
 
@@ -268,8 +285,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                         throw new CommonException(errorCode: 2, errorReason: "Channel状态为ShutDown");
                     }
                 }
+
                 #endregion
-                
+
                 channelAction(tempChannel);
 
                 /*
@@ -281,8 +299,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                  //deadLine必须使用UTC时间
                  var reply = client.SayHello(new Request() {Request_ = "Hello"}, deadline: DateTime.UtcNow.AddSeconds(timeoutSeconds));
                  */
-
+                 //重置连续错误为0
+                _continuousGrpcError = 0;
                 return true;
+            }
+            catch (RpcException rpcException)
+            {
+                //连续错误+1
+                _continuousGrpcError++;
+                exceptionHandler?.Invoke(rpcException);
+                return false;
             }
             catch (Exception e)
             {
