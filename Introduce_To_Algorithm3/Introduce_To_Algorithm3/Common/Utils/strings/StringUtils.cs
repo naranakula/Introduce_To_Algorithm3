@@ -16,7 +16,17 @@ namespace Introduce_To_Algorithm3.Common.Utils.strings
     {
         #region 常量
 
+        /// <summary>
+        /// Tab \t
+        /// </summary>
         public const string Tab = "\t";
+
+
+        /// <summary>
+        /// 换行
+        /// </summary>
+        public static readonly String NewLine = Environment.NewLine;
+        
 
         #endregion
 
