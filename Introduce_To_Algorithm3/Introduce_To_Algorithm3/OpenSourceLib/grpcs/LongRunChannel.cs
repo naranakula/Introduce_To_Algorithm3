@@ -142,14 +142,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     return ChannelState.Shutdown;
                 }
 
-                Channel tempChannel = _channel;
-                if (tempChannel == null)
-                {
-                    return ChannelState.Shutdown;
-                }
 
-                //通道状态，grpc底层已经实现了锁和异常处理(看过源代码)
-                return tempChannel.State;
+                lock (_locker)
+                {
+                    Channel tempChannel = _channel;
+                    if (tempChannel == null)
+                    {
+                        return ChannelState.Shutdown;
+                    }
+
+                    //通道状态，grpc底层已经实现了锁和异常处理(看过源代码)
+                    return tempChannel.State;
+                }
             }
         }
 
@@ -211,9 +215,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// </summary>
         public void Stop(int millisecondsTimeout = 9000, Action<Exception> exceptionHandler = null)
         {
-            InnerStop(millisecondsTimeout,exceptionHandler);
-            //经过考虑，放在InnerStop后面更合适
+            //经过考虑，放在InnerStop前面更合适
             _isStop = true;
+            InnerStop(millisecondsTimeout, exceptionHandler);
         }
 
 
