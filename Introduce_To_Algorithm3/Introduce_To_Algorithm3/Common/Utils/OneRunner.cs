@@ -166,7 +166,13 @@ namespace Common
             {
                 try
                 {
+                    //调用时有可能没有获取到锁，抛出异常
                     OneRunMutex.ReleaseMutex();
+                }
+                catch { }
+                try
+                {
+                    OneRunMutex.Dispose();
                 }
                 catch { }
                 OneRunMutex = null;
