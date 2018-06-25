@@ -82,11 +82,14 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
             finally
             {
-                try
+                if (finallyHandler != null)
                 {
-                    finallyHandler?.Invoke();
+                    try
+                    {
+                        finallyHandler();
+                    }
+                    catch { }
                 }
-                catch { }
             }
         }
 
