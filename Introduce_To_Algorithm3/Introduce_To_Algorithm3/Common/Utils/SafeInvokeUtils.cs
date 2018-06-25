@@ -55,6 +55,41 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
+
+        /// <summary>
+        /// 安全调用 调用失败，返回default(TR)
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <param name="finallyHandler"></param>
+        public static TR Safe<TR>(this Func<TR> func, Action<Exception> exceptionHandler = null, Action finallyHandler = null)
+        {
+            try
+            {
+                return func();
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    try
+                    {
+                        exceptionHandler(ex);
+                    }
+                    catch { }
+                }
+                return default(TR);
+            }
+            finally
+            {
+                try
+                {
+                    finallyHandler?.Invoke();
+                }
+                catch { }
+            }
+        }
+
         /// <summary>
         /// 安全调用
         /// 返回true，表示没有异常，false表示发生异常
@@ -88,31 +123,6 @@ namespace Introduce_To_Algorithm3.Common.Utils
             }
         }
 
-        /// <summary>
-        /// 安全调用 调用失败，返回default(TR)
-        /// </summary>
-        /// <param name="func"></param>
-        /// <param name="exceptionHandler"></param>
-        /// <param name="finallyHandler"></param>
-        public static TR Safe<TR>(this Func<TR> func, Action<Exception> exceptionHandler = null,Action finallyHandler = null)
-        {
-            try
-            {
-                return func();
-            }
-            catch (Exception ex)
-            {
-                if (exceptionHandler != null)
-                {
-                    exceptionHandler(ex);
-                }
-                return default(TR);
-            }
-            finally
-            {
-                finallyHandler?.Invoke();
-            }
-        }
 
         /// <summary>
         /// 安全调用 调用失败，返回default(TR)
