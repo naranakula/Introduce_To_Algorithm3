@@ -11,8 +11,8 @@ namespace Introduce_To_Algorithm3.Models
     /// </summary>
     public class CommonModel
     {
-        private string _commonModelTypeStr;
-        private object _commonModelObject;
+        private volatile string _commonModelTypeStr;
+        private volatile object _commonModelObject;
 
         /// <summary>
         /// locker
