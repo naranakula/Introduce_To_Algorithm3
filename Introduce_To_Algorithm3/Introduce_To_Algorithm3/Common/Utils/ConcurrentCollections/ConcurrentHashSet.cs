@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Introduce_To_Algorithm3.Models
+namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 {
     /// <summary>
     /// 并行集合
-    /// T需要实现equals和gethashcode
+    /// T需要覆盖object的equals和gethashcode
     /// 如果T相等则hashcode必须一样，不相等hashcode也有可能一样
+    /// 
     /// </summary>
-    public class ConcurrentSet<T> where T:class
+    public class ConcurrentHashSet<T> where T:class
     {
         /// <summary>
         /// 底层的hashset
