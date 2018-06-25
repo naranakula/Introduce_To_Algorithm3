@@ -150,9 +150,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     {
                         return ChannelState.Shutdown;
                     }
-
-                    //通道状态，grpc底层已经实现了锁和异常处理(看过源代码)
-                    return tempChannel.State;
+                    else
+                    {
+                        //通道状态，grpc底层已经实现了锁和异常处理(看过源代码)
+                        return tempChannel.State;
+                    }
                 }
             }
         }
@@ -175,13 +177,25 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 
                 //经测试如果服务器不存在也能启动成功，此时channel state是Idle，此时网络并没有实际连接
                 _channel = new Channel(_serverIp,_serverPort,ChannelCredentials.Insecure,GrpcOptions);
-                _isStop = false;
-                _continuousGrpcError = 0;
+                lock (_locker)
+                {
+                    _isStop = false;
+                    _continuousGrpcError = 0;
+                }
                 return true;
             }
             catch (Exception ex)
             {
-                exceptionHandler?.Invoke(ex);
+                if (exceptionHandler != null)
+                {
+                    try
+                    {
+                        exceptionHandler(ex);
+                    }
+                    catch
+                    {
+                    }
+                }
                 return false;
             }
         }
@@ -200,7 +214,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 }
                 catch (Exception ex)
                 {
-                    exceptionHandler?.Invoke(ex);
+                    if (exceptionHandler != null)
+                    {
+                        try
+                        {
+                            exceptionHandler(ex);
+                        }
+                        catch
+                        {
+                        }
+                    }
                 }
                 finally
                 {
@@ -216,7 +239,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         public void Stop(int millisecondsTimeout = 9000, Action<Exception> exceptionHandler = null)
         {
             //经过考虑，放在InnerStop前面更合适
-            _isStop = true;
+            lock (_locker)
+            {
+                _isStop = true;
+            }
             InnerStop(millisecondsTimeout, exceptionHandler);
         }
 
