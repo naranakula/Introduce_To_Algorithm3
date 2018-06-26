@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -142,6 +143,47 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
             return true;
         }
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// ObservableCollection的 in place排序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        public static void SortInPlace<T>(this ObservableCollection<T> collection) where T : IComparable<T>
+        {
+            if (collection == null || collection.Count <= 1)
+            {
+                return;
+            }
+
+            List<T> sortedList = collection.OrderBy(t => t).ToList();
+
+            for (int i = 0; i < sortedList.Count; i++)
+            {
+                int j = collection.IndexOf(sortedList[i]);
+                if (j >= 0 && i != j)
+                {
+                    collection.Move(j, i);
+                }
+            }
+
+        }
+
+
+
+
+
+
+
+
+
     }
 
 
