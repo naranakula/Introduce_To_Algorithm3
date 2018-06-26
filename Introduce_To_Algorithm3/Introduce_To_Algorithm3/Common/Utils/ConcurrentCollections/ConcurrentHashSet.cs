@@ -145,6 +145,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
 
         /// <summary>
         /// 转成列表
+        ///  ToList创建一个新的list，将原来的元素浅复制到新的集合
+        /// O(n)
         /// </summary>
         /// <returns></returns>
         public List<T> ToList()

@@ -191,6 +191,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         /// <summary>
         /// 本身keys的获取是O(1)的
         /// 但ToList是O(n)的
+        /// ToList创建一个新的list，将原来的元素浅复制到新的集合
         /// </summary>
         public List<TKey> KeyList
         {
