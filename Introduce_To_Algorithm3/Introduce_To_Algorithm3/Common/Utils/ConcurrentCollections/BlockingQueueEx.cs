@@ -205,7 +205,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                                     }
                                     else
                                     {
-                                        dataHandlerInThread?.Invoke(item);
+                                        try
+                                        {
+                                            dataHandlerInThread?.Invoke(item);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            exceptionHandlerInThread?.Invoke(ex);
+                                        }
                                     }
                                 }
 
@@ -261,7 +268,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                                 }
                                 else
                                 {
-                                    dataListHandlerInThread?.Invoke(dataList);
+                                    try
+                                    {
+                                        dataListHandlerInThread?.Invoke(dataList);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        exceptionHandlerInThread?.Invoke(ex);
+                                    }
                                 }
 
                                 #endregion
@@ -292,7 +306,14 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                                 }
                                 else
                                 {
-                                    dataHandlerInThread?.Invoke(item);
+                                    try
+                                    {
+                                        dataHandlerInThread?.Invoke(item);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        exceptionHandlerInThread?.Invoke(ex);
+                                    }
                                 }
                             }
 
