@@ -37,19 +37,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// <summary>
         /// 数据库日志，支持error和fatal
         /// </summary>
-        private static readonly BlockingQueueEx<CommonModel> SblockingQueueEx = new BlockingQueueEx<CommonModel>(singleDataHandler: item
+        private static readonly BlockingQueueEx<CommonObject> SblockingQueueEx = new BlockingQueueEx<CommonObject>(singleDataHandler: item
             =>
         {
-            if (item == null || item.CommonModelObject == null)
+            if (item == null || item.TheObject == null)
             {
                 return;
             }
 
             #region 日志
 
-            if (StringUtils.EqualsEx(CommonModelType.LogType, item.CommonModelTypeStr))
+            if (StringUtils.EqualsEx(CommonModelType.LogType, item.TheObjectType))
             {
-                var logItem = item.CommonModelObject as LogItem;
+                var logItem = item.TheObject as LogItem;
                 if (logItem == null)
                 {
                     return;
@@ -151,10 +151,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                         CreateTime = DateTime.Now,
                         LogContent = message
                     };
-                    CommonModel model = new CommonModel()
+                    CommonObject model = new CommonObject()
                     {
-                        CommonModelObject = item,
-                        CommonModelTypeStr = CommonModelType.LogType
+                        TheObject = item,
+                        TheObjectType = CommonModelType.LogType
                     };
                     SblockingQueueEx.Add(model);
                 }
@@ -189,10 +189,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                         CreateTime = DateTime.Now,
                         LogContent = message
                     };
-                    CommonModel model = new CommonModel()
+                    CommonObject model = new CommonObject()
                     {
-                        CommonModelObject = item,
-                        CommonModelTypeStr = CommonModelType.LogType
+                        TheObject = item,
+                        TheObjectType = CommonModelType.LogType
                     };
                     SblockingQueueEx.Add(model);
                 }
@@ -230,10 +230,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                         CreateTime = DateTime.Now,
                         LogContent = message
                     };
-                    CommonModel model = new CommonModel()
+                    CommonObject model = new CommonObject()
                     {
-                        CommonModelObject = item,
-                        CommonModelTypeStr = CommonModelType.LogType
+                        TheObject = item,
+                        TheObjectType = CommonModelType.LogType
                     };
                     SblockingQueueEx.Add(model);
                 }
@@ -269,10 +269,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
                         CreateTime = DateTime.Now,
                         LogContent = message
                     };
-                    CommonModel model = new CommonModel()
+                    CommonObject model = new CommonObject()
                     {
-                        CommonModelObject = item,
-                        CommonModelTypeStr = CommonModelType.LogType
+                        TheObject = item,
+                        TheObjectType = CommonModelType.LogType
                     };
                     SblockingQueueEx.Add(model);
                 }
@@ -291,7 +291,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
         /// 添加处理消息
         /// </summary>
         /// <param name="model"></param>
-        public static void AddMessage(CommonModel model)
+        public static void AddMessage(CommonObject model)
         {
             SblockingQueueEx.Add(model);
         }

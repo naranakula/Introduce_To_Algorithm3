@@ -762,7 +762,7 @@
     <Compile Include="MachineLearning\ReadMe.cs" />
     <Compile Include="Models\CommonConstants.cs" />
     <Compile Include="Models\CommonException.cs" />
-    <Compile Include="Models\CommonModel.cs" />
+    <Compile Include="Models\CommonObject.cs" />
     <Compile Include="Models\CommonResult.cs" />
     <Compile Include="Common\Utils\ConcurrentCollections\ConcurrentHashSet.cs" />
     <Compile Include="Models\LogType.cs" />
