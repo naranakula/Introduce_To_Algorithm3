@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -58,6 +59,15 @@ namespace Introduce_To_Algorithm3.Common.Utils
                         {
                             //ignore
                         }
+
+                        try
+                        {
+                            Process.GetCurrentProcess().Kill();
+                        }
+                        catch
+                        {
+                            //ignore
+                        }
                     }
                 });
 
@@ -105,13 +115,17 @@ namespace Introduce_To_Algorithm3.Common.Utils
         {
             if (maxWaitMilliSecondBeforeExit > 0)
             {
-                try
+                const int sleepPeriod = 100;//每次休眠100毫秒
+                for (int i = 0; i * sleepPeriod < maxWaitMilliSecondBeforeExit; i++)
                 {
-                    Thread.Sleep(maxWaitMilliSecondBeforeExit);
-                }
-                catch
-                {
-                    //ignore
+                    try
+                    {
+                        Thread.Sleep(sleepPeriod);
+                    }
+                    catch
+                    {
+                        //ignore
+                    }
                 }
             }
 
@@ -129,10 +143,33 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     {
                         Thread.Sleep(10);
                     }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
+
+                try
+                {
+                    Process.GetCurrentProcess().Kill();
+                }
+                catch
+                {
+                    //ignore
+                    try
+                    {
+                        Thread.Sleep(10);
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }
+
             }
         }
+        
+
 
     }
 
