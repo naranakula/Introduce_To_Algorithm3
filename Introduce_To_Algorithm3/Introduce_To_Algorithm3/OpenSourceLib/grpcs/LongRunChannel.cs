@@ -94,14 +94,15 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         private volatile bool _isStop = false;
 
         /// <summary>
-        /// 连续grpc
+        /// 连续grpc的错误
         /// </summary>
         private volatile int _continuousGrpcError = 0;
 
         /// <summary>
-        /// 最大连续错误次数
+        /// 最大连续的grpc的错误次数
         /// </summary>
-        private const int MaxConrinuousGrpcErrorCount = 31;
+        private const int MaxConrinuousGrpcErrorCount = 17;
+
         #endregion
 
         #endregion
@@ -141,7 +142,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 {
                     return ChannelState.Shutdown;
                 }
-
 
                 lock (_locker)
                 {
@@ -194,6 +194,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     }
                     catch
                     {
+                        // ignored
                     }
                 }
                 return false;
@@ -222,6 +223,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                         }
                         catch
                         {
+                            // ignored
                         }
                     }
                 }
@@ -242,6 +244,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             lock (_locker)
             {
                 _isStop = true;
+                _continuousGrpcError = 0;
             }
             InnerStop(millisecondsTimeout, exceptionHandler);
         }
@@ -280,15 +283,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                         throw new CommonException(errorCode: 1, errorReason: "channel已经被停止");
                     }
 
-                    //是否需要重建
-                    bool isNeedToReBuild = false;
+                    //是否重建
+                    bool isReBuilded = false;
 
                     lock (_locker)
                     {
+                        //重建至少间隔这么多的时间
                         if ((DateTime.Now - _lastRebuildChannelTime).TotalMilliseconds >
                             MinReEstablishChannelTimeIntervalInMilliseconds)
                         {
-                            isNeedToReBuild = true;
+                            isReBuilded = true;
 
                             //重建Channel,重建放在锁了，避免某些多线程异常
                             Start();
@@ -297,7 +301,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                         }
                     }
 
-                    if (isNeedToReBuild)
+                    if (isReBuilded)
                     {
                         //重建后，重新初始化状态
                         state = this.ChannelState;
