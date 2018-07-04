@@ -12,6 +12,12 @@ using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 
 namespace Introduce_To_Algorithm3.Common.Utils
 {
+
+
+
+    /// <summary>
+    /// 使用DateTimeOffset替代DateTime
+    /// </summary>
     public static class DateTimeUtils
     {
         /// <summary>
