@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Web.Caching;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
@@ -267,11 +268,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
             NLogHelper.Trace(url);
 
-            WebRequest request = null;
+            HttpWebRequest request = null;
             WebResponse response = null;
             try
             {
-                request = WebRequest.Create(url);
+                request = (HttpWebRequest)WebRequest.Create(url);
                 request.Timeout = 6000;//单位毫秒
                 request.Credentials = CredentialCache.DefaultCredentials;
                 request.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
@@ -330,5 +331,79 @@ namespace Introduce_To_Algorithm3.Common.Utils
         }
 
         #endregion
+
+
+        #region 修改系统时间
+
+
+        /// <summary>
+        ///系统时间
+        /// </summary>
+        public struct SYSTEMTIME
+        {
+            public ushort wYear;
+            public ushort wMonth;
+            public ushort wDayOfWeek;
+            public ushort wDay;
+            public ushort wHour;
+            public ushort wMinute;
+            public ushort wSecond;
+            public ushort wMilliseconds;
+
+            /// <summary>
+            /// 从System.DateTime转换。
+            /// </summary>
+            /// <param name="time">System.DateTime类型的时间。</param>
+            public static SYSTEMTIME FromDateTime(DateTime time)
+            {
+                SYSTEMTIME systemTime = new SYSTEMTIME();
+                systemTime.wYear = (ushort)time.Year;
+                systemTime.wMonth = (ushort)time.Month;
+                systemTime.wDayOfWeek = (ushort)time.DayOfWeek;
+                systemTime.wDay = (ushort)time.Day;
+                systemTime.wHour = (ushort)time.Hour;
+                systemTime.wMinute = (ushort)time.Minute;
+                systemTime.wSecond = (ushort)time.Second;
+                systemTime.wMilliseconds = (ushort)time.Millisecond;//0-999的值
+                return systemTime;
+            }
+           
+        }
+
+
+        /// <summary>
+        /// 设置系统时间
+        /// win7需要管理员权限
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static bool SetSystemTime(DateTime dateTime,Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                SYSTEMTIME systemtime = SYSTEMTIME.FromDateTime(dateTime);
+                return Win32API.SetLocalTime(ref systemtime);
+                
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
+        }
+
+
+        public class Win32API
+        {
+            [DllImport("Kernel32.dll")]
+            public static extern bool SetLocalTime(ref SYSTEMTIME Time);
+            [DllImport("Kernel32.dll")]
+            public static extern void GetLocalTime(ref SYSTEMTIME Time);
+        }
+
+        #endregion
+
+
     }
 }
