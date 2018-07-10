@@ -82,7 +82,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 如果Channel进入ShutDown状态，重建Channel的最小时间间隔 毫秒
         /// </summary>
-        private const int MinReEstablishChannelTimeIntervalInMilliseconds = 3217;
+        private readonly int _minReEstablishChannelTimeIntervalInMilliseconds;
 
         /// <summary>
         /// 上一次重建Channel时间
@@ -92,7 +92,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 如果上一次重建间隔时间超过此分钟数，必须重建，不管是不是正常
         /// </summary>
-        private const int MaxIntervalMinutesToRebuild = 25 * 61;
+        private readonly int _maxIntervalMinutesToRebuild;
 
         /// <summary>
         /// 是否人工停止，人工停止后，将不再重建连接
@@ -107,7 +107,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 最大连续的grpc的错误次数
         /// </summary>
-        private const int MaxConrinuousGrpcErrorCount = 23;
+        private readonly int _maxContinuousGrpcErrorCount;
 
         #endregion
 
@@ -130,6 +130,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             this._serverIp = serverIp.Trim();
             this._serverPort = serverPort;
             this._isStop = false;
+
+            Random rand = new Random();
+            _maxContinuousGrpcErrorCount = rand.Next(21, 29);
+            _maxIntervalMinutesToRebuild = rand.Next(25 * 61, 29 * 61);
+            _minReEstablishChannelTimeIntervalInMilliseconds = rand.Next(3000, 4100);
         }
 
         #endregion
@@ -151,12 +156,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                         return ChannelState.Shutdown;
                     }
                     //grpc错误次数超出限制,重建grpc channel
-                    else if (_continuousGrpcError > MaxConrinuousGrpcErrorCount)
+                    else if (_continuousGrpcError > _maxContinuousGrpcErrorCount)
                     {
                         return ChannelState.Shutdown;
                     }
                     //超过1天没有错误，重建grpc channel
-                    else if ((DateTime.Now - _lastRebuildChannelTime).TotalMinutes > MaxIntervalMinutesToRebuild)
+                    else if ((DateTime.Now - _lastRebuildChannelTime).TotalMinutes > _maxIntervalMinutesToRebuild)
                     {
                         return ChannelState.Shutdown;
                     }
@@ -301,7 +306,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
                         //重建至少间隔这么多的时间
                         if ((DateTime.Now - _lastRebuildChannelTime).TotalMilliseconds >
-                            MinReEstablishChannelTimeIntervalInMilliseconds)
+                            _minReEstablishChannelTimeIntervalInMilliseconds)
                         {
                             isReBuilded = true;
 
