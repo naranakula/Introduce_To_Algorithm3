@@ -16,12 +16,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// LongRunChannel longChannel = new LongRunChannel(...);
     /// longChannel.Start()
     /// 
+    /// 一系列的SafeInvoke
     /// SafeInvoke
     /// 
     /// longChannel.Stop()
     /// 
     /// </summary>
-    public class LongRunChannel:IDisposable
+    public class LongRunChannel : IDisposable
     {
 
         #region 属性
@@ -81,13 +82,18 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 如果Channel进入ShutDown状态，重建Channel的最小时间间隔 毫秒
         /// </summary>
-        private const int MinReEstablishChannelTimeIntervalInMilliseconds =3217;
+        private const int MinReEstablishChannelTimeIntervalInMilliseconds = 3217;
 
         /// <summary>
         /// 上一次重建Channel时间
         /// </summary>
-        private DateTime _lastRebuildChannelTime = DateTime.Now.AddDays(-1);
-        
+        private DateTime _lastRebuildChannelTime = DateTime.Now;
+
+        /// <summary>
+        /// 如果上一次重建间隔时间超过此分钟数，必须重建，不管是不是正常
+        /// </summary>
+        private const int MaxIntervalMinutesToRebuild = 25 * 61;
+
         /// <summary>
         /// 是否人工停止，人工停止后，将不再重建连接
         /// </summary>
@@ -101,7 +107,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 最大连续的grpc的错误次数
         /// </summary>
-        private const int MaxConrinuousGrpcErrorCount = 17;
+        private const int MaxConrinuousGrpcErrorCount = 23;
 
         #endregion
 
@@ -127,26 +133,30 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         }
 
         #endregion
-        
+
         #region 启动&停止
 
         /// <summary>
         /// 获取通道状态
         /// </summary>
-        public ChannelState ChannelState
+        private ChannelState ChannelState
         {
             get
             {
-                //grpc错误次数超出限制,重建grpc channel
-                if (_continuousGrpcError > MaxConrinuousGrpcErrorCount)
-                {
-                    return ChannelState.Shutdown;
-                }
-
                 lock (_locker)
                 {
                     Channel tempChannel = _channel;
                     if (tempChannel == null)
+                    {
+                        return ChannelState.Shutdown;
+                    }
+                    //grpc错误次数超出限制,重建grpc channel
+                    else if (_continuousGrpcError > MaxConrinuousGrpcErrorCount)
+                    {
+                        return ChannelState.Shutdown;
+                    }
+                    //超过1天没有错误，重建grpc channel
+                    else if ((DateTime.Now - _lastRebuildChannelTime).TotalMinutes > MaxIntervalMinutesToRebuild)
                     {
                         return ChannelState.Shutdown;
                     }
@@ -174,12 +184,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //内部停止
                 //如果已经启动则停止
                 InnerStop();
-                
+
                 //经测试如果服务器不存在也能启动成功，此时channel state是Idle，此时网络并没有实际连接
-                _channel = new Channel(_serverIp,_serverPort,ChannelCredentials.Insecure,GrpcOptions);
+                _channel = new Channel(_serverIp, _serverPort, ChannelCredentials.Insecure, GrpcOptions);
                 lock (_locker)
                 {
-                    _isStop = false;
                     _continuousGrpcError = 0;
                 }
                 return true;
@@ -204,7 +213,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 内部停止
         /// </summary>
-        private void InnerStop(int millisecondsTimeout=9000,Action<Exception> exceptionHandler = null)
+        private void InnerStop(int millisecondsTimeout = 9000, Action<Exception> exceptionHandler = null)
         {
             Channel tempChannel = _channel;
             if (tempChannel != null)
@@ -258,6 +267,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// <summary>
         /// 基于channel的多线程安全和自动重连
         /// 调用成功返回true，发生异常返回false
+        /// 多线程安全
         /// </summary>
         /// <param name="channelAction"></param>
         /// <param name="exceptionHandler"></param>
@@ -269,58 +279,63 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             {
                 Channel tempChannel = _channel;
 
-                //获取通道状态
-                ChannelState state = this.ChannelState;
-
-                #region ShutDown重新建立连接
-
-                if (state == ChannelState.Shutdown)
+                lock (_locker)
                 {
-                    //按照grpc文档，理论上start之后永远不会进入该状态
-                    //已经人为停止，不需要重建
-                    if (_isStop)
-                    {
-                        throw new CommonException(errorCode: 1, errorReason: "channel已经被停止");
-                    }
+                    //获取通道状态
+                    ChannelState state = this.ChannelState;
 
-                    //是否重建
-                    bool isReBuilded = false;
+                    #region ShutDown重新建立连接
 
-                    lock (_locker)
+                    if (state == ChannelState.Shutdown)
                     {
+                        //按照grpc文档，理论上start之后永远不会进入该状态
+                        //已经人为停止，不需要重建
+                        if (_isStop)
+                        {
+                            throw new CommonException(errorCode: 1, errorReason: "channel已经被停止");
+                        }
+
+                        //是否重建
+                        bool isReBuilded = false;
+
+
                         //重建至少间隔这么多的时间
                         if ((DateTime.Now - _lastRebuildChannelTime).TotalMilliseconds >
                             MinReEstablishChannelTimeIntervalInMilliseconds)
                         {
                             isReBuilded = true;
 
-                            //重建Channel,重建放在锁了，避免某些多线程异常
+                            //重建Channel,包含了关闭上一个连接，重建放在锁了，避免某些多线程异常
                             Start();
                             //因为重建需要耗时，所以重新调用Now
                             _lastRebuildChannelTime = DateTime.Now;
                         }
-                    }
 
-                    if (isReBuilded)
-                    {
-                        //重建后，重新初始化状态
-                        state = this.ChannelState;
-                        tempChannel = _channel;
 
-                        //failfast
-                        if (state == ChannelState.Shutdown)
+                        if (isReBuilded)
                         {
-                            throw new CommonException(errorCode: 3, errorReason: "Channel重建后，状态仍为ShutDown");
-                        }
-                    }
-                    else
-                    {
-                        //failfast
-                        throw new CommonException(errorCode: 2, errorReason: "Channel状态为ShutDown");
-                    }
-                }
+                            //重建后，重新初始化状态
+                            //state = this.ChannelState;
+                            tempChannel = _channel;
 
-                #endregion
+                            //不使用failfast，因为channelState并不是真的ChannelState
+                            ////failfast
+                            //if (state == ChannelState.Shutdown)
+                            //{
+                            //    throw new CommonException(errorCode: 3, errorReason: "Channel重建后，状态仍为ShutDown");
+                            //}
+                        }
+                        //else
+                        //{
+                        //    //failfast
+                        //    throw new CommonException(errorCode: 2, errorReason: "Channel状态为ShutDown");
+                        //}
+                    }
+
+
+                    #endregion
+
+                }
 
                 channelAction(tempChannel);
 
@@ -333,7 +348,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                  //deadLine必须使用UTC时间
                  var reply = client.SayHello(new Request() {Request_ = "Hello"}, deadline: DateTime.UtcNow.AddSeconds(timeoutSeconds));
                  */
-                 //重置连续错误为0
+                //重置连续错误为0
                 _continuousGrpcError = 0;
                 return true;
             }
@@ -366,5 +381,5 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         #endregion
     }
 
-    
+
 }
