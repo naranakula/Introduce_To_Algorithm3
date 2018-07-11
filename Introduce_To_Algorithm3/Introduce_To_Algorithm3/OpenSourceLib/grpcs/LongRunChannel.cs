@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Introduce_To_Algorithm3.Models;
@@ -133,8 +134,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
             Random rand = new Random();
             _maxContinuousGrpcErrorCount = rand.Next(21, 29);
-            _maxIntervalMinutesToRebuild = rand.Next(25 * 61, 29 * 61);
-            _minReEstablishChannelTimeIntervalInMilliseconds = rand.Next(3000, 4100);
+            _maxIntervalMinutesToRebuild = rand.Next(24 * 61, 29 * 67);
+            _minReEstablishChannelTimeIntervalInMilliseconds = rand.Next(2500, 4100);
         }
 
         #endregion
@@ -188,13 +189,42 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             {
                 //内部停止
                 //如果已经启动则停止
-                InnerStop();
+
+                #region 关闭
+                Channel tempChannel = _channel;
+                if (tempChannel != null)
+                {
+                    //延迟关闭，保证上一个channel一段时间可用
+                    Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            Thread.Sleep(2017);
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+
+                        //延迟关闭，保证上一个一段时间可用
+                        try
+                        {
+                            tempChannel.ShutdownAsync().Wait(millisecondsTimeout: 9000);
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                    });
+                }
+                #endregion
 
                 //经测试如果服务器不存在也能启动成功，此时channel state是Idle，此时网络并没有实际连接
                 _channel = new Channel(_serverIp, _serverPort, ChannelCredentials.Insecure, GrpcOptions);
                 lock (_locker)
                 {
                     _continuousGrpcError = 0;
+                    _lastRebuildChannelTime = DateTime.Now;
                 }
                 return true;
             }
@@ -215,11 +245,53 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             }
         }
 
+        ///// <summary>
+        ///// 内部停止
+        ///// </summary>
+        //private void InnerStop(int millisecondsTimeout = 9000, Action<Exception> exceptionHandler = null)
+        //{
+        //    Channel tempChannel = _channel;
+        //    if (tempChannel != null)
+        //    {
+        //        try
+        //        {
+        //            tempChannel.ShutdownAsync().Wait(millisecondsTimeout: millisecondsTimeout);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            if (exceptionHandler != null)
+        //            {
+        //                try
+        //                {
+        //                    exceptionHandler(ex);
+        //                }
+        //                catch
+        //                {
+        //                    // ignored
+        //                }
+        //            }
+        //        }
+        //        finally
+        //        {
+        //            _channel = null;
+        //        }
+        //    }
+        //}
+
+
         /// <summary>
-        /// 内部停止
+        /// 停止
         /// </summary>
-        private void InnerStop(int millisecondsTimeout = 9000, Action<Exception> exceptionHandler = null)
+        public void Stop(int millisecondsTimeout = 9000, Action<Exception> exceptionHandler = null)
         {
+            //经过考虑，放在InnerStop前面更合适
+            lock (_locker)
+            {
+                _isStop = true;
+                _continuousGrpcError = 0;
+            }
+
+
             Channel tempChannel = _channel;
             if (tempChannel != null)
             {
@@ -246,21 +318,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     _channel = null;
                 }
             }
-        }
-
-
-        /// <summary>
-        /// 停止
-        /// </summary>
-        public void Stop(int millisecondsTimeout = 9000, Action<Exception> exceptionHandler = null)
-        {
-            //经过考虑，放在InnerStop前面更合适
-            lock (_locker)
-            {
-                _isStop = true;
-                _continuousGrpcError = 0;
-            }
-            InnerStop(millisecondsTimeout, exceptionHandler);
         }
 
 
@@ -384,6 +441,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         }
 
         #endregion
+
     }
 
 
