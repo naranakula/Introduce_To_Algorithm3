@@ -197,6 +197,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     //延迟关闭，保证上一个channel一段时间可用
                     Task.Factory.StartNew(() =>
                     {
+                        Channel innerTempChannel = tempChannel;
                         try
                         {
                             Thread.Sleep(2017);
@@ -209,7 +210,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                         //延迟关闭，保证上一个一段时间可用
                         try
                         {
-                            tempChannel.ShutdownAsync().Wait(millisecondsTimeout: 9000);
+                            innerTempChannel.ShutdownAsync().Wait(millisecondsTimeout: 9000);
                         }
                         catch
                         {
