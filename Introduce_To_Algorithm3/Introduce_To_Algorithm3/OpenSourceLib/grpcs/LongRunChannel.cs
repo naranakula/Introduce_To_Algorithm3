@@ -180,6 +180,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// 启动channel
         /// 经测试即使服务器不存在，仍然可以Start成功，new Channel只是创建channel，并没有实际上连接服务器
         /// 经测试如果服务器不存在也能启动成功，此时channel state是Idle，此时网络并没有实际连接
+        /// 理论上不可能返回false
         /// </summary>
         /// <param name="exceptionHandler"></param>
         /// <returns></returns>
