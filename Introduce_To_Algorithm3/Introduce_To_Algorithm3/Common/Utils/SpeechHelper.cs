@@ -20,6 +20,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 语音合成
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="exceptionHandler">异常处理</param>
         public static bool Speech(string text,Action<Exception> exceptionHandler = null)
         {
             if (string.IsNullOrWhiteSpace(text))
