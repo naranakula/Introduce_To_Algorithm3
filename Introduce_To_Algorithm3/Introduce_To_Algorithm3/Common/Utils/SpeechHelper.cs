@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Speech.Synthesis;
@@ -28,6 +29,12 @@ namespace Introduce_To_Algorithm3.Common.Utils
 
             try
             {
+                if (WaveOut.DeviceCount < 1)
+                {
+                    //没有音频设备
+                    return false;
+                }
+
                 using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer())
                 {
                     //输出到默认的音频设备
