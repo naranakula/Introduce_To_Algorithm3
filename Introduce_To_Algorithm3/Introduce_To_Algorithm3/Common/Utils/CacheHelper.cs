@@ -19,6 +19,17 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// 
     /// CacheHelper.InitCacheHelper
     /// ...
+    /// 
+    /// 
+    /// 读操作：
+    ///     1、先从缓存中读取数据，如果缓存命中，则使用该数据
+    ///     2、如果缓存miss，则从数据库中读取数据，并set到缓存
+    /// 
+    /// 写操作:
+    ///     1、先写回数据库
+    ///     2、再delete淘汰缓存 (此处不是更新缓存，因为并发写无法保证时序，容易数据不一致)
+    ///     (先操作数据库，再操作缓存，如果先操作缓存，在读写并发时，可能出现数据不一致。)
+    /// 
     /// </summary>
     public static class CacheHelper
     {
