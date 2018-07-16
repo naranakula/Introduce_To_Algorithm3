@@ -2899,24 +2899,33 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         /// <summary>
         /// 最近一次修改时间
-        /// ConcurrencyCheck用于检查在读取该字段到再次更新该字段时，之间是否有其他人更改过该字段，如果有抛出DbUpdateConcurrencyException异常
-        /// 用于非sqlserver的并行检查，该数据类型可以是DateTime或者Guid
+        /// ConcurrencyCheck用于检查在读取该字段到再次更新或者删除该字段时，之间是否有其他人更改过该字段，如果有抛出DbUpdateConcurrencyException异常
+        /// 用于非sqlserver的并行检查，该数据类型可以是DateTime或者Guid或者string 等任意类型
         /// ConcurrencyCheck只用于检查该字段
         /// DateTime可以精确到千万分之一秒
+        /// ConcurrencyCheck特性可以被用到任何数量，任何类型的属性中。
+        /// Entity Framework不支持悲观并发，只支持乐观并发。
+        /// 对应fluent api的Property(p => p.ModifyTime).IsConcurrencyToken();
         /// </summary>
         [ConcurrencyCheck]
         public DateTime ModifyTime { get; set; }
 
         //索引分为聚集索引和非聚集索引，聚集索引是数据存储的物理顺序
         //聚集索引一个表只能有一个,而非聚集索引一个表可以存在多个
-        [Index("IX_Name_DepartmentMaster", IsClustered = false)]
+        //索引默认不是唯一的, 不是聚簇的
+        [Index("IX_Name_DepartmentMaster",IsUnique = false, IsClustered = false)]
         public string Name { get; set; }
 
         /// <summary>
         /// 乐观锁来支持并发控制
-        /// 如果同时多个用户修改，只有第一个用户修改成功，第二个用户需要处理DbUpdateConcurrencyException异常
+        /// 如果同时多个用户修改，只有第一个用户修改或者删除成功，第二个用户需要处理DbUpdateConcurrencyException异常
         /// 目前只在Sql Server中支持，
         /// RowVerion和ConcurrencyCheck的区别是每次Add和Update,rowVersion会自动incremented
+        /// RowVersion只能应用于byte[]类型，而ConcurrencyCheck特性可以被用到任何数量，任何类型的属性中。
+        /// Entity Framework不支持悲观并发，只支持乐观并发。
+        /// Timestamp来标识设置并发控制字段，标识为Timestamp的字段必需为byte[]类型
+        /// 对应fluent Api的IsRowversion()  Property(p => p.RowVersion).IsRowVersion();
+        /// 一个类中只能有一个Timestamp，但可以有多个ConcurrentCheck
         /// </summary>
         [Timestamp]
         public byte[] RowVersion { get; set; }
