@@ -14,8 +14,13 @@ namespace Introduce_To_Algorithm3.Models
     /// ResultCode结果码 0表示正常
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class CommonResult<T>
+    public class CommonResult<T> where T:class
     {
+        private volatile T _result;
+        private volatile int _resultCode;
+        private volatile string _resultDesc;
+        private volatile Exception _resultException;
+
         #region 构造函数
 
         public CommonResult()
@@ -52,23 +57,39 @@ namespace Introduce_To_Algorithm3.Models
         /// <summary>
         /// 实际的结果
         /// </summary>
-        public T Result { get; set; }
+        public T Result
+        {
+            get { return _result; }
+            set { _result = value; }
+        }
 
         /// <summary>
         /// 结果码
         /// 通常0表示正常
         /// </summary>
-        public int ResultCode { get; set; }
+        public int ResultCode
+        {
+            get { return _resultCode; }
+            set { _resultCode = value; }
+        }
 
         /// <summary>
         /// 对结果的一个描述
         /// </summary>
-        public string ResultDesc { get; set; }
+        public string ResultDesc
+        {
+            get { return _resultDesc; }
+            set { _resultDesc = value; }
+        }
 
         /// <summary>
         /// 结果失败时的异常信息
         /// </summary>
-        public Exception ResultException { get; set; }
+        public Exception ResultException
+        {
+            get { return _resultException; }
+            set { _resultException = value; }
+        }
 
         /// <summary>
         /// 覆盖ToString

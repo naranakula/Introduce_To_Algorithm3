@@ -160,6 +160,11 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
         /// </summary>
         public DbSet<LogItem> LogItems { get; set; }
 
+        /// <summary>
+        /// 本地配置
+        /// </summary>
+        public DbSet<LocalConfig> LocalConfigs { get; set; }
+
         #endregion
 
         /// <summary>
@@ -172,8 +177,8 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
             //设置初始化器，不像EfDbContext，这个不需要单独的Init函数
             //使用最新版的EF6.1.3，EF6.0不行
-            //var sqliteInitializer = new SqliteCreateDatabaseIfNotExists<SqliteCodeFirstContext>(modelBuilder);
-            var sqliteInitializer = new SqliteDropCreateDatabaseWhenModelChanges<SqliteCodeFirstContext>(modelBuilder);
+            var sqliteInitializer = new SqliteCreateDatabaseIfNotExists<SqliteCodeFirstContext>(modelBuilder);
+            //var sqliteInitializer = new SqliteDropCreateDatabaseWhenModelChanges<SqliteCodeFirstContext>(modelBuilder);
             Database.SetInitializer(sqliteInitializer);
 
             //设置所有的表定义映射
@@ -189,6 +194,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             modelBuilder.Configurations.Add(new DictBytesItemMap());
             modelBuilder.Configurations.Add(new CacheBytesItemMap());
             modelBuilder.Configurations.Add(new LogItemMap());
+            modelBuilder.Configurations.Add(new LocalConfigMap());
 
 
 
@@ -1596,6 +1602,136 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
         #endregion
 
+
+        #region 本地配置
+
+        /// <summary>
+        /// 添加或者更新数据项
+        /// 如果添加失败返回null，否则返回数据库中数据项
+        /// </summary>
+        /// <param name="configKey">键不能为空，键会做归一化处理，大小写不敏感,键最长不要超过128</param>
+        /// <param name="configValue">值不能为空</param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public LocalConfig AddOrUpdateLocalConfig(string configKey, string configValue,Action<Exception> exceptionHandler = null)
+        {
+            if (string.IsNullOrWhiteSpace(configKey) || string.IsNullOrWhiteSpace(configValue))
+            {
+                return null;
+            }
+
+            configKey = StringUtils.Normalize(configKey);
+            try
+            {
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    var oldItem = context.LocalConfigs.FirstOrDefault(r => r.ConfigKey == configKey);
+
+                    if (oldItem == null)
+                    {
+                        //新增
+                        var newItem = new LocalConfig();
+                        newItem.ConfigKey = configKey;
+                        newItem.ConfigValue = configValue;
+                        newItem.CreateTime = newItem.UpdateTime = DateTime.Now;
+                        context.LocalConfigs.Add(newItem);
+                        context.SaveChanges();
+                        return newItem;
+                    }
+                    else if (oldItem.ConfigValue != configValue)
+                    {
+                        //更新
+                        oldItem.ConfigValue = configValue;
+                        oldItem.UpdateTime = DateTime.Now;
+                        context.SaveChanges();
+                        return oldItem;
+                    }
+                    else
+                    {
+                        //不变
+                        return oldItem;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return null;
+            }
+        }
+
+
+        /// <summary>
+        /// 获取所有的本地配置项
+        /// 配置项的键做归一化处理
+        /// 如果获取失败，返回null
+        /// </summary>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public List<LocalConfig> GetAllLocalConfigList(Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    var list = context.LocalConfigs.ToList();
+                    foreach (var item in list)
+                    {
+                        item.ConfigKey = StringUtils.Normalize(item.ConfigKey);
+                    }
+
+                    return list;
+                }
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 删除指定配置项
+        /// 返回删除的配置项，如果没有返回null
+        /// </summary>
+        /// <param name="configKey">键将会归一化处理</param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public LocalConfig RemoveLocalConfig(string configKey,Action<Exception> exceptionHandler = null)
+        {
+
+            if (String.IsNullOrWhiteSpace(configKey))
+            {
+                return null;
+            }
+
+            try
+            {
+                configKey = StringUtils.Normalize(configKey);
+                using (SqliteCodeFirstContext context = new SqliteCodeFirstContext())
+                {
+                    LocalConfig removeItem = context.LocalConfigs.FirstOrDefault(r => r.ConfigKey == configKey);
+                    if (removeItem != null)
+                    {
+                        context.LocalConfigs.Remove(removeItem);
+                        context.SaveChanges();
+
+                        return removeItem;
+                    }
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                exceptionHandler?.Invoke(ex);
+                return null;
+            }
+        }
+
+
+        #endregion
+
     }
 
 
@@ -2161,6 +2297,55 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
 
     #endregion
 
+    #region LocalConfig 本地配置
+
+    /// <summary>
+    /// 本地配置
+    /// </summary>
+    public class LocalConfig
+    {
+        /// <summary>
+        /// 键 方法保证不为空或null
+        /// SQLite变长记录，字段不需要指定长度。
+        /// 长度不要超过128
+        /// </summary>
+        //当发生UNIQUE约束冲突，先存在的，导致冲突的行在更改或插入发生冲突的行之前被删除。这样，更改和插入总是被执行。命令照常执行且不返回错误信息。
+        //[SQLite.CodeFirst.Unique(OnConflictAction.Replace)]//唯一键
+        public string ConfigKey { get; set; }
+
+        /// <summary>
+        /// 值 方法保证不为空或null
+        /// SQLite变长记录，字段不需要指定长度
+        /// </summary>
+        public string ConfigValue { get; set; }
+
+
+        /// <summary>
+        /// 更新时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime UpdateTime { get; set; }
+
+        /// <summary>
+        /// 创建时间  不会产生UTC问题,读取时全部转换为了本地时间
+        /// 直接使用本地时间
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+    }
+
+    /// <summary>
+    /// 数据库映射
+    /// </summary>
+    public class LocalConfigMap : EntityTypeConfiguration<LocalConfig>
+    {
+        public LocalConfigMap()
+        {
+            ToTable(nameof(LocalConfig)).HasKey(t => t.ConfigKey);
+        }
+    }
+
+
+    #endregion
 
     #region 样例 供写代码时查看使用
 
