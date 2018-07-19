@@ -145,6 +145,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Enyim.Caching, Version=2.16.0.0, Culture=neutral, PublicKeyToken=cec98615db04012e, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnyimMemcached.2.16.0\lib\net35\Enyim.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="FluentFTP, Version=19.2.2.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentFTP.19.2.2\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
@@ -800,6 +803,7 @@
     <Compile Include="OpenSourceLib\Json\JsonHelper.cs" />
     <Compile Include="OpenSourceLib\Libsodium_加解密\LibsodiumHelper.cs" />
     <Compile Include="OpenSourceLib\LiteDb\LiteDBHelper.cs" />
+    <Compile Include="OpenSourceLib\Memcacheds\MemcachedHelper.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\FTP\SystemNetFtpClientImpl.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\Sdk.cs" />
