@@ -378,10 +378,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
                         if (isReBuilded)
                         {
-                            //重建后，重新初始化状态
-                            //state = this.ChannelState;
+                            
                             tempChannel = _channel;
 
+                            //重建后，重新初始化状态
+                            //state = this.ChannelState;
                             //不使用failfast，因为channelState并不是真的ChannelState
                             ////failfast
                             //if (state == ChannelState.Shutdown)
