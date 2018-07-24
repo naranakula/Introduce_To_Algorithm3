@@ -892,6 +892,7 @@
     <Content Include="Common\Utils\sockets\NetAssist网络调试工具.exe" />
     <Content Include="Common\Utils\sqls\EF2\Sqlite\DB.Browser.for.SQLite-3.9.1-win32.exe" />
     <Content Include="Common\Utils\sqls\EF2\收缩sql server数据库日志的sql.sql" />
+    <Content Include="Common\Utils\sqls\数据库最佳实践.txt" />
     <Content Include="Learn.txt" />
     <Content Include="license.txt" />
     <Content Include="localconfig.xml" />

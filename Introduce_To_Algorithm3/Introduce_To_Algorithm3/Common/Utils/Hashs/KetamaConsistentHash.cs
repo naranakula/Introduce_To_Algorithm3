@@ -18,7 +18,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.Hashs
         private readonly SortedDictionary<long,string> _ketamaNodes = new SortedDictionary<long, string>();
 
         /// <summary>
-        /// 虚拟节点的个数，
+        /// 节点的倍数，
         /// 该值变动会造成映射变动，因此声明为常数
         /// </summary>
         private const int NumOfNodeCopy = 128;
