@@ -29,6 +29,8 @@ namespace Introduce_To_Algorithm3.Common.Utils
     ///     1、先写回数据库
     ///     2、再delete淘汰缓存 (此处不是更新缓存，因为并发写无法保证时序，容易数据不一致)
     ///     (先操作数据库，再操作缓存，如果先操作缓存，在读写并发时，可能出现数据不一致。)
+    ///     
+    ///     另外一种方式，写删除缓存，再写回数据库，  建议使用上面的这一种
     /// 
     /// </summary>
     public static class CacheHelper

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Introduce_To_Algorithm3.Common.Utils
+namespace Introduce_To_Algorithm3.Common.Utils.Hashs
 {
     /// <summary>
     /// 加解密辅助类
@@ -87,7 +85,7 @@ System.Object
         /// 线程安全
         /// </summary>
         /// <param name="inputBytes">如果输入为null,直接返回null</param>
-        /// <returns>如果输入为null,直接返回null，否则返回32位长度的byte数组</returns>
+        /// <returns>如果输入为null,直接返回null，否则返回16*8位长度的byte数组, 16个字节</returns>
         public static byte[] Md5Hash(byte[] inputBytes)
         {
             if (inputBytes == null)
