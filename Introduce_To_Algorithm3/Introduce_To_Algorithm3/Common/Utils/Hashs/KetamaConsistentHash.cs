@@ -9,6 +9,8 @@ namespace Introduce_To_Algorithm3.Common.Utils.Hashs
     /// <summary>
     /// 一致性hash
     /// 当新增节点时，会造成扰动，但只会影响少量数据
+    /// 
+    /// https://www.cnblogs.com/daizhj/archive/2010/08/24/1807324.html
     /// </summary>
     public class KetamaConsistentHash
     {
