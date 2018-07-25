@@ -20,6 +20,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// </summary>
     public class GrpcServer
     {
+
+        /// <summary>
+        /// 锁
+        /// </summary>
+        private readonly object _locker = new object();
+
         /// <summary>
         /// 服务列表
         /// Greeter.BindService(new GreeterServiceImpl())
@@ -209,25 +215,35 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// 关闭
         /// </summary>
         /// <param name="exceptionHandler"></param>
+        /// <param name="milliSecondsTimeout">超时时间  单位毫秒</param>
         /// <returns></returns>
-        public bool  Stop(Action<Exception> exceptionHandler = null)
+        public bool  Stop(Action<Exception> exceptionHandler = null,int milliSecondsTimeout = 9543)
         {
-            if (_server == null)
+
+            if (milliSecondsTimeout < 100)
             {
-                return true;
+                milliSecondsTimeout = 1111;
             }
 
-            try
+            lock (_locker)
             {
-                _server.ShutdownAsync().Wait(9543);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                exceptionHandler?.Invoke(ex);
-            }
+                if (_server == null)
+                {
+                    return true;
+                }
 
-            _server = null;
+                try
+                {
+                    _server.ShutdownAsync().Wait(milliSecondsTimeout);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    exceptionHandler?.Invoke(ex);
+                }
+
+                _server = null;
+            }
 
             return false;
 
