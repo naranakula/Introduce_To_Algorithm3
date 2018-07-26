@@ -185,12 +185,22 @@ namespace Common
 
         /// <summary>
         /// IsOnlyOneProcessRunning
+        /// 当发生异常时返回false
         /// </summary>
+        /// <param name="exceptionHandler">异常处理</param>
         /// <returns></returns>
-        public static bool IsOnlyOneProcessRunning()
+        public static bool IsOnlyOneProcessRunning(Action<Exception> exceptionHandler = null)
         {
-            Process[] runningProcesses = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName);
-            return runningProcesses.Length == 1;
+            try
+            {
+                Process[] runningProcesses = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName);
+                return runningProcesses.Length <= 1;
+            }
+            catch (Exception ex)
+            {
+                exceptionHandler?.Invoke(ex);
+                return false;
+            }
         }
 
         /// <summary>
