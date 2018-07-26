@@ -177,6 +177,21 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
         /// </summary>
         public EfDbContext() : base(_nameOrConnectionString)
         {
+
+            /*
+             * 
+             使用这两个设置来决定是否加载导航属性。默认情况这两个值都是true的，也就是说会以延迟加载的方式加载导航属性，也就是当我们访问导航属性的时候才会去查数据库获取导航属性的数据。 
+             db.Configuration.ProxyCreationEnabled = true ; db.Configuration.LazyLoadingEnabled = true ;  
+             
+            
+            想禁用加载实体的导航属性，可以这样设置： db.Configuration.ProxyCreationEnabled = true ; db.Configuration.LazyLoadingEnabled = false;  
+            
+            或者直接： db.Configuration.ProxyCreationEnabled = false;  
+            
+            需要注意的是，当ProxyCreationEnabled =false的时候，LazyLoadingEnabled 是不起作用的。
+
+             */
+
             //改为false，之后延迟加载及时为true也不起作用，除非显示的Include
             //Include是显式加载，即使ProxyCreationEnabled = false和LazyLoadingEnabled = false，仍然会起作用
             //this.Configuration.ProxyCreationEnabled = false;//默认是true的
@@ -270,7 +285,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
 
         #endregion
 
-        #region 设置上下文
+        #region 初始化  设置上下文
 
         ///// <summary>
         ///// 静态构造函数，设置 database initializer to use for the given context type. The database initializer is called when a the given System.Data.Entity.DbContext type  is used to access a database for the first time.The default strategy for Code First contexts is an instance of System.Data.Entity.CreateDatabaseIfNotExists&lt;TContext>.
