@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
@@ -13,31 +14,53 @@ namespace Introduce_To_Algorithm3.Common.Utils.wcfs
     /// </summary>
     public  static class WcfExtensions
     {
+
+
+
         /// <summary>
         /// wcf调用拓展方法
+        /// 详情查看文档:https://docs.microsoft.com/en-us/dotnet/framework/wcf/samples/avoiding-problems-with-the-using-statement
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="client"></param>
         /// <param name="action"></param>
         /// <param name="exceptionHandler">异常处理</param>
-        public static void Using<T>(this T client, Action<T> action,Action<Exception> exceptionHandler = null) where T : ICommunicationObject
+        public static void Using<T>(this T client, Action<T> action, Action<Exception> exceptionHandler = null) where T : ICommunicationObject
         {
-            if (client == null)
-            {
-                return;
-            }
+            //是否异常处理，保证异常只处理一次
+            bool isExceptionHandled = false;
+
             try
             {
+                dynamic dynamicClient = client;
+
+                ServiceEndpoint endpoint = dynamicClient.Endpoint;
+
+                endpoint.Address = GenerateAddress(endpoint.Address, "localhost", 3668);
+
                 if (action != null)
                 {
-                    action(client);
+                    try
+                    {
+                        action(client);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (exceptionHandler != null)
+                        {
+                            exceptionHandler(ex);
+                            isExceptionHandled = true;
+                        }
+                    }
                 }
+
+
                 client.Close();
             }
             catch (TimeoutException te)
             {
                 client.Abort();
-                if (exceptionHandler != null)
+                if (exceptionHandler != null && isExceptionHandled == false)
                 {
                     exceptionHandler(te);
                 }
@@ -45,7 +68,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.wcfs
             catch (FaultException fe)
             {
                 client.Abort();
-                if (exceptionHandler != null)
+                if (exceptionHandler != null && isExceptionHandled == false)
                 {
                     exceptionHandler(fe);
                 }
@@ -53,7 +76,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.wcfs
             catch (CommunicationException ce)
             {
                 client.Abort();
-                if (exceptionHandler != null)
+                if (exceptionHandler != null && isExceptionHandled == false)
                 {
                     exceptionHandler(ce);
                 }
@@ -61,12 +84,45 @@ namespace Introduce_To_Algorithm3.Common.Utils.wcfs
             catch (Exception e)
             {
                 client.Abort();
-                if (exceptionHandler != null)
+
+                if (exceptionHandler != null && isExceptionHandled == false)
                 {
                     exceptionHandler(e);
                 }
             }
         }
+
+
+        /// <summary>
+        /// 替换url中的ip和端口号
+        /// </summary>
+        /// <param name="oldAddress"></param>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        private static EndpointAddress GenerateAddress(EndpointAddress oldAddress, string ip, int port)
+        {
+            string oldAddressString = oldAddress.ToString().Trim();
+
+            int index1 = oldAddressString.IndexOf("://", StringComparison.InvariantCulture);
+
+            if (index1 < 0)
+            {
+                return oldAddress;
+            }
+
+
+            int index2 = oldAddressString.IndexOf("/", index1 + 3, StringComparison.InvariantCulture);
+
+            if (index2 < 0)
+            {
+                return oldAddress;
+            }
+
+            string newAddressString = oldAddressString.Substring(0, index1 + 3) + ip + ":" + port + oldAddressString.Substring(index2);
+            return new EndpointAddress(newAddressString);
+        }
+
 
 
         /*
@@ -105,4 +161,6 @@ catch (FaultException<GreetingFault> greetingFault)
 
 
     }
+
+
 }
