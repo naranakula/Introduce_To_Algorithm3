@@ -608,6 +608,7 @@
     <Compile Include="Common\Utils\Hashs\KetamaConsistentHash.cs" />
     <Compile Include="Common\Utils\Images\ImageUtils.cs" />
     <Compile Include="Common\Utils\MailHelper.cs.cs" />
+    <Compile Include="Common\Utils\MemoryUtils.cs" />
     <Compile Include="Common\Utils\MessageHandler.cs" />
     <Compile Include="Common\Utils\PInvokeHelper.cs" />
     <Compile Include="Common\Utils\SerializeHelper.cs" />
