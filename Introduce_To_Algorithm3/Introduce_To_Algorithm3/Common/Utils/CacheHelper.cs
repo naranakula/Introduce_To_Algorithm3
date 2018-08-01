@@ -21,6 +21,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// ...
     /// 
     /// 
+    /// 
+    /// 
+    /// Cache aside pattern：
+    ///     https://dzone.com/articles/cache-aside-pattern
+    ///     https://docs.microsoft.com/en-us/azure/architecture/patterns/cache-aside
     /// 读操作：
     ///     1、先从缓存中读取数据，如果缓存命中，则使用该数据
     ///     2、如果缓存miss，则从数据库中读取数据，并set到缓存
@@ -28,6 +33,7 @@ namespace Introduce_To_Algorithm3.Common.Utils
     /// 写操作:
     ///     1、先写回数据库
     ///     2、再delete淘汰缓存 (此处不是更新缓存，因为并发写无法保证时序，容易数据不一致)
+    ///     //这是cache aside pattern
     ///     (先操作数据库，再操作缓存，如果缓存删除失败，导致数据库是新的数据，缓存是旧的数据。(MemoryCache不会出现删除失败(指的是redis)))
     ///     
     ///     另外一种方式，写删除缓存，再写回数据库，  建议使用上面的这一种
