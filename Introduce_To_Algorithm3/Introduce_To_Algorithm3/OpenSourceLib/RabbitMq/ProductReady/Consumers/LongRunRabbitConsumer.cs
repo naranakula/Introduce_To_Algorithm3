@@ -166,20 +166,20 @@ Publisher application id
         
         //使用类ExchangeType
 
-        /// <summary>
-        /// Direct exchange 类型
-        /// </summary>
-        public const string DirectExchangeTypeName = "direct";
+        ///// <summary>
+        ///// Direct exchange 类型
+        ///// </summary>
+        //public const string DirectExchangeTypeName = "direct";
 
-        /// <summary>
-        /// fanout exchange 类型
-        /// </summary>
-        public const string FanoutExchangeTypeName = "fanout";
+        ///// <summary>
+        ///// fanout exchange 类型
+        ///// </summary>
+        //public const string FanoutExchangeTypeName = "fanout";
 
-        /// <summary>
-        /// topic exchange 类型
-        /// </summary>
-        public const string TopicExchangeTypeName = "topic";
+        ///// <summary>
+        ///// topic exchange 类型
+        ///// </summary>
+        //public const string TopicExchangeTypeName = "topic";
 
         #endregion
 
@@ -190,23 +190,23 @@ Publisher application id
         /// true表示使用queue,false表示使用主题
         /// 类似于ActiveMQ的抽象，实际上RabbitMQ只有队列
         /// </summary>
-        private static readonly bool _isQueue = true;
+        //private static readonly bool _isQueue = true;
 
         /// <summary>
-        /// 当是Direct类型的Exchange时，使用的队列名称 不要使用""，因为它是默认的，并且每个队列自动绑定到它""上 非""不自动绑定
+        /// 使用的队列的名字
         /// </summary>
-        private static readonly string _usedDirectQueueName = ConfigUtils.GetString("UsedDirectQueueName");
+        private static readonly string UsedQueueName = ConfigUtils.GetString("UsedQueueName");
         
 
         /// <summary>
         /// 消费者使用的Exchange的名字
         /// </summary>
-        private static readonly string _usedExchangeName = ConfigUtils.GetString("UsedExchangeName");
+        //private static readonly string UsedExchangeName = ConfigUtils.GetString("UsedExchangeName");
 
         /// <summary>
         /// 使用的RoutingKey
         /// </summary>
-        private static readonly string _usedRoutingKeyName = ConfigUtils.GetString("UsedRoutingKey");
+        //private static readonly string UsedRoutingKeyName = ConfigUtils.GetString("UsedRoutingKey");
 
 
         #endregion
@@ -244,92 +244,106 @@ Publisher application id
                 //创建多路复用的channel
                 _channel = _connection.CreateModel();
 
-                if (_isQueue)
-                {
-                    // 1、创建exchange
-                    //使用direct
-                    //exchange:exchange的名字，//type:exchange的类型
-                    //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
-                    //autoDelete - true if the server should delete the exchange when it is no longer in use
-                    //arguments - other properties (construction arguments) for the exchange
-                    _channel.ExchangeDeclare(exchange: _usedExchangeName, type: ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
+                //if (_isQueue)
+                //{
+                //    // 1、创建exchange
+                //    //使用direct
+                //    //exchange:exchange的名字，//type:exchange的类型
+                //    //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
+                //    //autoDelete - true if the server should delete the exchange when it is no longer in use
+                //    //arguments - other properties (construction arguments) for the exchange
+                //    _channel.ExchangeDeclare(exchange: UsedExchangeName, type: ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
 
-                    //定义创建队列时的参数
-                    Dictionary<string, object> dictArgs = new Dictionary<string, object>();
-                    //限制队列的最大长度，超过该长度将从队列头丢弃
-                    dictArgs.Add("x-max-length",9000);
+                //    //定义创建队列时的参数
+                //    Dictionary<string, object> dictArgs = new Dictionary<string, object>();
+                //    //限制队列的最大长度，超过该长度将从队列头丢弃
+                //    dictArgs.Add("x-max-length",9000);
 
 
-                    //队列
-                    //queue:队列名 
-                    //durable:true if we are declaring a durable queue (the 队列 will survive a server restart) 当mq重启后队列是否仍然存在
-                    //exclusive:排他性，如果为true,表示队列只能被当前连接使用，连接关闭队列自动消失
-                    //autoDelete:当已经没有消费者时，服务器是否可以删除该队列,true if the server should delete the queue when it is no longer in use。
-                   //队列创建时会默认绑定到default的direct的""的exchange
-                    _channel.QueueDeclare(queue: _usedDirectQueueName, durable: true, exclusive: false, autoDelete: false,arguments: null);
+                //    //队列
+                //    //queue:队列名 
+                //    //durable:true if we are declaring a durable queue (the 队列 will survive a server restart) 当mq重启后队列是否仍然存在
+                //    //exclusive:排他性，如果为true,表示队列只能被当前连接使用，连接关闭队列自动消失
+                //    //autoDelete:当已经没有消费者时，服务器是否可以删除该队列,true if the server should delete the queue when it is no longer in use。
+                //   //队列创建时会默认绑定到default的direct的""的exchange
+                //    _channel.QueueDeclare(queue: UsedQueueName, durable: true, exclusive: false, autoDelete: false,arguments: null);
 
-                    //建立queue和exchange的绑定
-                    _channel.QueueBind(queue: _usedDirectQueueName, exchange: _usedExchangeName, routingKey: _usedRoutingKeyName, arguments: null);
+                //    //建立queue和exchange的绑定
+                //    _channel.QueueBind(queue: UsedQueueName, exchange: UsedExchangeName, routingKey: UsedRoutingKeyName, arguments: null);
 
-                    //prefetchSize - maximum amount of content (measured in octets) that the server will deliver, 0 if unlimited
-                    //prefetchCount - maximum number of messages that the server will deliver, 0 if unlimited
-                    //global - true if the settings should be applied to the entire channel rather than each consumer
-                    //每次取一个消息，消息大小不限制
-                    //注释掉该行，将会使用Robbin轮盘分配，使用下面这行，只有空闲的Consumer接收消息
-                    //我们设置prefetchCount=1，则Queue每次给每个消费者发送一条消息；消费者处理完这条消息后Queue会再给该消费者发送一条消息。
-                    _channel.BasicQos(prefetchSize:0,prefetchCount:3,global:false);
+                //    //prefetchSize - maximum amount of content (measured in octets) that the server will deliver, 0 if unlimited
+                //    //prefetchCount - maximum number of messages that the server will deliver, 0 if unlimited
+                //    //global - true if the settings should be applied to the entire channel rather than each consumer
+                //    //每次取一个消息，消息大小不限制
+                //    //注释掉该行，将会使用Robbin轮盘分配，使用下面这行，只有空闲的Consumer接收消息
+                //    //我们设置prefetchCount=1，则Queue每次给每个消费者发送一条消息；消费者处理完这条消息后Queue会再给该消费者发送一条消息。
+                //    _channel.BasicQos(prefetchSize:0,prefetchCount:3,global:false);
                     
-                    //定义消息接收事件
-                    EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
-                    consumer.Received += ConsumerOnReceived;
+                //    //定义消息接收事件
+                //    EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
+                //    consumer.Received += ConsumerOnReceived;
 
-                    //自动应答
-                    _channel.BasicConsume(queue:_usedDirectQueueName, autoAck:true, consumer:consumer);
+                //    //自动应答
+                //    _channel.BasicConsume(queue:UsedQueueName, autoAck:true, consumer:consumer);
 
 
-                    //同步调用
-                    //BasicGetResult getResult = _channel.BasicGet(queue:_usedDirectQueueName, autoAck: true);
-                    //if(getResult == null)
-                    //{
-                    //    //没有消息
-                    //}
-                    //else
-                    //{
-                    //    byte[] bodys = getResult.Body;
-                    //}
-                }
-                else
-                {
-                    // 1、创建exchange
-                    //使用fanout
-                    //exchange:exchange的名字，//type:exchange的类型
-                    //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
-                    //autoDelete - true if the server should delete the exchange when it is no longer in use
-                    //arguments - other properties (construction arguments) for the exchange
-                    _channel.ExchangeDeclare(exchange:_usedExchangeName,type:ExchangeType.Fanout,durable:true,autoDelete:false,arguments:null);
+                //    //同步调用
+                //    //BasicGetResult getResult = _channel.BasicGet(queue:_usedDirectQueueName, autoAck: true);
+                //    //if(getResult == null)
+                //    //{
+                //    //    //没有消息
+                //    //}
+                //    //else
+                //    //{
+                //    //    byte[] bodys = getResult.Body;
+                //    //}
+                //}
+                //else
+                //{
+                //    // 1、创建exchange
+                //    //使用fanout
+                //    //exchange:exchange的名字，//type:exchange的类型
+                //    //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
+                //    //autoDelete - true if the server should delete the exchange when it is no longer in use
+                //    //arguments - other properties (construction arguments) for the exchange
+                //    _channel.ExchangeDeclare(exchange:UsedExchangeName,type:ExchangeType.Fanout,durable:true,autoDelete:false,arguments:null);
 
-                    //2、创建queue
-                    //由MQ服务器创建一个amp.开头的(如amq.gen-JzTY20BRgKO-HjmUJj0wLg)非持久、排他、自动删除的队列
-                    //连接断开后，服务器将删除该队列
-                    string tempQueueName = _channel.QueueDeclare().QueueName;
+                //    //2、创建queue
+                //    //由MQ服务器创建一个amp.开头的(如amq.gen-JzTY20BRgKO-HjmUJj0wLg)非持久、排他、自动删除的队列
+                //    //连接断开后，服务器将删除该队列
+                //    string tempQueueName = _channel.QueueDeclare().QueueName;
 
-                    //3、绑定queue
-                    //将队列绑定到exchange
-                    //fanout的routingkey不起作用，将会被忽略
-                    //使用指定的Routingkey将指定的queue绑定到指定的exchange上
-                    //如果关心多种消息，一个channel可以创建多个bind，可以使用相同的队列名(一个队列关心多个routingKey)
-                    _channel.QueueBind(queue:tempQueueName,exchange:_usedExchangeName,routingKey:"",arguments:null);
+                //    //3、绑定queue
+                //    //将队列绑定到exchange
+                //    //fanout的routingkey不起作用，将会被忽略
+                //    //使用指定的Routingkey将指定的queue绑定到指定的exchange上
+                //    //如果关心多种消息，一个channel可以创建多个bind，可以使用相同的队列名(一个队列关心多个routingKey)
+                //    _channel.QueueBind(queue:tempQueueName,exchange:UsedExchangeName,routingKey:"",arguments:null);
 
-                    //预取3条消息
-                    _channel.BasicQos(prefetchSize: 0, prefetchCount: 3, global: false);
+                //    //预取3条消息
+                //    _channel.BasicQos(prefetchSize: 0, prefetchCount: 3, global: false);
 
-                    //定义消息接收事件
-                    EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
-                    consumer.Received += ConsumerOnReceived;
+                //    //定义消息接收事件
+                //    EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
+                //    consumer.Received += ConsumerOnReceived;
 
-                    //自动应答
-                    _channel.BasicConsume(queue: tempQueueName, autoAck: true, consumer: consumer);
-                }
+                //    //自动应答
+                //    _channel.BasicConsume(queue: tempQueueName, autoAck: true, consumer: consumer);
+                //}
+
+
+                //每次取一个消息，消息大小不限制
+                //注释掉该行，将会使用Robbin轮盘分配，使用下面这行，只有空闲的Consumer接收消息
+                //我们设置prefetchCount=1，则Queue每次给每个消费者发送一条消息；消费者处理完这条消息后Queue会再给该消费者发送一条消息。
+                _channel.BasicQos(prefetchSize: 0, prefetchCount: 3, global: false);
+
+                //定义消息接收事件
+                EventingBasicConsumer consumer = new EventingBasicConsumer(_channel);
+                consumer.Received += ConsumerOnReceived;
+
+                //自动应答
+                _channel.BasicConsume(queue: UsedQueueName, autoAck: true, consumer: consumer);
+
 
                 lock (SLocker)
                 {
@@ -483,12 +497,12 @@ Publisher application id
         /// </summary>
         public static void StopConsumer()
         {
-
+            //Disposing channel and connection objects is not enough, they must be explicitly closed
             if (_channel != null)
             {
                 SafeInvokeUtils.Safe(() =>
                 {
-                    _channel.Dispose();
+                    _channel.Close();
                 }, ex =>
                 {
                     NLogHelper.Error($"关闭RabbitMQ的channel失败:{ex}");
@@ -501,7 +515,7 @@ Publisher application id
             {
                 SafeInvokeUtils.Safe(() =>
                 {
-                    _connection.Dispose();
+                    _connection.Close();
                 }, ex =>
                 {
                     NLogHelper.Error($"关闭RabbitMQ的connection失败:{ex}");

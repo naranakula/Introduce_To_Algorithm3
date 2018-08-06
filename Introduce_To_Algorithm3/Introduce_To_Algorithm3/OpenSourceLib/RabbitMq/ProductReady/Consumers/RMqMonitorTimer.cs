@@ -27,7 +27,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
         /// <summary>
         /// 定时器是否正在运行
         /// </summary>
-        private static bool _isRunning = false;
+        private static volatile bool _isRunning = false;
 
         /// <summary>
         /// 是否第一次启动mQ
@@ -37,7 +37,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
         /// <summary>
         /// 锁
         /// </summary>
-        private static readonly object locker = new object();
+        private static readonly object Slocker = new object();
 
         /// <summary>
         /// 通过定时器开启MQ，不要直接开启mQ
@@ -47,7 +47,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
             if (_mqTimer == null)
             {
                 //执行周期17s
-                _mqTimer = new Timer(new TimerCallback(MQTimerCallBack), null, 500, 29571);
+                _mqTimer = new Timer(new TimerCallback(MqTimerCallBack), null, 500, 31571);
             }
         }
 
@@ -55,9 +55,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
         /// MQ回调
         /// </summary>
         /// <param name="state"></param>
-        private static void MQTimerCallBack(object state)
+        private static void MqTimerCallBack(object state)
         {
-            lock (locker)
+            lock (Slocker)
             {
                 if (_isRunning)
                 {
@@ -100,7 +100,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
             }
             finally
             {
-                lock (locker)
+                lock (Slocker)
                 {
                     _isRunning = false;
                 }
@@ -120,7 +120,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
                     _mqTimer = null;
                 }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             //关闭MQ
             LongRunRabbitConsumer.StopConsumer();

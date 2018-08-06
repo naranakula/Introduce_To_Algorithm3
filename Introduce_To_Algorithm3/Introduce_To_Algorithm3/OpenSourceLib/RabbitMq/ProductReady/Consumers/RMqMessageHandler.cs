@@ -30,7 +30,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
         /// 底层消息处理
         /// 构造时初始化底层线程
         /// </summary>
-        private static readonly BlockingQueueEx<RMqMessage> _blockingQueue = new BlockingQueueEx<RMqMessage>(singleDataHandler:SingleDataHandler,dataListHandler:ListDataHandler,exceptionHandler:ExceptionHandler);
+        private static readonly BlockingQueueEx<RMqMessage> BlockingQueue = new BlockingQueueEx<RMqMessage>(singleDataHandler:SingleDataHandler,dataListHandler:ListDataHandler,exceptionHandler:ExceptionHandler);
 
         /// <summary>
         /// 添加待处理的消息
@@ -43,7 +43,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
                 return;
             }
 
-            _blockingQueue.Add(item,abandonAction:AbandonMessageHandler);
+            BlockingQueue.Add(item,abandonAction:AbandonMessageHandler);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
         /// </summary>
         public static void Stop()
         {
-            _blockingQueue.Stop();
+            BlockingQueue.Stop();
         }
     }
 
