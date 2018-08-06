@@ -133,7 +133,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             this._isStop = false;
 
             Random rand = new Random();
-            _maxContinuousGrpcErrorCount = rand.Next(19, 23);
+            _maxContinuousGrpcErrorCount = rand.Next(13, 23);
             _maxIntervalMinutesToRebuild = rand.Next(24 * 60, 25 * 67);
             _minReEstablishChannelTimeIntervalInMilliseconds = rand.Next(2500, 4100);
         }
