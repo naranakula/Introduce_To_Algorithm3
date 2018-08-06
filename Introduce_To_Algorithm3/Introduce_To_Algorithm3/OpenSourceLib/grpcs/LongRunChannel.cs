@@ -61,7 +61,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
 
         /// <summary>
-        /// 通道
+        /// 通道  抽象一个tcp连接
         /// </summary>
         private volatile Channel _channel = null;
 
@@ -71,7 +71,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         private static readonly List<ChannelOption> GrpcOptions = new List<ChannelOption>(capacity: 4)
         {
             ////Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
-            new ChannelOption(ChannelOptions.MaxSendMessageLength,8*1024*1024),//最大可以发送的消息长度
+            new ChannelOption(ChannelOptions.MaxSendMessageLength,16*1024*1024),//最大可以发送的消息长度
             new ChannelOption(ChannelOptions.MaxReceiveMessageLength,32*1024*1024),//最大允许接收的消息长度
             new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
             new ChannelOption(ChannelOptions.MaxConcurrentStreams,63),//单个连接最大允许的并发流
@@ -133,8 +133,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             this._isStop = false;
 
             Random rand = new Random();
-            _maxContinuousGrpcErrorCount = rand.Next(21, 30);
-            _maxIntervalMinutesToRebuild = rand.Next(24 * 61, 29 * 67);
+            _maxContinuousGrpcErrorCount = rand.Next(19, 23);
+            _maxIntervalMinutesToRebuild = rand.Next(24 * 60, 25 * 67);
             _minReEstablishChannelTimeIntervalInMilliseconds = rand.Next(2500, 4100);
         }
 

@@ -18,7 +18,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
     /// 服务实现类只创建一个实例的，即Greeter.BindService(new GreeterServiceImpl())时创建的实例,已验证
     /// examples下有完整例子
     /// </summary>
-    public class GrpcServer
+    public class GrpcServer:IDisposable
     {
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         /// 服务列表
         /// Greeter.BindService(new GreeterServiceImpl())
         /// </summary>
-        private readonly List<ServerServiceDefinition> _serviceList = null;
+        private readonly List<ServerServiceDefinition> _serviceList = new List<ServerServiceDefinition>();
 
         /// <summary>
         /// 服务器端口
@@ -46,6 +46,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         }
 
 
+        private readonly string _bindIp;
+
+        /// <summary>
+        /// 服务器端绑定IP
+        /// </summary>
+        public string BindIp
+        {
+            get { return _bindIp; }
+        }
+
+
         /// <summary>
         /// 底层服务
         /// </summary>
@@ -53,15 +64,44 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
 
         /// <summary>
+        /// Grpc启动时选项配置
+        /// </summary>
+        private static readonly List<ChannelOption> GrpcOptions = new List<ChannelOption>(4)
+        {
+            //Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
+            new ChannelOption(ChannelOptions.MaxSendMessageLength,32*1024*1024),//最大可以发送的消息长度  单位byte
+            new ChannelOption(ChannelOptions.MaxReceiveMessageLength,16*1024*1024),//最大允许接收的消息长度 单位byte
+            //最大允许的Maximum number of concurrent incoming streams to allow on a http2 connection
+            //单个http2连接允许的最大数量的stream
+            new ChannelOption(ChannelOptions.MaxConcurrentStreams,63),//单个连接最大允许的并发流
+            new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口
+            //HTTP/2 默认的 window size 是 64 KB，实际这个值太小了，在 TiKV 里面我们直接设置成 1 GB。
+            //TCP两端都有缓冲区来保存接收的数据，如果满了，那么在缓冲区清空之前不能接收更多的数据
+            //发送也有缓冲区
+            //The official definition of the window size is "the amount of octets that can be transmitted without receiving an acknowledgement from the other side". window size 官方定义是：在未收到对方确认报文时，发送端能发送的字节（八字节）数；​
+            //目前C#没有该设置项,建议设成1M或者512K
+            //new ChannelOption(ChannelOptions.)
+        };
+
+
+
+        /// <summary>
         /// 构造函数
         /// 服务实现抛出异常不会挂掉服务器，客户端捕获如下异常信息:Status(StatusCode=Unknown, Detail="Exception was thrown by handler.")
         /// </summary>
         /// <param name="services">服务定义 如:（单个） Greeter.BindService(new GreeterServiceImpl())  //服务实现抛出异常不会挂掉服务器，客户端捕获如下异常信息:Status(StatusCode=Unknown, Detail="Exception was thrown by handler.")</param>
-        /// <param name="serverPort"></param>
-        public GrpcServer(List<ServerServiceDefinition> services,int serverPort)
+        /// <param name="serverPort">服务器监听端口</param>
+        /// <param name="bindIp">服务器端绑定的IP,默认是0.0.0.0,表示所有的IP</param>
+        public GrpcServer(List<ServerServiceDefinition> services,int serverPort,string bindIp="0.0.0.0")
         {
             this._serverPort = serverPort;
-            this._serviceList = services;
+            this._bindIp = bindIp;
+
+            //添加服务项
+            foreach (var serviceItem in services)
+            {
+                this._serviceList.Add(serviceItem);
+            }
         }
 
         /// <summary>
@@ -73,22 +113,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         {
             try
             {
-                var options = new List<ChannelOption>()
-                {
-                    //Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
-                    new ChannelOption(ChannelOptions.MaxSendMessageLength,32*1024*1024),//最大可以发送的消息长度
-                    new ChannelOption(ChannelOptions.MaxReceiveMessageLength,16*1024*1024),//最大允许接收的消息长度
-                    //最大允许的Maximum number of concurrent incoming streams to allow on a http2 connection
-                    //单个http2连接允许的最大数量的stream
-                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,63),//单个连接最大允许的并发流
-                    new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口
-                    //HTTP/2 默认的 window size 是 64 KB，实际这个值太小了，在 TiKV 里面我们直接设置成 1 GB。
-                    //TCP两端都有缓冲区来保存接收的数据，如果满了，那么在缓冲区清空之前不能接收更多的数据
-                    //发送也有缓冲区
-                    //The official definition of the window size is "the amount of octets that can be transmitted without receiving an acknowledgement from the other side". window size 官方定义是：在未收到对方确认报文时，发送端能发送的字节（八字节）数；​
-                    //目前C#没有该设置项,建议设成1M或者512K
-                    //new ChannelOption(ChannelOptions.)
-                };
 
                 ////Server可以服务多个services，绑定多个端口
                 //Server server = new Server(options)
@@ -102,7 +126,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //};
 
                 //Server可以定义多个服务，绑定多个端口
-                _server = new Server(options);
+                _server = new Server(GrpcOptions);
 
                 //添加多个服务
                 foreach (var serviceItem in _serviceList)
@@ -113,8 +137,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 
                 //添加多个监听端口
                 //0.0.0.0表示监听本机所有ip地址， 没有安全验证
-                string ipAny = IPAddress.Any.ToString();
-                _server.Ports.Add(ipAny, _serverPort, ServerCredentials.Insecure);
+                //string ipAny = IPAddress.Any.ToString();
+                _server.Ports.Add(this._bindIp, this._serverPort, ServerCredentials.Insecure);
                 
                 _server.Start();
 
@@ -140,23 +164,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         {
             try
             {
-                
-                var options = new List<ChannelOption>()
-                {
-                    //Grpc不适合处理大量的数据，处理的数据级别是MB。如果需要传输大的消息，使用stream流式消息多次传输
-                    new ChannelOption(ChannelOptions.MaxSendMessageLength,32*1024*1024),//最大可以发送的消息长度
-                    new ChannelOption(ChannelOptions.MaxReceiveMessageLength,16*1024*1024),//最大允许接收的消息长度
-                    //最大允许的Maximum number of concurrent incoming streams to allow on a http2 connection
-                    //单个http2连接允许的最大数量的stream
-                    new ChannelOption(ChannelOptions.MaxConcurrentStreams,100),
-                    new ChannelOption(ChannelOptions.SoReuseport,1),//重用端口，默认值就是1
-                    //HTTP/2 默认的 window size 是 64 KB，实际这个值太小了，在 TiKV 里面我们直接设置成 1 GB。
-                    //TCP两端都有缓冲区来保存接收的数据，如果满了，那么在缓冲区清空之前不能接收更多的数据
-                    //发送也有缓冲区
-                    //The official definition of the window size is "the amount of octets that can be transmitted without receiving an acknowledgement from the other side". window size 官方定义是：在未收到对方确认报文时，发送端能发送的字节（八字节）数；​
-                    //目前C#没有该设置项,建议设成1M或者512K
-                    //new ChannelOption(ChannelOptions.)
-                };
+              
 
                 ////Server可以服务多个services，绑定多个端口
                 //Server server = new Server(options)
@@ -170,7 +178,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 //};
 
                 //Server可以定义多个服务，绑定多个端口
-                _server = new Server(options);
+                _server = new Server(GrpcOptions);
 
                 //添加多个服务
                 foreach (var serviceItem in _serviceList)
@@ -187,17 +195,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 string privateKey = File.ReadAllText(privateKeyFile, Encoding.UTF8);
 
 
-                var keyPair = new KeyCertificatePair(serverCert, privateKey);
+                KeyCertificatePair keyPair = new KeyCertificatePair(serverCert, privateKey);
 
-                var sslCredentials = new SslServerCredentials(new List<KeyCertificatePair>(){keyPair});
+                SslServerCredentials sslCredentials = new SslServerCredentials(new List<KeyCertificatePair>(){keyPair});
 
                 #endregion
 
                 //添加多个监听端口
                 //0.0.0.0表示监听本机所有ip地址， 没有安全验证
-                string ipAny = IPAddress.Any.ToString();
+                //string ipAny = IPAddress.Any.ToString();
                 //ssl证书
-                _server.Ports.Add(ipAny, _serverPort, sslCredentials);
+                _server.Ports.Add(this._bindIp, this._serverPort, sslCredentials);
 
                 _server.Start();
 
@@ -220,9 +228,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
         public bool  Stop(Action<Exception> exceptionHandler = null,int milliSecondsTimeout = 9543)
         {
 
-            if (milliSecondsTimeout < 100)
+            if (milliSecondsTimeout < 111)
             {
-                milliSecondsTimeout = 1111;
+                milliSecondsTimeout = 777;
             }
 
             lock (_locker)
@@ -249,6 +257,17 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
 
         }
 
+        #region IDisposable接口
+
+        /// <summary>
+        /// 实现Dispose接口
+        /// </summary>
+        public void Dispose()
+        {
+            Stop();
+        }
+
+        #endregion
 
         #region 测试 已测试
 
