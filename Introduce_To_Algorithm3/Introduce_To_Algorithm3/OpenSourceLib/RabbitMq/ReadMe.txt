@@ -109,7 +109,7 @@ http://www.rabbitmq.com/configure.html#configuration-file
 消费者从队列消费消息
 队列和Exchange可以建立多个binding key，一个队列可以Binding到多个Exchange
 
-
+默认的exchange是""，是direct的，不需要queue和该exchange绑定(其它的exchange需要绑定)，将routingkey和queue进行匹配
 
 Exchange  --  The Component of the message broker that routes messages to queues 
 Queue  --   Where to store message

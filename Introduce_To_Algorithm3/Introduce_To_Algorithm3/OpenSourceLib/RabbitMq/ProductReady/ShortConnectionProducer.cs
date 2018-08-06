@@ -81,6 +81,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
                         //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
                         //autoDelete - true if the server should delete the exchange when it is no longer in use
                         //arguments - other properties (construction arguments) for the exchange
+                        //不要在代码中声明，在web管理界面中声明
                         channel.ExchangeDeclare(exchange: _usedExchangeName, type: ExchangeType.Direct, durable: true, autoDelete: false, arguments: null);
 
                         //queue:队列名 
@@ -88,6 +89,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
                         //exclusive:排他性，如果为true,表示队列只能被当前连接使用，连接关闭队列自动消失
                         //autoDelete:当已经没有消费者时，服务器是否可以删除该队列,true if the server should delete the queue when it is no longer in use。
                         //该queue默认会绑定到direct exchange的默认的实例""上，除非你显式的调用QueueBind
+                        ////不要在代码中声明，在web管理界面中声明
                         channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false,
                             arguments: null);
                         //上面这一步是可选的
@@ -158,6 +160,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady
                         //durable - true if we are declaring a durable exchange (the exchange will survive a server restart)
                         //autoDelete - true if the server should delete the exchange when it is no longer in use
                         //arguments - other properties (construction arguments) for the exchange
+                        //不要在代码中声明
                         channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Fanout, durable: true, autoDelete: false, arguments: null);
 
 

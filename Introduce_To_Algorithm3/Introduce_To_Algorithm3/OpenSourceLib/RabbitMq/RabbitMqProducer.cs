@@ -9,6 +9,9 @@ using RabbitMQ.Client.Exceptions;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
 {
+    /// <summary>
+    /// 这是测试用的，具体使用见ProductReady
+    /// </summary>
     public static class RabbitMqProducer
     {
         /// <summary>
@@ -43,6 +46,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
                     channel.QueueDeclare(QueueName,false,false,false,null);
                     //消息是二进制的
                     byte[] body = Encoding.UTF8.GetBytes(message);
+                    //默认的exchange是""，是direct的，不需要queue和该exchange绑定(其它的exchange需要绑定)，将routingkey和queue进行匹配
                     channel.BasicPublish("",QueueName,null,body);
                 }
             }
@@ -65,7 +69,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq
                     byte[] body = Encoding.UTF8.GetBytes(message);
                     var properties = channel.CreateBasicProperties();
                     properties.DeliveryMode = 2;
-                    channel.BasicPublish("", QueueName, properties, body);
+                    //默认的exchange是""，是direct的，不需要queue和该exchange绑定(其它的exchange需要绑定)，将routingkey和queue匹配
+                    channel.BasicPublish("", routingKey:QueueName, basicProperties:properties, body:body);
                 }
             }
         }
