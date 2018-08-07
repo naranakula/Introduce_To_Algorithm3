@@ -52,7 +52,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
         /// <param name="obj"></param>
         private static void AbandonMessageHandler(RMqMessage obj)
         {
-            NLogHelper.Warn($"存在消息丢弃,base64={StringUtils.ToBase64String(obj.ContentBytes)}");
+            NLogHelper.Warn($"存在消息丢弃,消息id={obj.Id}");
         }
 
         /// <summary>

@@ -834,6 +834,7 @@
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Producers\LongRunRabbitProducer.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Producers\RMqProducerMessageHandler.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Producers\RMqProducerMonitorTimer.cs" />
+    <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Producers\RMqSendMessage.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\RabbitMqConfig.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\Rpcs\RabbitMqRpcClient.cs" />
     <Compile Include="OpenSourceLib\RabbitMq\ProductReady\ShortConnectionClusterSupportProducer.cs" />

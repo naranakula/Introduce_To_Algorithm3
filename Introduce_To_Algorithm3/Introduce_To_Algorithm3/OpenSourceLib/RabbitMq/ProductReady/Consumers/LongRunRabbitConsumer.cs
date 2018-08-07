@@ -224,6 +224,7 @@ Publisher application id
             {
                 StopConsumer();
 
+                //创建并打开连接
                 _connection = SFactory.CreateConnection();
 
                 //定义连接事件
@@ -523,6 +524,10 @@ Publisher application id
                 _connection = null;
             }
 
+            lock (SLocker)
+            {
+                _isAlive = false;
+            }
         }
 
         #endregion

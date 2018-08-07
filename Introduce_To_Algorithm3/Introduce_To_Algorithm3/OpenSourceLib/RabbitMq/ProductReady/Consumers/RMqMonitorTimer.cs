@@ -35,6 +35,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
         private static volatile bool _isFirstTimeToStartMq = true;
 
         /// <summary>
+        /// 重启次数
+        /// </summary>
+        private static volatile int _restartCount = 0;
+
+        /// <summary>
         /// 锁
         /// </summary>
         private static readonly object Slocker = new object();
@@ -82,7 +87,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Consumers
                     }
                     else
                     {
-                        NLogHelper.Warn("MQ异常,尝试重启 MQConsumer");
+                        _restartCount++;
+                        if (_restartCount > 10000000)
+                        {
+                            _restartCount = 10000;
+                        }
+                        NLogHelper.Warn($"MQ异常,第{_restartCount}次尝试重启 MQConsumer");
                         LongRunRabbitConsumer.StartConsumer(ex =>
                         {
                             NLogHelper.Error($"开启MQ失败:{ex}");
