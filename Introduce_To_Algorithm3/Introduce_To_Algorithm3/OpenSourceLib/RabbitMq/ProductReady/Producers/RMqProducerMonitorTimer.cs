@@ -53,7 +53,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Producers
             {
                 Random rand = new Random();
                 //执行周期17s
-                _mqTimer = new Timer(new TimerCallback(MqTimerCallBack), null, rand.Next(400,600), 7000+rand.Next(1,1000));
+                _mqTimer = new Timer(new TimerCallback(MqTimerCallBack), null, rand.Next(100,500), 7000+rand.Next(1,1000));
             }
         }
 
