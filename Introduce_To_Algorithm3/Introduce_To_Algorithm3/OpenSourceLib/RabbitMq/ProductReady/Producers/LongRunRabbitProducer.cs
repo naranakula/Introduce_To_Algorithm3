@@ -92,7 +92,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Producers
                 {
                     _isAlive = true;
                 }
-
+                NLogHelper.Info("mq启动完成");
                 return true;
             }
             catch (Exception e)
