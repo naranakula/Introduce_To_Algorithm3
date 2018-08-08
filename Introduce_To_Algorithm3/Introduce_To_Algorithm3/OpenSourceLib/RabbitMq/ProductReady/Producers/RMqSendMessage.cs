@@ -23,6 +23,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Producers
         private string _routingKey;
         private DateTime _createTime;
 
+
         /// <summary>
         /// 消息Id
         /// </summary>
@@ -67,5 +68,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Producers
             get { lock (_locker) { return _createTime; } }
             set { lock (_locker) { _createTime = value; } }
         }
+
     }
 }

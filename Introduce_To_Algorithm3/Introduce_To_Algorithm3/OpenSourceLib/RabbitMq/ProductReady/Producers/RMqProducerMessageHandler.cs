@@ -29,7 +29,36 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Producers
         /// 底层消息处理
         /// 构造时初始化底层线程
         /// </summary>
-        private static readonly BlockingQueueEx<RMqSendMessage> BlockingQueue = new BlockingQueueEx<RMqSendMessage>(singleDataHandler: SingleDataHandler, dataListHandler: null, exceptionHandler: ExceptionHandler,isNeedOptimize:false);
+        private static readonly BlockingQueueEx<RMqSendMessage> BlockingQueue = new BlockingQueueEx<RMqSendMessage>(singleDataHandler: SingleDataHandler, dataListHandler: DataListHandler, exceptionHandler: ExceptionHandler,isNeedOptimize:false);
+
+        /// <summary>
+        /// 列表发送
+        /// </summary>
+        /// <param name="msgList"></param>
+        private static void DataListHandler(List<RMqSendMessage> msgList)
+        {
+            if (LongRunRabbitProducer.IsAlive())
+            {
+                bool result = LongRunRabbitProducer.SendMessage(msgList, ex =>
+                {
+                    NLogHelper.Error($"{msgList.Count}条消息处理失败:{ex}");
+                });
+
+                if (result)
+                {
+
+                }
+                else
+                {
+
+                }
+
+            }
+            else
+            {
+                NLogHelper.Error($"mq连接异常，{msgList.Count}条消息发送失败");
+            }
+        }
 
         /// <summary>
         /// 添加待处理的消息

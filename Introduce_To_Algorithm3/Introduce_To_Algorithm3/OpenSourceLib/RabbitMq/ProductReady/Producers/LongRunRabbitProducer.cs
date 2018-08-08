@@ -136,7 +136,41 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Producers
                 return false;
             }
         }
-        
+
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <param name="msgList"></param>
+        /// <param name="exceptionHandler"></param>
+        /// <returns></returns>
+        public static bool SendMessage(List<RMqSendMessage> msgList, Action<Exception> exceptionHandler = null)
+        {
+            try
+            {
+                using (IModel channel = _connection.CreateModel())
+                {
+                    foreach (RMqSendMessage msg in msgList)
+                    {
+                        var properties = channel.CreateBasicProperties();
+                        //持久
+                        properties.DeliveryMode = 2;
+                        //超时时间，单位毫秒
+                        properties.Expiration = "7200000";
+                        channel.BasicPublish(exchange: msg.ExchangeName, routingKey: msg.RoutingKey, basicProperties: properties, body: msg.ContentBytes);
+                    }
+                    
+                }
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// 停止

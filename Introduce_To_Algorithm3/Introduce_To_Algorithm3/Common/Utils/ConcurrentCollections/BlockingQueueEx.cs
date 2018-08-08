@@ -39,6 +39,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 }
                 catch 
                 {
+                    // ignored
                     return 0;
                 }
             }
@@ -69,7 +70,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
         }
 
         /// <summary>
-        /// 数据处理
+        /// 单个数据处理
         /// </summary>
         private readonly Action<T> _singleDataHandler = null;
 
@@ -151,7 +152,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
             _thread = new Thread(() =>
             {
                 T item = null;
-                Action<T> dataHandlerInThread = null;
+                Action<T> dataHandlerInThread = null;//单条消息处理
                 Action<Exception> exceptionHandlerInThread = null;
                 Action<List<T>> dataListHandlerInThread = null;
                 bool enableListHandlerInThread = false;
@@ -240,7 +241,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                                 List<T> dataList = new List<T>(dataListSize);
                                 for (int i = 0; i < dataListSize; i++)
                                 {
-                                    if (_blockingQueue.TryTake(out item))
+                                    if (_blockingQueue.TryTake(out item,111))
                                     {
                                         //有数据立刻返回
                                         dataList.Add(item);
@@ -423,7 +424,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                 Thread.Sleep(sleepMs);
 
                 i++;
-                if ((DateTime.Now - now).TotalSeconds > 1.03 || i*sleepMs>2000)
+                if ((DateTime.Now - now).TotalSeconds > 0.93 || i*sleepMs>1111)
                 {
                     NLogHelper.Warn($"BlockingQueue存在约{UnHandleCount}条数据未处理完成");
                     break;
