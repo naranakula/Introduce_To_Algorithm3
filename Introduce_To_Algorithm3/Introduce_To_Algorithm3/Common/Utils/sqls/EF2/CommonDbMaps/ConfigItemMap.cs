@@ -23,7 +23,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbMaps
             //变长 nvarchar(36)
             Property(x => x.Id)
                 .IsRequired()
-                .IsUnicode()
+                .IsUnicode(false)
                 .HasMaxLength(36)
                 .IsVariableLength()
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);

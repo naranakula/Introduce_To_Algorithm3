@@ -1768,7 +1768,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             //变长 nvarchar(36)
             Property(x => x.Id)
                 .IsRequired()
-                .IsUnicode()
+                .IsUnicode(false)
                 .HasMaxLength(36)
                 .IsVariableLength()
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
@@ -1807,7 +1807,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             //变长 nvarchar(36)
             Property(x => x.Id)
                 .IsRequired()
-                .IsUnicode()
+                .IsUnicode(false)
                 .HasMaxLength(36)
                 .IsVariableLength()
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
@@ -2287,7 +2287,7 @@ INTEGER as Unix Time, the number of seconds since 1970-01-01 00:00:00 UTC.
             //变长 nvarchar(36)
             Property(x => x.Id)
                 .IsRequired()
-                .IsUnicode()
+                .IsUnicode(false)
                 .HasMaxLength(36)
                 .IsVariableLength()
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
