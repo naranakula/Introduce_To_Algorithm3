@@ -771,6 +771,7 @@
     <Compile Include="Models\CommonResult.cs" />
     <Compile Include="Common\Utils\ConcurrentCollections\ConcurrentHashSet.cs" />
     <Compile Include="Models\LogType.cs" />
+    <Compile Include="Models\MvvmBaseViewModel.cs" />
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\CommonMessage.cs" />
     <Compile Include="OpenSourceLib\ActiveMq\Consumers\MQConsumer.cs" />

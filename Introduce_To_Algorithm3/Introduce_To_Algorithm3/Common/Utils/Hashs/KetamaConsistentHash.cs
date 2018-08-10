@@ -11,6 +11,9 @@ namespace Introduce_To_Algorithm3.Common.Utils.Hashs
     /// 当新增节点时，会造成扰动，但只会影响少量数据
     /// 
     /// https://www.cnblogs.com/daizhj/archive/2010/08/24/1807324.html
+    /// 
+    /// 
+    /// 对于固定的节点，其hash的位置是固定的
     /// </summary>
     public class KetamaConsistentHash
     {
@@ -37,10 +40,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.Hashs
                 throw new Exception("node list can not be empty");
             }
 
+            //除以8，是因为使用sha256hash,共32个整数(一个整数4个字节)
             int loopCount = NumOfNodeCopy / 8 ;
 
             if (NumOfNodeCopy % 8 != 0 || loopCount <= 0)
             {
+                //不会进入
                 loopCount++;
             }
 
@@ -61,11 +66,12 @@ namespace Introduce_To_Algorithm3.Common.Utils.Hashs
 
                         if (_ketamaNodes.ContainsKey(nodePosition))
                         {
-                            //更新
+                            //更新，理论上包含的概率很小
                             _ketamaNodes[nodePosition] = node;
                         }
                         else
                         {
+                            //对于固定的节点，其hash的位置是固定的
                             _ketamaNodes.Add(nodePosition, node);
                         }
                     }
