@@ -25,12 +25,12 @@ namespace Common
         /// 每个程序使用不同的id
         /// 建议在配置文件中配置
         /// </summary>
-        private static readonly string APP_ID = ConfigUtils.GetString("AppId", "dd771b7a02e746b388ffad5adf202fc5");//@"dd771b7a02e746b388ffad5adf202fc5";//ConfigUtils.GetString("AppId");
+        private static readonly string AppId = ConfigUtils.GetString("AppId", "dd771b7a02e746b388ffad5adf202fc5");//@"dd771b7a02e746b388ffad5adf202fc5";//ConfigUtils.GetString("AppId");
 
         /// <summary>
         /// 用于测试单实例的Mutex
         /// </summary>
-        private static volatile Mutex OneRunMutex = null;
+        private static volatile Mutex _oneRunMutex = null;
 
         /// <summary>
         /// 是否之前已经运行了实例
@@ -42,14 +42,14 @@ namespace Common
             
             try
             {
-                if (OneRunMutex != null)
+                if (_oneRunMutex != null)
                 {
                     throw new ArgumentException("这个方法仅能调用一次");
                 }
 
                 bool createdNew = false;
                 //注意退出时释放Mutex
-                OneRunMutex = new Mutex(true, APP_ID, out createdNew);
+                _oneRunMutex = new Mutex(true, AppId, out createdNew);
 
                 if (!createdNew)
                 {
@@ -162,20 +162,26 @@ namespace Common
         /// </summary>
         public static void ReleaseMutex()
         {
-            if (OneRunMutex != null)
+            if (_oneRunMutex != null)
             {
                 try
                 {
                     //调用时有可能没有获取到锁，抛出异常
-                    OneRunMutex.ReleaseMutex();
+                    _oneRunMutex.ReleaseMutex();
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
                 try
                 {
-                    OneRunMutex.Dispose();
+                    _oneRunMutex.Dispose();
                 }
-                catch { }
-                OneRunMutex = null;
+                catch
+                {
+                    // ignored
+                }
+                _oneRunMutex = null;
             }
         }
 

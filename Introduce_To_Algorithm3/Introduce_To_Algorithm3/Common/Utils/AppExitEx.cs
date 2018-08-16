@@ -60,13 +60,16 @@ namespace Introduce_To_Algorithm3.Common.Utils
                             //ignore
                         }
 
-                        try
+                        if (i > 3)
                         {
-                            Process.GetCurrentProcess().Kill();
-                        }
-                        catch
-                        {
-                            //ignore
+                            try
+                            {
+                                Process.GetCurrentProcess().Kill();
+                            }
+                            catch
+                            {
+                                //ignore
+                            }
                         }
                     }
                 });
@@ -87,7 +90,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     {
                         exceptionHandler(ex);
                     }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
                 
             }
@@ -99,8 +105,9 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     {
                         finallyHandler();
                     }
-                    catch 
+                    catch
                     {
+                        // ignored
                     }
                 }
             }
