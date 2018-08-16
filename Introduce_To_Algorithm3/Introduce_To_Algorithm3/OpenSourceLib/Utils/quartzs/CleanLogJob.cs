@@ -32,7 +32,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <param name="context"></param>
         public void Execute(IJobExecutionContext context)
         {
-            lock (locker)
+            lock (Slocker)
             {
                 if (_isRunning)
                 {
@@ -69,11 +69,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             }
             catch (Exception ex)
             {
-                NLogHelper.Error("清理日志失败:" + ex);
+                NLogHelper.Error($"清理日志失败:{ex}");
             }
             finally
             {
-                lock (locker)
+                lock (Slocker)
                 {
                     _isRunning = false;
                 }
@@ -147,7 +147,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             #endregion
 
 
-            NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss", CultureInfo.CurrentCulture)}之前的{dirInfo.FullName}目录的日志");
+            NLogHelper.Info($"清理{expireTime.ToString("yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture)}之前的{dirInfo.FullName}目录的日志");
 
             //清理文件
             try
@@ -172,7 +172,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             }
 
 
-            NLogHelper.Info($"清理日志完成");
+            NLogHelper.Info("清理日志完成");
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             if (currentDepth > MaxRecursiveDepth)
             {
                 //目录的快捷方式会被认为是一个文件
-                NLogHelper.Warn($"日志文件夹深度太大或者存在快捷方式导致无穷递归");
+                NLogHelper.Warn("日志文件夹深度太大或者存在快捷方式导致无穷递归");
                 return 0;
             }
 
@@ -257,7 +257,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         {
             if (currentDepth > MaxRecursiveDepth)
             {
-                NLogHelper.Warn($"日志文件夹存在快捷方式导致无穷递归");
+                NLogHelper.Warn("日志文件夹存在快捷方式导致无穷递归");
                 return 0;
             }
 
@@ -328,7 +328,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// 网络安全法第二十一条规定网络日志至少保存半年
         /// </summary>
         //private const int KeepDays = 200;
-        private static readonly int KeepDays = ConfigUtils.GetInteger("LogKeepDays", 200);
+        private static readonly int KeepDays = ConfigUtils.GetInteger("LogKeepDays", 90);
 
         /// <summary>
         /// 过滤什么样的文件
@@ -356,12 +356,12 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 锁
         /// </summary>
-        private static readonly Object locker = new Object();
+        private static readonly Object Slocker = new Object();
 
         /// <summary>
         /// 回调函数是否正在执行
         /// </summary>
-        private static bool _isRunning = false;
+        private static volatile bool _isRunning = false;
 
         /// <summary>
         /// 最大递归深度，  防止文件夹快捷方式造成的无穷递归
