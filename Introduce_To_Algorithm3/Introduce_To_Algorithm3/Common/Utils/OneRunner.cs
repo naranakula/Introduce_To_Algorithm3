@@ -6,9 +6,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
+using MessageBox = System.Windows.Forms.MessageBox;
+
 
 namespace Common
 {
@@ -18,6 +21,8 @@ namespace Common
     /// </summary>
     public static class OneRunner
     {
+
+
         #region Mutex单实例实现
 
         /// <summary>
@@ -187,6 +192,108 @@ namespace Common
 
 
         #endregion
+
+
+
+        #region 辅助方法
+
+
+
+        /// <summary>
+        /// 通用的已经运行一个实例的执行动作
+        /// </summary>
+        public static void GeneralExitAction(string title, string content, Action<Exception> exceptionHandler = null, int maxWaitMilliSecondBeforeExit = 30000)
+        {
+            try
+            {
+                #region 强制退出
+
+                //Task创建的是后台线程
+                Task.Factory.StartNew(() =>
+                {
+                    //5s后强制退出
+                    if (maxWaitMilliSecondBeforeExit > 0)
+                    {
+                        const int sleepPeriod = 100;//每次休眠100毫秒
+                        for (int i = 0; i * sleepPeriod < maxWaitMilliSecondBeforeExit; i++)
+                        {
+                            try
+                            {
+                                Thread.Sleep(sleepPeriod);
+                            }
+                            catch
+                            {
+                                //ignore
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < 11; i++)
+                    {
+                        try
+                        {
+                            NLogHelper.Warn($"程序自动第{i + 1}次尝试强制退出");
+                            Environment.Exit(0);
+                        }
+                        catch
+                        {
+                            //ignore
+                            try
+                            {
+                                Thread.Sleep(10);
+                            }
+                            catch
+                            {
+                                // ignored
+                            }
+                        }
+                    }
+                });
+
+                #endregion
+
+                System.Windows.MessageBox.Show(content, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                for (int i = 0; i < 8; i++)
+                {
+                    try
+                    {
+                        NLogHelper.Warn($"程序强制第{i + 1}次尝试强制退出");
+                        Environment.Exit(0);
+                    }
+                    catch
+                    {
+                        //ignore
+                        try
+                        {
+                            Thread.Sleep(10);
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (exceptionHandler != null)
+                {
+                    exceptionHandler(ex);
+                }
+                else
+                {
+                    NLogHelper.Error("程序退出时异常：" + ex);
+                }
+            }
+        }
+
+
+
+
+        #endregion
+
 
 
         /// <summary>

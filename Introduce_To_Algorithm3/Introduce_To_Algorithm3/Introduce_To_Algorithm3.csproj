@@ -276,6 +276,7 @@
       <HintPath>..\packages\Portable.Licensing.1.1.0\lib\portable-net40+sl4+wp7+win8\Portable.Licensing.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="ProtobufSerializer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f58108eb6480f6ec, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>OpenSourceLib\NetWorkComms.Net\References\ProtobufSerializer.dll</HintPath>
