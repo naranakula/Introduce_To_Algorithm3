@@ -17,7 +17,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
         /// <summary>
         /// 锁
         /// </summary>
-        private static readonly object _locker = new object();
+        private static readonly object Slocker = new object();
 
         private SimpleQuartzHelper()
         {
@@ -37,7 +37,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             }
 
 
-            lock (_locker)
+            lock (Slocker)
             {
                 if (_instance == null)
                 {
