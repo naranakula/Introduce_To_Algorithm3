@@ -611,6 +611,7 @@
     <Compile Include="Common\Utils\MemoryUtils.cs" />
     <Compile Include="Common\Utils\MessageHandler.cs" />
     <Compile Include="Common\Utils\PInvokeHelper.cs" />
+    <Compile Include="Common\Utils\PropertyUtils.cs" />
     <Compile Include="Common\Utils\SerializeHelper.cs" />
     <Compile Include="Common\Utils\Serial\SerialPortTimer.cs" />
     <Compile Include="Common\Utils\SettingHelper.cs" />
