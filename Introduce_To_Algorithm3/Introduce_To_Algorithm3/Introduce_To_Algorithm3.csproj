@@ -877,6 +877,7 @@
     <Compile Include="OpenSourceLib\Utils\MySqlHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\NLogAsyncHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\NLogHelper.cs" />
+    <Compile Include="OpenSourceLib\Utils\NLogHelper2.cs" />
     <Compile Include="OpenSourceLib\Utils\OracleHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\PclCryptoHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\PollyHelper.cs" />
