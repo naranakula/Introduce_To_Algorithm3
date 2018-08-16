@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Introduce_To_Algorithm3.Common.Utils;
 using Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite;
+using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite.DbModels;
 using Introduce_To_Algorithm3.Common.Utils.strings;
 using Introduce_To_Algorithm3.Models;
 using NLog;
