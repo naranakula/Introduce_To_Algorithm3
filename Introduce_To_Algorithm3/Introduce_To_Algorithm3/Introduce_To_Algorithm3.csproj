@@ -884,6 +884,7 @@
     <Compile Include="OpenSourceLib\Utils\PclCryptoHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\PollyHelper.cs" />
     <Compile Include="OpenSourceLib\Utils\ProtobufUtils.cs" />
+    <Compile Include="OpenSourceLib\Utils\quartzs\AutoRestartJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\BackDbJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\CleanLogJob.cs" />
     <Compile Include="OpenSourceLib\Utils\quartzs\CpuJob.cs" />
@@ -1100,6 +1101,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LearnNotes_Unimport\通用工具\AppRestartNoUI\AppRestartLib\AppRestartLib.csproj">
+      <Project>{8279726e-75f1-4e95-b8ee-dc7a1010e138}</Project>
+      <Name>AppRestartLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

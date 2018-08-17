@@ -46,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdPartys", "ThirdPartys"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quartznet3Learn", "Quartznet3Learn\Quartznet3Learn.csproj", "{8014C841-453B-44C3-96A2-2C59551F19EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppRestartLib", "..\..\LearnNotes_Unimport\通用工具\AppRestartNoUI\AppRestartLib\AppRestartLib.csproj", "{8279726E-75F1-4E95-B8EE-DC7A1010E138}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -234,6 +236,22 @@ Global
 		{8014C841-453B-44C3-96A2-2C59551F19EF}.Release|x64.Build.0 = Release|Any CPU
 		{8014C841-453B-44C3-96A2-2C59551F19EF}.Release|x86.ActiveCfg = Release|Any CPU
 		{8014C841-453B-44C3-96A2-2C59551F19EF}.Release|x86.Build.0 = Release|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Debug|x64.Build.0 = Debug|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Debug|x86.Build.0 = Debug|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Release|x64.ActiveCfg = Release|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Release|x64.Build.0 = Release|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Release|x86.ActiveCfg = Release|Any CPU
+		{8279726E-75F1-4E95-B8EE-DC7A1010E138}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
