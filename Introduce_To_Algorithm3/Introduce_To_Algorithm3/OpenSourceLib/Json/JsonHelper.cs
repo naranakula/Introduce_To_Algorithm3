@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Introduce_To_Algorithm3.Common.Utils.strings;
 using Introduce_To_Algorithm3.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -142,7 +143,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
             List<string> allDrives = jObject["Drives"].Select(r => (string) r).ToList();
             allDrives = jObject["Drives"].Values<string>().ToList();
             allDrives = (from r in jObject["Drives"] select r.Value<string>()).ToList();
-
+            jObject = (JObject)jObject.GetValue("data");
             jsonStr = @"[
   'Small',
   'Medium',
@@ -151,7 +152,39 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Json
             //该字符串不能用JObject来解析
             JArray jArray = JArray.Parse(jsonStr);
             List<string> nameList = jArray.Select(r => (string) r).ToList();
-            
+
+
+
+
+
+            String str = "{\"code\":\"0\",\"msg\":\"success\",\"data\":{\"id\":\"2c96232a64916f1b0164916f2aae0002\",\"airportCode\":\"XMN\",\"description\":\"厦门机场\",\"serverInfos\":[{\"id\":\"2c96232a64916f1b0164916f2a9b0001\",\"protocol\":\"http\",\"url\":\"http://www.baidu.com\",\"isDefault\":\"1\"}],\"rules\":[{\"id\":\"2c96232a64916f1b0164916f29f80000\",\"startTime\":\"00:00\",\"finishTime\":\"04:00\",\"isDefault\":\"1\"}]}}";
+            JObject jobject = JObject.Parse(str);
+            JObject data = (JObject)jobject.GetValue("data");
+            JArray serverInfos = (JArray)data.GetValue("serverInfos");
+            for (int i = 0; i < serverInfos.Count; i++)
+            {
+                JObject serverInfo = (JObject)serverInfos[i];
+                String protocol = (string)serverInfo.GetValue("protocol");
+                string url = (string)serverInfo.GetValue("url");
+
+                if (StringUtils.EqualsEx("https", protocol))
+                {
+                    break;
+                }
+            }
+
+
+            JArray rules = (JArray)data.GetValue("rules");
+
+            for (int i = 0; i < rules.Count; i++)
+            {
+                JObject item = (JObject)rules[i];
+                string startTime = (string)item.GetValue("startTime");
+                string endTime = (string)item.GetValue("finishTime");
+            }
+
+
+
         }
 
         /// <summary>

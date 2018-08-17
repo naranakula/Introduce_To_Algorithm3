@@ -56,7 +56,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                 using (HttpClient client = new HttpClient())
                 {
                     client.Timeout = new TimeSpan(0,0,DefaultTimeoutInSeconds);
-
+                    
 
                     #region 处理http头
                     HandleHttpHeader(client, headerDict);
@@ -112,7 +112,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sockets
                         using (HttpContent content = response.Content)
                         {
                             byte[] byteArr = content.ReadAsByteArrayAsync().Result;
-                            return Encoding.UTF8.GetString(byteArr);
+                            return encoding.GetString(byteArr);
                         }
                     }
                 }
