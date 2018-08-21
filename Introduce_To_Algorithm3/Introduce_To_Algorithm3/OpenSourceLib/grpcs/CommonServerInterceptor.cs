@@ -85,7 +85,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             {
                 this._beforeAction?.Invoke(methodName,clientIp);
             }
-            catch {}
+            catch
+            {
+                // ignored
+            }
 
             try
             {
@@ -97,7 +100,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 {
                     _afterAction?.Invoke(methodName,clientIp, true, null, usedTimeSpan);
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
 
 
                 return responseTask;
@@ -110,7 +116,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 {
                     _afterAction?.Invoke(methodName, clientIp, false, ex, usedTimeSpan);
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
 
                 throw;
             }

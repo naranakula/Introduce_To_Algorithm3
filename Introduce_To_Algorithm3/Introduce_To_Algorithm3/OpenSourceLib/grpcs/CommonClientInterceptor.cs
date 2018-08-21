@@ -81,7 +81,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             {
                 _beforeAction?.Invoke(fullMethodName);
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             try
             {
@@ -93,7 +96,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 {
                     _afterAction?.Invoke(fullMethodName, true, null, usedTimeSpan);
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
 
                 return resultResponse;
             }
@@ -105,7 +111,10 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 {
                     _afterAction?.Invoke(fullMethodName, false, ex, usedTimeSpan);
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
 
                 throw;
             }
