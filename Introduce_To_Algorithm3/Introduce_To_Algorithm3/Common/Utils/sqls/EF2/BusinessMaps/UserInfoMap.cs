@@ -13,7 +13,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.BusinessMaps
     /// <summary>
     /// 用户信息映射
     /// </summary>
-    public class UserInfoMap:EntityTypeConfiguration<UserInfo>
+    public class UserInfoMap : EntityTypeConfiguration<UserInfo>
     {
         public UserInfoMap()
         {
@@ -39,7 +39,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.BusinessMaps
             //设置索引  默认使用索引名IX_AccountNo，不唯一，非聚集
             //HasIndex(t => t.AccountNo);//默认使用索引名IX_AccountNo，不唯一，非聚集
 
-            HasIndex(t=>t.AccountNo).HasName("IX_AccountNo").IsClustered(false).IsUnique(true);
+            HasIndex(t => t.AccountNo).HasName("IX_AccountNo").IsClustered(false).IsUnique(true);
 
 
             /*
