@@ -28,9 +28,13 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.BusinessMaps
                 .HasMaxLength(128)
                 .IsVariableLength();
 
+            Property(t => t.NickName).IsRequired().IsUnicode().HasMaxLength(128).IsVariableLength();
 
+            Property(t => t.Password).IsRequired().IsUnicode().HasMaxLength(128).IsVariableLength();
 
+            Property(t => t.PasswordHash).IsRequired().IsUnicode(false).HasMaxLength(128).IsVariableLength();
 
+            Property(t => t.CurrentLoginToken).IsOptional().IsUnicode(false).HasMaxLength(36).IsVariableLength();
 
             //设置索引  默认使用索引名IX_AccountNo，不唯一，非聚集
             //HasIndex(t => t.AccountNo);//默认使用索引名IX_AccountNo，不唯一，非聚集
