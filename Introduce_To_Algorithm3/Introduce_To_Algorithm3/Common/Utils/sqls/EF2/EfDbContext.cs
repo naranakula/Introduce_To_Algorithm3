@@ -3044,72 +3044,96 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     {
         public BaseMap()
         {
-            
+
             //配置表T的属性
-            #region 设置表名和主键
-            //设置表名和主键
-            // ToTable("Person").HasKey(p=>p.PersonId);//设置表名和主键
-            //主键数据库自动生成， 即自增主键
-            //DatabaseGeneratedOption的三个属性：None:不是服务器生成，默认值；Identity：插入时，由数据库生成值，更新时保持不变（int或long型自增主键），自己设置无效；Computed:在插入或更新行时，数据库生成值，自己设置无效
-            // Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+#region 设置表名和主键
+//设置表名和主键
+// ToTable("Person").HasKey(p=>p.PersonId);//设置表名和主键
+//主键数据库自动生成， 即自增主键
+//DatabaseGeneratedOption的三个属性：None:不是服务器生成，默认值；Identity：插入时，由数据库生成值，更新时保持不变（int或long型自增主键），自己设置无效；Computed:在插入或更新行时，数据库生成值，自己设置无效
+// Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
 
-            // ToTable("TableName").HasKey(p=>p.Id);//设置表名和主键
-            //Property(x => x.Id).HasMaxLength(36)
-            //    .IsUnicode()
-            //    .IsVariableLength();
-            #endregion
+// ToTable("TableName").HasKey(p=>p.Id);//设置表名和主键
+//Property(x => x.Id).HasMaxLength(36)
+//    .IsUnicode()
+//    .IsVariableLength();
+#endregion
 
-            #region 设置属性列字段
+#region 设置属性列字段
 
-            //设置属性列字段
-            //字符串
-            //Property(p => p.FirstName)
-            //    .HasColumnName("FirstName")
-            //    .IsOptional()//.IsRequired()
-            //    .HasMaxLength(30)
-            //    .IsUnicode()
-            //    .IsVariableLength();
-            //Property(p => p.MiddleName).IsOptional().IsFixedLength().IsUnicode(false).HasMaxLength(1);
+//设置属性列字段
+//字符串
+//Property(p => p.FirstName)
+//    .HasColumnName("FirstName")
+//    .IsOptional()//.IsRequired()
+//    .HasMaxLength(30)
+//    .IsUnicode()
+//    .IsVariableLength();
+//Property(p => p.MiddleName).IsOptional().IsFixedLength().IsUnicode(false).HasMaxLength(1);
 
-            //时间  对应默认数据库类型datetime,SqlServer的datetime有效范围是1753年1月1日到9999年12月31日
-            //Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime");
-            //HasColumnType指定类型 datetime2的范围0001-01-01 到 9999-12-31
-            //Property(t => t.ModifiedTime).IsOptional().HasColumnName("ModifiedTime").HasColumnType("datetime2");
+//时间  对应默认数据库类型datetime,SqlServer的datetime有效范围是1753年1月1日到9999年12月31日
+//Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime");
+//HasColumnType指定类型 datetime2的范围0001-01-01 到 9999-12-31
+//Property(t => t.ModifiedTime).IsOptional().HasColumnName("ModifiedTime").HasColumnType("datetime2");
 
-            //设置Timestamp属性和调用IsRowVersion两选一，目前只在Sql Server中支持，其它数据库的并发自行百度
-            //Property(t => t.RowVersion).IsRowVersion();
+//设置Timestamp属性和调用IsRowVersion两选一，目前只在Sql Server中支持，其它数据库的并发自行百度
+//Property(t => t.RowVersion).IsRowVersion();
 
-            //用于非sqlserver数据库的并行检查
-            //Property(p => p.ModifyTime).IsConcurrencyToken();
+//用于非sqlserver数据库的并行检查
+//Property(p => p.ModifyTime).IsConcurrencyToken();
 
-            #endregion
+#endregion
 
 
-            #region 设置索引
+#region 设置索引
 
-            //索引分为聚集索引和非聚集索引，聚集索引是数据存储的物理顺序
-            //聚集索引一个表只能有一个,而非聚集索引一个表可以存在多个
-            //聚集索引存储记录是物理上连续存在，而非聚集索引是逻辑上的连续，物理存储并不连续
-            //主键自动为聚集索引
-            //设置索引和设置属性，应该连在一起
-            //without the given name and has no column order, clustering, or
-            //     uniqueness specified. //索引默认是不唯一非聚集的， 使用默认的命名为IX_列名
-            //Property(t => t.Name).HasColumnName("Name").IsOptional().HasMaxLength(512)
-            //    .HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute("IndexName")));
-            //Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime").HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute()));
+//索引分为聚集索引和非聚集索引，聚集索引是数据存储的物理顺序
+//聚集索引一个表只能有一个,而非聚集索引一个表可以存在多个
+//聚集索引存储记录是物理上连续存在，而非聚集索引是逻辑上的连续，物理存储并不连续
+//主键自动为聚集索引
+//设置索引和设置属性，应该连在一起
+//without the given name and has no column order, clustering, or
+//     uniqueness specified. //索引默认是不唯一非聚集的， 使用默认的命名为IX_列名
+//Property(t => t.Name).HasColumnName("Name").IsOptional().HasMaxLength(512)
+//    .HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute("IndexName")));
+//Property(t => t.CreateTime).IsOptional().HasColumnName("CreateTime").HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute()));
 
-            #endregion
 
-            #region 设置关系 One-To-One  One-To-Many  Many-To-Many
 
-            //建议在OnModelCreating中设置，不要在Map中设置
-            // HasRequired(s => s.Flight).WithMany(s => s.FlightVias).HasForeignKey(t => t.FlightId).WillCascadeOnDelete(true);
-            #endregion
-        }
-    }
+/*
 
-    #endregion
+设置索引
+//befores ef 6.2
+modelBuilder.Entity<Person>()
+    .Property(e => e.Name)
+    .HasColumnAnnotation(
+        IndexAnnotation.AnnotationName,
+        new IndexAnnotation(new IndexAttribute { IsUnique = true }));
+
+// after ef 6.2
+modelBuilder.Entity<Person>()
+    .HasIndex(p => p.Name)
+    .IsUnique();
+
+// multi column index
+modelBuilder.Entity<Person>()
+    .HasIndex(p => new { p.Name, p.Firstname })
+    .IsUnique();
+
+    */
+
+#endregion
+
+#region 设置关系 One-To-One  One-To-Many  Many-To-Many
+
+//建议在OnModelCreating中设置，不要在Map中设置
+// HasRequired(s => s.Flight).WithMany(s => s.FlightVias).HasForeignKey(t => t.FlightId).WillCascadeOnDelete(true);
+#endregion
+}
+}
+
+#endregion
 
 }
 
