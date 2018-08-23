@@ -15,7 +15,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.DbConfigurations
     /// DbConfiguration的主要作用是在不使用配置文件的情况下注册Provider
     ///  The config file takes precedence over code-based configuration. 
     /// </summary>
-    public class SQLiteConfiguration:DbConfiguration
+    public class SQLiteConfiguration : DbConfiguration
     {
         public SQLiteConfiguration()
         {

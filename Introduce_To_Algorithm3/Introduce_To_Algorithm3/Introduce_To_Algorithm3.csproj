@@ -698,6 +698,8 @@
     <Compile Include="Common\Utils\SpeechHelper.cs" />
     <Compile Include="Common\Utils\sqls\CommonEfEntity.cs" />
     <Compile Include="Common\Utils\sqls\DbContextExtension.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\BusinessMaps\UserInfoMap.cs" />
+    <Compile Include="Common\Utils\sqls\EF2\BusinessModels\UserInfo.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\CacheBytesItemMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\CacheItemMap.cs" />
     <Compile Include="Common\Utils\sqls\EF2\CommonDbMaps\ConfigItemMap.cs" />

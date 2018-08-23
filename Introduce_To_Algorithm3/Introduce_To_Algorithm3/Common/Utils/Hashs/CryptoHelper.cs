@@ -28,7 +28,7 @@ System.Object
 
 提供了7种实现,常用的有MD5,SHA1,SHA256
 安全性MD5<SHA1<SHA256
-速度  MD5>SHA1>SHA256  建议使用SHA1
+速度  MD5>SHA1>SHA256  建议使用SHA256
 散列hash加盐,在用户原来密码基础上(规定位置如结尾)添加上一段随机salt,然后再散列
          * 
          */

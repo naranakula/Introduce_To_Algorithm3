@@ -24,7 +24,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.DbConfigurations
             SetDefaultConnectionFactory(new SqlConnectionFactory());
 
             //设置数据库初始化方式
-            this.SetDatabaseInitializer<EfDbContext>(null);
+            //this.SetDatabaseInitializer<EfDbContext>(null);
 
         }
     }

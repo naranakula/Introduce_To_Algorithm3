@@ -20,9 +20,11 @@ using NLog.Internal;
 using System.Linq.Expressions;
 using Z.EntityFramework.Plus;
 using System.ComponentModel.DataAnnotations.Schema;
+using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.BusinessMaps;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbModels;
 using Introduce_To_Algorithm3.Common.Utils.strings;
 using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.CommonDbMaps;
+using Introduce_To_Algorithm3.Common.Utils.sqls.EF2.DbConfigurations;
 using Introduce_To_Algorithm3.Models;
 
 namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
@@ -54,6 +56,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
     ///         DateTime CreateTime   数据创建时间 
     /// 
     /// </summary>
+    [DbConfigurationType(typeof(MsEfConfiguration))]
     public class EfDbContext : DbContext
     {
         #region Private Member
@@ -382,6 +385,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2
             modelBuilder.Configurations.Add(new BaseEntityMap());
 
             modelBuilder.Configurations.Add(new ConfigItemMap());
+
+
+            modelBuilder.Configurations.Add(new UserInfoMap());
+
 
             //modelBuilder.Configurations.Add(new PersonMap());
             //modelBuilder.Configurations.Add(new PhoneMap());
