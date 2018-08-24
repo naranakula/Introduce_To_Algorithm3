@@ -9,6 +9,7 @@
 //C# pb需要.net4.5
 //pb文件支持两种注释:// /*  */
 //对于repeated的field默认值只读，空list，对于嵌入的message filed默认值null（对于C#，其实是语言依赖的）
+// All fields according to proto3 are optional. Default values will always be used if a field is not set. 
 syntax = "proto3";
 
 //默认的包名  package不加引号 使用小写  这个名称会用来识别service标志，不管定义的java_package或csharp_namespace（它们定义生成的类所在的包），
