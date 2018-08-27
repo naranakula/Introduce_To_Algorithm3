@@ -10,6 +10,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
     /// <summary>
     /// MySql帮助类
+    /// Nuget  MySql.Data
+    /// 如果需要EntityFramework支持再添加nuget:MySql.Data.Entity
     /// </summary>
     public class MySqlHelper
     {

@@ -9,6 +9,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
     /// <summary>
     /// Oracle的帮助类，需要System.Data.OracleClient.dll
+    /// Nuget:Oracle.ManagedDataAccess
+    /// 如果需要EntityFramework支持，再添加Oracle.ManagedDataAccess.EntityFramework
     /// </summary>
     public class OracleHelper
     {
