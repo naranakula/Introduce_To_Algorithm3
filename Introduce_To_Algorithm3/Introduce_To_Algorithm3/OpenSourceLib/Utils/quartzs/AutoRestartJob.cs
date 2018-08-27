@@ -13,9 +13,9 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
     /// <summary>
     /// 重启任务
     /// </summary>
-    public class AutoRestartJob:IJob
+    public class AutoRestartJob : IJob
     {
-        
+
 
         public void Execute(IJobExecutionContext context)
         {
@@ -42,7 +42,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 const int sleepInterval = 100;
                 int totalSleepMs = random.Next(11000, 19000);
 
-                for (int i = 0; i*sleepInterval < totalSleepMs; i++)
+                //i<1000是为了避免循环次数过大
+                for (int i = 0; i * sleepInterval < totalSleepMs && i < 1000; i++)
                 {
                     try
                     {
@@ -61,16 +62,16 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 RestartHelper.Restart(failAction: failReason =>
                 {
                     NLogHelper.Error($"自动重启失败:{failReason?.Description},exception={failReason?.Exception}");
-                },successAction: () =>
-                {
+                }, successAction: () =>
+                 {
                     //成功处理
                     // TODO
 
                     NLogHelper.Warn($"自动重启成功");
-                },logAction: str =>
-                {
-                    NLogHelper.Warn($"自动重启日志:{str}");
-                });
+                 }, logAction: str =>
+                 {
+                     NLogHelper.Warn($"自动重启日志:{str}");
+                 });
 
 
             }
