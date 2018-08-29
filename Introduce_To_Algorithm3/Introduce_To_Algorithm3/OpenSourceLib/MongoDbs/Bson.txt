@@ -1,0 +1,36 @@
+﻿Bson是Binary Json.Bson是有序键值对组合，值可以是bson对象，数组，bson对象数据。
+BSON is a binary format in which zero or more ordered key/value pairs are stored as a single entity. We call this entity a document.
+
+
+Bson支持的数据类型
+Type类型			Alias别名				说明
+Double				double
+String				string					Bson中字符串是UTF8的
+Object				object
+Array				array
+Binary data			binData
+ObjectId			objectId
+Boolean				bool
+Date				date					BSON Date is a 64-bit integer that represents the number of milliseconds since the Unix epoch
+Null				null
+32位有符号整数		int
+Timestamp			timestamp				timestamp是64位 the first 32 bits are a time_t value (seconds since the Unix epoch)  the second 32 bits are an incrementing ordinal for operations within a given second.
+64位有符号整数		long
+Decimal128			decimal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
