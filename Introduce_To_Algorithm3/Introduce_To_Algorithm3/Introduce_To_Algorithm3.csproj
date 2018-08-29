@@ -135,6 +135,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>OpenSourceLib\NetWorkComms.Net\References\DistributedFileSystem.dll</HintPath>
     </Reference>
+    <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
+      <HintPath>..\packages\DnsClient.1.0.7\lib\net45\DnsClient.dll</HintPath>
+    </Reference>
     <Reference Include="edtFTPnet, Version=2.2.3.0, Culture=neutral, PublicKeyToken=4b0c991f43097782, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\edtFTPnet.dll</HintPath>
@@ -205,6 +208,15 @@
     </Reference>
     <Reference Include="MimeKit, Version=1.16.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
       <HintPath>..\packages\MimeKit.1.16.2\lib\net45\MimeKit.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.7.0\lib\net45\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.7.0\lib\net45\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.7.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.9.12\lib\net45\MySql.Data.dll</HintPath>
@@ -347,6 +359,9 @@
       <HintPath>Reference\SuperSocket\SuperSocket.SocketEngine.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.3.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
@@ -832,6 +847,7 @@
     <Compile Include="OpenSourceLib\Libsodium_加解密\LibsodiumHelper.cs" />
     <Compile Include="OpenSourceLib\LiteDb\LiteDBHelper.cs" />
     <Compile Include="OpenSourceLib\Memcacheds\MemcachedHelper.cs" />
+    <Compile Include="OpenSourceLib\MongoDbs\MongoDbHelper.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\FTP\SystemNetFtpClientImpl.cs" />
     <Compile Include="OpenSourceLib\HP-Socket\Sdk.cs" />
@@ -934,6 +950,7 @@
     <Content Include="OpenSourceLib\grpcs\protos\ReadMe.txt" />
     <Content Include="OpenSourceLib\grpcs\protos\windows_x86\protoc.exe" />
     <Content Include="OpenSourceLib\grpcs\ssl.txt" />
+    <Content Include="OpenSourceLib\MongoDbs\ReadMe.txt" />
     <Content Include="OpenSourceLib\NetMqs\ReadMe.txt" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.dll" />
     <Content Include="OpenSourceLib\NetWorkCommsDotNets\References\DistributedFileSystem.pdb" />
@@ -1065,6 +1082,7 @@
     <None Include="OpenSourceLib\HP-Socket\HP-Socket.docx" />
     <None Include="OpenSourceLib\HP-Socket\HP-Socket_Development_Guide_%28v3.3-20150101%29.pdf" />
     <None Include="OpenSourceLib\Json\Json.docx" />
+    <None Include="OpenSourceLib\MongoDbs\MongoDb安装文档.docx" />
     <None Include="OpenSourceLib\NetMqs\Docs\NetMq文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Docs\NetWorkComms.Net文档.docx" />
     <None Include="OpenSourceLib\NetWorkCommsDotNets\Packages\NetworkCommsDotNet_v3.0.3_ALv2.zip" />
