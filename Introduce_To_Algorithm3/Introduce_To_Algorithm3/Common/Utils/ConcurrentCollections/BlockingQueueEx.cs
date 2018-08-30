@@ -238,7 +238,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.ConcurrentCollections
                                 }
 
 
-                                List<T> dataList = new List<T>(dataListSize);
+                                List<T> dataList = new List<T>();
                                 for (int i = 0; i < dataListSize; i++)
                                 {
                                     if (_blockingQueue.TryTake(out item,111))
