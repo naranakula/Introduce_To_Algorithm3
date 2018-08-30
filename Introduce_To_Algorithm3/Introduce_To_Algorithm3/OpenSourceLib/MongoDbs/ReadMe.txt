@@ -34,6 +34,26 @@ Document有如下限制:
 每个Document都要有一个_id字段，表示主键，唯一不可变更，_id应该是document的第一个字段。
 
 
+CRUD  CRUD列举的函数都是原子的
+	Create:add a new document to a collection, if collection not exist,create collection automatically.
+			db.collection.insertOne()
+			db.collection.insertMany()  原子的，要么全部成功，要么全部失败
+
+	Read:retrieves documents from a collection.
+			db.collection.find()
+
+	Update:update existing document(s) in a collection
+			db.collection.updateOne()
+			db.collection.updateMany() 原子的，要么全部成功，要么全部失败
+			db.collection.replaceOne()
+
+	Delete:delete documents from a collection
+			db.collection.deleteOne()
+			db.collection.deleteMany()  原子的，要么全部成功，要么全部失败
+
+
+
+
 
 
 
