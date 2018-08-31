@@ -114,6 +114,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
                 connection.ExceptionListener += connection_ExceptionListener;
                 connection.ConnectionInterruptedListener += connection_ConnectionInterruptedListener;
                 connection.ConnectionResumedListener += ConnectionOnConnectionResumedListener;
+                
                 //connection.RedeliveryPolicy;//重发策略
                 //超时16s
                 connection.RequestTimeout = new TimeSpan(0, 0, 30);

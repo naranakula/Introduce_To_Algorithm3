@@ -77,29 +77,34 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.RabbitMq.ProductReady.Producers
                 if (!LongRunRabbitProducer.IsAlive())
                 {
                    
+                    Thread.Sleep(5500);
 
-                    if (_isFirstTimeToStartMq)
+                    //延迟，使其能够自动恢复
+                    if (!LongRunRabbitProducer.IsAlive())
                     {
-                        _isFirstTimeToStartMq = false;
+                        if (_isFirstTimeToStartMq)
+                        {
+                            _isFirstTimeToStartMq = false;
 
-                        NLogHelper.Debug("首次尝试启动MQConsumer");
-                        LongRunRabbitProducer.Start(ex =>
-                        {
-                            NLogHelper.Error($"开启MQ失败:{ex}");
-                        });
-                    }
-                    else
-                    {
-                        _restartCount++;
-                        if (_restartCount > 10000000)
-                        {
-                            _restartCount = 10000;
+                            NLogHelper.Debug("首次尝试启动MQConsumer");
+                            LongRunRabbitProducer.Start(ex =>
+                            {
+                                NLogHelper.Error($"开启MQ失败:{ex}");
+                            });
                         }
-                        NLogHelper.Warn($"MQ异常,第{_restartCount}次尝试重启 MQConsumer");
-                        LongRunRabbitProducer.Start(ex =>
+                        else
                         {
-                            NLogHelper.Error($"开启MQ失败:{ex}");
-                        });
+                            _restartCount++;
+                            if (_restartCount > 10000000)
+                            {
+                                _restartCount = 10000;
+                            }
+                            NLogHelper.Warn($"MQ异常,第{_restartCount}次尝试重启 MQConsumer");
+                            LongRunRabbitProducer.Start(ex =>
+                            {
+                                NLogHelper.Error($"开启MQ失败:{ex}");
+                            });
+                        }
                     }
                 }
                 else

@@ -124,6 +124,7 @@ Publisher application id
         //Virtualhost是虚拟主机,类似于命名空间
         //Rabbitmq的默认用户guest/guest，具有管理员权限 //guest拥有管理员权限，但只能本地访问,已测试
         //即使AutomaticRecoveryEnable为true，CreateConnection超时仍会抛出异常，与activemq不同
+        //所有的超时都有默认值，建议使用默认值
         private static readonly ConnectionFactory SFactory = new ConnectionFactory() { UserName = "admin", Password = "admin", VirtualHost = ConnectionFactory.DefaultVHost, HostName = "192.168.163.12", Port = 5672, AutomaticRecoveryEnabled = true/*自动重连，指的是自动重连，为true时CreateConnectin仍会抛出异常*/, NetworkRecoveryInterval = TimeSpan.FromMilliseconds(5753)/*自动重连的时间间隔默认5s*/, RequestedConnectionTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketReadTimeout = ConnectionFactory.DefaultConnectionTimeout, SocketWriteTimeout = ConnectionFactory.DefaultConnectionTimeout/*以上三个值就是不设置时使用的默认的值,30s*/,RequestedHeartbeat = ConnectionFactory.DefaultHeartbeat/*心跳检测，默认是60s*/};
 
         /// <summary>
@@ -239,6 +240,9 @@ Publisher application id
                 //连接恢复成功
                 _connection.RecoverySucceeded += ConnectionOnRecoverySucceeded;
                 //连接关闭
+                //closed: the object has received all shutdown-complete notification(s) from any lower-layer objects, and as a consequence has shut itself down
+                //Those objects always end up in the closed state, regardless of the reason that caused the closure, like an application request, an internal client library failure, a remote network request or network failure.
+                //连接一旦进入closed状态，将不会改变
                 _connection.ConnectionShutdown += ConnectionOnConnectionShutdown;
 
 
@@ -435,7 +439,7 @@ Publisher application id
                 _isAlive = false;
             }
 
-            NLogHelper.Warn($"OnConnectionShutdown");
+            NLogHelper.Warn($"OnConnectionShutdown:{shutdownEventArgs?.Cause}");
         }
 
         /// <summary>

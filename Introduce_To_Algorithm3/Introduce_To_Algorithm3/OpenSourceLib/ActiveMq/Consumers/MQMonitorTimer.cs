@@ -71,17 +71,22 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.ActiveMq
             {
                 if (!MQConsumer.IsAlive())
                 {
-                    if (_isFirstTimeToStartMq)
+                    Thread.Sleep(5500);
+                    //延迟5s，使其能够自动恢复
+                    if (!MQConsumer.IsAlive())
                     {
-                        _isFirstTimeToStartMq = false;
+                        if (_isFirstTimeToStartMq)
+                        {
+                            _isFirstTimeToStartMq = false;
 
-                        NLogHelper.Debug("首次尝试启动MQConsumer");
-                        MQConsumer.InitConsumer();
-                    }
-                    else
-                    {
-                        NLogHelper.Warn("MQ异常,尝试重启 MQConsumer");
-                        MQConsumer.InitConsumer();
+                            NLogHelper.Debug("首次尝试启动MQConsumer");
+                            MQConsumer.InitConsumer();
+                        }
+                        else
+                        {
+                            NLogHelper.Warn("MQ异常,尝试重启 MQConsumer");
+                            MQConsumer.InitConsumer();
+                        }
                     }
                 }
                 else
