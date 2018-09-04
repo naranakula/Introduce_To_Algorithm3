@@ -616,6 +616,7 @@
     <Compile Include="Common\Utils\ConcurrentCollections\AsyncActionUtils.cs" />
     <Compile Include="Common\Utils\ConcurrentCollections\BlockingQueueEx.cs" />
     <Compile Include="Common\Utils\ConcurrentCollections\ConcurrentRbTree.cs" />
+    <Compile Include="Common\Utils\ConsoleUtils\ScreenUtils.cs" />
     <Compile Include="Common\Utils\Hashs\CryptoHelper.cs" />
     <Compile Include="Common\Utils\DeepClone.cs" />
     <Compile Include="Common\Utils\DeviceId.cs" />
