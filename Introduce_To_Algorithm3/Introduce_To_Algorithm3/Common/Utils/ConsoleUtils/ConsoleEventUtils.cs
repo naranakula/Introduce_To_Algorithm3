@@ -46,6 +46,11 @@ namespace Introduce_To_Algorithm3.Common.Utils
         public delegate bool ConsoleCtrlDelegate(int ctrlType);
 
         /// <summary>
+        /// 代理实例
+        /// </summary>
+        private static readonly ConsoleCtrlDelegate ConsoleDelegate = new ConsoleCtrlDelegate(HandleRoutine);
+
+        /// <summary>
         /// 用户关闭Console时，系统发送的消息
         /// </summary>
         private const int CTRL_CLOSE_EVENT = 2;
@@ -74,12 +79,20 @@ namespace Introduce_To_Algorithm3.Common.Utils
         /// 安装消息处理钩子
         /// </summary>
         /// <returns>true,表示安装成功，false，表示安装失败</returns>
-        public static Boolean RegisterHandler()
+        public static bool RegisterHandler(Action<Exception> exceptionHandler = null)
         {
-            ConsoleCtrlDelegate consoleCtrlDelegate = new ConsoleCtrlDelegate(HandleRoutine);
-            bool bRet = SetConsoleCtrlHandler(consoleCtrlDelegate, true);
+            try
+            {
+                bool bRet = SetConsoleCtrlHandler(ConsoleDelegate, true);
 
-            return bRet;
+                return bRet;
+            }
+            catch (Exception e)
+            {
+                exceptionHandler?.Invoke(e);
+                return false;
+            }
+            
         }
 
         /// <summary>
@@ -93,9 +106,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
             {
                 case  CTRL_C_EVENT:
                 case CTRL_BREAK_EVENT:
+                case CTRL_CLOSE_EVENT:
+
                     return true;
               
-                case CTRL_CLOSE_EVENT:
                 case  CTRL_LOGOFF_EVENT:
                 case CTRL_SHUTDOWN_EVENT:
                     break;
