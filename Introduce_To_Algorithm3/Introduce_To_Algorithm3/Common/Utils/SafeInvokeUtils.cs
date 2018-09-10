@@ -82,7 +82,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     {
                         exceptionHandler(ex);
                     }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
                 return default(TR);
             }
@@ -94,7 +97,10 @@ namespace Introduce_To_Algorithm3.Common.Utils
                     {
                         finallyHandler();
                     }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
             }
         }
