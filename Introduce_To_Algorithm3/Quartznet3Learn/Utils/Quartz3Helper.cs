@@ -52,14 +52,16 @@ namespace Quartznet3Learn.Utils
             //AdoJobStore 信息使用ADO.NET保存在数据库中 
 
             //配置可以使用quartz.config，也可以使用NameValueCollection 以下是默认配置
-            NameValueCollection collection = new NameValueCollection();
-            collection.Add("quartz.scheduler.instanceName", "DefaultQuartzScheduler");
-            collection.Add("quartz.threadPool.threadCount", "10");
-            collection.Add("quartz.jobStore.misfireThreshold", "60000");
-            collection.Add("quartz.jobStore.type", "Quartz.Simpl.RAMJobStore, Quartz");
+            //NameValueCollection collection = new NameValueCollection();
+            //collection.Add("quartz.scheduler.instanceName", "DefaultQuartzScheduler");
+            //collection.Add("quartz.threadPool.threadCount", "10");
+            //collection.Add("quartz.jobStore.misfireThreshold", "60000");
+            //collection.Add("quartz.jobStore.type", "Quartz.Simpl.RAMJobStore, Quartz");
 
 
-            _schedulerFactory = new StdSchedulerFactory(collection);
+            //_schedulerFactory = new StdSchedulerFactory(collection);
+
+            _schedulerFactory = new StdSchedulerFactory();
 
             _scheduler = _schedulerFactory.GetScheduler().Result;
         }
@@ -72,10 +74,10 @@ namespace Quartznet3Learn.Utils
         /// <returns></returns>
         public static Quartz3Helper GetInstance()
         {
-            var tInstance = _instance;
-            if (tInstance != null)
+            var tmpInstance = _instance;
+            if (tmpInstance != null)
             {
-                return tInstance;
+                return tmpInstance;
             }
 
             lock (Slocker)
@@ -85,6 +87,7 @@ namespace Quartznet3Learn.Utils
                     _instance = new Quartz3Helper();
                 }
             }
+
             return _instance;
         }
 
@@ -106,7 +109,7 @@ namespace Quartznet3Learn.Utils
         /// <summary>
         /// Halts the Quartz.IScheduler's firing of Quartz.ITriggers, and cleans up all resources associated with the Scheduler.
         /// </summary>
-        /// <param name="waitForJobsToComplete">if true the scheduler will not allow this method to return until all currently executing jobs have completed.</param>
+        /// <param name="waitForJobsToComplete">if true the scheduler will not allow this method to return until all currently executing jobs have completed.默认值是false</param>
         /// <param name="exceptionHandler"></param>
         public void Shutdown(bool waitForJobsToComplete = false, Action<Exception> exceptionHandler = null)
         {
@@ -129,15 +132,15 @@ namespace Quartznet3Learn.Utils
             return _scheduler;
         }
 
-        /// <summary>
-        /// 获取指定名称的scheduler
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public IScheduler GetScheduler(String name)
-        {
-            return _schedulerFactory.GetScheduler(name).Result;
-        }
+        ///// <summary>
+        ///// 获取指定名称的scheduler
+        ///// </summary>
+        ///// <param name="name"></param>
+        ///// <returns></returns>
+        //public IScheduler GetScheduler(String name)
+        //{
+        //    return _schedulerFactory.GetScheduler(name).Result;
+        //}
 
         /// <summary>
         /// 获取所有的job
@@ -184,6 +187,8 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
             //Job 不持久 ， 不要求恢复， 使用默认的SchedulerConstants.DefaultGroup
             //Set the property JobDetail.Durable = true - which instructs Quartz not to delete the Job when it becomes an “orphan” (when the Job not longer has a Trigger referencing it).
             // if set to true, job will request recovery.  automatically re-executed after a scheduler fails.
+            
+
             IJobDetail jobDetail = new JobDetailImpl(jobName, null, job.GetType(), false, false);
 
             if (data != null)
@@ -263,7 +268,7 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
         /// </summary>
         /// <param name="triggerName">触发器的名字，必须唯一</param>
         /// <param name="offsetMilliSeconds">多长时间后触发器执行 即第一次job执行  单位为毫秒,0表示立刻执行</param>
-        /// <param name="periodSeconds">第一次之后每次触发器的执行周期，单位为毫秒,范围可以超过60</param>
+        /// <param name="periodSeconds">第一次之后每次触发器的执行周期，单位为秒,范围可以超过60</param>
         /// <returns></returns>
         public static ITrigger CreateSimpleTrigger(string triggerName, int offsetMilliSeconds, int periodSeconds)
         {
@@ -459,19 +464,35 @@ RequestsRecovery - if a job “requests recovery”, and it is executing during 
         /// 0 0 4 ? * 1     每个星期天4点执行
         /// </summary>
         /// <param name="triggerName">triggerName,必须唯一</param>
-        /// <param name="offsetMilliSeconds">trigger起始执行的时间,以毫秒为单位</param>
+        /// <param name="offsetMilliSeconds">trigger起始执行的延迟时间,以毫秒为单位 小于等于0表示立刻启动</param>
         /// <param name="cronExpression"></param>
         /// <returns></returns>
         public static ITrigger CreateCronTrigger(String triggerName, int offsetMilliSeconds, String cronExpression)
         {
-            ITrigger trigger =
-                TriggerBuilder.Create()
-                    .StartAt(DateTimeOffset.UtcNow.AddMilliseconds(offsetMilliSeconds))
-                    .WithIdentity(triggerName)
-                    .WithCronSchedule(cronExpression)
-                    .Build();
-            return trigger;
+
+            if (offsetMilliSeconds <= 0)
+            {
+                ITrigger trigger =
+                    TriggerBuilder.Create()
+                        .StartNow()
+                        .WithIdentity(triggerName)
+                        .WithCronSchedule(cronExpression)
+                        .Build();
+                return trigger;
+            }
+            else
+            {
+                ITrigger trigger =
+                    TriggerBuilder.Create()
+                        .StartAt(DateTimeOffset.UtcNow.AddMilliseconds(offsetMilliSeconds))
+                        .WithIdentity(triggerName)
+                        .WithCronSchedule(cronExpression)
+                        .Build();
+                return trigger;
+            }
         }
         #endregion
+
     }
+
 }
