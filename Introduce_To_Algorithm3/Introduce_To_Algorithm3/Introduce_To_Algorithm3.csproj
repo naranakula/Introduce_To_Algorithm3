@@ -848,6 +848,7 @@
     <Compile Include="OpenSourceLib\Libsodium_加解密\LibsodiumHelper.cs" />
     <Compile Include="OpenSourceLib\LiteDb\LiteDBHelper.cs" />
     <Compile Include="OpenSourceLib\Memcacheds\MemcachedHelper.cs" />
+    <Compile Include="OpenSourceLib\MongoDbs\Models\BaseBsonModel.cs" />
     <Compile Include="OpenSourceLib\MongoDbs\MongoDbHelper.cs" />
     <Compile Include="OpenSourceLib\MSHttpClient\Cache\RedisClientHelper.cs" />
     <Compile Include="OpenSourceLib\FTP\SystemNetFtpClientImpl.cs" />
