@@ -238,6 +238,11 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
             }
             catch (Exception ex)
             {
+                lock (_locker)
+                {
+                    _channel = null;
+                }
+
                 if (exceptionHandler != null)
                 {
                     try
@@ -372,7 +377,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                             _minReEstablishChannelTimeIntervalInMilliseconds)
                         {
                             //重建Channel,包含了关闭上一个连接，重建放在锁了，避免某些多线程异常
-                            Start();
+                            Start(exceptionHandler);
                             //因为重建需要耗时，所以重新调用Now
                             _lastRebuildChannelTime = DateTime.Now;
 
