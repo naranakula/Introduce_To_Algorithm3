@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Introduce_To_Algorithm3.OpenSourceLib.Utils;
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
 using MongoDB.Driver;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.MongoDbs
@@ -480,6 +482,13 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.MongoDbs
         #region Bson 相关
 
 
+        /*
+         * 
+         * BsonDocument是default type used for documents. It handles dynamic documents of any complexity.
+         * 
+         */
+
+
         /// <summary>
         /// 创建BsonDocument
         /// 一个示例
@@ -494,9 +503,53 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.MongoDbs
             var info = document["info"] = new BsonDocument();
             info["x"] = 201;
             info["y"] = 121;
-
+            
             return document;
         }
+
+        /// <summary>
+        /// 读取bson
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void ReadBson(string fileName)
+        {
+            using (FileStream stream = File.OpenRead(fileName))
+            {
+                using (BsonBinaryReader reader = new BsonBinaryReader(stream))
+                {
+                    //读取bson
+                    reader.ReadEndDocument();
+
+                    //读取属性名
+                    string fieldName =reader.ReadName();
+                    //读取属性值
+                    string valueName = reader.ReadString();
+
+                    reader.ReadEndDocument();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 写bson
+        /// </summary>
+        /// <param name="outputFileName"></param>
+        public static void WriteBson(string outputFileName)
+        {
+            //如果存在，则覆盖(注意原来的不截断)
+            using (FileStream stream = File.OpenWrite(outputFileName))
+            {
+                using (BsonBinaryWriter writer = new BsonBinaryWriter(stream))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteName("a");
+                    writer.WriteInt32(1);
+
+                    writer.WriteEndDocument();
+                }
+            }
+        }
+
 
 
 
