@@ -128,14 +128,19 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                 throw new ArgumentException("server ip can't be empty");
             }
 
-            this._serverIp = serverIp.Trim();
-            this._serverPort = serverPort;
-            this._isStop = false;
 
-            Random rand = new Random();
-            _maxContinuousGrpcErrorCount = rand.Next(13, 23);
-            _maxIntervalMinutesToRebuild = rand.Next(24 * 60, 25 * 67);
-            _minReEstablishChannelTimeIntervalInMilliseconds = rand.Next(2500, 4100);
+            lock (_locker)
+            {
+                this._serverIp = serverIp.Trim();
+                this._serverPort = serverPort;
+                this._isStop = false;
+
+                Random rand = new Random();
+                _maxContinuousGrpcErrorCount = rand.Next(13, 23);
+                _maxIntervalMinutesToRebuild = rand.Next(24 * 60, 25 * 67);
+                _minReEstablishChannelTimeIntervalInMilliseconds = rand.Next(2500, 4100);
+            }
+
         }
 
         #endregion
@@ -199,6 +204,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                     Task.Factory.StartNew(() =>
                     {
                         Channel innerTempChannel = tempChannel;
+                        
                         try
                         {
                             Thread.Sleep(2017);
@@ -359,48 +365,34 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.grpcs
                             throw new CommonException(errorCode: 1, errorReason: "channel已经被停止");
                         }
 
-                        //是否重建
-                        bool isReBuilded = false;
 
 
                         //重建至少间隔这么多的时间
                         if ((DateTime.Now - _lastRebuildChannelTime).TotalMilliseconds >
                             _minReEstablishChannelTimeIntervalInMilliseconds)
                         {
-                            isReBuilded = true;
-
                             //重建Channel,包含了关闭上一个连接，重建放在锁了，避免某些多线程异常
                             Start();
                             //因为重建需要耗时，所以重新调用Now
                             _lastRebuildChannelTime = DateTime.Now;
-                        }
 
-
-                        if (isReBuilded)
-                        {
-                            
+                            //重置channel
                             tempChannel = _channel;
-
-                            //重建后，重新初始化状态
-                            //state = this.ChannelState;
-                            //不使用failfast，因为channelState并不是真的ChannelState
-                            ////failfast
-                            //if (state == ChannelState.Shutdown)
-                            //{
-                            //    throw new CommonException(errorCode: 3, errorReason: "Channel重建后，状态仍为ShutDown");
-                            //}
                         }
-                        //else
-                        //{
-                        //    //failfast
-                        //    throw new CommonException(errorCode: 2, errorReason: "Channel状态为ShutDown");
-                        //}
+
                     }
 
 
                     #endregion
 
                 }
+
+
+                if (tempChannel == null)
+                {
+                    throw new CommonException(errorCode:2,errorReason:"channel为null");
+                }
+
 
                 channelAction(tempChannel);
 
