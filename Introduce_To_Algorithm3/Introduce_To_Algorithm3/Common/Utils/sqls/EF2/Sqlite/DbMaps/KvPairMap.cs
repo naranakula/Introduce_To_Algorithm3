@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,10 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite.DbMaps
         public KvPairMap()
         {
             ToTable(nameof(KvPair)).HasKey(p => p.Key);
+
+
+            Property(t => t.Key).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
             //CREATE TABLE "KvPair" ([Key] nvarchar (128) NOT NULL, [Value] nvarchar, [UpdateTime] datetime NOT NULL, [CreateTime] datetime NOT NULL, PRIMARY KEY(Key))
 
             //自增主键

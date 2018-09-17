@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace Introduce_To_Algorithm3.Common.Utils.sqls.EF2.Sqlite.DbMaps
         public LocalConfigMap()
         {
             ToTable(nameof(LocalConfig)).HasKey(t => t.ConfigKey);
+            Property(t => t.ConfigKey).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
         }
     }
 
