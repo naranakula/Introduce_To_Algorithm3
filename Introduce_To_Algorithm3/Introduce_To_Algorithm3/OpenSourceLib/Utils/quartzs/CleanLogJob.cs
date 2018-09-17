@@ -46,7 +46,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 //开始时间
                 DateTime startTime = DateTime.Now;
                 //过期时间
-                DateTime expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0));
+                DateTime expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0)).Date;
 
                 #region 其它清理工作
 
@@ -64,7 +64,8 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                 #endregion
 
                 //清理日志使用的时间
-                TimeSpan usedTimeSpan = DateTime.Now - startTime;
+                DateTime endTime = DateTime.Now;
+                TimeSpan usedTimeSpan = endTime - startTime;
                 NLogHelper.Info($"耗时{usedTimeSpan.TotalSeconds}秒----({usedTimeSpan})");
             }
             catch (Exception ex)
@@ -115,28 +116,31 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
             }
 
 
-            DateTime expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0));//过期时间
+            DateTime expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDays, 0, 0, 0)).Date;//过期时间
 
             #region 根据当前硬盘减少保存时间
             try
             {
-                DriveInfo driveInfo = null;
-
-                foreach (DriveInfo item in DriveInfo.GetDrives())
+                if (KeepDays > KeepDaysWhenAvailableLimit)
                 {
-                    if (StringUtils.EqualsEx(dirInfo.Root.Name, item.RootDirectory.Name))
+                    DriveInfo driveInfo = null;
+
+                    foreach (DriveInfo item in DriveInfo.GetDrives())
                     {
-                        //查找logs所在的磁盘
-                        driveInfo = item;
-                        break;
+                        if (StringUtils.EqualsEx(dirInfo.Root.Name, item.RootDirectory.Name))
+                        {
+                            //查找logs所在的磁盘
+                            driveInfo = item;
+                            break;
+                        }
                     }
-                }
 
-                //如果磁盘空间不足，保留更少的天数
-                if (driveInfo != null && driveInfo.AvailableFreeSpace < driveInfo.TotalSize * DriveAvailableLimit)
-                {
-                    //当到达硬盘利用极限时，保存的天数
-                    expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDaysWhenAvailableLimit, 0, 0, 0));
+                    //如果磁盘空间不足，保留更少的天数
+                    if (driveInfo != null && driveInfo.AvailableFreeSpace < driveInfo.TotalSize * DriveAvailableLimit)
+                    {
+                        //当到达硬盘利用极限时，保存的天数
+                        expireTime = DateTime.Now.Subtract(new TimeSpan(KeepDaysWhenAvailableLimit, 0, 0, 0)).Date;
+                    }
                 }
             }
             catch (Exception ex)
@@ -228,7 +232,7 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils.quartzs
                     {
                         fileInfo.Delete();
                         delCount++;
-                        NLogHelper.Trace("删除文件:" + fileInfo.FullName);
+                        NLogHelper.Trace("成功删除文件:" + fileInfo.FullName);
                     }
                 }
                 catch (Exception ex)
