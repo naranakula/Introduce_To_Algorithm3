@@ -74,7 +74,7 @@ import "google/protobuf/timestamp.proto";
 //you must not change the tag numbers of any existing fields.
 //you may delete fields.删除的标签不能再使用
 //you may add new fields but you must use fresh tag numbers
-//old code will happily read new messages and simply ignore any new fields. To the old code, singular fields that were deleted will simply have their default value, and deleted repeated fields will be empty. 
+//old code will happily read new messages and simply ignore any new fields. To the new code, singular fields that were deleted will simply have their default value, and deleted repeated fields will be empty. 
 
 
 //pb3中Message fields can be one of the following:  pb3默认是optional,没有required
@@ -82,16 +82,18 @@ import "google/protobuf/timestamp.proto";
 //repeated: this field can be repeated any number of times (including zero) in a well-formed message. The order of the repeated values will be preserved.
 // In proto3,
 // repeated fields of scalar numeric types use packed encoding by default.
-
+//消息命名使用 CamelCase格式，如 SongServerRequest
 message SearchRequest {
-//每个字段必须赋值一个唯一的数字，1到15使用一个字节表示数字和类型，16到2047使用两个字节。最小的是1，最大的是 2^29 – 1=536,870,911。并且不能使用19000到 19999。
+//每个字段必须赋值一个唯一的数字，该数字在消息二进制协议中用来标志(一旦确定，不能改变)字段，1到15使用一个字节表示数字和类型，16到2047使用两个字节。最小的是1，最大的是 2^29 – 1=536,870,911。并且不能使用19000到 19999。
 //多个消息类型可以定义在一个.proto文件中。
   string query = 1;
+  //field name使用 underscore_separated_name
   int32 page_number = 2;
   int32 result_per_page = 3;
   //枚举第一个字段必须赋值为0,当消息不包含该类型时，第一个字段是默认值
   //建议枚举字段从0开始每个字段赋值，必须显式赋值
   enum Corpus {
+  // 枚举采用 _分割的大写  如:CAPITALS_WITH_UNDERSCORES
     UNIVERSAL = 0;
     WEB = 1;
     IMAGES = 2;
@@ -146,9 +148,11 @@ service FooService {
 //类型定义
 //map不保证顺序  repeated保证顺序
 //Proto3丢弃了required，默认是optional，除非加了repeated
-//map<key_type, value_type> map_field = N;//key_type can be any integral or string type (so, any scalar type except for floating point types and bytes). The value_type can be any type except another map.
+//map<key_type, value_type> map_field = N;//key_type can be any integral or string type (so, any scalar type except for floating point types , bytes and enum). The value_type can be any type except another map.
 //map<string, Project> projects = 3;
-//map cannot be repeated. map不保证顺序
+//map cannot be repeated. map不保留顺序
+//
+
 //proto Type	Notes	Java Type	C# Type
 //double		double	double
 //float		float	float
@@ -179,7 +183,9 @@ service FooService {
 //for C#, the pb（not grpc） compiler generates a .cs file from each .proto, with a class for each message type described in your file.
 
 /*
-When a message is parsed, if the encoded message does not contain a particular singular element, the corresponding field in the parsed object is set to the default value for that field. These defaults are type-specific:
+When a message is parsed, if the encoded message does not contain a particular singular element, the corresponding field in the parsed object is set to the default value for that field.
+if a scalar message field is set to the default,the value will not be serialized on the wire.
+These defaults are type-specific:
 
 For strings, the default value is the empty string.
 For bytes, the default value is empty bytes.
@@ -190,7 +196,7 @@ For message fields, the field is not set. Its exact value is language-dependent.
 The default value for repeated fields is empty (generally an empty list in the appropriate language).*/
 
 
-
+//json map: proto3 提供了canonical encoding(依教规的) in json. 如果json中没有或者为null，pb解析为默认值。如果pb中值为默认值，在json中省略。
 
 
 
