@@ -31,6 +31,7 @@ namespace Com.Utility.Commons
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Encoding = Encoding.UTF8;
             settings.Indent = true;
+            //覆盖的含义是将原来的内容清除，重新写  已测
             using (StreamWriter streamWriter = new StreamWriter(destFile, false, Encoding.UTF8))
             {
                 using (XmlWriter xmlWriter = XmlWriter.Create(streamWriter, settings))
