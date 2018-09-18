@@ -7,6 +7,8 @@ using NLog;
 
 namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 {
+
+
     public static class NLogHelper2
     {
 
@@ -146,4 +148,6 @@ namespace Introduce_To_Algorithm3.OpenSourceLib.Utils
 
 
     }
+
+
 }
